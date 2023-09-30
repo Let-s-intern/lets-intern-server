@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 public class ProgramTotalListDTO {
 
-    List<Program> programList;
+    private List<Program> programList;
 
     @Builder
     private ProgramTotalListDTO(List<Program> programList) {
