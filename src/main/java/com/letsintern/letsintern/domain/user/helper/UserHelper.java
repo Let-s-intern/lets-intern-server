@@ -8,6 +8,8 @@ import com.letsintern.letsintern.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 @RequiredArgsConstructor
 public class UserHelper {
@@ -23,5 +25,9 @@ public class UserHelper {
         User newUser = userMapper.toEntity(userSignUpDTO);
         User savedUser = userRepository.save(newUser);
         return savedUser.getId();
+    }
+
+    public List<User> getUserTotalList() {
+        return userRepository.findAll();
     }
 }
