@@ -12,8 +12,10 @@ import org.springframework.boot.autoconfigure.security.ConditionalOnDefaultWebSe
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -71,39 +73,31 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.cors()
-                .configurationSource(configurationSource())
-                .and()
-                .csrf().disable()
-                .headers().frameOptions()
-                .sameOrigin()
-                .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
-        http.authorizeHttpRequests()
-                .requestMatchers(CorsUtils::isPreFlightRequest)
-                .permitAll()
-                .requestMatchers(HttpMethod.GET, GetPermittedPatterns)
-                .permitAll()
-                .requestMatchers(HttpMethod.POST, PostPermittedPatterns)
-                .permitAll()
-                .requestMatchers(HttpMethod.PATCH, PatchPermittedPatterns)
-                .permitAll()
-                .requestMatchers(SwaggerPatterns)
-                .permitAll()
-                .requestMatchers(AdminPatterns)
-                .hasAnyRole("ADMIN")
-                .anyRequest()
-                .permitAll()
-                .and()
-                .headers()
-                .frameOptions().disable();
-
-        http.exceptionHandling().accessDeniedHandler(jwtAccessDeniedHandler)
-                .authenticationEntryPoint(jwtAuthenticationEntryPoint);
-        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-        http.addFilterBefore(jwtExceptionHandlerFilter, JwtAuthenticationFilter.class);
-        http.addFilterBefore(accessDeniedFilter, AuthorizationFilter.class);
+        http
+                .cors(cors -> configurationSource())
+                .csrf(AbstractHttpConfigurer::disable)
+                .headers(headers -> {
+                    headers.defaultsDisabled().frameOptions(Customizer.withDefaults());
+                })
+                .sessionManagement(sessionManagement -> {
+                    sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                })
+                .authorizeHttpRequests(request -> {
+                    request.requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+                            .requestMatchers(HttpMethod.GET, GetPermittedPatterns).permitAll()
+                            .requestMatchers(HttpMethod.POST, PostPermittedPatterns).permitAll()
+                            .requestMatchers(HttpMethod.PATCH, PatchPermittedPatterns).permitAll()
+                            .requestMatchers(SwaggerPatterns).permitAll()
+                            .requestMatchers(AdminPatterns).hasAnyRole("ADMIN")
+                            .anyRequest().permitAll();
+                })
+                .exceptionHandling(exceptionHandling -> {
+                    exceptionHandling.accessDeniedHandler(jwtAccessDeniedHandler)
+                            .authenticationEntryPoint(jwtAuthenticationEntryPoint);
+                })
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtExceptionHandlerFilter, JwtAuthenticationFilter.class)
+                .addFilterBefore(accessDeniedFilter, AuthorizationFilter.class);
 
         return http.build();
     }
