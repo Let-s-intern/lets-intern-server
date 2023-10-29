@@ -51,11 +51,11 @@ public class TokenProvider implements InitializingBean {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    private String createAccessToken(Long id, Authentication authentication) {
+    public String createAccessToken(Long id, Authentication authentication) {
         return createToken(id, ACCESS_KEY, accessTokenExpirationTime, authentication);
     }
 
-    private String createRefreshToken(Long id, Authentication authentication) {
+    public String createRefreshToken(Long id, Authentication authentication) {
         return createToken(id, REFRESH_KEY, refreshTokenExpirationTime, authentication);
     }
 

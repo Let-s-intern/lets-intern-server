@@ -1,9 +1,10 @@
 package com.letsintern.letsintern.domain.user.domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.letsintern.letsintern.domain.user.dto.request.UserSignUpDTO;
+import com.letsintern.letsintern.domain.user.dto.request.UserSignUpRequest;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.text.SimpleDateFormat;
@@ -20,82 +21,70 @@ public class User {
     private Long id;
 
     @NotNull
-    @Column(length = 20)
+    @Size(max = 255)
+    private String email;
+
+    @NotNull
+    @Size(max = 20)
     private String name;
 
     @NotNull
-    @Column(length = 20)
-    private String email;
+    @Size(max = 128)
+    private String password;
 
     @NotNull
     @Column(unique = true, length = 15)
     private String phoneNum;
 
     @NotNull
+    private String signedUpAt;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
+
+
+    @Nullable
     @Column(length = 50)
     private String university;
 
-    @NotNull
+    @Nullable
     @Column(length = 50)
     private String major;
 
-    @NotNull
+    @Nullable
     private Integer grade;
 
-    @NotNull
-    @Column(length = 100)
-    private String inflow;
-
-    @NotNull
+    @Nullable
     @Column(length = 100)
     private String wishCompany;
 
-    @NotNull
+    @Nullable
     @Column(length = 100)
     private String wishJob;
 
-    @NotNull
+    @Nullable
     private Integer prepareForEmployment;       // 네, 아니오, 잘 모르겠어요
 
-    @NotNull
-    private String joinedAt;
-
-    @NotNull
-    private String role;
 
     @Builder
-    private User(String name, String email, String phoneNum,
-                 String university, String major, Integer grade,
-                 String inflow, String wishCompany, String wishJob,
-                 Integer prepareForEmployment) {
+    private User(String email, String name, String password, String phoneNum) {
         this.name = name;
         this.email = email;
+        this.password = password;
         this.phoneNum = phoneNum;
-        this.university = university;
-        this.major = major;
-        this.grade = grade;
-        this.inflow = inflow;
-        this.wishCompany = wishCompany;
-        this.wishJob = wishJob;
-        this.prepareForEmployment = prepareForEmployment;
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        this.joinedAt = simpleDateFormat.format(new Date());
-        this.role = "QUEST";
+        this.signedUpAt = simpleDateFormat.format(new Date());
+        this.role = UserRole.ROLE_ANONYMOUS;
     }
 
-    public static User of(UserSignUpDTO userSignUpDTO) {
+    public static User of(UserSignUpRequest userSignUpRequest, String encodedPassword) {
         return User.builder()
-                .name(userSignUpDTO.getName())
-                .email(userSignUpDTO.getEmail())
-                .phoneNum(userSignUpDTO.getPhoneNum())
-                .university(userSignUpDTO.getUniversity())
-                .major(userSignUpDTO.getMajor())
-                .grade(userSignUpDTO.getGrade())
-                .inflow(userSignUpDTO.getInflow())
-                .wishCompany(userSignUpDTO.getWishCompany())
-                .wishJob(userSignUpDTO.getWishJob())
-                .prepareForEmployment(userSignUpDTO.getPrepareForEmployment())
+                .email(userSignUpRequest.getUserVo().getEmail())
+                .name(userSignUpRequest.getUserVo().getName())
+                .password(encodedPassword)
+                .phoneNum(userSignUpRequest.getUserVo().getPhoneNum())
                 .build();
     }
 }
