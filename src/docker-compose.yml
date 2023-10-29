@@ -1,0 +1,19 @@
+version: "3"
+
+services:
+  server-dev:
+    image: letsintern/letsintern-server-dev:latest
+    container_name: server-dev
+    hostname: server-dev
+    expose:
+      - "8080"
+
+  nginx:
+    depends_on:
+      - server-dev
+    restart: always
+    build:
+      dockerfile: Dockerfile
+      context: ./config/nginx
+    ports:
+      - "80:80"
