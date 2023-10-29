@@ -60,6 +60,9 @@ public class User {
     @NotNull
     private String joinedAt;
 
+    @NotNull
+    private String role;
+
     @Builder
     private User(String name, String email, String phoneNum,
                  String university, String major, Integer grade,
@@ -78,6 +81,7 @@ public class User {
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         this.joinedAt = simpleDateFormat.format(new Date());
+        this.role = "QUEST";
     }
 
     public static User of(UserSignUpDTO userSignUpDTO) {

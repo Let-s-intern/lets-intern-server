@@ -37,6 +37,8 @@ public class QUser extends EntityPathBase<User> {
 
     public final NumberPath<Integer> prepareForEmployment = createNumber("prepareForEmployment", Integer.class);
 
+    public final StringPath role = createString("role");
+
     public final StringPath university = createString("university");
 
     public final StringPath wishCompany = createString("wishCompany");
