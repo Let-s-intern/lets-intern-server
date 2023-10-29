@@ -25,17 +25,19 @@ public class QUser extends EntityPathBase<User> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final StringPath inflow = createString("inflow");
-
-    public final StringPath joinedAt = createString("joinedAt");
-
     public final StringPath major = createString("major");
 
     public final StringPath name = createString("name");
 
+    public final StringPath password = createString("password");
+
     public final StringPath phoneNum = createString("phoneNum");
 
     public final NumberPath<Integer> prepareForEmployment = createNumber("prepareForEmployment", Integer.class);
+
+    public final EnumPath<UserRole> role = createEnum("role", UserRole.class);
+
+    public final StringPath signedUpAt = createString("signedUpAt");
 
     public final StringPath university = createString("university");
 

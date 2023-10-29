@@ -1,0 +1,28 @@
+package com.letsintern.letsintern.domain.user.exception;
+
+import com.letsintern.letsintern.global.common.dto.ErrorReason;
+import com.letsintern.letsintern.global.error.BaseErrorCode;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import org.springframework.http.HttpStatus;
+
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+
+@Getter
+@AllArgsConstructor
+public enum UserErrorCode implements BaseErrorCode {
+
+    DUPLICATE_USER(BAD_REQUEST, "USER_400_1", "이미 가입한 유저입니다."),
+    USER_NOT_FOUND(NOT_FOUND, "USER_404_1", "존재하지 않는 유저입니다."),
+    MISMATCH_PASSWORD(BAD_REQUEST, "USER_400_2", "비밀번호가 일치하지 않습니다");
+
+    private HttpStatus status;
+    private String code;
+    private String reason;
+
+    @Override
+    public ErrorReason getErrorReason() {
+        return ErrorReason.of(status.value(), code, reason);
+    }
+}
