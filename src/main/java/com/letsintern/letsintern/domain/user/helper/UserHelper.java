@@ -4,9 +4,11 @@ import com.letsintern.letsintern.domain.user.domain.User;
 import com.letsintern.letsintern.domain.user.dto.request.UserSignInRequest;
 import com.letsintern.letsintern.domain.user.exception.DuplicateUser;
 import com.letsintern.letsintern.domain.user.exception.MismatchPassword;
+import com.letsintern.letsintern.domain.user.exception.RefreshTokenNotFound;
 import com.letsintern.letsintern.domain.user.exception.UserNotFound;
 import com.letsintern.letsintern.domain.user.mapper.UserMapper;
 import com.letsintern.letsintern.domain.user.repository.UserRepository;
+import com.letsintern.letsintern.domain.user.util.RedisUtil;
 import com.letsintern.letsintern.domain.user.vo.UserVo;
 import com.letsintern.letsintern.global.config.user.PrincipalDetailsService;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +29,7 @@ public class UserHelper {
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     private final PrincipalDetailsService principalDetailsService;
     private final UserRepository userRepository;
-    private final UserMapper userMapper;
+    private final RedisUtil redisUtil;
 
     public String encodePassword(String password) {
         return passwordEncoder.encode(password);
@@ -45,6 +47,20 @@ public class UserHelper {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         return authentication;
+    }
+
+    public void matchesRefreshToken(String refreshToken, User user) {
+        String redisRefreshToken = redisUtil.getRefreshToken(user.getId().toString());
+        if(redisRefreshToken == null || !redisRefreshToken.equals(refreshToken)) {
+            throw RefreshTokenNotFound.EXCEPTION;
+        }
+    }
+
+    public User findUser(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> {
+                    throw UserNotFound.EXCEPTION;
+                });
     }
 
     public void findDuplicateUser(UserVo userVo) {

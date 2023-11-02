@@ -1,5 +1,7 @@
 package com.letsintern.letsintern.global.config.jwt;
 
+import com.letsintern.letsintern.domain.user.exception.NotRefreshToken;
+import com.letsintern.letsintern.domain.user.util.RedisUtil;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import com.letsintern.letsintern.global.config.user.PrincipalDetailsService;
 import io.jsonwebtoken.*;
@@ -26,8 +28,8 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 public class TokenProvider implements InitializingBean {
-
     private final PrincipalDetailsService principalDetailsService;
+    private final RedisUtil redisUtil;
     private static final String AUTHORITIES_KEY = "auth";
     private static final String ACCESS_KEY = "access";
     private static final String REFRESH_KEY = "refresh";
@@ -70,7 +72,7 @@ public class TokenProvider implements InitializingBean {
         final Date issuedAt = new Date();
         final Date validity = new Date(calendar.getTimeInMillis());
 
-        return Jwts.builder()
+        String token = Jwts.builder()
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
                 .setSubject(id.toString())
                 .claim(AUTHORITIES_KEY, authorities)
@@ -79,6 +81,16 @@ public class TokenProvider implements InitializingBean {
                 .setExpiration(validity)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
+
+        if(type.equals(REFRESH_KEY)) {
+            redisUtil.setRefreshToken(id, token, expirationTime);
+        }
+
+        return token;
+    }
+
+    public void deleteRefreshToken(Long id) {
+        redisUtil.delete(id.toString());
     }
 
     public String getTokenUserId(String token) {
@@ -119,5 +131,21 @@ public class TokenProvider implements InitializingBean {
         }
 
         return null;
+    }
+
+    public void validateRefreshToken(String token) {
+        Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+        String typeValue = claims.get("type", String.class);
+        if(!typeValue.equals(REFRESH_KEY)) {
+            throw NotRefreshToken.EXCEPTION;
+        }
+    }
+
+    // token 의 남은 유효 시간 구하기
+    public long getExpiration(String token) {
+        Date expiration = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getExpiration();
+        Long now = new Date().getTime();
+
+        return (expiration.getTime() - now);
     }
 }

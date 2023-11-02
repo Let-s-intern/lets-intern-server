@@ -1,6 +1,7 @@
 package com.letsintern.letsintern.domain.user.service;
 
 import com.letsintern.letsintern.domain.user.domain.User;
+import com.letsintern.letsintern.domain.user.dto.request.TokenRequest;
 import com.letsintern.letsintern.domain.user.dto.request.UserSignInRequest;
 import com.letsintern.letsintern.domain.user.dto.request.UserSignUpRequest;
 import com.letsintern.letsintern.domain.user.dto.response.TokenResponse;
@@ -9,9 +10,12 @@ import com.letsintern.letsintern.domain.user.dto.response.UserTotalListDTO;
 import com.letsintern.letsintern.domain.user.helper.UserHelper;
 import com.letsintern.letsintern.domain.user.mapper.UserMapper;
 import com.letsintern.letsintern.domain.user.repository.UserRepository;
+import com.letsintern.letsintern.domain.user.util.RedisUtil;
 import com.letsintern.letsintern.global.config.jwt.TokenProvider;
+import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +27,7 @@ public class UserService {
     private final UserHelper userHelper;
     private final UserMapper userMapper;
     private final TokenProvider tokenProvider;
+    private final RedisUtil redisUtil;
 
     @Transactional
     public UserIdResponseDTO signUp(UserSignUpRequest userSignUpRequest) {
@@ -46,7 +51,30 @@ public class UserService {
     }
 
     @Transactional
+    public void logout(PrincipalDetails principalDetails, TokenRequest tokenRequest) {
+        final User user = principalDetails.getUser();
+        tokenProvider.deleteRefreshToken(user.getId());
+
+        final String accessToken = tokenRequest.getAccessToken();
+        redisUtil.setLogoutAccessToken(accessToken, tokenProvider.getExpiration(accessToken));
+    }
+
+    @Transactional
+    public TokenResponse reissueToken(TokenRequest tokenRequest) {
+        final String refreshToken = tokenRequest.getRefreshToken();
+        final User user = userHelper.findUser(Long.parseLong(tokenProvider.getTokenUserId(refreshToken)));
+        final Authentication authentication = userHelper.userAuthorizationInput(user);
+
+        tokenProvider.validateRefreshToken(refreshToken);
+        userHelper.matchesRefreshToken(refreshToken, user);
+
+        final String newAccessToken = tokenProvider.createAccessToken(user.getId(), authentication);
+        return userMapper.toTokenResponse(newAccessToken, refreshToken);
+    }
+
+    @Transactional
     public UserTotalListDTO getUserTotalList() {
         return userMapper.toUserTotalListResponseDTO(userHelper.getUserTotalList());
     }
+
 }

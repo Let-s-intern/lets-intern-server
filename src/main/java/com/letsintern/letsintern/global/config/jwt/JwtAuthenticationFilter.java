@@ -1,7 +1,6 @@
 package com.letsintern.letsintern.global.config.jwt;
 
 import com.letsintern.letsintern.global.error.exception.TokenValidateException;
-import io.micrometer.common.util.StringUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
