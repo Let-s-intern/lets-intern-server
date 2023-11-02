@@ -63,9 +63,6 @@ public class User {
     @Column(length = 100)
     private String wishJob;
 
-    @Nullable
-    private Integer prepareForEmployment;       // 네, 아니오, 잘 모르겠어요
-
 
     @Builder
     private User(String email, String name, String password, String phoneNum) {

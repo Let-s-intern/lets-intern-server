@@ -33,8 +33,6 @@ public class QUser extends EntityPathBase<User> {
 
     public final StringPath phoneNum = createString("phoneNum");
 
-    public final NumberPath<Integer> prepareForEmployment = createNumber("prepareForEmployment", Integer.class);
-
     public final EnumPath<UserRole> role = createEnum("role", UserRole.class);
 
     public final StringPath signedUpAt = createString("signedUpAt");

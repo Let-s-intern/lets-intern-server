@@ -59,7 +59,7 @@ public class WebSecurityConfig {
     };
 
     private final String[] PostPermittedPatterns = {
-
+        "/user/signup", "/user/token/reissue"
     };
 
     private final String[] PatchPermittedPatterns = {
