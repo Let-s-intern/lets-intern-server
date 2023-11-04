@@ -1,10 +1,7 @@
 package com.letsintern.letsintern.domain.program.domain;
 
 import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequestDTO;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
@@ -14,6 +11,7 @@ import lombok.*;
 public class Program {
 
     @Id
+    @Column(name = "program_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 

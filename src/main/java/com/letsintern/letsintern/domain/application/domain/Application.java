@@ -7,6 +7,7 @@ import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Getter
@@ -15,17 +16,27 @@ import lombok.*;
 public class Application {
 
     @Id
+    @Column(name = "application_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull
-    private String applyMotive;
-
-    @Nullable
-    private String question;
+    private Integer grade;
 
     @NotNull
-    private Boolean checkAttendance;
+    @Column(length = 100)
+    private String wishCompany;
+
+    @NotNull
+    @Column(length = 100)
+    private String wishJob;
+
+    @NotNull
+    private String applyMotive;
+
+    @NotNull
+    @ColumnDefault("false")
+    private Boolean approved;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "program_id", nullable = false)
@@ -37,21 +48,24 @@ public class Application {
 
 
     @Builder
-    private Application(Program program, User user,
-                        String applyMotive, String question) {
+    private Application(Program program, User user, Integer grade,
+                        String wishCompany, String wishJob, String applyMotive) {
         this.program = program;
         this.user = user;
+        this.grade = grade;
+        this.wishCompany = wishCompany;
+        this.wishJob = wishJob;
         this.applyMotive = applyMotive;
-        this.question = question;
-        this.checkAttendance = false;
     }
 
     public static Application of(Program program, User user, ApplicationCreateDTO applicationCreateDTO) {
         return Application.builder()
                 .program(program)
                 .user(user)
+                .grade(applicationCreateDTO.getGrade())
+                .wishCompany(applicationCreateDTO.getWishCompany())
+                .wishJob(applicationCreateDTO.getWishJob())
                 .applyMotive(applicationCreateDTO.getApplyMotive())
-                .question(applicationCreateDTO.getQuestion())
                 .build();
     }
 }

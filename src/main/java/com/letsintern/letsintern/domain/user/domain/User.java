@@ -17,6 +17,7 @@ import java.util.Date;
 public class User {
 
     @Id
+    @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -51,17 +52,6 @@ public class User {
     @Nullable
     @Column(length = 50)
     private String major;
-
-    @Nullable
-    private Integer grade;
-
-    @Nullable
-    @Column(length = 100)
-    private String wishCompany;
-
-    @Nullable
-    @Column(length = 100)
-    private String wishJob;
 
 
     @Builder
