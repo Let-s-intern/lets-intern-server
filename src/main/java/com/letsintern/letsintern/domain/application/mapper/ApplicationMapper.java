@@ -5,7 +5,6 @@ import com.letsintern.letsintern.domain.application.dto.request.ApplicationCreat
 import com.letsintern.letsintern.domain.application.dto.response.ApplicationIdResponseDTO;
 import com.letsintern.letsintern.domain.application.dto.response.ApplicationListResponseDTO;
 import com.letsintern.letsintern.domain.application.exception.ApplicationNotFound;
-import com.letsintern.letsintern.domain.application.vo.ApplicationListItemVo;
 import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
 import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
@@ -42,10 +41,6 @@ public class ApplicationMapper {
     }
 
     public ApplicationListResponseDTO toApplicationListResponseDTO(List<Application> applicationList) {
-        List<ApplicationListItemVo> applicationListItemVoList = applicationList.stream()
-                .map(ApplicationListItemVo::from)
-                .toList();
-
-        return ApplicationListResponseDTO.from(applicationListItemVoList);
+        return ApplicationListResponseDTO.from(applicationList);
     }
 }

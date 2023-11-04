@@ -11,8 +11,12 @@ public class ApplicationCreateDTO {
 
     private Long userId;
 
-    private String applyMotive;
+    private Integer grade;
 
-    private String question;
+    private String wishCompany;
+
+    private String wishJob;
+
+    private String applyMotive;
 
 }

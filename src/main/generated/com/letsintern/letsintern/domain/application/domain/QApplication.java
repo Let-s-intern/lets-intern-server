@@ -24,15 +24,19 @@ public class QApplication extends EntityPathBase<Application> {
 
     public final StringPath applyMotive = createString("applyMotive");
 
-    public final BooleanPath checkAttendance = createBoolean("checkAttendance");
+    public final BooleanPath approved = createBoolean("approved");
+
+    public final NumberPath<Integer> grade = createNumber("grade", Integer.class);
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final com.letsintern.letsintern.domain.program.domain.QProgram program;
 
-    public final StringPath question = createString("question");
-
     public final com.letsintern.letsintern.domain.user.domain.QUser user;
+
+    public final StringPath wishCompany = createString("wishCompany");
+
+    public final StringPath wishJob = createString("wishJob");
 
     public QApplication(String variable) {
         this(Application.class, forVariable(variable), INITS);
