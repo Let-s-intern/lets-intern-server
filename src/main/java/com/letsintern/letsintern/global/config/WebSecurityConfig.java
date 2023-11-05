@@ -51,7 +51,7 @@ public class WebSecurityConfig {
     };
 
     private final String[] AdminPatterns = {
-            "/user/list", "program/create", "/application/list/**"
+            "/user/list", "program/admin/**", "/application/list/**"
     };
 
     private final String[] GetPermittedPatterns = {
