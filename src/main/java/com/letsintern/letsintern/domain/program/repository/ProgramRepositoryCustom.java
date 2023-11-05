@@ -13,5 +13,5 @@ public interface ProgramRepositoryCustom {
 
     List<ProgramThumbnailVo> findProgramThumbnailByStatus(ProgramStatus status, Pageable pageable);
 
-    List<ProgramThumbnailVo> findProgramThumbnailByTypeAndStatus(ProgramType type, ProgramStatus status, Pageable pageable);
+    List<ProgramThumbnailVo> findProgramThumbnailByTypeAndStatus(String type, ProgramStatus status, Pageable pageable);
 }

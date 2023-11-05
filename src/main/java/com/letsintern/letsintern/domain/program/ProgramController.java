@@ -1,6 +1,8 @@
 package com.letsintern.letsintern.domain.program;
 
+import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequestDTO;
+import com.letsintern.letsintern.domain.program.dto.request.ProgramUpdateRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.response.ProgramIdResponseDTO;
 import com.letsintern.letsintern.domain.program.dto.response.ProgramListDTO;
 import com.letsintern.letsintern.domain.program.service.ProgramService;
@@ -25,10 +27,22 @@ public class ProgramController {
         return programService.createProgram(programCreateRequestDTO);
     }
 
+    @Operation(summary = "어드민 프로그램 수정")
+    @PatchMapping("/admin/update/{programId}")
+    public ProgramIdResponseDTO updateProgram(@PathVariable Long programId, @RequestBody ProgramUpdateRequestDTO programUpdateRequestDTO) {
+        return programService.updateProgram(programId, programUpdateRequestDTO);
+    }
+
     @Operation(summary = "프로그램 전체 목록")
     @GetMapping("/list")
     public ProgramListDTO getProgramList(@PageableDefault(size = 15) Pageable pageable) {
         return programService.getProgramList(pageable);
+    }
+
+    @Operation(summary = "타입 별 프로그램 목록 (CHALLENGE_HALF/FULL, BOOTCAMP, LETS_CHAT)")
+    @GetMapping("/list/{type}")
+    public ProgramListDTO getProgramTypeList(@PathVariable String type, @PageableDefault(size = 15) Pageable pageable) {
+        return programService.getProgramTypeList(type, pageable);
     }
 
 }

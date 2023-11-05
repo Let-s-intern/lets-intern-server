@@ -54,8 +54,25 @@ public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
     }
 
     @Override
-    public List<ProgramThumbnailVo> findProgramThumbnailByTypeAndStatus(ProgramType type, ProgramStatus status, Pageable pageable) {
+    public List<ProgramThumbnailVo> findProgramThumbnailByTypeAndStatus(String type, ProgramStatus status, Pageable pageable) {
         QProgram qProgram = QProgram.program;
+
+        if(type.equals("CHALLENGE")) {
+            return jpaQueryFactory
+                    .select(new QProgramThumbnailVo(
+                            qProgram.id,
+                            qProgram.type,
+                            qProgram.th,
+                            qProgram.dueDate,
+                            qProgram.startDate
+                    ))
+                    .from(qProgram)
+                    .where(qProgram.type.eq(ProgramType.CHALLENGE_HALF).or(qProgram.type.eq(ProgramType.CHALLENGE_FULL)), qProgram.status.eq(status))
+                    .orderBy(qProgram.id.desc())
+                    .offset(pageable.getOffset())
+                    .limit(pageable.getPageSize())
+                    .fetch();
+        }
 
         return jpaQueryFactory
                 .select(new QProgramThumbnailVo(
@@ -66,7 +83,7 @@ public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
                         qProgram.startDate
                 ))
                 .from(qProgram)
-                .where(qProgram.type.eq(type), qProgram.status.eq(status))
+                .where(qProgram.type.eq(ProgramType.valueOf(type)), qProgram.status.eq(status))
                 .orderBy(qProgram.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())

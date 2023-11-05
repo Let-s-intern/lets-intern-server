@@ -1,6 +1,7 @@
 package com.letsintern.letsintern.domain.program.service;
 
 import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequestDTO;
+import com.letsintern.letsintern.domain.program.dto.request.ProgramUpdateRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.response.ProgramIdResponseDTO;
 import com.letsintern.letsintern.domain.program.dto.response.ProgramListDTO;
 import com.letsintern.letsintern.domain.program.helper.ProgramHelper;
@@ -24,7 +25,17 @@ public class ProgramService {
     }
 
     @Transactional
+    public ProgramIdResponseDTO updateProgram(Long programId, ProgramUpdateRequestDTO programUpdateRequestDTO) {
+        return programMapper.toProgramIdResponseDTO(programHelper.updateProgram(programId, programUpdateRequestDTO));
+    }
+
+    @Transactional
     public ProgramListDTO getProgramList(Pageable pageable) {
         return programHelper.getProgramList(pageable);
+    }
+
+    @Transactional
+    public ProgramListDTO getProgramTypeList(String type, Pageable pageable) {
+        return programHelper.getProgramTypeList(type, pageable);
     }
 }
