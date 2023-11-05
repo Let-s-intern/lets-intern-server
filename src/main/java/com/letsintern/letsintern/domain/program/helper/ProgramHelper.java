@@ -1,11 +1,15 @@
 package com.letsintern.letsintern.domain.program.helper;
 
 import com.letsintern.letsintern.domain.program.domain.Program;
+import com.letsintern.letsintern.domain.program.domain.ProgramStatus;
 import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequestDTO;
+import com.letsintern.letsintern.domain.program.dto.response.ProgramListDTO;
 import com.letsintern.letsintern.domain.program.mapper.ProgramMapper;
 import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
+import com.letsintern.letsintern.domain.program.vo.ProgramThumbnailVo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
@@ -29,7 +33,9 @@ public class ProgramHelper {
         return savedProgram.getId();
     }
 
-    public List<Program> getProgramTotalList() {
-        return programRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
+    public ProgramListDTO getProgramList(Pageable pageable) {
+        List<ProgramThumbnailVo> openProgramList =  programRepository.findProgramThumbnailByStatus(ProgramStatus.OPEN, pageable);
+        List<ProgramThumbnailVo> closedProgramList = programRepository.findProgramThumbnailByStatus(ProgramStatus.CLOSED, pageable);
+        return programMapper.toProgramListDTO(openProgramList, closedProgramList);
     }
 }

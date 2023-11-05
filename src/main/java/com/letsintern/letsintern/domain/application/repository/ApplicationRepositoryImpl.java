@@ -24,7 +24,7 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
                 .from(qApplication)
                 .where(qApplication.program.id.eq(programId))
                 .offset(pageable.getOffset())
-                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
     }
 
@@ -37,7 +37,7 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
                 .from(qApplication)
                 .where(qApplication.program.id.eq(programId), qApplication.approved.eq(approved))
                 .offset(pageable.getOffset())
-                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
     }
 
@@ -50,7 +50,7 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
                 .from(qApplication)
                 .where(qApplication.user.id.eq(userId))
                 .offset(pageable.getOffset())
-                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
     }
 }

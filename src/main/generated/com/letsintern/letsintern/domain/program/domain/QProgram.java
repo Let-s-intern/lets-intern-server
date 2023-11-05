@@ -19,7 +19,15 @@ public class QProgram extends EntityPathBase<Program> {
 
     public static final QProgram program = new QProgram("program");
 
+    public final StringPath announcementDate = createString("announcementDate");
+
+    public final DateTimePath<java.util.Date> dueDate = createDateTime("dueDate", java.util.Date.class);
+
     public final NumberPath<Long> id = createNumber("id", Long.class);
+
+    public final StringPath startDate = createString("startDate");
+
+    public final EnumPath<ProgramStatus> status = createEnum("status", ProgramStatus.class);
 
     public final NumberPath<Integer> th = createNumber("th", Integer.class);
 
