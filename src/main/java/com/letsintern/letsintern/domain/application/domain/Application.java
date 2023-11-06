@@ -2,6 +2,7 @@ package com.letsintern.letsintern.domain.application.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.letsintern.letsintern.domain.program.domain.Program;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -35,6 +36,9 @@ public abstract class Application {
 
     @NotNull
     private Boolean approved = false;
+
+    @Nullable
+    private Long reviewId;
 
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

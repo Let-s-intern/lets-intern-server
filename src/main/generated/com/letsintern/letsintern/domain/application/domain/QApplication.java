@@ -34,6 +34,8 @@ public class QApplication extends EntityPathBase<Application> {
 
     public final com.letsintern.letsintern.domain.program.domain.QProgram program;
 
+    public final NumberPath<Long> reviewId = createNumber("reviewId", Long.class);
+
     public final StringPath wishCompany = createString("wishCompany");
 
     public final StringPath wishJob = createString("wishJob");
