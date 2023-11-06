@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/application")
-@Tag(name = "UserApplication")
+@Tag(name = "Application")
 public class ApplicationController {
 
     private final ApplicationService applicationService;

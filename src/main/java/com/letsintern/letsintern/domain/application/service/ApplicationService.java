@@ -46,7 +46,6 @@ public class ApplicationService {
         return applicationMapper.toUserApplicationListResponseDTO(applicationHelper.getApplicationListOfUserId(userId, pageable));
     }
 
-    @Transactional
     public ApplicationIdResponseDTO updateApplicationApproved(Long applicationId, Boolean approved) {
         return applicationMapper.toApplicationIdResponse(applicationHelper.updateApplicationApproved(applicationId, approved));
     }
