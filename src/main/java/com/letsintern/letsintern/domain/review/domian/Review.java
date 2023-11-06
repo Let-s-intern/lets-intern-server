@@ -4,13 +4,10 @@ import com.letsintern.letsintern.domain.review.dto.request.ReviewCreateDTO;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
-@Getter
+@Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Review {
 
@@ -30,6 +27,9 @@ public class Review {
 
     @NotNull
     Long programId;
+
+    @NotNull
+    ReviewStatus status = ReviewStatus.INVISIBLE;
 
     @Builder
     private Review(Integer grade, String reviewContents, String suggestContents, Long programId) {
