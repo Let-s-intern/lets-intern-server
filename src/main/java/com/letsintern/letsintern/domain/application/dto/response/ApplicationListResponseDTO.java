@@ -1,6 +1,7 @@
 package com.letsintern.letsintern.domain.application.dto.response;
 
 import com.letsintern.letsintern.domain.application.domain.Application;
+import com.letsintern.letsintern.domain.application.domain.UserApplication;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

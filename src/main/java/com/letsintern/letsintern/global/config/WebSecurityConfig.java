@@ -51,15 +51,19 @@ public class WebSecurityConfig {
     };
 
     private final String[] AdminPatterns = {
-            "/user/list", "program/admin/**", "/application/list/**"
+            "/user/list/**", "/program/admin/**", "/application/admin/**"
+    };
+
+    private final String[] UserAndAnonymousPatterns = {
+            "/user/logout", "/application/create/**", "/application/list/mypage"
     };
 
     private final String[] GetPermittedPatterns = {
-
+            "/program/list/**"
     };
 
     private final String[] PostPermittedPatterns = {
-        "/user/signup", "/user/token/reissue"
+        "/user/signup", "/user/token/reissue", "/application/guest/create/**"
     };
 
     private final String[] PatchPermittedPatterns = {
@@ -89,6 +93,7 @@ public class WebSecurityConfig {
                             .requestMatchers(HttpMethod.PATCH, PatchPermittedPatterns).permitAll()
                             .requestMatchers(SwaggerPatterns).permitAll()
                             .requestMatchers(AdminPatterns).hasAnyRole("ADMIN")
+                            .requestMatchers(UserAndAnonymousPatterns).hasAnyRole("USER", "ANONYMOUS")
                             .anyRequest().permitAll();
                 })
                 .exceptionHandling(exceptionHandling -> {
