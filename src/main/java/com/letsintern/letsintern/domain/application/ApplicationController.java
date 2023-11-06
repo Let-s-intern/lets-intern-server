@@ -1,28 +1,42 @@
 package com.letsintern.letsintern.domain.application;
 
 import com.letsintern.letsintern.domain.application.dto.request.ApplicationCreateDTO;
+import com.letsintern.letsintern.domain.application.dto.request.GuestApplicationCreateDTO;
 import com.letsintern.letsintern.domain.application.dto.response.ApplicationIdResponseDTO;
 import com.letsintern.letsintern.domain.application.dto.response.ApplicationListResponseDTO;
 import com.letsintern.letsintern.domain.application.service.ApplicationService;
+import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/application")
-@Tag(name = "Application")
+@Tag(name = "UserApplication")
 public class ApplicationController {
 
     private final ApplicationService applicationService;
 
-    @Operation(summary = "지원서 생성")
-    @PostMapping("/create")
-    public ApplicationIdResponseDTO createApplication(@RequestBody ApplicationCreateDTO applicationCreateDTO) {
-        return applicationService.createApplication(applicationCreateDTO);
+    @Operation(summary = "회원 지원서 생성")
+    @PostMapping("/create/{programId}")
+    public ApplicationIdResponseDTO createUserApplication(
+            @PathVariable Long programId,
+            @RequestBody ApplicationCreateDTO applicationCreateDTO,
+            @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        return applicationService.createUserApplication(programId, applicationCreateDTO, principalDetails);
+    }
+
+    @Operation(summary = "비회원 지원서 생성")
+    @PostMapping("/create/guest/{programId}")
+    public ApplicationIdResponseDTO createGuestApplication(
+            @PathVariable Long programId,
+            @RequestBody GuestApplicationCreateDTO guestApplicationCreateDTO) {
+        return applicationService.createGuestApplication(programId, guestApplicationCreateDTO);
     }
 
     @Operation(summary = "프로그램별 지원서 전체 목록")

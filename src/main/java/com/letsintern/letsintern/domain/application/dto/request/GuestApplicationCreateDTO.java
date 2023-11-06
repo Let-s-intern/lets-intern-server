@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class ApplicationCreateDTO {
+public class GuestApplicationCreateDTO {
 
     private Integer grade;
 
@@ -14,5 +14,11 @@ public class ApplicationCreateDTO {
     private String wishJob;
 
     private String applyMotive;
+
+    private String guestName;
+
+    private String guestPhoneNum;
+
+    private String guestEmail;
 
 }

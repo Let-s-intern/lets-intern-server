@@ -32,8 +32,6 @@ public class QApplication extends EntityPathBase<Application> {
 
     public final com.letsintern.letsintern.domain.program.domain.QProgram program;
 
-    public final com.letsintern.letsintern.domain.user.domain.QUser user;
-
     public final StringPath wishCompany = createString("wishCompany");
 
     public final StringPath wishJob = createString("wishJob");
@@ -57,7 +55,6 @@ public class QApplication extends EntityPathBase<Application> {
     public QApplication(Class<? extends Application> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.program = inits.isInitialized("program") ? new com.letsintern.letsintern.domain.program.domain.QProgram(forProperty("program")) : null;
-        this.user = inits.isInitialized("user") ? new com.letsintern.letsintern.domain.user.domain.QUser(forProperty("user")) : null;
     }
 
 }
