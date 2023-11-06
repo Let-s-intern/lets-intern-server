@@ -1,5 +1,6 @@
 package com.letsintern.letsintern.domain.application.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.letsintern.letsintern.domain.program.domain.Program;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -35,6 +36,7 @@ public abstract class Application {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "program_id", nullable = false)
+    @JsonIgnore
     Program program;
 
 }

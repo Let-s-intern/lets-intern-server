@@ -1,11 +1,13 @@
 package com.letsintern.letsintern.domain.application.mapper;
 
+import com.letsintern.letsintern.domain.application.domain.Application;
 import com.letsintern.letsintern.domain.application.domain.GuestApplication;
 import com.letsintern.letsintern.domain.application.domain.UserApplication;
 import com.letsintern.letsintern.domain.application.dto.request.ApplicationCreateDTO;
 import com.letsintern.letsintern.domain.application.dto.request.GuestApplicationCreateDTO;
 import com.letsintern.letsintern.domain.application.dto.response.ApplicationIdResponseDTO;
 import com.letsintern.letsintern.domain.application.dto.response.ApplicationListResponseDTO;
+import com.letsintern.letsintern.domain.application.dto.response.UserApplicationListResponseDTO;
 import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
 import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
@@ -40,8 +42,12 @@ public class ApplicationMapper {
         return ApplicationIdResponseDTO.from(applicationId);
     }
 
-    public ApplicationListResponseDTO toApplicationListResponseDTO(List<UserApplication> userApplicationList) {
-        return ApplicationListResponseDTO.from(userApplicationList);
+    public ApplicationListResponseDTO toApplicationListResponseDTO(List<Application> applicationList) {
+        return ApplicationListResponseDTO.from(applicationList);
+    }
+
+    public UserApplicationListResponseDTO toUserApplicationListResponseDTO(List<UserApplication> userApplicationList) {
+        return UserApplicationListResponseDTO.from(userApplicationList);
     }
 
     private Program validateApply(Long programId, String phoneNum) {

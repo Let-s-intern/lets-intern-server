@@ -4,6 +4,7 @@ import com.letsintern.letsintern.domain.application.dto.request.ApplicationCreat
 import com.letsintern.letsintern.domain.application.dto.request.GuestApplicationCreateDTO;
 import com.letsintern.letsintern.domain.application.dto.response.ApplicationIdResponseDTO;
 import com.letsintern.letsintern.domain.application.dto.response.ApplicationListResponseDTO;
+import com.letsintern.letsintern.domain.application.dto.response.UserApplicationListResponseDTO;
 import com.letsintern.letsintern.domain.application.service.ApplicationService;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import io.swagger.v3.oas.annotations.Operation;
@@ -53,7 +54,7 @@ public class ApplicationController {
 
     @Operation(summary = "유저별 지원서 전체 목록")
     @GetMapping("/list/user/{userId}")
-    public ApplicationListResponseDTO getApplicationListOfUser(@PathVariable Long userId, @PageableDefault(size = 15) Pageable pageable) {
+    public UserApplicationListResponseDTO getApplicationListOfUser(@PathVariable Long userId, @PageableDefault(size = 15) Pageable pageable) {
         return applicationService.getApplicationListOfUser(userId, pageable);
     }
 }

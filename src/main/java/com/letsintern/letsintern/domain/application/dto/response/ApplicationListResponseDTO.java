@@ -1,5 +1,6 @@
 package com.letsintern.letsintern.domain.application.dto.response;
 
+import com.letsintern.letsintern.domain.application.domain.Application;
 import com.letsintern.letsintern.domain.application.domain.UserApplication;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,16 +12,16 @@ import java.util.List;
 @NoArgsConstructor
 public class ApplicationListResponseDTO {
 
-    private List<UserApplication> userApplicationList;
+    private List<Application> applicationList;
 
     @Builder
-    private ApplicationListResponseDTO(List<UserApplication> userApplicationList) {
-        this.userApplicationList = userApplicationList;
+    private ApplicationListResponseDTO(List<Application> applicationList) {
+        this.applicationList = applicationList;
     }
 
-    public static ApplicationListResponseDTO from(List<UserApplication> userApplicationList) {
+    public static ApplicationListResponseDTO from(List<Application> applicationList) {
         return ApplicationListResponseDTO.builder()
-                .userApplicationList(userApplicationList)
+                .applicationList(applicationList)
                 .build();
     }
 }

@@ -1,5 +1,6 @@
 package com.letsintern.letsintern.domain.application.helper;
 
+import com.letsintern.letsintern.domain.application.domain.Application;
 import com.letsintern.letsintern.domain.application.domain.GuestApplication;
 import com.letsintern.letsintern.domain.application.domain.UserApplication;
 import com.letsintern.letsintern.domain.application.dto.request.ApplicationCreateDTO;
@@ -32,12 +33,12 @@ public class ApplicationHelper {
         return applicationRepository.save(newGuestApplication).getId();
     }
 
-    public List<UserApplication> getApplicationListOfProgramId(Long programId, Pageable pageable) {
+    public List<Application> getApplicationListOfProgramId(Long programId, Pageable pageable) {
         PageRequest pageRequest = makePageRequest(pageable);
         return applicationRepository.findAllByProgramId(programId, pageRequest);
     }
 
-    public List<UserApplication> getApplicationListOfProgramIdAndApproved(Long programId, Boolean approved, Pageable pageable) {
+    public List<Application> getApplicationListOfProgramIdAndApproved(Long programId, Boolean approved, Pageable pageable) {
         PageRequest pageRequest = makePageRequest(pageable);
         return applicationRepository.findAllByProgramIdAndApproved(programId, approved, pageRequest);
     }
