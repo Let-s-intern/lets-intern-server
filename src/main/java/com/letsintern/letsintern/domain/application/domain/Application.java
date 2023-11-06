@@ -31,6 +31,9 @@ public abstract class Application {
     String applyMotive;
 
     @NotNull
+    InflowPath inflowPath;
+
+    @NotNull
     private Boolean approved = false;
 
 

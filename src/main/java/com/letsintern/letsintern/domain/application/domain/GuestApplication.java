@@ -27,8 +27,8 @@ public class GuestApplication extends Application {
     private String guestEmail;
 
     @Builder
-    private GuestApplication(Program program, Integer grade, String wishCompany, String wishJob,
-                             String applyMotive, String guestName, String guestPhoneNum, String guestEmail) {
+    private GuestApplication(Program program, Integer grade, String wishCompany, String wishJob, String applyMotive,
+                             String guestName, String guestPhoneNum, String guestEmail, InflowPath inflowPath) {
         this.program = program;
         this.grade = grade;
         this.wishCompany = wishCompany;
@@ -37,6 +37,7 @@ public class GuestApplication extends Application {
         this.guestName = guestName;
         this.guestPhoneNum = guestPhoneNum;
         this.guestEmail = guestEmail;
+        this.inflowPath = inflowPath;
     }
 
     public static GuestApplication of(Program program, GuestApplicationCreateDTO guestApplicationCreateDTO) {
@@ -49,6 +50,7 @@ public class GuestApplication extends Application {
                 .guestName(guestApplicationCreateDTO.getGuestName())
                 .guestPhoneNum(guestApplicationCreateDTO.getGuestPhoneNum())
                 .guestEmail(guestApplicationCreateDTO.getGuestEmail())
+                .inflowPath(guestApplicationCreateDTO.getInflowPath())
                 .build();
     }
 }

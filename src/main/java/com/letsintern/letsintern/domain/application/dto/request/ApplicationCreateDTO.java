@@ -1,5 +1,6 @@
 package com.letsintern.letsintern.domain.application.dto.request;
 
+import com.letsintern.letsintern.domain.application.domain.InflowPath;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,5 +15,7 @@ public class ApplicationCreateDTO {
     private String wishJob;
 
     private String applyMotive;
+
+    private InflowPath inflowPath;
 
 }
