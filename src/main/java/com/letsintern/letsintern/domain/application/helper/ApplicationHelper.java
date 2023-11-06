@@ -5,6 +5,7 @@ import com.letsintern.letsintern.domain.application.domain.GuestApplication;
 import com.letsintern.letsintern.domain.application.domain.UserApplication;
 import com.letsintern.letsintern.domain.application.dto.request.ApplicationCreateDTO;
 import com.letsintern.letsintern.domain.application.dto.request.GuestApplicationCreateDTO;
+import com.letsintern.letsintern.domain.application.exception.ApplicationNotFound;
 import com.letsintern.letsintern.domain.application.mapper.ApplicationMapper;
 import com.letsintern.letsintern.domain.application.repository.ApplicationRepository;
 import com.letsintern.letsintern.domain.user.domain.User;
@@ -46,6 +47,16 @@ public class ApplicationHelper {
     public List<UserApplication> getApplicationListOfUserId(Long userId, Pageable pageable) {
         PageRequest pageRequest = makePageRequest(pageable);
         return applicationRepository.findAllByUserId(userId, pageRequest);
+    }
+
+    public Long updateApplicationApproved(Long applicationId, Boolean approved) {
+        Application application = applicationRepository.findById(applicationId)
+                .orElseThrow(() -> {
+                    throw ApplicationNotFound.EXCEPTION;
+                });
+
+        application.setApproved(approved);
+        return application.getId();
     }
 
     private PageRequest makePageRequest(Pageable pageable) {
