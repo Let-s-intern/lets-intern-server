@@ -2,6 +2,8 @@ package com.letsintern.letsintern.domain.application.repository;
 
 import com.letsintern.letsintern.domain.application.domain.Application;
 import com.letsintern.letsintern.domain.application.domain.QApplication;
+import com.letsintern.letsintern.domain.application.domain.QUserApplication;
+import com.letsintern.letsintern.domain.application.domain.UserApplication;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -20,9 +22,9 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
         QApplication qApplication = QApplication.application;
 
         return jpaQueryFactory
-                .select(qApplication)
-                .from(qApplication)
+                .selectFrom(qApplication)
                 .where(qApplication.program.id.eq(programId))
+                .orderBy(qApplication.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -36,19 +38,21 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
                 .select(qApplication)
                 .from(qApplication)
                 .where(qApplication.program.id.eq(programId), qApplication.approved.eq(approved))
+                .orderBy(qApplication.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
     }
 
     @Override
-    public List<Application> findAllByUserId(Long userId, Pageable pageable) {
-        QApplication qApplication = QApplication.application;
+    public List<UserApplication> findAllByUserId(Long userId, Pageable pageable) {
+        QUserApplication qUserApplication = QUserApplication.userApplication;
 
         return jpaQueryFactory
-                .select(qApplication)
-                .from(qApplication)
-                .where(qApplication.user.id.eq(userId))
+                .select(qUserApplication)
+                .from(qUserApplication)
+                .where(qUserApplication.user.id.eq(userId))
+                .orderBy(qUserApplication.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
