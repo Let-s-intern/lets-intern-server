@@ -39,7 +39,6 @@ public class WebSecurityConfig {
 
     @Value("${server.url}")
     private String SERVER_URL;
-
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
@@ -74,7 +73,7 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .cors(cors -> configurationSource())
+                .cors(cors -> cors.configurationSource(configurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .headers(headers -> {
                     headers.defaultsDisabled().frameOptions(Customizer.withDefaults());
@@ -114,6 +113,7 @@ public class WebSecurityConfig {
                 Arrays.asList(
                         "http://localhost:8080",
                         "http://localhost:3000",
+                        "https://lets-intern.vercel.app",
                         SERVER_URL
                 )
         );
