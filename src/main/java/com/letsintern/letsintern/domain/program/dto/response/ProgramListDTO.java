@@ -11,19 +11,16 @@ import java.util.List;
 @NoArgsConstructor
 public class ProgramListDTO {
 
-    private List<ProgramThumbnailVo> openProgramList;
-    private List<ProgramThumbnailVo> closedProgramList;
+    private List<ProgramThumbnailVo> programList;
 
     @Builder
-    private ProgramListDTO(List<ProgramThumbnailVo> openProgramList, List<ProgramThumbnailVo> closedProgramList) {
-        this.openProgramList = openProgramList;
-        this.closedProgramList = closedProgramList;
+    private ProgramListDTO(List<ProgramThumbnailVo> programList) {
+        this.programList = programList;
     }
 
-    public static ProgramListDTO from(List<ProgramThumbnailVo> openProgramList, List<ProgramThumbnailVo> closedProgramList) {
+    public static ProgramListDTO from(List<ProgramThumbnailVo> programList) {
         return ProgramListDTO.builder()
-                .openProgramList(openProgramList)
-                .closedProgramList(closedProgramList)
+                .programList(programList)
                 .build();
     }
 }

@@ -14,15 +14,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProgramMapper {
 
-    public Program toEntity(ProgramCreateRequestDTO programCreateRequestDTO, Integer th) {
-        return Program.of(programCreateRequestDTO, th);
+    public Program toEntity(ProgramCreateRequestDTO programCreateRequestDTO) {
+        return Program.of(programCreateRequestDTO);
     }
 
     public ProgramIdResponseDTO toProgramIdResponseDTO(Long programId) {
         return ProgramIdResponseDTO.from(programId);
     }
 
-    public ProgramListDTO toProgramListDTO(List<ProgramThumbnailVo> openProgramList, List<ProgramThumbnailVo> closedProgramList) {
-        return ProgramListDTO.from(openProgramList, closedProgramList);
+    public ProgramListDTO toProgramListDTO(List<ProgramThumbnailVo> programList) {
+        return ProgramListDTO.from(programList);
     }
 }

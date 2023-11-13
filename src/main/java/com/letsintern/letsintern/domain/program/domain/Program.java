@@ -1,10 +1,10 @@
 package com.letsintern.letsintern.domain.program.domain;
 
 import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequestDTO;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -28,6 +28,10 @@ public class Program {
     private Integer th;
 
     @NotNull
+    @Column(length = 50)
+    private String title;
+
+    @NotNull
     private Date dueDate;
 
     @NotNull
@@ -37,30 +41,63 @@ public class Program {
     private String startDate;
 
     @NotNull
+    private String contents;
+
+    @NotNull
+    private ProgramWay way;
+
+    @Nullable
+    private String location;
+
+    @Nullable
+    private String link;
+
+    @Nullable
+    private String questions;
+
+    @NotNull
     @Column(length = 32)
     @Enumerated(EnumType.STRING)
-    private ProgramStatus status = ProgramStatus.CLOSED;
+    private ProgramStatus status = ProgramStatus.OPEN;
+
+    @NotNull
+    private Boolean isApproved = false;
+
+    @NotNull
+    private Boolean isVisible = false;
+
 
     @Builder
-    private Program(ProgramType type, Integer th, Date dueDate, Date announcementDate, Date startDate) {
+    private Program(ProgramType type, Integer th, String title, Date dueDate, Date announcementDate, Date startDate,
+                    String contents, ProgramWay way, String location, String link, String questions) {
         this.type = type;
         this.th = th;
+        this.title = title;
         this.dueDate = dueDate;
-
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy년 MM월 dd일");
         this.announcementDate = simpleDateFormat.format(announcementDate);
-
-        SimpleDateFormat simpleDateFormatWithTime = new SimpleDateFormat("yyyy-MM-dd HH:MM");
+        SimpleDateFormat simpleDateFormatWithTime = new SimpleDateFormat("yyyy년 MM월 dd일 HH:MM");
         this.startDate = simpleDateFormatWithTime.format(startDate);
+        this.contents = contents;
+        this.way = way;
+        this.location = location;
+        this.link = link;
+        this.questions = questions;
     }
 
-    public static Program of(ProgramCreateRequestDTO programCreateRequestDTO, Integer th) {
+    public static Program of(ProgramCreateRequestDTO programCreateRequestDTO) {
         return Program.builder()
                 .type(programCreateRequestDTO.getType())
-                .th(th)
+                .th(programCreateRequestDTO.getTh())
+                .title(programCreateRequestDTO.getTitle())
                 .dueDate(programCreateRequestDTO.getDueDate())
                 .announcementDate(programCreateRequestDTO.getAnnouncementDate())
                 .startDate(programCreateRequestDTO.getStartDate())
+                .contents(programCreateRequestDTO.getContents())
+                .way(programCreateRequestDTO.getWay())
+                .location(programCreateRequestDTO.getLocation())
+                .link(programCreateRequestDTO.getLink())
+                .questions(programCreateRequestDTO.getQuestions())
                 .build();
     }
 }

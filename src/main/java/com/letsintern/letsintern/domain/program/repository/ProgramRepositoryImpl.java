@@ -1,6 +1,5 @@
 package com.letsintern.letsintern.domain.program.repository;
 
-import com.letsintern.letsintern.domain.program.domain.ProgramStatus;
 import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import com.letsintern.letsintern.domain.program.domain.QProgram;
 import com.letsintern.letsintern.domain.program.vo.ProgramThumbnailVo;
@@ -32,19 +31,21 @@ public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
     }
 
     @Override
-    public List<ProgramThumbnailVo> findProgramThumbnailByStatus(ProgramStatus status, Pageable pageable) {
+    public List<ProgramThumbnailVo> findProgramThumbnails(Pageable pageable) {
         QProgram qProgram = QProgram.program;
 
         return jpaQueryFactory
                 .select(new QProgramThumbnailVo(
                         qProgram.id,
+                        qProgram.status,
                         qProgram.type,
                         qProgram.th,
+                        qProgram.title,
                         qProgram.dueDate,
                         qProgram.startDate
                 ))
                 .from(qProgram)
-                .where(qProgram.status.eq(status))
+                .where(qProgram.isApproved.eq(true), qProgram.isVisible.eq(true))
                 .orderBy(qProgram.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -52,20 +53,23 @@ public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
     }
 
     @Override
-    public List<ProgramThumbnailVo> findProgramThumbnailByTypeAndStatus(String type, ProgramStatus status, Pageable pageable) {
+    public List<ProgramThumbnailVo> findProgramThumbnailsByType(String type, Pageable pageable) {
         QProgram qProgram = QProgram.program;
 
         if(type.equals("CHALLENGE")) {
             return jpaQueryFactory
                     .select(new QProgramThumbnailVo(
                             qProgram.id,
+                            qProgram.status,
                             qProgram.type,
                             qProgram.th,
+                            qProgram.title,
                             qProgram.dueDate,
                             qProgram.startDate
                     ))
                     .from(qProgram)
-                    .where(qProgram.type.eq(ProgramType.CHALLENGE_HALF).or(qProgram.type.eq(ProgramType.CHALLENGE_FULL)), qProgram.status.eq(status))
+                    .where(qProgram.type.eq(ProgramType.CHALLENGE_HALF).or(qProgram.type.eq(ProgramType.CHALLENGE_FULL)))
+                    .where(qProgram.isApproved.eq(true), qProgram.isVisible.eq(true))
                     .orderBy(qProgram.id.desc())
                     .offset(pageable.getOffset())
                     .limit(pageable.getPageSize())
@@ -75,13 +79,16 @@ public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
         return jpaQueryFactory
                 .select(new QProgramThumbnailVo(
                         qProgram.id,
+                        qProgram.status,
                         qProgram.type,
                         qProgram.th,
+                        qProgram.title,
                         qProgram.dueDate,
                         qProgram.startDate
                 ))
                 .from(qProgram)
-                .where(qProgram.type.eq(ProgramType.valueOf(type)), qProgram.status.eq(status))
+                .where(qProgram.type.eq(ProgramType.valueOf(type)))
+                .where(qProgram.isApproved.eq(true), qProgram.isVisible.eq(true))
                 .orderBy(qProgram.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
