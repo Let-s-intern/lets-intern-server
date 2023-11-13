@@ -22,7 +22,7 @@ public class ProgramMapper {
         return ProgramIdResponseDTO.from(programId);
     }
 
-    public ProgramListDTO toProgramListDTO(List<ProgramThumbnailVo> openProgramList, List<ProgramThumbnailVo> closedProgramList) {
-        return ProgramListDTO.from(openProgramList, closedProgramList);
+    public ProgramListDTO toProgramListDTO(List<ProgramThumbnailVo> programList) {
+        return ProgramListDTO.from(programList);
     }
 }

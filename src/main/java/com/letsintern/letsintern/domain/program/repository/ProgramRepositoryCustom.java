@@ -1,6 +1,5 @@
 package com.letsintern.letsintern.domain.program.repository;
 
-import com.letsintern.letsintern.domain.program.domain.ProgramStatus;
 import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import com.letsintern.letsintern.domain.program.vo.ProgramThumbnailVo;
 import org.springframework.data.domain.Pageable;
@@ -11,7 +10,7 @@ public interface ProgramRepositoryCustom {
 
     Integer maxTh(ProgramType type);
 
-    List<ProgramThumbnailVo> findProgramThumbnailByStatus(ProgramStatus status, Pageable pageable);
+    List<ProgramThumbnailVo> findProgramThumbnails(Pageable pageable);
 
-    List<ProgramThumbnailVo> findProgramThumbnailByTypeAndStatus(String type, ProgramStatus status, Pageable pageable);
+    List<ProgramThumbnailVo> findProgramThumbnailsByType(String type, Pageable pageable);
 }

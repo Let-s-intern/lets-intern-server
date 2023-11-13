@@ -13,8 +13,8 @@ public class QProgramThumbnailVo extends ConstructorExpression<ProgramThumbnailV
 
     private static final long serialVersionUID = -861108337L;
 
-    public QProgramThumbnailVo(com.querydsl.core.types.Expression<Long> id, com.querydsl.core.types.Expression<com.letsintern.letsintern.domain.program.domain.ProgramType> type, com.querydsl.core.types.Expression<Integer> th, com.querydsl.core.types.Expression<? extends java.util.Date> dueDate, com.querydsl.core.types.Expression<String> startDate) {
-        super(ProgramThumbnailVo.class, new Class<?>[]{long.class, com.letsintern.letsintern.domain.program.domain.ProgramType.class, int.class, java.util.Date.class, String.class}, id, type, th, dueDate, startDate);
+    public QProgramThumbnailVo(com.querydsl.core.types.Expression<Long> id, com.querydsl.core.types.Expression<com.letsintern.letsintern.domain.program.domain.ProgramStatus> status, com.querydsl.core.types.Expression<com.letsintern.letsintern.domain.program.domain.ProgramType> type, com.querydsl.core.types.Expression<Integer> th, com.querydsl.core.types.Expression<String> title, com.querydsl.core.types.Expression<? extends java.util.Date> dueDate, com.querydsl.core.types.Expression<String> startDate) {
+        super(ProgramThumbnailVo.class, new Class<?>[]{long.class, com.letsintern.letsintern.domain.program.domain.ProgramStatus.class, com.letsintern.letsintern.domain.program.domain.ProgramType.class, int.class, String.class, java.util.Date.class, String.class}, id, status, type, th, title, dueDate, startDate);
     }
 
 }
