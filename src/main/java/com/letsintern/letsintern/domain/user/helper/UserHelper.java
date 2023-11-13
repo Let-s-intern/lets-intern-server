@@ -64,7 +64,7 @@ public class UserHelper {
     }
 
     public void findDuplicateUser(UserVo userVo) {
-        if(userRepository.findByEmail(userVo.getEmail()).isPresent()) {
+        if(userRepository.findByEmailOrPhoneNum(userVo.getEmail(), userVo.getPhoneNum()).isPresent()) {
             throw DuplicateUser.EXCEPTION;
         }
     }

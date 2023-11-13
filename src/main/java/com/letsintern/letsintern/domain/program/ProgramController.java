@@ -12,6 +12,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,7 +26,9 @@ public class ProgramController {
 
     @Operation(summary = "어드민 프로그램 신규 개설")
     @PostMapping("/admin/create")
-    public ProgramIdResponseDTO createProgram(@RequestBody ProgramCreateRequestDTO programCreateRequestDTO) {
+    public ProgramIdResponseDTO createProgram(
+            @RequestBody ProgramCreateRequestDTO programCreateRequestDTO) {
+        // @RequestPart List<MultipartFile> files 추가 필요
         return programService.createProgram(programCreateRequestDTO);
     }
 

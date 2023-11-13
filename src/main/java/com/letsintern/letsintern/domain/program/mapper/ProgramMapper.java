@@ -14,8 +14,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProgramMapper {
 
-    public Program toEntity(ProgramCreateRequestDTO programCreateRequestDTO, Integer th) {
-        return Program.of(programCreateRequestDTO, th);
+    public Program toEntity(ProgramCreateRequestDTO programCreateRequestDTO) {
+        return Program.of(programCreateRequestDTO);
     }
 
     public ProgramIdResponseDTO toProgramIdResponseDTO(Long programId) {

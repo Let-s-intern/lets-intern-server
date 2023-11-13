@@ -2,7 +2,6 @@ package com.letsintern.letsintern.domain.program.helper;
 
 import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.program.domain.ProgramStatus;
-import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramUpdateRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.response.ProgramListDTO;
@@ -12,8 +11,8 @@ import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
 import com.letsintern.letsintern.domain.program.vo.ProgramThumbnailVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -25,12 +24,8 @@ public class ProgramHelper {
     private final ProgramRepository programRepository;
     private final ProgramMapper programMapper;
 
-    private Integer findMaxTh(ProgramType type) {
-        return programRepository.maxTh(type);
-    }
-
     public Long createProgram(ProgramCreateRequestDTO programCreateRequestDTO) {
-        Program newProgram = programMapper.toEntity(programCreateRequestDTO, findMaxTh(programCreateRequestDTO.getType()) + 1);
+        Program newProgram = programMapper.toEntity(programCreateRequestDTO);
         return programRepository.save(newProgram).getId();
     }
 
