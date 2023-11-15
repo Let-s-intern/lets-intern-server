@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,6 +20,12 @@ import org.springframework.web.bind.annotation.*;
 public class ProgramController {
 
     private final ProgramService programService;
+
+    @Operation(summary = "AWS Target Group 상태 확인용")
+    @GetMapping("/tg")
+    public ResponseEntity<String> targetGroup() {
+        return ResponseEntity.ok("success");
+    }
 
     @Operation(summary = "어드민 프로그램 신규 개설")
     @PostMapping("")
