@@ -74,14 +74,13 @@ public class Program {
     @Builder
     private Program(ProgramType type, Integer th, String title, Date dueDate, Date announcementDate, Date startDate,
                     String contents, ProgramWay way, String location, String link) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy년 MM월 dd일 HH:MM");
         this.type = type;
         this.th = th;
         this.title = title;
         this.dueDate = dueDate;
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy년 MM월 dd일");
         this.announcementDate = simpleDateFormat.format(announcementDate);
-        SimpleDateFormat simpleDateFormatWithTime = new SimpleDateFormat("yyyy년 MM월 dd일 HH:MM");
-        this.startDate = simpleDateFormatWithTime.format(startDate);
+        this.startDate = simpleDateFormat.format(startDate);
         this.contents = contents;
         this.way = way;
         this.location = location;

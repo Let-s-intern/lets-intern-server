@@ -13,6 +13,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.Objects;
 
 @RestController
@@ -38,7 +39,7 @@ public class ProgramController {
 
     @Operation(summary = "어드민 프로그램 수정")
     @PatchMapping("/{programId}")
-    public ProgramIdResponseDTO updateProgram(@PathVariable Long programId, @RequestBody ProgramUpdateRequestDTO programUpdateRequestDTO) {
+    public ProgramIdResponseDTO updateProgram(@PathVariable Long programId, @RequestBody ProgramUpdateRequestDTO programUpdateRequestDTO) throws ParseException {
         return programService.updateProgram(programId, programUpdateRequestDTO);
     }
 

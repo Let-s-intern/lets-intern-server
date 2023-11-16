@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -41,13 +42,13 @@ public class ProgramHelper {
         return savedProgram.getId();
     }
 
-    public Long updateProgram(Long programId, ProgramUpdateRequestDTO programUpdateRequestDTO) {
+    public Long updateProgram(Long programId, ProgramUpdateRequestDTO programUpdateRequestDTO) throws ParseException {
         Program program = programRepository.findById(programId)
                 .orElseThrow(() -> {
                     throw ProgramNotFound.EXCEPTION;
                 });
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy년 MM월 dd일");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy년 MM월 dd일 HH:mm");
 
         if(programUpdateRequestDTO.getType() != null) {
             program.setType(programUpdateRequestDTO.getType());
@@ -59,14 +60,13 @@ public class ProgramHelper {
             program.setTitle(program.getTitle());
         }
         if(programUpdateRequestDTO.getDueDate() != null) {
-            program.setDueDate(programUpdateRequestDTO.getDueDate());
+            program.setDueDate(simpleDateFormat.parse(programUpdateRequestDTO.getDueDate()));
         }
         if(programUpdateRequestDTO.getAnnouncementDate() != null) {
-            SimpleDateFormat simpleDateFormatWithTIme = new SimpleDateFormat("yyyy년 MM월 dd일 HH:mm");
-            program.setAnnouncementDate(simpleDateFormatWithTIme.format(programUpdateRequestDTO.getAnnouncementDate()));
+            program.setAnnouncementDate(programUpdateRequestDTO.getAnnouncementDate());
         }
         if(programUpdateRequestDTO.getStartDate() != null) {
-            program.setStartDate(simpleDateFormat.format(programUpdateRequestDTO.getStartDate()));
+            program.setStartDate(programUpdateRequestDTO.getStartDate());
         }
         if(programUpdateRequestDTO.getContents() != null) {
             program.setContents(programUpdateRequestDTO.getContents());
