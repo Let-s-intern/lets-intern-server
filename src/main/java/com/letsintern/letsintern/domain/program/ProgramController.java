@@ -44,24 +44,27 @@ public class ProgramController {
         return programService.updateProgram(programId, programUpdateRequestDTO);
     }
 
-    @Operation(summary = "프로그램 전체 목록")
-    @GetMapping("")
-    public ProgramListDTO getProgramList(@PageableDefault(size = 15) Pageable pageable) {
-        return programService.getProgramList(pageable);
+    @Operation(summary = "어드민 프로그램 삭제")
+    @DeleteMapping("/{programId}")
+    public ResponseEntity<?> deleteProgram(@PathVariable Long programId) {
+        programService.deleteProgram(programId);
+        return ResponseEntity.ok(null);
     }
 
-    @Operation(summary = "타입 별 프로그램 목록 (CHALLENGE_HALF/FULL, BOOTCAMP, LETS_CHAT)")
-    @GetMapping("/{type}")
-    public ProgramListDTO getProgramTypeList(@PathVariable String type, @PageableDefault(size = 15) Pageable pageable) {
-        return programService.getProgramTypeList(type, pageable);
+
+    @Operation(summary = "프로그램 전체 목록, 타입별 프로그램 목록 (CHALLENGE, BOOTCAMP, LETS_CHAT")
+    @GetMapping("")
+    public ResponseEntity<?> getProgramList(@PageableDefault(size = 15) Pageable pageable, @RequestParam(required = false) String type) {
+        if(type != null) return ResponseEntity.ok(programService.getProgramTypeList(type, pageable));
+        return ResponseEntity.ok(programService.getProgramList(pageable));
     }
 
     @Operation(summary = "프로그램 1개 상세 보기")
-    @GetMapping("/detail/{programId}")
-    public ResponseEntity<?> getProgramDetailVo(@PathVariable Long programId, @RequestParam(required = false) String type) {
+    @GetMapping("/{programId}")
+    public ResponseEntity<?> getProgramDetailVo(@PathVariable Long programId,  @RequestParam(required = false) String type) {
         if(Objects.equals(type, "admin")) return ResponseEntity.ok(programService.getProgram(programId));
-
         return ResponseEntity.ok(programService.getProgramDetailVo(programId));
     }
+
 
 }

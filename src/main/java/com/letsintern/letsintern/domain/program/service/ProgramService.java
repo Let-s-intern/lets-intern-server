@@ -14,9 +14,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -53,6 +50,15 @@ public class ProgramService {
     }
 
     public Program getProgram(Long programId) {
+        return checkExistingProgram(programId);
+    }
+
+    public void deleteProgram(Long programId) {
+        Program program = checkExistingProgram(programId);
+        programRepository.delete(program);
+    }
+
+    private Program checkExistingProgram(Long programId) {
         Program program = programRepository.findById(programId)
                 .orElseThrow(() -> {
                     throw ProgramNotFound.EXCEPTION;
