@@ -15,9 +15,7 @@ import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
 import com.letsintern.letsintern.domain.program.vo.ProgramDetailVo;
 import com.letsintern.letsintern.domain.program.vo.ProgramThumbnailVo;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
@@ -32,13 +30,15 @@ public class ProgramHelper {
     private final FaqRepository faqRepository;
 
     public Long createProgram(ProgramCreateRequestDTO programCreateRequestDTO) {
-        Program newProgram = programMapper.toEntity(programCreateRequestDTO);
-        programRepository.save(newProgram);
+        Program savedProgram = programRepository.save(programMapper.toEntity(programCreateRequestDTO));
 
-        for(FaqDTO faqDTO : programCreateRequestDTO.getFaqDTOList()) {
-            faqRepository.save(Faq.of(newProgram, faqDTO.getQuestion(), faqDTO.getAnswer()));
+        if(programCreateRequestDTO.getFaqDTOList() != null) {
+            for(FaqDTO faqDTO : programCreateRequestDTO.getFaqDTOList()) {
+                faqRepository.save(Faq.of(savedProgram, faqDTO.getQuestion(), faqDTO.getAnswer()));
+            }
         }
-        return newProgram.getId();
+
+        return savedProgram.getId();
     }
 
     public Long updateProgram(Long programId, ProgramUpdateRequestDTO programUpdateRequestDTO) {

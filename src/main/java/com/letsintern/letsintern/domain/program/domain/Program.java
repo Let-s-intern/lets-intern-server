@@ -9,6 +9,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -67,7 +68,7 @@ public class Program {
     private Boolean isVisible = false;
 
     @OneToMany(mappedBy = "program", orphanRemoval = true)
-    List<Faq> faqList;
+    List<Faq> faqList = new ArrayList<>();
 
 
     @Builder
