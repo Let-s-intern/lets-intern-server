@@ -66,9 +66,7 @@ public class Program {
     @NotNull
     private Boolean isVisible = false;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "faq_id")
-    @JsonIgnore
+    @OneToMany(mappedBy = "program", orphanRemoval = true)
     List<Faq> faqList;
 
 
