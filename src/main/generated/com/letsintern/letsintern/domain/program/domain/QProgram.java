@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -25,6 +26,8 @@ public class QProgram extends EntityPathBase<Program> {
 
     public final DateTimePath<java.util.Date> dueDate = createDateTime("dueDate", java.util.Date.class);
 
+    public final ListPath<com.letsintern.letsintern.domain.faq.domain.Faq, com.letsintern.letsintern.domain.faq.domain.QFaq> faqList = this.<com.letsintern.letsintern.domain.faq.domain.Faq, com.letsintern.letsintern.domain.faq.domain.QFaq>createList("faqList", com.letsintern.letsintern.domain.faq.domain.Faq.class, com.letsintern.letsintern.domain.faq.domain.QFaq.class, PathInits.DIRECT2);
+
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final BooleanPath isApproved = createBoolean("isApproved");
@@ -34,8 +37,6 @@ public class QProgram extends EntityPathBase<Program> {
     public final StringPath link = createString("link");
 
     public final StringPath location = createString("location");
-
-    public final StringPath questions = createString("questions");
 
     public final StringPath startDate = createString("startDate");
 

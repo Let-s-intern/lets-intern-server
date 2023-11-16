@@ -1,11 +1,13 @@
 package com.letsintern.letsintern.domain.program.dto.request;
 
+import com.letsintern.letsintern.domain.faq.dto.FaqDTO;
 import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import com.letsintern.letsintern.domain.program.domain.ProgramWay;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -31,6 +33,6 @@ public class ProgramCreateRequestDTO {
 
     private String link;
 
-    private String questions;
+    private List<FaqDTO> faqDTOList;
 
 }

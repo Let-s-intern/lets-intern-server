@@ -35,4 +35,12 @@ public class Faq {
         this.answer = answer;
     }
 
+    public static Faq of(Program program, String question, String answer) {
+        return Faq.builder()
+                .program(program)
+                .question(question)
+                .answer(answer)
+                .build();
+    }
+
 }

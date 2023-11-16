@@ -1,12 +1,17 @@
 package com.letsintern.letsintern.domain.program.helper;
 
+import com.letsintern.letsintern.domain.faq.domain.Faq;
+import com.letsintern.letsintern.domain.faq.dto.FaqDTO;
+import com.letsintern.letsintern.domain.faq.repository.FaqRepository;
 import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramUpdateRequestDTO;
+import com.letsintern.letsintern.domain.program.dto.response.ProgramDetailDTO;
 import com.letsintern.letsintern.domain.program.dto.response.ProgramListDTO;
 import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
 import com.letsintern.letsintern.domain.program.mapper.ProgramMapper;
 import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
+import com.letsintern.letsintern.domain.program.vo.ProgramDetailVo;
 import com.letsintern.letsintern.domain.program.vo.ProgramThumbnailVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -21,10 +26,16 @@ public class ProgramHelper {
 
     private final ProgramRepository programRepository;
     private final ProgramMapper programMapper;
+    private final FaqRepository faqRepository;
 
     public Long createProgram(ProgramCreateRequestDTO programCreateRequestDTO) {
         Program newProgram = programMapper.toEntity(programCreateRequestDTO);
-        return programRepository.save(newProgram).getId();
+        programRepository.save(newProgram);
+
+        for(FaqDTO faqDTO : programCreateRequestDTO.getFaqDTOList()) {
+            faqRepository.save(Faq.of(newProgram, faqDTO.getQuestion(), faqDTO.getAnswer()));
+        }
+        return newProgram.getId();
     }
 
     public Long updateProgram(Long programId, ProgramUpdateRequestDTO programUpdateRequestDTO) {
@@ -66,9 +77,6 @@ public class ProgramHelper {
         if(programUpdateRequestDTO.getLink() != null) {
             program.setLink(programUpdateRequestDTO.getLink());
         }
-        if(programUpdateRequestDTO.getQuestions() != null) {
-            program.setQuestions(programUpdateRequestDTO.getQuestions());
-        }
         if(programUpdateRequestDTO.getStatus() != null) {
             program.setStatus(programUpdateRequestDTO.getStatus());
         }
@@ -90,5 +98,15 @@ public class ProgramHelper {
     public ProgramListDTO getProgramTypeList(String type, Pageable pageable) {
         List<ProgramThumbnailVo> programList =  programRepository.findProgramThumbnailsByType(type, pageable);
         return programMapper.toProgramListDTO(programList);
+    }
+
+    public ProgramDetailDTO getProgramDetailVo(Long programId) {
+        ProgramDetailVo programDetailVo = programRepository.findProgramDetailVo(programId)
+                .orElseThrow(() -> {
+                    throw ProgramNotFound.EXCEPTION;
+                });
+        List<Faq> faqList = faqRepository.findAllByProgramId(programId);
+
+        return ProgramDetailDTO.of(programDetailVo, faqList);
     }
 }
