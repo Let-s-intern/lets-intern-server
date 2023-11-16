@@ -5,6 +5,7 @@ import com.letsintern.letsintern.domain.program.dto.request.ProgramUpdateRequest
 import com.letsintern.letsintern.domain.program.dto.response.ProgramIdResponseDTO;
 import com.letsintern.letsintern.domain.program.dto.response.ProgramListDTO;
 import com.letsintern.letsintern.domain.program.service.ProgramService;
+import com.letsintern.letsintern.domain.program.vo.ProgramDetailVo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Objects;
 
 @RestController
 @RequiredArgsConstructor
@@ -51,6 +54,14 @@ public class ProgramController {
     @GetMapping("/{type}")
     public ProgramListDTO getProgramTypeList(@PathVariable String type, @PageableDefault(size = 15) Pageable pageable) {
         return programService.getProgramTypeList(type, pageable);
+    }
+
+    @Operation(summary = "프로그램 1개 상세 보기")
+    @GetMapping("/detail/{programId}")
+    public ResponseEntity<?> getProgramDetailVo(@PathVariable Long programId, @RequestParam(required = false) String type) {
+        if(Objects.equals(type, "admin")) return ResponseEntity.ok(programService.getProgram(programId));
+
+        return ResponseEntity.ok(programService.getProgramDetailVo(programId));
     }
 
 }

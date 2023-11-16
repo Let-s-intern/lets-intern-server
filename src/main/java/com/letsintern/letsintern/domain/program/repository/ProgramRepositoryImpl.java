@@ -2,14 +2,17 @@ package com.letsintern.letsintern.domain.program.repository;
 
 import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import com.letsintern.letsintern.domain.program.domain.QProgram;
+import com.letsintern.letsintern.domain.program.vo.ProgramDetailVo;
 import com.letsintern.letsintern.domain.program.vo.ProgramThumbnailVo;
 import com.letsintern.letsintern.domain.program.vo.QProgramThumbnailVo;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -93,5 +96,18 @@ public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
+    }
+
+    @Override
+    public Optional<ProgramDetailVo> findProgramDetailVo(Long programId) {
+        QProgram qProgram = QProgram.program;
+        return Optional.ofNullable(jpaQueryFactory
+                .select(Projections.constructor(ProgramDetailVo.class,
+                        qProgram.title,
+                        qProgram.contents
+                ))
+                .from(qProgram)
+                .where(qProgram.id.eq(programId))
+                .fetchOne());
     }
 }

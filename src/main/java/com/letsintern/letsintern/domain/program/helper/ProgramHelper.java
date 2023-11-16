@@ -7,6 +7,7 @@ import com.letsintern.letsintern.domain.program.dto.response.ProgramListDTO;
 import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
 import com.letsintern.letsintern.domain.program.mapper.ProgramMapper;
 import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
+import com.letsintern.letsintern.domain.program.vo.ProgramDetailVo;
 import com.letsintern.letsintern.domain.program.vo.ProgramThumbnailVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -90,5 +91,13 @@ public class ProgramHelper {
     public ProgramListDTO getProgramTypeList(String type, Pageable pageable) {
         List<ProgramThumbnailVo> programList =  programRepository.findProgramThumbnailsByType(type, pageable);
         return programMapper.toProgramListDTO(programList);
+    }
+
+    public ProgramDetailVo getProgramDetailVo(Long programId) {
+        ProgramDetailVo programDetailVo = programRepository.findProgramDetailVo(programId)
+                .orElseThrow(() -> {
+                    throw ProgramNotFound.EXCEPTION;
+                });
+        return programDetailVo;
     }
 }
