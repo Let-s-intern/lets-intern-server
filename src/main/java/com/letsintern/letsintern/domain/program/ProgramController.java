@@ -44,6 +44,14 @@ public class ProgramController {
         return programService.updateProgram(programId, programUpdateRequestDTO);
     }
 
+    @Operation(summary = "어드민 프로그램 삭제")
+    @DeleteMapping("/{programId}")
+    public ResponseEntity<?> deleteProgram(@PathVariable Long programId) {
+        programService.deleteProgram(programId);
+        return ResponseEntity.ok(null);
+    }
+
+
     @Operation(summary = "프로그램 전체 목록, 타입별 프로그램 목록 (CHALLENGE, BOOTCAMP, LETS_CHAT")
     @GetMapping("")
     public ResponseEntity<?> getProgramList(@PageableDefault(size = 15) Pageable pageable, @RequestParam(required = false) String type) {
@@ -57,5 +65,6 @@ public class ProgramController {
         if(Objects.equals(type, "admin")) return ResponseEntity.ok(programService.getProgram(programId));
         return ResponseEntity.ok(programService.getProgramDetailVo(programId));
     }
+
 
 }
