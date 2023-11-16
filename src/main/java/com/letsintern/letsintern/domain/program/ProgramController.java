@@ -3,7 +3,6 @@ package com.letsintern.letsintern.domain.program;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramUpdateRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.response.ProgramIdResponseDTO;
-import com.letsintern.letsintern.domain.program.dto.response.ProgramListDTO;
 import com.letsintern.letsintern.domain.program.service.ProgramService;
 import com.letsintern.letsintern.domain.program.vo.ProgramDetailVo;
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,7 +33,6 @@ public class ProgramController {
     @PostMapping("")
     public ProgramIdResponseDTO createProgram(
             @RequestBody ProgramCreateRequestDTO programCreateRequestDTO) {
-        // @RequestPart List<MultipartFile> files 추가 필요
         return programService.createProgram(programCreateRequestDTO);
     }
 
@@ -51,8 +49,7 @@ public class ProgramController {
         return ResponseEntity.ok(null);
     }
 
-
-    @Operation(summary = "프로그램 전체 목록, 타입별 프로그램 목록 (CHALLENGE, BOOTCAMP, LETS_CHAT")
+    @Operation(summary = "프로그램 전체 목록, 타입별 프로그램 목록 (CHALLENGE, BOOTCAMP, LETS_CHAT)")
     @GetMapping("")
     public ResponseEntity<?> getProgramList(@PageableDefault(size = 15) Pageable pageable, @RequestParam(required = false) String type) {
         if(type != null) return ResponseEntity.ok(programService.getProgramTypeList(type, pageable));
@@ -61,9 +58,9 @@ public class ProgramController {
 
     @Operation(summary = "프로그램 1개 상세 보기")
     @GetMapping("/{programId}")
-    public ResponseEntity<?> getProgramDetailVo(@PathVariable Long programId,  @RequestParam(required = false) String type) {
+    public ResponseEntity<?> getProgramDetail(@PathVariable Long programId, @RequestParam(required = false) String type) {
         if(Objects.equals(type, "admin")) return ResponseEntity.ok(programService.getProgram(programId));
-        return ResponseEntity.ok(programService.getProgramDetailVo(programId));
+        return ResponseEntity.ok(programService.getProgramDetailDTO(programId));
     }
 
 

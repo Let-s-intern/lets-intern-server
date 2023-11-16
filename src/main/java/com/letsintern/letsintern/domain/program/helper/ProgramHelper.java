@@ -1,8 +1,12 @@
 package com.letsintern.letsintern.domain.program.helper;
 
+import com.letsintern.letsintern.domain.faq.domain.Faq;
+import com.letsintern.letsintern.domain.faq.dto.FaqDTO;
+import com.letsintern.letsintern.domain.faq.repository.FaqRepository;
 import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramUpdateRequestDTO;
+import com.letsintern.letsintern.domain.program.dto.response.ProgramDetailDTO;
 import com.letsintern.letsintern.domain.program.dto.response.ProgramListDTO;
 import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
 import com.letsintern.letsintern.domain.program.mapper.ProgramMapper;
@@ -22,10 +26,16 @@ public class ProgramHelper {
 
     private final ProgramRepository programRepository;
     private final ProgramMapper programMapper;
+    private final FaqRepository faqRepository;
 
     public Long createProgram(ProgramCreateRequestDTO programCreateRequestDTO) {
         Program newProgram = programMapper.toEntity(programCreateRequestDTO);
-        return programRepository.save(newProgram).getId();
+        programRepository.save(newProgram);
+
+        for(FaqDTO faqDTO : programCreateRequestDTO.getFaqDTOList()) {
+            faqRepository.save(Faq.of(newProgram, faqDTO.getQuestion(), faqDTO.getAnswer()));
+        }
+        return newProgram.getId();
     }
 
     public Long updateProgram(Long programId, ProgramUpdateRequestDTO programUpdateRequestDTO) {
@@ -67,9 +77,6 @@ public class ProgramHelper {
         if(programUpdateRequestDTO.getLink() != null) {
             program.setLink(programUpdateRequestDTO.getLink());
         }
-        if(programUpdateRequestDTO.getQuestions() != null) {
-            program.setQuestions(programUpdateRequestDTO.getQuestions());
-        }
         if(programUpdateRequestDTO.getStatus() != null) {
             program.setStatus(programUpdateRequestDTO.getStatus());
         }
@@ -93,11 +100,13 @@ public class ProgramHelper {
         return programMapper.toProgramListDTO(programList);
     }
 
-    public ProgramDetailVo getProgramDetailVo(Long programId) {
+    public ProgramDetailDTO getProgramDetailVo(Long programId) {
         ProgramDetailVo programDetailVo = programRepository.findProgramDetailVo(programId)
                 .orElseThrow(() -> {
                     throw ProgramNotFound.EXCEPTION;
                 });
-        return programDetailVo;
+        List<Faq> faqList = faqRepository.findAllByProgramId(programId);
+
+        return ProgramDetailDTO.of(programDetailVo, faqList);
     }
 }

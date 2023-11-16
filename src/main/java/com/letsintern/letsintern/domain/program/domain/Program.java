@@ -1,5 +1,7 @@
 package com.letsintern.letsintern.domain.program.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.letsintern.letsintern.domain.faq.domain.Faq;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequestDTO;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
@@ -8,6 +10,7 @@ import lombok.*;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Getter @Setter
@@ -52,9 +55,6 @@ public class Program {
     @Nullable
     private String link;
 
-    @Nullable
-    private String questions;
-
     @NotNull
     @Column(length = 32)
     @Enumerated(EnumType.STRING)
@@ -66,10 +66,15 @@ public class Program {
     @NotNull
     private Boolean isVisible = false;
 
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "faq_id")
+    @JsonIgnore
+    List<Faq> faqList;
+
 
     @Builder
     private Program(ProgramType type, Integer th, String title, Date dueDate, Date announcementDate, Date startDate,
-                    String contents, ProgramWay way, String location, String link, String questions) {
+                    String contents, ProgramWay way, String location, String link) {
         this.type = type;
         this.th = th;
         this.title = title;
@@ -82,7 +87,6 @@ public class Program {
         this.way = way;
         this.location = location;
         this.link = link;
-        this.questions = questions;
     }
 
     public static Program of(ProgramCreateRequestDTO programCreateRequestDTO) {
@@ -97,7 +101,6 @@ public class Program {
                 .way(programCreateRequestDTO.getWay())
                 .location(programCreateRequestDTO.getLocation())
                 .link(programCreateRequestDTO.getLink())
-                .questions(programCreateRequestDTO.getQuestions())
                 .build();
     }
 }
