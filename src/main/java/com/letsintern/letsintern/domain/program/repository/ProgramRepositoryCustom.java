@@ -1,5 +1,6 @@
 package com.letsintern.letsintern.domain.program.repository;
 
+import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import com.letsintern.letsintern.domain.program.vo.ProgramDetailVo;
 import com.letsintern.letsintern.domain.program.vo.ProgramThumbnailVo;
@@ -17,4 +18,6 @@ public interface ProgramRepositoryCustom {
     List<ProgramThumbnailVo> findProgramThumbnailsByType(String type, Pageable pageable);
 
     Optional<ProgramDetailVo> findProgramDetailVo(Long programId);
+
+    List<Program> findAllAdmin(Pageable pageable);
 }

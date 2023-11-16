@@ -51,8 +51,9 @@ public class ProgramController {
 
     @Operation(summary = "프로그램 전체 목록, 타입별 프로그램 목록 (CHALLENGE, BOOTCAMP, LETS_CHAT)")
     @GetMapping("")
-    public ResponseEntity<?> getProgramList(@RequestParam(required = false) String type, @RequestParam(required = false) boolean isAdmin, @PageableDefault(size = 15) Pageable pageable) {
+    public ResponseEntity<?> getProgramList(@RequestParam(required = false) String type, @RequestParam(required = false) boolean isAdmin, @PageableDefault(size = 20) Pageable pageable) {
         if(type != null) return ResponseEntity.ok(programService.getProgramTypeList(type, pageable));
+        if(isAdmin) return ResponseEntity.ok(programService.getProgramAdminList(pageable));
         return ResponseEntity.ok(programService.getProgramList(pageable));
     }
 

@@ -1,5 +1,6 @@
 package com.letsintern.letsintern.domain.program.repository;
 
+import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import com.letsintern.letsintern.domain.program.domain.QProgram;
 import com.letsintern.letsintern.domain.program.vo.ProgramDetailVo;
@@ -109,5 +110,18 @@ public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
                 .from(qProgram)
                 .where(qProgram.id.eq(programId))
                 .fetchOne());
+    }
+
+    @Override
+    public List<Program> findAllAdmin(Pageable pageable) {
+        QProgram qProgram = QProgram.program;
+
+        return jpaQueryFactory
+                .select(qProgram)
+                .from(qProgram)
+                .orderBy(qProgram.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
     }
 }

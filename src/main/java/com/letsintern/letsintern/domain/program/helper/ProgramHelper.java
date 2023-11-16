@@ -6,6 +6,7 @@ import com.letsintern.letsintern.domain.faq.repository.FaqRepository;
 import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramUpdateRequestDTO;
+import com.letsintern.letsintern.domain.program.dto.response.ProgramAdminListDTO;
 import com.letsintern.letsintern.domain.program.dto.response.ProgramDetailDTO;
 import com.letsintern.letsintern.domain.program.dto.response.ProgramListDTO;
 import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
@@ -14,7 +15,9 @@ import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
 import com.letsintern.letsintern.domain.program.vo.ProgramDetailVo;
 import com.letsintern.letsintern.domain.program.vo.ProgramThumbnailVo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
@@ -108,5 +111,9 @@ public class ProgramHelper {
         List<Faq> faqList = faqRepository.findAllByProgramId(programId);
 
         return ProgramDetailDTO.of(programDetailVo, faqList);
+    }
+
+    public ProgramAdminListDTO getAdminProgramList(Pageable pageable) {
+        return ProgramAdminListDTO.from(programRepository.findAllAdmin(pageable));
     }
 }
