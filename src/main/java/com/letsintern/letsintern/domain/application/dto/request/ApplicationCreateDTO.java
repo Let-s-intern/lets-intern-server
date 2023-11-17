@@ -18,4 +18,10 @@ public class ApplicationCreateDTO {
 
     private InflowPath inflowPath;
 
+    private String guestName;
+
+    private String guestPhoneNum;
+
+    private String guestEmail;
+
 }

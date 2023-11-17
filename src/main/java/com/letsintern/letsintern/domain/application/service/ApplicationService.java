@@ -1,8 +1,6 @@
 package com.letsintern.letsintern.domain.application.service;
 
-import com.letsintern.letsintern.domain.application.domain.GuestApplication;
 import com.letsintern.letsintern.domain.application.dto.request.ApplicationCreateDTO;
-import com.letsintern.letsintern.domain.application.dto.request.GuestApplicationCreateDTO;
 import com.letsintern.letsintern.domain.application.dto.response.ApplicationIdResponseDTO;
 import com.letsintern.letsintern.domain.application.dto.response.ApplicationListResponseDTO;
 import com.letsintern.letsintern.domain.application.dto.response.UserApplicationListResponseDTO;
@@ -28,8 +26,8 @@ public class ApplicationService {
         return applicationMapper.toApplicationIdResponse(applicationHelper.createUserApplication(programId, applicationCreateDTO, user));
     }
 
-    public ApplicationIdResponseDTO createGuestApplication(Long programId, GuestApplicationCreateDTO guestApplicationCreateDTO) {
-        return applicationMapper.toApplicationIdResponse(applicationHelper.createGuestApplication(programId, guestApplicationCreateDTO));
+    public ApplicationIdResponseDTO createGuestApplication(Long programId, ApplicationCreateDTO applicationCreateDTO) {
+        return applicationMapper.toApplicationIdResponse(applicationHelper.createGuestApplication(programId, applicationCreateDTO));
     }
 
     public ApplicationListResponseDTO getApplicationListOfProgram(Long programId, Pageable pageable) {

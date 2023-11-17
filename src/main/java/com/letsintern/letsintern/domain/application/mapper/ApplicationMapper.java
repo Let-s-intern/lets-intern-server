@@ -4,7 +4,6 @@ import com.letsintern.letsintern.domain.application.domain.Application;
 import com.letsintern.letsintern.domain.application.domain.GuestApplication;
 import com.letsintern.letsintern.domain.application.domain.UserApplication;
 import com.letsintern.letsintern.domain.application.dto.request.ApplicationCreateDTO;
-import com.letsintern.letsintern.domain.application.dto.request.GuestApplicationCreateDTO;
 import com.letsintern.letsintern.domain.application.dto.response.ApplicationIdResponseDTO;
 import com.letsintern.letsintern.domain.application.dto.response.ApplicationListResponseDTO;
 import com.letsintern.letsintern.domain.application.dto.response.UserApplicationListResponseDTO;
@@ -31,10 +30,10 @@ public class ApplicationMapper {
         );
     }
 
-    public GuestApplication toGuestEntity(Long programId, GuestApplicationCreateDTO guestApplicationCreateDTO) {
+    public GuestApplication toGuestEntity(Long programId, ApplicationCreateDTO applicationCreateDTO) {
         return GuestApplication.of(
-                validateApply(programId, guestApplicationCreateDTO.getGuestPhoneNum()),
-                guestApplicationCreateDTO
+                validateApply(programId, applicationCreateDTO.getGuestPhoneNum()),
+                applicationCreateDTO
         );
     }
 

@@ -1,7 +1,6 @@
 package com.letsintern.letsintern.domain.application;
 
 import com.letsintern.letsintern.domain.application.dto.request.ApplicationCreateDTO;
-import com.letsintern.letsintern.domain.application.dto.request.GuestApplicationCreateDTO;
 import com.letsintern.letsintern.domain.application.dto.response.ApplicationIdResponseDTO;
 import com.letsintern.letsintern.domain.application.dto.response.ApplicationListResponseDTO;
 import com.letsintern.letsintern.domain.application.dto.response.UserApplicationListResponseDTO;
@@ -24,25 +23,23 @@ public class ApplicationController {
 
     private final ApplicationService applicationService;
 
-    @Operation(summary = "회원 지원서 생성")
-    @PostMapping("/create/{programId}")
+    @Operation(summary = "지원서 생성")
+    @PostMapping("/{programId}")
     public ApplicationIdResponseDTO createUserApplication(
             @PathVariable Long programId,
             @RequestBody ApplicationCreateDTO applicationCreateDTO,
             @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        return applicationService.createUserApplication(programId, applicationCreateDTO, principalDetails);
-    }
 
-    @Operation(summary = "비회원 지원서 생성")
-    @PostMapping("/guest/create/{programId}")
-    public ApplicationIdResponseDTO createGuestApplication(
-            @PathVariable Long programId,
-            @RequestBody GuestApplicationCreateDTO guestApplicationCreateDTO) {
-        return applicationService.createGuestApplication(programId, guestApplicationCreateDTO);
+        // 회원 지원서 생성
+        if(principalDetails != null)
+            return applicationService.createUserApplication(programId, applicationCreateDTO, principalDetails);
+
+        // 비회원 지원서 생성
+        return applicationService.createGuestApplication(programId, applicationCreateDTO);
     }
 
     @Operation(summary = "마이페이지 나의 지원서 목록")
-    @GetMapping("/list/mypage")
+    @GetMapping("")
     public UserApplicationListResponseDTO getMyPageApplicationList(
             @PageableDefault(size = 15) Pageable pageable,
             @AuthenticationPrincipal PrincipalDetails principalDetails) {

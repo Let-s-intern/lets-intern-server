@@ -1,6 +1,6 @@
 package com.letsintern.letsintern.domain.application.domain;
 
-import com.letsintern.letsintern.domain.application.dto.request.GuestApplicationCreateDTO;
+import com.letsintern.letsintern.domain.application.dto.request.ApplicationCreateDTO;
 import com.letsintern.letsintern.domain.program.domain.Program;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
@@ -40,17 +40,17 @@ public class GuestApplication extends Application {
         this.inflowPath = inflowPath;
     }
 
-    public static GuestApplication of(Program program, GuestApplicationCreateDTO guestApplicationCreateDTO) {
+    public static GuestApplication of(Program program, ApplicationCreateDTO applicationCreateDTO) {
         return GuestApplication.builder()
                 .program(program)
-                .grade(guestApplicationCreateDTO.getGrade())
-                .wishCompany(guestApplicationCreateDTO.getWishCompany())
-                .wishJob(guestApplicationCreateDTO.getWishJob())
-                .applyMotive(guestApplicationCreateDTO.getApplyMotive())
-                .guestName(guestApplicationCreateDTO.getGuestName())
-                .guestPhoneNum(guestApplicationCreateDTO.getGuestPhoneNum())
-                .guestEmail(guestApplicationCreateDTO.getGuestEmail())
-                .inflowPath(guestApplicationCreateDTO.getInflowPath())
+                .grade(applicationCreateDTO.getGrade())
+                .wishCompany(applicationCreateDTO.getWishCompany())
+                .wishJob(applicationCreateDTO.getWishJob())
+                .applyMotive(applicationCreateDTO.getApplyMotive())
+                .guestName(applicationCreateDTO.getGuestName())
+                .guestPhoneNum(applicationCreateDTO.getGuestPhoneNum())
+                .guestEmail(applicationCreateDTO.getGuestEmail())
+                .inflowPath(applicationCreateDTO.getInflowPath())
                 .build();
     }
 }

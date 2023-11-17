@@ -4,7 +4,6 @@ import com.letsintern.letsintern.domain.application.domain.Application;
 import com.letsintern.letsintern.domain.application.domain.GuestApplication;
 import com.letsintern.letsintern.domain.application.domain.UserApplication;
 import com.letsintern.letsintern.domain.application.dto.request.ApplicationCreateDTO;
-import com.letsintern.letsintern.domain.application.dto.request.GuestApplicationCreateDTO;
 import com.letsintern.letsintern.domain.application.exception.ApplicationNotFound;
 import com.letsintern.letsintern.domain.application.mapper.ApplicationMapper;
 import com.letsintern.letsintern.domain.application.repository.ApplicationRepository;
@@ -29,8 +28,8 @@ public class ApplicationHelper {
         return applicationRepository.save(newUserApplication).getId();
     }
 
-    public Long createGuestApplication(Long programId, GuestApplicationCreateDTO guestApplicationCreateDTO) {
-        GuestApplication newGuestApplication = applicationMapper.toGuestEntity(programId, guestApplicationCreateDTO);
+    public Long createGuestApplication(Long programId, ApplicationCreateDTO applicationCreateDTO) {
+        GuestApplication newGuestApplication = applicationMapper.toGuestEntity(programId, applicationCreateDTO);
         return applicationRepository.save(newGuestApplication).getId();
     }
 
