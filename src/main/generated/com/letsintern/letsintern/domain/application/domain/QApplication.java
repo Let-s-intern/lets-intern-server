@@ -30,8 +30,6 @@ public class QApplication extends EntityPathBase<Application> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final EnumPath<InflowPath> inflowPath = createEnum("inflowPath", InflowPath.class);
-
     public final com.letsintern.letsintern.domain.program.domain.QProgram program;
 
     public final NumberPath<Long> reviewId = createNumber("reviewId", Long.class);

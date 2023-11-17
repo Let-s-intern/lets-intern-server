@@ -6,17 +6,17 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class ApplicationIdResponseDTO {
+public class ApplicationIdResponse {
 
     private Long applicationId;
 
     @Builder
-    private ApplicationIdResponseDTO(Long applicationId) {
+    private ApplicationIdResponse(Long applicationId) {
         this.applicationId = applicationId;
     }
 
-    public static ApplicationIdResponseDTO from(Long applicationId) {
-        return ApplicationIdResponseDTO.builder()
+    public static ApplicationIdResponse from(Long applicationId) {
+        return ApplicationIdResponse.builder()
                 .applicationId(applicationId)
                 .build();
     }

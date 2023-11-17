@@ -1,15 +1,13 @@
 package com.letsintern.letsintern.domain.application.repository;
 
-import com.letsintern.letsintern.domain.application.domain.Application;
-import com.letsintern.letsintern.domain.application.domain.QApplication;
-import com.letsintern.letsintern.domain.application.domain.QUserApplication;
-import com.letsintern.letsintern.domain.application.domain.UserApplication;
+import com.letsintern.letsintern.domain.application.domain.*;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -56,5 +54,26 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
+    }
+
+    @Override
+    public UserApplication findByProgramIdAndUserId(Long programId, Long userId) {
+        QUserApplication qUserApplication = QUserApplication.userApplication;
+
+        return jpaQueryFactory
+                .select(qUserApplication)
+                .from(qUserApplication)
+                .where(qUserApplication.program.id.eq(programId), qUserApplication.user.id.eq(userId))
+                .fetchFirst();
+    }
+
+    @Override
+    public GuestApplication findByProgramIdAndGuestEmail(Long programId, String email) {
+        QGuestApplication qGuestApplication = QGuestApplication.guestApplication;
+
+        return jpaQueryFactory
+                .selectFrom(qGuestApplication)
+                .where(qGuestApplication.program.id.eq(programId), qGuestApplication.guestEmail.eq(email))
+                .fetchFirst();
     }
 }

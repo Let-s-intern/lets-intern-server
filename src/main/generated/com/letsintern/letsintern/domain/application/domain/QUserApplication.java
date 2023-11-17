@@ -36,9 +36,6 @@ public class QUserApplication extends EntityPathBase<UserApplication> {
     //inherited
     public final NumberPath<Long> id;
 
-    //inherited
-    public final EnumPath<InflowPath> inflowPath;
-
     // inherited
     public final com.letsintern.letsintern.domain.program.domain.QProgram program;
 
@@ -76,7 +73,6 @@ public class QUserApplication extends EntityPathBase<UserApplication> {
         this.approved = _super.approved;
         this.grade = _super.grade;
         this.id = _super.id;
-        this.inflowPath = _super.inflowPath;
         this.program = _super.program;
         this.reviewId = _super.reviewId;
         this.user = inits.isInitialized("user") ? new com.letsintern.letsintern.domain.user.domain.QUser(forProperty("user")) : null;
