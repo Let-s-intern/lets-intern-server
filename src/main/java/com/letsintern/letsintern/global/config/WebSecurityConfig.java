@@ -54,7 +54,7 @@ public class WebSecurityConfig {
     };
 
     private final String[] UserAndAnonymousPatterns = {
-            "/user/logout", "/application/create/**", "/application/list/mypage"
+            "/user/logout", "/application/list/mypage"
     };
 
     private final String[] GetPermittedPatterns = {

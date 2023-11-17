@@ -4,9 +4,10 @@ import com.letsintern.letsintern.domain.application.domain.Application;
 import com.letsintern.letsintern.domain.application.domain.GuestApplication;
 import com.letsintern.letsintern.domain.application.domain.UserApplication;
 import com.letsintern.letsintern.domain.application.dto.request.ApplicationCreateDTO;
-import com.letsintern.letsintern.domain.application.dto.response.ApplicationIdResponseDTO;
-import com.letsintern.letsintern.domain.application.dto.response.ApplicationListResponseDTO;
-import com.letsintern.letsintern.domain.application.dto.response.UserApplicationListResponseDTO;
+import com.letsintern.letsintern.domain.application.dto.response.ApplicationCreateResponse;
+import com.letsintern.letsintern.domain.application.dto.response.ApplicationIdResponse;
+import com.letsintern.letsintern.domain.application.dto.response.ApplicationListResponse;
+import com.letsintern.letsintern.domain.application.dto.response.UserApplicationListResponse;
 import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
 import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
@@ -37,16 +38,20 @@ public class ApplicationMapper {
         );
     }
 
-    public ApplicationIdResponseDTO toApplicationIdResponse(Long applicationId) {
-        return ApplicationIdResponseDTO.from(applicationId);
+    public ApplicationIdResponse toApplicationIdResponse(Long applicationId) {
+        return ApplicationIdResponse.from(applicationId);
     }
 
-    public ApplicationListResponseDTO toApplicationListResponseDTO(List<Application> applicationList) {
-        return ApplicationListResponseDTO.from(applicationList);
+    public ApplicationCreateResponse toApplicationCreateResponse(Application application) {
+        return ApplicationCreateResponse.from(application.getId(), application.getProgram().getAnnouncementDate());
     }
 
-    public UserApplicationListResponseDTO toUserApplicationListResponseDTO(List<UserApplication> userApplicationList) {
-        return UserApplicationListResponseDTO.from(userApplicationList);
+    public ApplicationListResponse toApplicationListResponseDTO(List<Application> applicationList) {
+        return ApplicationListResponse.from(applicationList);
+    }
+
+    public UserApplicationListResponse toUserApplicationListResponseDTO(List<UserApplication> userApplicationList) {
+        return UserApplicationListResponse.from(userApplicationList);
     }
 
     private Program validateApply(Long programId, String phoneNum) {

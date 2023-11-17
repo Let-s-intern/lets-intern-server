@@ -1,9 +1,11 @@
 package com.letsintern.letsintern.domain.application.service;
 
 import com.letsintern.letsintern.domain.application.dto.request.ApplicationCreateDTO;
-import com.letsintern.letsintern.domain.application.dto.response.ApplicationIdResponseDTO;
-import com.letsintern.letsintern.domain.application.dto.response.ApplicationListResponseDTO;
-import com.letsintern.letsintern.domain.application.dto.response.UserApplicationListResponseDTO;
+import com.letsintern.letsintern.domain.application.dto.response.ApplicationCreateResponse;
+import com.letsintern.letsintern.domain.application.dto.response.ApplicationIdResponse;
+import com.letsintern.letsintern.domain.application.dto.response.ApplicationListResponse;
+import com.letsintern.letsintern.domain.application.dto.response.UserApplicationListResponse;
+import com.letsintern.letsintern.domain.application.exception.ApplicationUserBadRequest;
 import com.letsintern.letsintern.domain.application.helper.ApplicationHelper;
 import com.letsintern.letsintern.domain.application.mapper.ApplicationMapper;
 import com.letsintern.letsintern.domain.user.domain.User;
@@ -21,30 +23,37 @@ public class ApplicationService {
     private final ApplicationHelper applicationHelper;
     private final ApplicationMapper applicationMapper;
 
-    public ApplicationIdResponseDTO createUserApplication(Long programId, ApplicationCreateDTO applicationCreateDTO, PrincipalDetails principalDetails) {
+    public void checkUserApplicationHistory(Long programId, PrincipalDetails principalDetails) {
         final User user = principalDetails.getUser();
-        return applicationMapper.toApplicationIdResponse(applicationHelper.createUserApplication(programId, applicationCreateDTO, user));
+        applicationHelper.checkUserApplicationHistory(programId, user);
     }
 
-    public ApplicationIdResponseDTO createGuestApplication(Long programId, ApplicationCreateDTO applicationCreateDTO) {
-        return applicationMapper.toApplicationIdResponse(applicationHelper.createGuestApplication(programId, applicationCreateDTO));
+    public ApplicationCreateResponse createUserApplication(Long programId, ApplicationCreateDTO applicationCreateDTO, PrincipalDetails principalDetails) {
+        final User user = principalDetails.getUser();
+        return applicationHelper.createUserApplication(programId, applicationCreateDTO, user);
     }
 
-    public ApplicationListResponseDTO getApplicationListOfProgram(Long programId, Pageable pageable) {
+    public ApplicationCreateResponse createGuestApplication(Long programId, ApplicationCreateDTO applicationCreateDTO) {
+        return applicationHelper.createGuestApplication(programId, applicationCreateDTO);
+    }
+
+    public ApplicationListResponse getApplicationListOfProgram(Long programId, Pageable pageable) {
         return applicationMapper.toApplicationListResponseDTO(applicationHelper.getApplicationListOfProgramId(programId, pageable));
     }
 
-    public ApplicationListResponseDTO getApplicationListOfProgramAndApproved(Long programId, Boolean approved, Pageable pageable) {
+    public ApplicationListResponse getApplicationListOfProgramAndApproved(Long programId, Boolean approved, Pageable pageable) {
         return applicationMapper.toApplicationListResponseDTO(
                 applicationHelper.getApplicationListOfProgramIdAndApproved(programId, approved, pageable)
         );
     }
 
-    public UserApplicationListResponseDTO getApplicationListOfUser(Long userId, Pageable pageable) {
+    public UserApplicationListResponse getApplicationListOfUser(Long userId, Pageable pageable) {
         return applicationMapper.toUserApplicationListResponseDTO(applicationHelper.getApplicationListOfUserId(userId, pageable));
     }
 
-    public ApplicationIdResponseDTO updateApplicationApproved(Long applicationId, Boolean approved) {
+    public ApplicationIdResponse updateApplicationApproved(Long applicationId, Boolean approved) {
         return applicationMapper.toApplicationIdResponse(applicationHelper.updateApplicationApproved(applicationId, approved));
     }
+
+
 }

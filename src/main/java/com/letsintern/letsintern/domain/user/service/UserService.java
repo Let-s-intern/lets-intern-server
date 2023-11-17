@@ -15,7 +15,6 @@ import com.letsintern.letsintern.global.config.jwt.TokenProvider;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,6 +47,14 @@ public class UserService {
         final String refreshToken = tokenProvider.createRefreshToken(user.getId(), authentication);
 
         return userMapper.toTokenResponse(accessToken, refreshToken);
+    }
+
+    @Transactional
+    public void addUserDetailInfo(PrincipalDetails principalDetails, String university, String major) {
+        final User user = principalDetails.getUser();
+        user.setUniversity(university);
+        user.setMajor(major);
+        userRepository.save(user);
     }
 
     @Transactional
