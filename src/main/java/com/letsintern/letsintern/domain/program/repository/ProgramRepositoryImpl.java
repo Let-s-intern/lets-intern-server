@@ -20,11 +20,10 @@ import java.util.Optional;
 public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
+    private static final QProgram qProgram = QProgram.program;
 
     @Override
     public Integer maxTh(ProgramType type) {
-        QProgram qProgram = QProgram.program;
-
         Integer maxTh = jpaQueryFactory
                             .select(qProgram.th.max())
                             .from(qProgram)
@@ -36,8 +35,6 @@ public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
 
     @Override
     public List<ProgramThumbnailVo> findProgramThumbnails(Pageable pageable) {
-        QProgram qProgram = QProgram.program;
-
         return jpaQueryFactory
                 .select(new QProgramThumbnailVo(
                         qProgram.id,
@@ -58,8 +55,6 @@ public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
 
     @Override
     public List<ProgramThumbnailVo> findProgramThumbnailsByType(String type, Pageable pageable) {
-        QProgram qProgram = QProgram.program;
-
         if(type.equals("CHALLENGE")) {
             return jpaQueryFactory
                     .select(new QProgramThumbnailVo(
@@ -101,7 +96,6 @@ public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
 
     @Override
     public Optional<ProgramDetailVo> findProgramDetailVo(Long programId) {
-        QProgram qProgram = QProgram.program;
         return Optional.ofNullable(jpaQueryFactory
                 .select(Projections.constructor(ProgramDetailVo.class,
                         qProgram.title,
@@ -114,12 +108,51 @@ public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
 
     @Override
     public List<Program> findAllAdmin(Pageable pageable) {
-        QProgram qProgram = QProgram.program;
-
         return jpaQueryFactory
-                .select(qProgram)
-                .from(qProgram)
+                .selectFrom(qProgram)
                 .orderBy(qProgram.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+    }
+
+    @Override
+    public List<Program> findAllAdminByType(String type, Pageable pageable) {
+        if(type.equals("CHALLENGE")) {
+            return jpaQueryFactory
+                    .selectFrom(qProgram)
+                    .where(qProgram.type.eq(ProgramType.CHALLENGE_HALF).or(qProgram.type.eq(ProgramType.CHALLENGE_FULL)))
+                    .orderBy(qProgram.id.desc())
+                    .offset(pageable.getOffset())
+                    .limit(pageable.getPageSize())
+                    .fetch();
+        }
+        return jpaQueryFactory
+                .selectFrom(qProgram)
+                .where(qProgram.type.eq(ProgramType.valueOf(type)))
+                .orderBy(qProgram.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+    }
+
+    @Override
+    public List<Program> findAllAdminByTypeAndTh(String type, Integer th, Pageable pageable) {
+        if(type.equals("CHALLENGE")) {
+            return jpaQueryFactory
+                    .selectFrom(qProgram)
+                    .where(qProgram.type.eq(ProgramType.CHALLENGE_HALF).or(qProgram.type.eq(ProgramType.CHALLENGE_FULL)))
+                    .where(qProgram.th.eq(th))
+                    .orderBy(qProgram.id.desc())
+                    .offset(pageable.getOffset())
+                    .limit(pageable.getPageSize())
+                    .fetch();
+        }
+        return jpaQueryFactory
+                .selectFrom(qProgram)
+                .where(qProgram.type.eq(ProgramType.valueOf(type)), qProgram.th.eq(th))
+                .orderBy(qProgram.id.desc())
+                .where(qProgram.th.eq(th))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();

@@ -4,9 +4,10 @@ import com.letsintern.letsintern.domain.faq.domain.Faq;
 import com.letsintern.letsintern.domain.faq.dto.FaqDTO;
 import com.letsintern.letsintern.domain.faq.repository.FaqRepository;
 import com.letsintern.letsintern.domain.program.domain.Program;
+import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramUpdateRequestDTO;
-import com.letsintern.letsintern.domain.program.dto.response.ProgramAdminListDTO;
+import com.letsintern.letsintern.domain.program.dto.response.AdminProgramListDTO;
 import com.letsintern.letsintern.domain.program.dto.response.ProgramDetailDTO;
 import com.letsintern.letsintern.domain.program.dto.response.ProgramListDTO;
 import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
@@ -93,13 +94,11 @@ public class ProgramHelper {
         return program.getId();
     }
 
-    public ProgramListDTO getProgramList(Pageable pageable) {
-        List<ProgramThumbnailVo> programList =  programRepository.findProgramThumbnails(pageable);
-        return programMapper.toProgramListDTO(programList);
-    }
+    public ProgramListDTO getProgramThumbnailList(String type, Pageable pageable) {
+        List<ProgramThumbnailVo> programList;
+        if(type != null) programList = programRepository.findProgramThumbnailsByType(type, pageable);
+        else programList = programRepository.findProgramThumbnails(pageable);
 
-    public ProgramListDTO getProgramTypeList(String type, Pageable pageable) {
-        List<ProgramThumbnailVo> programList =  programRepository.findProgramThumbnailsByType(type, pageable);
         return programMapper.toProgramListDTO(programList);
     }
 
@@ -113,7 +112,23 @@ public class ProgramHelper {
         return ProgramDetailDTO.of(programDetailVo, faqList);
     }
 
-    public ProgramAdminListDTO getAdminProgramList(Pageable pageable) {
-        return ProgramAdminListDTO.from(programRepository.findAllAdmin(pageable));
+    public AdminProgramListDTO getAdminProgramList(String type, Integer th, Pageable pageable) {
+        if(type != null && th != null) {
+            return AdminProgramListDTO.from(programRepository.findAllAdminByTypeAndTh(type, th, pageable));
+        }
+
+        if(type != null) {
+            return AdminProgramListDTO.from(programRepository.findAllAdminByType(type, pageable));
+        }
+
+        return AdminProgramListDTO.from(programRepository.findAllAdmin(pageable));
+    }
+
+    public Program getExistingProgram(Long programId) {
+        Program program = programRepository.findById(programId)
+                .orElseThrow(() -> {
+                    throw ProgramNotFound.EXCEPTION;
+                });
+        return program;
     }
 }

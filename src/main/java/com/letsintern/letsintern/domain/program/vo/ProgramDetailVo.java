@@ -11,8 +11,6 @@ public class ProgramDetailVo {
     private String title;
     private String contents;
 
-    //private List<Faq> faqList;
-
     @Builder
     public ProgramDetailVo(String title, String contents) {
         this.title = title;
