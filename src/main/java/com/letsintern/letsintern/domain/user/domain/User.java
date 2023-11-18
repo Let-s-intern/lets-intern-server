@@ -1,5 +1,6 @@
 package com.letsintern.letsintern.domain.user.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.letsintern.letsintern.domain.user.dto.request.UserSignUpRequest;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
@@ -31,6 +32,7 @@ public class User {
 
     @NotNull
     @Size(max = 128)
+    @JsonIgnore
     private String password;
 
     @NotNull

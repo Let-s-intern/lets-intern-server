@@ -58,12 +58,9 @@ public class UserService {
     }
 
     @Transactional
-    public void logout(PrincipalDetails principalDetails, TokenRequest tokenRequest) {
+    public void signOut(PrincipalDetails principalDetails) {
         final User user = principalDetails.getUser();
         tokenProvider.deleteRefreshToken(user.getId());
-
-        final String accessToken = tokenRequest.getAccessToken();
-        redisUtil.setLogoutAccessToken(accessToken, tokenProvider.getExpiration(accessToken));
     }
 
     @Transactional

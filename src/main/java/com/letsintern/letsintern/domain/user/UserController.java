@@ -36,9 +36,9 @@ public class UserController {
     }
 
     @Operation(summary = "로그아웃")
-    @PostMapping("/logout")
-    public void logout(@AuthenticationPrincipal PrincipalDetails principalDetails, @RequestBody TokenRequest tokenRequest) {
-        userService.logout(principalDetails, tokenRequest);
+    @GetMapping("/signout")
+    public void signOut(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        userService.signOut(principalDetails);
     }
 
     @Operation(summary = "토큰 재발급")
@@ -47,8 +47,8 @@ public class UserController {
         return userService.reissueToken(tokenRequest);
     }
 
-    @Operation(summary = "유저 전체 목록")
-    @GetMapping("/list")
+    @Operation(summary = "어드민 사용자 전체 목록")
+    @GetMapping("")
     public UserTotalListDTO getUserTotalList() {
         return userService.getUserTotalList();
     }
