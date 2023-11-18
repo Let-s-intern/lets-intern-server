@@ -56,4 +56,8 @@ public class ApplicationService {
     }
 
 
+    @Transactional
+    public void deleteApplication(Long applicationId) {
+        applicationHelper.deleteApplication(applicationId);
+    }
 }
