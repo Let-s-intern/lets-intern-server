@@ -14,8 +14,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReviewMapper {
 
-    public Review toEntity(Application application, ReviewCreateDTO reviewCreateDTO, String username) {
-        return Review.of(reviewCreateDTO, application.getProgram().getId(), username);
+    public Review toEntity(Long programId, ReviewCreateDTO reviewCreateDTO, String username) {
+        return Review.of(reviewCreateDTO, programId, username);
     }
 
     public ReviewIdResponse toReviewIdResponse(Long reviewId) {

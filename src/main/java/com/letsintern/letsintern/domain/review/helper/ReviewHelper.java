@@ -25,6 +25,11 @@ public class ReviewHelper {
     private final ReviewRepository reviewRepository;
     private final ReviewMapper reviewMapper;
 
+    public Long createLinkReview(Long programId, ReviewCreateDTO reviewCreateDTO) {
+        Review newReview = reviewMapper.toEntity(programId, reviewCreateDTO, null);
+        return reviewRepository.save(newReview).getId();
+    }
+
     public Long createReview(Long applicationId, ReviewCreateDTO reviewCreateDTO, String username) {
         Application application = applicationRepository.findById(applicationId)
                 .orElseThrow(() -> ApplicationNotFound.EXCEPTION);
@@ -33,7 +38,7 @@ public class ReviewHelper {
             throw ReviewUnAuthorized.EXCEPTION;
         }
 
-        Review newReview = reviewMapper.toEntity(application, reviewCreateDTO, username);
+        Review newReview = reviewMapper.toEntity(application.getProgram().getId(), reviewCreateDTO, username);
         Long reviewId = reviewRepository.save(newReview).getId();
         application.setReviewId(reviewId);
 

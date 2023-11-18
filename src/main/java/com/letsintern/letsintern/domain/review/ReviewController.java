@@ -23,9 +23,16 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
+    @PostMapping("")
+    @Operation(summary = "리뷰 생성 - 링크용")
+    public ReviewIdResponse createLinkReview(
+            @RequestParam Long programId,
+            @RequestBody ReviewCreateDTO reviewCreateDTO) {
+        return reviewService.createLinkReview(programId, reviewCreateDTO);
+    }
 
     @PostMapping("/{applicationId}")
-    @Operation(summary = "리뷰 생성")
+    @Operation(summary = "리뷰 생성 - 마이페이지용")
     public ReviewIdResponse createReview(
             @PathVariable Long applicationId,
             @RequestBody ReviewCreateDTO reviewCreateDTO,

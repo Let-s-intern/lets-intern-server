@@ -1,6 +1,5 @@
 package com.letsintern.letsintern.domain.review.service;
 
-import com.letsintern.letsintern.domain.review.domian.ReviewStatus;
 import com.letsintern.letsintern.domain.review.dto.request.ReviewCreateDTO;
 import com.letsintern.letsintern.domain.review.dto.request.ReviewUpdateDTO;
 import com.letsintern.letsintern.domain.review.dto.response.ReviewIdResponse;
@@ -21,10 +20,16 @@ public class ReviewService {
     private final ReviewHelper reviewHelper;
     private final ReviewMapper reviewMapper;
 
+    public ReviewIdResponse createLinkReview(Long programId, ReviewCreateDTO reviewCreateDTO) {
+        return reviewMapper.toReviewIdResponse(reviewHelper.createLinkReview(programId, reviewCreateDTO));
+    }
+
     public ReviewIdResponse createReview(Long applicationId, ReviewCreateDTO reviewCreateDTO, PrincipalDetails principalDetails) {
-        if(principalDetails != null) {
+        if(principalDetails != null) {  // 회원 리뷰
             return reviewMapper.toReviewIdResponse(reviewHelper.createReview(applicationId, reviewCreateDTO, principalDetails.getUsername()));
         }
+
+        // 비회원 리뷰
         return reviewMapper.toReviewIdResponse(reviewHelper.createReview(applicationId, reviewCreateDTO, null));
     }
 
@@ -35,4 +40,5 @@ public class ReviewService {
     public ReviewIdResponse updateReviewStatus(Long reviewId, ReviewUpdateDTO reviewUpdateDTO) {
         return reviewMapper.toReviewIdResponse(reviewHelper.updateReviewStatus(reviewId, reviewUpdateDTO));
     }
+
 }
