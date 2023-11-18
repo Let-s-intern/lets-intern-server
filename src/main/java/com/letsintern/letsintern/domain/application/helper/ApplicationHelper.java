@@ -98,4 +98,11 @@ public class ApplicationHelper {
         return PageRequest.of(pageNum, pageSize, Sort.by("id").descending());
     }
 
+    public void deleteApplication(Long applicationId) {
+        Application application = applicationRepository.findById(applicationId)
+                .orElseThrow(() -> {
+                    throw ApplicationNotFound.EXCEPTION;
+                });
+        applicationRepository.delete(application);
+    }
 }

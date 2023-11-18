@@ -35,7 +35,7 @@ public class ApplicationController {
             @PathVariable Long programId,
             @AuthenticationPrincipal PrincipalDetails principalDetails) {
         applicationService.checkUserApplicationHistory(programId, principalDetails);
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(true);
     }
 
     @Operation(summary = "지원서 생성")
@@ -70,6 +70,15 @@ public class ApplicationController {
             @AuthenticationPrincipal PrincipalDetails principalDetails) {
         final User user = principalDetails.getUser();
         return applicationService.getApplicationListOfUser(user.getId(), pageable);
+    }
+
+    @Operation(summary = "마이페이지 지원 내역 취소")
+    @DeleteMapping("/{applicationId}")
+    public ResponseEntity<String> deleteApplication(
+            @PathVariable Long applicationId,
+            @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        applicationService.deleteApplication(applicationId);
+        return ResponseEntity.ok("success");
     }
 
     @Operation(summary = "어드민 프로그램별 지원서 전체 목록")
