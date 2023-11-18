@@ -13,7 +13,7 @@ public enum UserRole {
 
     ROLE_ADMIN("운영진"),
     ROLE_USER("사용자"),
-    ROLE_ANONYMOUS("임시");
+    ROLE_ANONYMOUS("가입자");
 
     @JsonValue private final String userRole;
 

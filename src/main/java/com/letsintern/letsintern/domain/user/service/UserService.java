@@ -1,16 +1,16 @@
 package com.letsintern.letsintern.domain.user.service;
 
 import com.letsintern.letsintern.domain.user.domain.User;
-import com.letsintern.letsintern.domain.user.dto.request.TokenRequest;
-import com.letsintern.letsintern.domain.user.dto.request.UserSignInRequest;
-import com.letsintern.letsintern.domain.user.dto.request.UserSignUpRequest;
+import com.letsintern.letsintern.domain.user.dto.request.TokenRequestDTO;
+import com.letsintern.letsintern.domain.user.dto.request.UserSignInRequestDTO;
+import com.letsintern.letsintern.domain.user.dto.request.UserSignUpRequestDTO;
+import com.letsintern.letsintern.domain.user.dto.request.UserUpdateRequestDTO;
 import com.letsintern.letsintern.domain.user.dto.response.TokenResponse;
 import com.letsintern.letsintern.domain.user.dto.response.UserIdResponseDTO;
 import com.letsintern.letsintern.domain.user.dto.response.UserTotalListDTO;
 import com.letsintern.letsintern.domain.user.helper.UserHelper;
 import com.letsintern.letsintern.domain.user.mapper.UserMapper;
 import com.letsintern.letsintern.domain.user.repository.UserRepository;
-import com.letsintern.letsintern.domain.user.util.RedisUtil;
 import com.letsintern.letsintern.global.config.jwt.TokenProvider;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
@@ -26,21 +26,20 @@ public class UserService {
     private final UserHelper userHelper;
     private final UserMapper userMapper;
     private final TokenProvider tokenProvider;
-    private final RedisUtil redisUtil;
 
     @Transactional
-    public UserIdResponseDTO signUp(UserSignUpRequest userSignUpRequest) {
+    public UserIdResponseDTO signUp(UserSignUpRequestDTO userSignUpRequestDTO) {
         // 기존 가입 여부 확인
-        userHelper.findDuplicateUser(userSignUpRequest.getUserVo());
+        userHelper.findDuplicateUser(userSignUpRequestDTO.getUserVo());
 
-        final String encodedPassword = userHelper.encodePassword(userSignUpRequest.getUserVo().getPassword());
-        final User user = userMapper.toEntity(userSignUpRequest, encodedPassword);
+        final String encodedPassword = userHelper.encodePassword(userSignUpRequestDTO.getUserVo().getPassword());
+        final User user = userMapper.toEntity(userSignUpRequestDTO, encodedPassword);
         return userMapper.toUserIdResponseDTO(userRepository.save(user).getId());
     }
 
     @Transactional
-    public TokenResponse signIn(UserSignInRequest userSignInRequest) {
-        final User user = userHelper.findForSignIn(userSignInRequest);
+    public TokenResponse signIn(UserSignInRequestDTO userSignInRequestDTO) {
+        final User user = userHelper.findForSignIn(userSignInRequestDTO);
         final Authentication authentication = userHelper.userAuthorizationInput(user);
 
         final String accessToken = tokenProvider.createAccessToken(user.getId(), authentication);
@@ -58,17 +57,14 @@ public class UserService {
     }
 
     @Transactional
-    public void logout(PrincipalDetails principalDetails, TokenRequest tokenRequest) {
+    public void signOut(PrincipalDetails principalDetails) {
         final User user = principalDetails.getUser();
         tokenProvider.deleteRefreshToken(user.getId());
-
-        final String accessToken = tokenRequest.getAccessToken();
-        redisUtil.setLogoutAccessToken(accessToken, tokenProvider.getExpiration(accessToken));
     }
 
     @Transactional
-    public TokenResponse reissueToken(TokenRequest tokenRequest) {
-        final String refreshToken = tokenRequest.getRefreshToken();
+    public TokenResponse reissueToken(TokenRequestDTO tokenRequestDTO) {
+        final String refreshToken = tokenRequestDTO.getRefreshToken();
         final User user = userHelper.findUser(Long.parseLong(tokenProvider.getTokenUserId(refreshToken)));
         final Authentication authentication = userHelper.userAuthorizationInput(user);
 
@@ -80,8 +76,15 @@ public class UserService {
     }
 
     @Transactional
+    public UserIdResponseDTO updateUserInfo(UserUpdateRequestDTO userUpdateRequestDTO, PrincipalDetails principalDetails) {
+        User user = principalDetails.getUser();
+        return userMapper.toUserIdResponseDTO(userHelper.updateUser(user, userUpdateRequestDTO));
+    }
+
+    @Transactional
     public UserTotalListDTO getUserTotalList() {
         return userMapper.toUserTotalListResponseDTO(userHelper.getUserTotalList());
     }
+
 
 }

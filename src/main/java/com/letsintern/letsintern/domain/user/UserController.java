@@ -1,8 +1,9 @@
 package com.letsintern.letsintern.domain.user;
 
-import com.letsintern.letsintern.domain.user.dto.request.TokenRequest;
-import com.letsintern.letsintern.domain.user.dto.request.UserSignInRequest;
-import com.letsintern.letsintern.domain.user.dto.request.UserSignUpRequest;
+import com.letsintern.letsintern.domain.user.dto.request.TokenRequestDTO;
+import com.letsintern.letsintern.domain.user.dto.request.UserSignInRequestDTO;
+import com.letsintern.letsintern.domain.user.dto.request.UserSignUpRequestDTO;
+import com.letsintern.letsintern.domain.user.dto.request.UserUpdateRequestDTO;
 import com.letsintern.letsintern.domain.user.dto.response.TokenResponse;
 import com.letsintern.letsintern.domain.user.dto.response.UserIdResponseDTO;
 import com.letsintern.letsintern.domain.user.dto.response.UserTotalListDTO;
@@ -25,31 +26,41 @@ public class UserController {
 
     @Operation(summary = "회원가입")
     @PostMapping("/signup")
-    public UserIdResponseDTO signUp(@RequestBody @Valid UserSignUpRequest signUpRequest) {
+    public UserIdResponseDTO signUp(@RequestBody @Valid UserSignUpRequestDTO signUpRequest) {
         return userService.signUp(signUpRequest);
     }
 
     @Operation(summary = "로그인")
     @PostMapping("/signin")
-    public TokenResponse signIn(@RequestBody @Valid UserSignInRequest signInRequest) {
+    public TokenResponse signIn(@RequestBody @Valid UserSignInRequestDTO signInRequest) {
         return userService.signIn(signInRequest);
     }
 
     @Operation(summary = "로그아웃")
-    @PostMapping("/logout")
-    public void logout(@AuthenticationPrincipal PrincipalDetails principalDetails, @RequestBody TokenRequest tokenRequest) {
-        userService.logout(principalDetails, tokenRequest);
+    @GetMapping("/signout")
+    public void signOut(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        userService.signOut(principalDetails);
     }
 
     @Operation(summary = "토큰 재발급")
     @PostMapping("/reissue")
-    public TokenResponse reissueToken(@RequestBody TokenRequest tokenRequest) {
-        return userService.reissueToken(tokenRequest);
+    public TokenResponse reissueToken(@RequestBody TokenRequestDTO tokenRequestDTO) {
+        return userService.reissueToken(tokenRequestDTO);
     }
 
-    @Operation(summary = "유저 전체 목록")
-    @GetMapping("/list")
-    public UserTotalListDTO getUserTotalList() {
+    @Operation(summary = "마이페이지 사용자 정보 수정")
+    @PatchMapping("")
+    public UserIdResponseDTO updateUserInfo(
+            @RequestBody UserUpdateRequestDTO userUpdateRequestDTO,
+            @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        return userService.updateUserInfo(userUpdateRequestDTO, principalDetails);
+    }
+
+    @Operation(summary = "어드민 사용자 전체 목록")
+    @GetMapping("")
+    public UserTotalListDTO getUserTotalList(
+            @RequestParam(required = false) Long programId
+    ) {
         return userService.getUserTotalList();
     }
 }

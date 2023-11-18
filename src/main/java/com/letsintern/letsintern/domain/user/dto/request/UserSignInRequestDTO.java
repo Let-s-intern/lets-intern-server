@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
 @Getter
-public class UserSignInRequest {
+public class UserSignInRequestDTO {
 
     @Schema(defaultValue = "string")
     @NotNull(message = "이메일을 입력해주세요")
