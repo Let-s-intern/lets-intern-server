@@ -24,11 +24,11 @@ public class QApplication extends EntityPathBase<Application> {
 
     public final StringPath applyMotive = createString("applyMotive");
 
-    public final BooleanPath approved = createBoolean("approved");
-
     public final NumberPath<Integer> grade = createNumber("grade", Integer.class);
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
+
+    public final BooleanPath isApproved = createBoolean("isApproved");
 
     public final com.letsintern.letsintern.domain.program.domain.QProgram program;
 

@@ -49,20 +49,32 @@ public class WebSecurityConfig {
             "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html"
     };
 
-    private final String[] AdminPatterns = {
-            "/user/list/**", "/program/admin/**", "/application/admin/**", "/review/admin/**"
+    private final String[] AdminGetPatterns = {
+            "/application/admin/**", "/review/admin/**"
+    };
+
+    private final String[] AdminPostPatterns = {
+            "/application/admin/**", "/review/admin/**"
+    };
+
+    private final String[] AdminPatchPatterns = {
+            "/application/**", "/review/admin/**"
+    };
+
+    private final String[] AdminDeletePatterns = {
+            "/application/admin/**", "/review/admin/**"
     };
 
     private final String[] UserAndAnonymousPatterns = {
-            "/user/logout", "/application/list/mypage"
+//            "/user/logout", "/application/list/mypage"
     };
 
     private final String[] GetPermittedPatterns = {
-            "/program/**"
+//            "/program/**"
     };
 
     private final String[] PostPermittedPatterns = {
-        "/user/signup", "/user/token/reissue", "/application/guest/create/**"
+//        "/user/signup", "/user/token/reissue", "/application/guest/create/**"
     };
 
     private final String[] PatchPermittedPatterns = {
@@ -91,7 +103,10 @@ public class WebSecurityConfig {
                             .requestMatchers(HttpMethod.POST, PostPermittedPatterns).permitAll()
                             .requestMatchers(HttpMethod.PATCH, PatchPermittedPatterns).permitAll()
                             .requestMatchers(SwaggerPatterns).permitAll()
-                            .requestMatchers(AdminPatterns).hasAnyRole("ADMIN")
+                            .requestMatchers(HttpMethod.GET, AdminGetPatterns).hasAnyRole("ADMIN")
+                            .requestMatchers(HttpMethod.POST, AdminPostPatterns).hasAnyRole("ADMIN")
+                            .requestMatchers(HttpMethod.PATCH, AdminPatchPatterns).hasAnyRole("ADMIN")
+                            .requestMatchers(HttpMethod.DELETE, AdminDeletePatterns).hasAnyRole("ADMIN")
                             .requestMatchers(UserAndAnonymousPatterns).hasAnyRole("USER", "ANONYMOUS")
                             .anyRequest().permitAll();
                 })

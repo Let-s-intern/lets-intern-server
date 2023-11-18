@@ -8,6 +8,7 @@ import com.letsintern.letsintern.domain.application.dto.response.ApplicationCrea
 import com.letsintern.letsintern.domain.application.dto.response.ApplicationIdResponse;
 import com.letsintern.letsintern.domain.application.dto.response.ApplicationListResponse;
 import com.letsintern.letsintern.domain.application.dto.response.UserApplicationListResponse;
+import com.letsintern.letsintern.domain.application.vo.UserApplicationVo;
 import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
 import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
@@ -50,7 +51,7 @@ public class ApplicationMapper {
         return ApplicationListResponse.from(applicationList);
     }
 
-    public UserApplicationListResponse toUserApplicationListResponseDTO(List<UserApplication> userApplicationList) {
+    public UserApplicationListResponse toUserApplicationListResponse(List<UserApplicationVo> userApplicationList) {
         return UserApplicationListResponse.from(userApplicationList);
     }
 
