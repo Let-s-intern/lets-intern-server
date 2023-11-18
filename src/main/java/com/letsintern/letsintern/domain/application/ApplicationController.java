@@ -76,10 +76,10 @@ public class ApplicationController {
     @GetMapping("/admin/{programId}")
     public ApplicationListResponse getApplicationListOfProgram(
             @PathVariable Long programId,
-            @RequestParam(required = false) Boolean approved,
+            @RequestParam(required = false) Boolean isApproved,
             @PageableDefault(size = 15) Pageable pageable) {
 
-        if(approved != null) return applicationService.getApplicationListOfProgramAndApproved(programId, approved, pageable);
+        if(isApproved != null) return applicationService.getApplicationListOfProgramAndApproved(programId, isApproved, pageable);
         return applicationService.getApplicationListOfProgram(programId, pageable);
     }
 
