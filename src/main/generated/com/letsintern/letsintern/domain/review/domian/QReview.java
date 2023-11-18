@@ -19,6 +19,8 @@ public class QReview extends EntityPathBase<Review> {
 
     public static final QReview review = new QReview("review");
 
+    public final StringPath createdAt = createString("createdAt");
+
     public final NumberPath<Integer> grade = createNumber("grade", Integer.class);
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
@@ -30,6 +32,8 @@ public class QReview extends EntityPathBase<Review> {
     public final EnumPath<ReviewStatus> status = createEnum("status", ReviewStatus.class);
 
     public final StringPath suggestContents = createString("suggestContents");
+
+    public final StringPath userName = createString("userName");
 
     public QReview(String variable) {
         super(Review.class, forVariable(variable));

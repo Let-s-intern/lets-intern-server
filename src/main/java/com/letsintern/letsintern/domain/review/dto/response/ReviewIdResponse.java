@@ -4,17 +4,17 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class ReviewIdResponseDTO {
+public class ReviewIdResponse {
 
     private Long reviewId;
 
     @Builder
-    private ReviewIdResponseDTO(Long reviewId) {
+    private ReviewIdResponse(Long reviewId) {
         this.reviewId = reviewId;
     }
 
-    public static ReviewIdResponseDTO of(Long reviewId) {
-        return ReviewIdResponseDTO.builder()
+    public static ReviewIdResponse of(Long reviewId) {
+        return ReviewIdResponse.builder()
                 .reviewId(reviewId)
                 .build();
     }
