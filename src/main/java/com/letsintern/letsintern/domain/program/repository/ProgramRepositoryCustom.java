@@ -20,4 +20,8 @@ public interface ProgramRepositoryCustom {
     Optional<ProgramDetailVo> findProgramDetailVo(Long programId);
 
     List<Program> findAllAdmin(Pageable pageable);
+
+    List<Program> findAllAdminByTypeAndTh(String type, Integer th, Pageable pageable);
+
+    List<Program> findAllAdminByType(String type, Pageable pageable);
 }

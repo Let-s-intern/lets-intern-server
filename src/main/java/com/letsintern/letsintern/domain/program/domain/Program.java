@@ -1,6 +1,5 @@
 package com.letsintern.letsintern.domain.program.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.letsintern.letsintern.domain.faq.domain.Faq;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequestDTO;
 import jakarta.annotation.Nullable;
@@ -34,6 +33,12 @@ public class Program {
     @NotNull
     @Column(length = 50)
     private String title;
+
+    @NotNull
+    private Integer maxHeadcount = -1;
+
+    @NotNull
+    private Integer headcount = 0;
 
     @NotNull
     private Date dueDate;
@@ -72,12 +77,14 @@ public class Program {
 
 
     @Builder
-    private Program(ProgramType type, Integer th, String title, Date dueDate, Date announcementDate, Date startDate,
+    private Program(ProgramType type, Integer th, String title, Integer maxHeadcount,
+                    Date dueDate, Date announcementDate, Date startDate,
                     String contents, ProgramWay way, String location, String link) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy년 MM월 dd일 HH:MM");
         this.type = type;
         this.th = th;
         this.title = title;
+        this.maxHeadcount = maxHeadcount;
         this.dueDate = dueDate;
         this.announcementDate = simpleDateFormat.format(announcementDate);
         this.startDate = simpleDateFormat.format(startDate);
@@ -92,6 +99,7 @@ public class Program {
                 .type(programCreateRequestDTO.getType())
                 .th(programCreateRequestDTO.getTh())
                 .title(programCreateRequestDTO.getTitle())
+                .maxHeadcount(programCreateRequestDTO.getMaxHeadcount())
                 .dueDate(programCreateRequestDTO.getDueDate())
                 .announcementDate(programCreateRequestDTO.getAnnouncementDate())
                 .startDate(programCreateRequestDTO.getStartDate())

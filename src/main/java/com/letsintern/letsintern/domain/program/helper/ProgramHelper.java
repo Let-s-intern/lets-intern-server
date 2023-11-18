@@ -4,9 +4,11 @@ import com.letsintern.letsintern.domain.faq.domain.Faq;
 import com.letsintern.letsintern.domain.faq.dto.FaqDTO;
 import com.letsintern.letsintern.domain.faq.repository.FaqRepository;
 import com.letsintern.letsintern.domain.program.domain.Program;
+import com.letsintern.letsintern.domain.program.domain.ProgramStatus;
+import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramUpdateRequestDTO;
-import com.letsintern.letsintern.domain.program.dto.response.ProgramAdminListDTO;
+import com.letsintern.letsintern.domain.program.dto.response.AdminProgramListDTO;
 import com.letsintern.letsintern.domain.program.dto.response.ProgramDetailDTO;
 import com.letsintern.letsintern.domain.program.dto.response.ProgramListDTO;
 import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
@@ -20,6 +22,7 @@ import com.letsintern.letsintern.domain.review.vo.ReviewVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -63,6 +66,9 @@ public class ProgramHelper {
         if(programUpdateRequestDTO.getTitle() != null) {
             program.setTitle(program.getTitle());
         }
+        if(programUpdateRequestDTO.getHeadcount() != null) {
+            program.setHeadcount(program.getHeadcount());
+        }
         if(programUpdateRequestDTO.getDueDate() != null) {
             program.setDueDate(simpleDateFormat.parse(programUpdateRequestDTO.getDueDate()));
         }
@@ -97,13 +103,21 @@ public class ProgramHelper {
         return program.getId();
     }
 
-    public ProgramListDTO getProgramList(Pageable pageable) {
-        List<ProgramThumbnailVo> programList =  programRepository.findProgramThumbnails(pageable);
-        return programMapper.toProgramListDTO(programList);
+    @Transactional
+    public void updateProgramHeadCount(Long programId) {
+        Program program = getExistingProgram(programId);
+        program.setHeadcount(program.getHeadcount() + 1);
+
+        if(program.getMaxHeadcount() > 0 && program.getHeadcount() >= program.getMaxHeadcount()) {
+            program.setStatus(ProgramStatus.CLOSED);
+        }
     }
 
-    public ProgramListDTO getProgramTypeList(String type, Pageable pageable) {
-        List<ProgramThumbnailVo> programList =  programRepository.findProgramThumbnailsByType(type, pageable);
+    public ProgramListDTO getProgramThumbnailList(String type, Pageable pageable) {
+        List<ProgramThumbnailVo> programList;
+        if(type != null) programList = programRepository.findProgramThumbnailsByType(type, pageable);
+        else programList = programRepository.findProgramThumbnails(pageable);
+
         return programMapper.toProgramListDTO(programList);
     }
 
@@ -118,7 +132,23 @@ public class ProgramHelper {
         return ProgramDetailDTO.of(programDetailVo, faqList, reviewList);
     }
 
-    public ProgramAdminListDTO getAdminProgramList(Pageable pageable) {
-        return ProgramAdminListDTO.from(programRepository.findAllAdmin(pageable));
+    public AdminProgramListDTO getAdminProgramList(String type, Integer th, Pageable pageable) {
+        if(type != null && th != null) {
+            return AdminProgramListDTO.from(programRepository.findAllAdminByTypeAndTh(type, th, pageable));
+        }
+
+        if(type != null) {
+            return AdminProgramListDTO.from(programRepository.findAllAdminByType(type, pageable));
+        }
+
+        return AdminProgramListDTO.from(programRepository.findAllAdmin(pageable));
+    }
+
+    public Program getExistingProgram(Long programId) {
+        Program program = programRepository.findById(programId)
+                .orElseThrow(() -> {
+                    throw ProgramNotFound.EXCEPTION;
+                });
+        return program;
     }
 }
