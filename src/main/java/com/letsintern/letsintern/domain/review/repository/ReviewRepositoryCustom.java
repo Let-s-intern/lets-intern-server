@@ -9,5 +9,5 @@ import java.util.List;
 public interface ReviewRepositoryCustom {
 
     List<Review> findAllByProgramId(Long programId, Pageable pageable);
-    List<ReviewVo> findAllVosByProgramId(Long programId, Pageable pageable);
+    List<ReviewVo> findAllVosByProgramId(Long programId);
 }

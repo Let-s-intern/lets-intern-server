@@ -40,10 +40,6 @@ public class ReviewHelper {
         return reviewId;
     }
 
-    public List<ReviewVo> getReviewVoListOfProgram(Long programId, Pageable pageable) {
-        return reviewRepository.findAllVosByProgramId(programId, pageable);
-    }
-
     public List<Review> getReviewListOfProgram(Long programId, Pageable pageable) {
         return reviewRepository.findAllByProgramId(programId, pageable);
     }

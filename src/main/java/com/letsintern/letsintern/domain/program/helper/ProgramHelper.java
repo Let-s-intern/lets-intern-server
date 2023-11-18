@@ -14,6 +14,9 @@ import com.letsintern.letsintern.domain.program.mapper.ProgramMapper;
 import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
 import com.letsintern.letsintern.domain.program.vo.ProgramDetailVo;
 import com.letsintern.letsintern.domain.program.vo.ProgramThumbnailVo;
+import com.letsintern.letsintern.domain.review.domian.Review;
+import com.letsintern.letsintern.domain.review.repository.ReviewRepository;
+import com.letsintern.letsintern.domain.review.vo.ReviewVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
@@ -29,6 +32,7 @@ public class ProgramHelper {
     private final ProgramRepository programRepository;
     private final ProgramMapper programMapper;
     private final FaqRepository faqRepository;
+    private final ReviewRepository reviewRepository;
 
     public Long createProgram(ProgramCreateRequestDTO programCreateRequestDTO) {
         Program savedProgram = programRepository.save(programMapper.toEntity(programCreateRequestDTO));
@@ -109,8 +113,9 @@ public class ProgramHelper {
                     throw ProgramNotFound.EXCEPTION;
                 });
         List<Faq> faqList = faqRepository.findAllByProgramId(programId);
+        List<ReviewVo> reviewList = reviewRepository.findAllVosByProgramId(programId);
 
-        return ProgramDetailDTO.of(programDetailVo, faqList);
+        return ProgramDetailDTO.of(programDetailVo, faqList, reviewList);
     }
 
     public ProgramAdminListDTO getAdminProgramList(Pageable pageable) {

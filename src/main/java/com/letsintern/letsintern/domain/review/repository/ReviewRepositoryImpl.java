@@ -32,7 +32,7 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
     }
 
     @Override
-    public List<ReviewVo> findAllVosByProgramId(Long programId, Pageable pageable) {
+    public List<ReviewVo> findAllVosByProgramId(Long programId) {
         QReview qReview = QReview.review;
 
         return jpaQueryFactory
@@ -46,8 +46,6 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
                 .from(qReview)
                 .where(qReview.programId.eq(programId), qReview.status.eq(ReviewStatus.VISIBLE))
                 .orderBy(qReview.id.desc())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
                 .fetch();
     }
 }
