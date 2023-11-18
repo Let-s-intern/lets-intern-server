@@ -40,4 +40,4 @@ out/
 application-secret.yml
 
 ### generated ###
-!**/src/main/generated/
+generated

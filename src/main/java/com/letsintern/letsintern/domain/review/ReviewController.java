@@ -2,14 +2,17 @@ package com.letsintern.letsintern.domain.review;
 
 import com.letsintern.letsintern.domain.review.domian.ReviewStatus;
 import com.letsintern.letsintern.domain.review.dto.request.ReviewCreateDTO;
-import com.letsintern.letsintern.domain.review.dto.response.ReviewIdResponseDTO;
-import com.letsintern.letsintern.domain.review.dto.response.ReviewListResponseDTO;
+import com.letsintern.letsintern.domain.review.dto.request.ReviewUpdateDTO;
+import com.letsintern.letsintern.domain.review.dto.response.ReviewIdResponse;
+import com.letsintern.letsintern.domain.review.dto.response.ReviewListResponse;
 import com.letsintern.letsintern.domain.review.service.ReviewService;
+import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,21 +23,32 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
-    @PostMapping("/create/{applicationId}")
-    @Operation(summary = "리뷰 생성")
-    public ReviewIdResponseDTO createReview(@PathVariable Long applicationId, @RequestBody ReviewCreateDTO reviewCreateDTO) {
-        return reviewService.createReview(applicationId, reviewCreateDTO);
+    @PostMapping("")
+    @Operation(summary = "리뷰 생성 - 링크용")
+    public ReviewIdResponse createLinkReview(
+            @RequestParam Long programId,
+            @RequestBody ReviewCreateDTO reviewCreateDTO) {
+        return reviewService.createLinkReview(programId, reviewCreateDTO);
     }
 
-    @GetMapping("/admin/list/{programId}")
+    @PostMapping("/{applicationId}")
+    @Operation(summary = "리뷰 생성 - 마이페이지용")
+    public ReviewIdResponse createReview(
+            @PathVariable Long applicationId,
+            @RequestBody ReviewCreateDTO reviewCreateDTO,
+            @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        return reviewService.createReview(applicationId, reviewCreateDTO, principalDetails);
+    }
+
+    @GetMapping("/{programId}")
     @Operation(summary = "어드민 프로그램 별 리뷰 목록")
-    public ReviewListResponseDTO getReviewListOfProgram(@PathVariable Long programId, @PageableDefault(size = 15) Pageable pageable) {
+    public ReviewListResponse getReviewListOfProgram(@PathVariable Long programId, @PageableDefault(size = 20) Pageable pageable) {
         return reviewService.getReviewListOfProgram(programId, pageable);
     }
 
-    @GetMapping("/admin/update/{reviewId}/{status}")
-    @Operation(summary = "어드민 리뷰 상태 변경")
-    public ReviewIdResponseDTO updateReviewStatus(@PathVariable Long reviewId, @PathVariable ReviewStatus status) {
-        return reviewService.updateReviewStatus(reviewId, status);
+    @PatchMapping("/{reviewId}")
+    @Operation(summary = "어드민 리뷰 수정")
+    public ReviewIdResponse updateReviewStatus(@PathVariable Long reviewId, @RequestBody ReviewUpdateDTO reviewUpdateDTO) {
+        return reviewService.updateReviewStatus(reviewId, reviewUpdateDTO);
     }
 }
