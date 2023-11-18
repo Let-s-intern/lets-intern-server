@@ -1,11 +1,11 @@
 package com.letsintern.letsintern.domain.application.service;
 
 import com.letsintern.letsintern.domain.application.dto.request.ApplicationCreateDTO;
+import com.letsintern.letsintern.domain.application.dto.request.ApplicationUpdateDTO;
 import com.letsintern.letsintern.domain.application.dto.response.ApplicationCreateResponse;
 import com.letsintern.letsintern.domain.application.dto.response.ApplicationIdResponse;
 import com.letsintern.letsintern.domain.application.dto.response.ApplicationListResponse;
 import com.letsintern.letsintern.domain.application.dto.response.UserApplicationListResponse;
-import com.letsintern.letsintern.domain.application.exception.ApplicationUserBadRequest;
 import com.letsintern.letsintern.domain.application.helper.ApplicationHelper;
 import com.letsintern.letsintern.domain.application.mapper.ApplicationMapper;
 import com.letsintern.letsintern.domain.user.domain.User;
@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class ApplicationService {
 
@@ -48,11 +47,12 @@ public class ApplicationService {
     }
 
     public UserApplicationListResponse getApplicationListOfUser(Long userId, Pageable pageable) {
-        return applicationMapper.toUserApplicationListResponseDTO(applicationHelper.getApplicationListOfUserId(userId, pageable));
+        return applicationMapper.toUserApplicationListResponse(applicationHelper.getApplicationListOfUserId(userId, pageable));
     }
 
-    public ApplicationIdResponse updateApplicationApproved(Long applicationId, Boolean approved) {
-        return applicationMapper.toApplicationIdResponse(applicationHelper.updateApplicationApproved(applicationId, approved));
+    @Transactional
+    public ApplicationIdResponse updateApplication(Long applicationId, ApplicationUpdateDTO applicationUpdateDTO) {
+        return applicationMapper.toApplicationIdResponse(applicationHelper.updateApplication(applicationId, applicationUpdateDTO));
     }
 
 

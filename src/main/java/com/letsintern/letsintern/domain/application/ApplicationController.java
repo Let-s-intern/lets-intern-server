@@ -1,6 +1,7 @@
 package com.letsintern.letsintern.domain.application;
 
 import com.letsintern.letsintern.domain.application.dto.request.ApplicationCreateDTO;
+import com.letsintern.letsintern.domain.application.dto.request.ApplicationUpdateDTO;
 import com.letsintern.letsintern.domain.application.dto.response.ApplicationCreateResponse;
 import com.letsintern.letsintern.domain.application.dto.response.ApplicationIdResponse;
 import com.letsintern.letsintern.domain.application.dto.response.ApplicationListResponse;
@@ -65,34 +66,27 @@ public class ApplicationController {
     @Operation(summary = "마이페이지 나의 지원서 목록")
     @GetMapping("")
     public UserApplicationListResponse getMyPageApplicationList(
-            @PageableDefault(size = 15) Pageable pageable,
+            @PageableDefault(size = 20) Pageable pageable,
             @AuthenticationPrincipal PrincipalDetails principalDetails) {
         final User user = principalDetails.getUser();
         return applicationService.getApplicationListOfUser(user.getId(), pageable);
     }
 
-
     @Operation(summary = "어드민 프로그램별 지원서 전체 목록")
     @GetMapping("/admin/{programId}")
     public ApplicationListResponse getApplicationListOfProgram(
             @PathVariable Long programId,
-            @RequestParam(required = false) Boolean approved,
+            @RequestParam(required = false) Boolean isApproved,
             @PageableDefault(size = 15) Pageable pageable) {
 
-        if(approved != null) return applicationService.getApplicationListOfProgramAndApproved(programId, approved, pageable);
+        if(isApproved != null) return applicationService.getApplicationListOfProgramAndApproved(programId, isApproved, pageable);
         return applicationService.getApplicationListOfProgram(programId, pageable);
     }
 
-    @Operation(summary = "어드민 유저별 지원서 전체 목록")
-    @GetMapping("/admin/{userId}")
-    public UserApplicationListResponse getApplicationListOfUser(@PathVariable Long userId, @PageableDefault(size = 15) Pageable pageable) {
-        return applicationService.getApplicationListOfUser(userId, pageable);
-    }
-
     @Operation(summary = "어드민 지원서 상태 변경")
-    @GetMapping("/admin/{applicationId}")
-    public ApplicationIdResponse updateApplicationStatus(@PathVariable Long applicationId, @RequestParam(required = true) Boolean approved) {
-        return applicationService.updateApplicationApproved(applicationId, approved);
+    @PatchMapping("/{applicationId}")
+    public ApplicationIdResponse updateApplicationStatus(@PathVariable Long applicationId, @RequestBody ApplicationUpdateDTO applicationUpdateDTO) {
+        return applicationService.updateApplication(applicationId, applicationUpdateDTO);
     }
 
 }

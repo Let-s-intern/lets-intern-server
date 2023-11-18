@@ -32,7 +32,7 @@ public abstract class Application {
     String applyMotive;
 
     @NotNull
-    private Boolean approved = false;
+    private Boolean isApproved = false;
 
     @Nullable
     private Long reviewId;

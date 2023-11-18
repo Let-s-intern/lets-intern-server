@@ -28,9 +28,6 @@ public class QGuestApplication extends EntityPathBase<GuestApplication> {
     public final StringPath applyMotive;
 
     //inherited
-    public final BooleanPath approved;
-
-    //inherited
     public final NumberPath<Integer> grade;
 
     public final StringPath guestEmail = createString("guestEmail");
@@ -41,6 +38,9 @@ public class QGuestApplication extends EntityPathBase<GuestApplication> {
 
     //inherited
     public final NumberPath<Long> id;
+
+    //inherited
+    public final BooleanPath isApproved;
 
     // inherited
     public final com.letsintern.letsintern.domain.program.domain.QProgram program;
@@ -74,9 +74,9 @@ public class QGuestApplication extends EntityPathBase<GuestApplication> {
         super(type, metadata, inits);
         this._super = new QApplication(type, metadata, inits);
         this.applyMotive = _super.applyMotive;
-        this.approved = _super.approved;
         this.grade = _super.grade;
         this.id = _super.id;
+        this.isApproved = _super.isApproved;
         this.program = _super.program;
         this.reviewId = _super.reviewId;
         this.wishCompany = _super.wishCompany;

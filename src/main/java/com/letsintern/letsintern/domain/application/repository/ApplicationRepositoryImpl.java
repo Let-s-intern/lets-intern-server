@@ -1,13 +1,14 @@
 package com.letsintern.letsintern.domain.application.repository;
 
 import com.letsintern.letsintern.domain.application.domain.*;
+import com.letsintern.letsintern.domain.application.vo.UserApplicationVo;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -29,13 +30,13 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
     }
 
     @Override
-    public List<Application> findAllByProgramIdAndApproved(Long programId, Boolean approved, Pageable pageable) {
+    public List<Application> findAllByProgramIdAndIsApproved(Long programId, Boolean isApproved, Pageable pageable) {
         QApplication qApplication = QApplication.application;
 
         return jpaQueryFactory
                 .select(qApplication)
                 .from(qApplication)
-                .where(qApplication.program.id.eq(programId), qApplication.approved.eq(approved))
+                .where(qApplication.program.id.eq(programId), qApplication.isApproved.eq(isApproved))
                 .orderBy(qApplication.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -43,11 +44,17 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
     }
 
     @Override
-    public List<UserApplication> findAllByUserId(Long userId, Pageable pageable) {
+    public List<UserApplicationVo> findAllByUserId(Long userId, Pageable pageable) {
         QUserApplication qUserApplication = QUserApplication.userApplication;
 
         return jpaQueryFactory
-                .select(qUserApplication)
+                .select(Projections.constructor(UserApplicationVo.class,
+                        qUserApplication.id,
+                        qUserApplication.reviewId,
+                        qUserApplication.isApproved,
+                        qUserApplication.program.title,
+                        qUserApplication.program.status
+                ))
                 .from(qUserApplication)
                 .where(qUserApplication.user.id.eq(userId))
                 .orderBy(qUserApplication.id.desc())

@@ -28,13 +28,13 @@ public class QUserApplication extends EntityPathBase<UserApplication> {
     public final StringPath applyMotive;
 
     //inherited
-    public final BooleanPath approved;
-
-    //inherited
     public final NumberPath<Integer> grade;
 
     //inherited
     public final NumberPath<Long> id;
+
+    //inherited
+    public final BooleanPath isApproved;
 
     // inherited
     public final com.letsintern.letsintern.domain.program.domain.QProgram program;
@@ -70,9 +70,9 @@ public class QUserApplication extends EntityPathBase<UserApplication> {
         super(type, metadata, inits);
         this._super = new QApplication(type, metadata, inits);
         this.applyMotive = _super.applyMotive;
-        this.approved = _super.approved;
         this.grade = _super.grade;
         this.id = _super.id;
+        this.isApproved = _super.isApproved;
         this.program = _super.program;
         this.reviewId = _super.reviewId;
         this.user = inits.isInitialized("user") ? new com.letsintern.letsintern.domain.user.domain.QUser(forProperty("user")) : null;
