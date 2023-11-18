@@ -1,7 +1,7 @@
 package com.letsintern.letsintern.domain.user.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.letsintern.letsintern.domain.user.dto.request.UserSignUpRequest;
+import com.letsintern.letsintern.domain.user.dto.request.UserSignUpRequestDTO;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -68,12 +68,12 @@ public class User {
         this.role = UserRole.ROLE_ANONYMOUS;
     }
 
-    public static User of(UserSignUpRequest userSignUpRequest, String encodedPassword) {
+    public static User of(UserSignUpRequestDTO userSignUpRequestDTO, String encodedPassword) {
         return User.builder()
-                .email(userSignUpRequest.getUserVo().getEmail())
-                .name(userSignUpRequest.getUserVo().getName())
+                .email(userSignUpRequestDTO.getUserVo().getEmail())
+                .name(userSignUpRequestDTO.getUserVo().getName())
                 .password(encodedPassword)
-                .phoneNum(userSignUpRequest.getUserVo().getPhoneNum())
+                .phoneNum(userSignUpRequestDTO.getUserVo().getPhoneNum())
                 .build();
     }
 }

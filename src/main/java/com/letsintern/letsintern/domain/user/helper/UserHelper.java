@@ -1,15 +1,16 @@
 package com.letsintern.letsintern.domain.user.helper;
 
 import com.letsintern.letsintern.domain.user.domain.User;
-import com.letsintern.letsintern.domain.user.dto.request.UserSignInRequest;
+import com.letsintern.letsintern.domain.user.dto.request.UserSignInRequestDTO;
+import com.letsintern.letsintern.domain.user.dto.request.UserUpdateRequestDTO;
 import com.letsintern.letsintern.domain.user.exception.DuplicateUser;
 import com.letsintern.letsintern.domain.user.exception.MismatchPassword;
 import com.letsintern.letsintern.domain.user.exception.RefreshTokenNotFound;
 import com.letsintern.letsintern.domain.user.exception.UserNotFound;
-import com.letsintern.letsintern.domain.user.mapper.UserMapper;
 import com.letsintern.letsintern.domain.user.repository.UserRepository;
 import com.letsintern.letsintern.domain.user.util.RedisUtil;
 import com.letsintern.letsintern.domain.user.vo.UserVo;
+import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import com.letsintern.letsintern.global.config.user.PrincipalDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,6 +20,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -69,17 +71,47 @@ public class UserHelper {
         }
     }
 
-    public User findForSignIn(UserSignInRequest userSignInRequest) {
-        User findUser = userRepository.findByEmail(userSignInRequest.getEmail())
+    public User findForSignIn(UserSignInRequestDTO userSignInRequestDTO) {
+        User findUser = userRepository.findByEmail(userSignInRequestDTO.getEmail())
                 .orElseThrow(() -> {
                     throw UserNotFound.EXCEPTION;
                 });
 
-        if(!matchesPassword(userSignInRequest.getPassword(), findUser.getPassword())) {
+        if(!matchesPassword(userSignInRequestDTO.getPassword(), findUser.getPassword())) {
             throw MismatchPassword.EXCEPTION;
         }
 
         return findUser;
+    }
+
+    public Long updateUser(User user, UserUpdateRequestDTO userUpdateRequestDTO) {
+        if(userUpdateRequestDTO.getName() != null) {
+            user.setName(userUpdateRequestDTO.getName());
+        }
+
+        if(userUpdateRequestDTO.getEmail() != null) {
+            if(userRepository.findByEmail(userUpdateRequestDTO.getEmail()).isPresent()) {
+                throw DuplicateUser.EXCEPTION;
+            }
+            user.setEmail(userUpdateRequestDTO.getEmail());
+        }
+
+        if(userUpdateRequestDTO.getPhoneNum() != null) {
+            if(userRepository.findByPhoneNum(userUpdateRequestDTO.getPhoneNum()).isPresent()) {
+                throw DuplicateUser.EXCEPTION;
+            }
+            user.setPhoneNum(userUpdateRequestDTO.getPhoneNum());
+        }
+
+        if(userUpdateRequestDTO.getUniversity() != null) {
+            user.setUniversity(userUpdateRequestDTO.getUniversity());
+        }
+
+        if(userUpdateRequestDTO.getMajor() != null) {
+            user.setMajor(user.getMajor());
+        }
+
+        return user.getId();
     }
 
     public List<User> getUserTotalList() {

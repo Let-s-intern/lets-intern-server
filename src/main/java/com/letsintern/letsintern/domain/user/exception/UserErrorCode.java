@@ -13,7 +13,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 @AllArgsConstructor
 public enum UserErrorCode implements BaseErrorCode {
 
-    DUPLICATE_USER(BAD_REQUEST, "USER_400_1", "이미 가입한 유저입니다."),
+    DUPLICATE_USER(BAD_REQUEST, "USER_400_1", "이미 존재하는 유저입니다."),
     USER_NOT_FOUND(NOT_FOUND, "USER_404_1", "존재하지 않는 유저입니다."),
     MISMATCH_PASSWORD(BAD_REQUEST, "USER_400_2", "비밀번호가 일치하지 않습니다"),
 
