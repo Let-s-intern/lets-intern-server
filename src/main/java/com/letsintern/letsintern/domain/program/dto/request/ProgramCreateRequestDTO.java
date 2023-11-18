@@ -19,6 +19,8 @@ public class ProgramCreateRequestDTO {
 
     private String title;
 
+    private Integer maxHeadcount;
+
     private Date dueDate;
 
     private Date announcementDate;

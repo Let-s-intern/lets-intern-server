@@ -52,7 +52,7 @@ public class ApplicationController {
         }
 
         // 회원 상세 정보 추가
-        if(userDetailInfo == true) {
+        if(userDetailInfo != null && userDetailInfo == true) {
             if(applicationCreateDTO.getUniversity() == null || applicationCreateDTO.getMajor() == null) {
                 throw ApplicationUserBadRequest.EXCEPTION;
             }
