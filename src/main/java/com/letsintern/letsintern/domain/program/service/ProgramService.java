@@ -1,9 +1,10 @@
 package com.letsintern.letsintern.domain.program.service;
 
 import com.letsintern.letsintern.domain.program.domain.Program;
+import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramUpdateRequestDTO;
-import com.letsintern.letsintern.domain.program.dto.response.ProgramAdminListDTO;
+import com.letsintern.letsintern.domain.program.dto.response.AdminProgramListDTO;
 import com.letsintern.letsintern.domain.program.dto.response.ProgramDetailDTO;
 import com.letsintern.letsintern.domain.program.dto.response.ProgramIdResponseDTO;
 import com.letsintern.letsintern.domain.program.dto.response.ProgramListDTO;
@@ -11,14 +12,12 @@ import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
 import com.letsintern.letsintern.domain.program.helper.ProgramHelper;
 import com.letsintern.letsintern.domain.program.mapper.ProgramMapper;
 import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
-import com.letsintern.letsintern.domain.program.vo.ProgramDetailVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -41,18 +40,13 @@ public class ProgramService {
     }
 
     @Transactional
-    public ProgramListDTO getProgramList(Pageable pageable) {
-        return programHelper.getProgramList(pageable);
+    public ProgramListDTO getProgramThumbnailList(String type, Pageable pageable) {
+        return programHelper.getProgramThumbnailList(type, pageable);
     }
 
     @Transactional
-    public ProgramListDTO getProgramTypeList(String type, Pageable pageable) {
-        return programHelper.getProgramTypeList(type, pageable);
-    }
-
-    @Transactional
-    public ProgramAdminListDTO getProgramAdminList(Pageable pageable) {
-        return programHelper.getAdminProgramList(pageable);
+    public AdminProgramListDTO getProgramAdminList(String type, Integer th, Pageable pageable) {
+        return programHelper.getAdminProgramList(type, th, pageable);
     }
 
     public ProgramDetailDTO getProgramDetailDTO(Long programId) {
@@ -60,19 +54,14 @@ public class ProgramService {
     }
 
     public Program getProgram(Long programId) {
-        return checkExistingProgram(programId);
+        return programHelper.getExistingProgram(programId);
     }
 
     public void deleteProgram(Long programId) {
-        Program program = checkExistingProgram(programId);
-        programRepository.delete(program);
-    }
-
-    private Program checkExistingProgram(Long programId) {
         Program program = programRepository.findById(programId)
                 .orElseThrow(() -> {
                     throw ProgramNotFound.EXCEPTION;
                 });
-        return program;
+        programRepository.delete(program);
     }
 }

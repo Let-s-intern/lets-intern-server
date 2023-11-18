@@ -14,6 +14,8 @@ public class ProgramUpdateRequestDTO {
 
     private String title;
 
+    private Integer headcount;
+
     private String dueDate;
 
     private String announcementDate;

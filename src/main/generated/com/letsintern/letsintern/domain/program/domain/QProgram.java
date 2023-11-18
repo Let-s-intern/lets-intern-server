@@ -28,6 +28,8 @@ public class QProgram extends EntityPathBase<Program> {
 
     public final ListPath<com.letsintern.letsintern.domain.faq.domain.Faq, com.letsintern.letsintern.domain.faq.domain.QFaq> faqList = this.<com.letsintern.letsintern.domain.faq.domain.Faq, com.letsintern.letsintern.domain.faq.domain.QFaq>createList("faqList", com.letsintern.letsintern.domain.faq.domain.Faq.class, com.letsintern.letsintern.domain.faq.domain.QFaq.class, PathInits.DIRECT2);
 
+    public final NumberPath<Integer> headcount = createNumber("headcount", Integer.class);
+
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final BooleanPath isApproved = createBoolean("isApproved");
@@ -37,6 +39,8 @@ public class QProgram extends EntityPathBase<Program> {
     public final StringPath link = createString("link");
 
     public final StringPath location = createString("location");
+
+    public final NumberPath<Integer> maxHeadcount = createNumber("maxHeadcount", Integer.class);
 
     public final StringPath startDate = createString("startDate");
 

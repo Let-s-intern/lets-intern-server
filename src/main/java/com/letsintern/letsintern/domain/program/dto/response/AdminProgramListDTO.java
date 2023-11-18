@@ -9,17 +9,17 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-public class ProgramAdminListDTO {
+public class AdminProgramListDTO {
 
     private List<Program> programList;
 
     @Builder
-    private ProgramAdminListDTO(List<Program> programList) {
+    private AdminProgramListDTO(List<Program> programList) {
         this.programList = programList;
     }
 
-    public static ProgramAdminListDTO from(List<Program> programList) {
-        return ProgramAdminListDTO.builder()
+    public static AdminProgramListDTO from(List<Program> programList) {
+        return AdminProgramListDTO.builder()
                 .programList(programList)
                 .build();
     }
