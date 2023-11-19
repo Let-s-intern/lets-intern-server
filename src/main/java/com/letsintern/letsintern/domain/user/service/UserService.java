@@ -7,6 +7,7 @@ import com.letsintern.letsintern.domain.user.dto.request.UserSignUpRequestDTO;
 import com.letsintern.letsintern.domain.user.dto.request.UserUpdateRequestDTO;
 import com.letsintern.letsintern.domain.user.dto.response.TokenResponse;
 import com.letsintern.letsintern.domain.user.dto.response.UserIdResponseDTO;
+import com.letsintern.letsintern.domain.user.dto.response.UserInfoResponseDTO;
 import com.letsintern.letsintern.domain.user.dto.response.UserTotalListDTO;
 import com.letsintern.letsintern.domain.user.helper.UserHelper;
 import com.letsintern.letsintern.domain.user.mapper.UserMapper;
@@ -63,6 +64,13 @@ public class UserService {
     }
 
     @Transactional
+    public void withdraw(PrincipalDetails principalDetails) {
+        signOut(principalDetails);
+        User user = principalDetails.getUser();
+        userRepository.delete(user);
+    }
+
+    @Transactional
     public TokenResponse reissueToken(TokenRequestDTO tokenRequestDTO) {
         final String refreshToken = tokenRequestDTO.getRefreshToken();
         final User user = userHelper.findUser(Long.parseLong(tokenProvider.getTokenUserId(refreshToken)));
@@ -75,10 +83,16 @@ public class UserService {
         return userMapper.toTokenResponse(newAccessToken, refreshToken);
     }
 
+    public UserInfoResponseDTO getUserInfo(PrincipalDetails principalDetails) {
+        final User user = principalDetails.getUser();
+        return userMapper.toUserInfoResponseDTO(user);
+    }
+
     @Transactional
     public UserIdResponseDTO updateUserInfo(UserUpdateRequestDTO userUpdateRequestDTO, PrincipalDetails principalDetails) {
-        User user = principalDetails.getUser();
-        return userMapper.toUserIdResponseDTO(userHelper.updateUser(user, userUpdateRequestDTO));
+        return userMapper.toUserIdResponseDTO(
+                userHelper.updateUserInfo(principalDetails.getUser().getId(), userUpdateRequestDTO)
+        );
     }
 
     @Transactional

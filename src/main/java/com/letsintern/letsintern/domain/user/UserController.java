@@ -6,6 +6,7 @@ import com.letsintern.letsintern.domain.user.dto.request.UserSignUpRequestDTO;
 import com.letsintern.letsintern.domain.user.dto.request.UserUpdateRequestDTO;
 import com.letsintern.letsintern.domain.user.dto.response.TokenResponse;
 import com.letsintern.letsintern.domain.user.dto.response.UserIdResponseDTO;
+import com.letsintern.letsintern.domain.user.dto.response.UserInfoResponseDTO;
 import com.letsintern.letsintern.domain.user.dto.response.UserTotalListDTO;
 import com.letsintern.letsintern.domain.user.service.UserService;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
@@ -48,6 +49,18 @@ public class UserController {
         return userService.reissueToken(tokenRequestDTO);
     }
 
+    @Operation(summary = "회원 탈퇴")
+    @GetMapping("/withdraw")
+    public void withdraw(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        userService.withdraw(principalDetails);
+    }
+
+    @Operation(summary = "마이페이지 사용자 정보")
+    @GetMapping("")
+    public UserInfoResponseDTO getUserInfo(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        return userService.getUserInfo(principalDetails);
+    }
+
     @Operation(summary = "마이페이지 사용자 정보 수정")
     @PatchMapping("")
     public UserIdResponseDTO updateUserInfo(
@@ -57,7 +70,7 @@ public class UserController {
     }
 
     @Operation(summary = "어드민 사용자 전체 목록")
-    @GetMapping("")
+    @GetMapping("/admin")
     public UserTotalListDTO getUserTotalList(
             @RequestParam(required = false) Long programId
     ) {

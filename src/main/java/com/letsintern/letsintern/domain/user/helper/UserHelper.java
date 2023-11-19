@@ -10,7 +10,6 @@ import com.letsintern.letsintern.domain.user.exception.UserNotFound;
 import com.letsintern.letsintern.domain.user.repository.UserRepository;
 import com.letsintern.letsintern.domain.user.util.RedisUtil;
 import com.letsintern.letsintern.domain.user.vo.UserVo;
-import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import com.letsintern.letsintern.global.config.user.PrincipalDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,7 +19,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -32,6 +30,7 @@ public class UserHelper {
     private final PrincipalDetailsService principalDetailsService;
     private final UserRepository userRepository;
     private final RedisUtil redisUtil;
+
 
     public String encodePassword(String password) {
         return passwordEncoder.encode(password);
@@ -84,7 +83,12 @@ public class UserHelper {
         return findUser;
     }
 
-    public Long updateUser(User user, UserUpdateRequestDTO userUpdateRequestDTO) {
+    public Long updateUserInfo(Long userId, UserUpdateRequestDTO userUpdateRequestDTO) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> {
+                    throw UserNotFound.EXCEPTION;
+                });
+
         if(userUpdateRequestDTO.getName() != null) {
             user.setName(userUpdateRequestDTO.getName());
         }
