@@ -41,7 +41,7 @@ public class User {
     private String password;
 
     @NotNull
-    @Column(unique = true, length = 15)
+    @Column(length = 15)
     private String phoneNum;
 
     @NotNull

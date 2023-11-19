@@ -7,6 +7,7 @@ import com.letsintern.letsintern.domain.user.dto.request.UserSignUpRequestDTO;
 import com.letsintern.letsintern.domain.user.dto.request.UserUpdateRequestDTO;
 import com.letsintern.letsintern.domain.user.dto.response.TokenResponse;
 import com.letsintern.letsintern.domain.user.dto.response.UserIdResponseDTO;
+import com.letsintern.letsintern.domain.user.dto.response.UserInfoResponseDTO;
 import com.letsintern.letsintern.domain.user.dto.response.UserTotalListDTO;
 import com.letsintern.letsintern.domain.user.helper.UserHelper;
 import com.letsintern.letsintern.domain.user.mapper.UserMapper;
@@ -82,6 +83,11 @@ public class UserService {
         return userMapper.toTokenResponse(newAccessToken, refreshToken);
     }
 
+    public UserInfoResponseDTO getUserInfo(PrincipalDetails principalDetails) {
+        final User user = principalDetails.getUser();
+        return userMapper.toUserInfoResponseDTO(user);
+    }
+
     @Transactional
     public UserIdResponseDTO updateUserInfo(UserUpdateRequestDTO userUpdateRequestDTO, PrincipalDetails principalDetails) {
         return userMapper.toUserIdResponseDTO(
@@ -93,4 +99,6 @@ public class UserService {
     public UserTotalListDTO getUserTotalList() {
         return userMapper.toUserTotalListResponseDTO(userHelper.getUserTotalList());
     }
+
+
 }
