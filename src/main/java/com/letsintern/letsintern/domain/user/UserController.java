@@ -48,6 +48,12 @@ public class UserController {
         return userService.reissueToken(tokenRequestDTO);
     }
 
+    @Operation(summary = "회원 탈퇴")
+    @GetMapping("/withdraw")
+    public void withdraw(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        userService.withdraw(principalDetails);
+    }
+
     @Operation(summary = "마이페이지 사용자 정보 수정")
     @PatchMapping("")
     public UserIdResponseDTO updateUserInfo(

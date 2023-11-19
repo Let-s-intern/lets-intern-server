@@ -1,5 +1,6 @@
 package com.letsintern.letsintern.domain.user.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.letsintern.letsintern.domain.user.dto.request.UserSignUpRequestDTO;
 import jakarta.annotation.Nullable;
@@ -7,14 +8,18 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
-@Getter
-@Setter
+@Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Where(clause = "deleted_at IS NULL")
+@SQLDelete(sql = "UPDATE user SET deleted_at = CURRENT_TIMESTAMP where user_id = ?")
 public class User {
 
     @Id
@@ -41,6 +46,10 @@ public class User {
 
     @NotNull
     private String signedUpAt;
+
+    @Nullable
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
+    private LocalDate deletedAt;
 
     @NotNull
     @Enumerated(EnumType.STRING)

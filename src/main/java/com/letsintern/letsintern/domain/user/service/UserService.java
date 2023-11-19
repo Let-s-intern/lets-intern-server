@@ -63,6 +63,13 @@ public class UserService {
     }
 
     @Transactional
+    public void withdraw(PrincipalDetails principalDetails) {
+        signOut(principalDetails);
+        User user = principalDetails.getUser();
+        userRepository.delete(user);
+    }
+
+    @Transactional
     public TokenResponse reissueToken(TokenRequestDTO tokenRequestDTO) {
         final String refreshToken = tokenRequestDTO.getRefreshToken();
         final User user = userHelper.findUser(Long.parseLong(tokenProvider.getTokenUserId(refreshToken)));
@@ -77,14 +84,13 @@ public class UserService {
 
     @Transactional
     public UserIdResponseDTO updateUserInfo(UserUpdateRequestDTO userUpdateRequestDTO, PrincipalDetails principalDetails) {
-        User user = principalDetails.getUser();
-        return userMapper.toUserIdResponseDTO(userHelper.updateUser(user, userUpdateRequestDTO));
+        return userMapper.toUserIdResponseDTO(
+                userHelper.updateUserInfo(principalDetails.getUser().getId(), userUpdateRequestDTO)
+        );
     }
 
     @Transactional
     public UserTotalListDTO getUserTotalList() {
         return userMapper.toUserTotalListResponseDTO(userHelper.getUserTotalList());
     }
-
-
 }
