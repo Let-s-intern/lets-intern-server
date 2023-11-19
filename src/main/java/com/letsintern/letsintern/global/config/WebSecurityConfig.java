@@ -134,6 +134,8 @@ public class WebSecurityConfig {
                         "http://localhost:8080",
                         "http://localhost:3000",
                         "https://lets-intern.vercel.app",
+                        "https://letsintern.co.kr",
+                        "https://www.letsintern.co.kr",
                         SERVER_URL
                 )
         );
