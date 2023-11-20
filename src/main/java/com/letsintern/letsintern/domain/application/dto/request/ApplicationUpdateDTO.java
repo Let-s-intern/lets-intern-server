@@ -22,6 +22,9 @@ public class ApplicationUpdateDTO {
     @Nullable
     private String applyMotive;
 
+    @Nullable
+    private Boolean attendance;
+
 
     /* 회원 추가 정보 */
     @Nullable

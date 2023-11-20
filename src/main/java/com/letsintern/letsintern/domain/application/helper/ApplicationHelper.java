@@ -6,13 +6,11 @@ import com.letsintern.letsintern.domain.application.domain.UserApplication;
 import com.letsintern.letsintern.domain.application.dto.request.ApplicationCreateDTO;
 import com.letsintern.letsintern.domain.application.dto.request.ApplicationUpdateDTO;
 import com.letsintern.letsintern.domain.application.dto.response.ApplicationCreateResponse;
-import com.letsintern.letsintern.domain.application.exception.ApplicationGuestBadRequest;
-import com.letsintern.letsintern.domain.application.exception.ApplicationNotFound;
-import com.letsintern.letsintern.domain.application.exception.ApplicationUserBadRequest;
-import com.letsintern.letsintern.domain.application.exception.DuplicateApplication;
+import com.letsintern.letsintern.domain.application.exception.*;
 import com.letsintern.letsintern.domain.application.mapper.ApplicationMapper;
 import com.letsintern.letsintern.domain.application.repository.ApplicationRepository;
 import com.letsintern.letsintern.domain.application.vo.UserApplicationVo;
+import com.letsintern.letsintern.domain.program.domain.ProgramStatus;
 import com.letsintern.letsintern.domain.program.helper.ProgramHelper;
 import com.letsintern.letsintern.domain.user.domain.User;
 import lombok.RequiredArgsConstructor;
@@ -92,6 +90,8 @@ public class ApplicationHelper {
             application.setWishJob(application.getWishJob());
         if(applicationUpdateDTO.getApplyMotive() != null)
             application.setApplyMotive(application.getApplyMotive());
+        if(applicationUpdateDTO.getAttendance() != null)
+            application.setAttendance(applicationUpdateDTO.getAttendance());
 
         return application.getId();
     }
@@ -107,6 +107,12 @@ public class ApplicationHelper {
                 .orElseThrow(() -> {
                     throw ApplicationNotFound.EXCEPTION;
                 });
-        applicationRepository.delete(application);
+
+        if(application.getProgram().getStatus().equals(ProgramStatus.OPEN)) {
+            applicationRepository.delete(application);
+        } else {
+            throw ApplicationCannotDeleted.EXCEPTION;
+        }
+
     }
 }

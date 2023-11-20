@@ -37,6 +37,9 @@ public abstract class Application {
     @NotNull
     private Boolean isApproved = false;
 
+    @NotNull
+    private Boolean attendance = true;
+
     @Nullable
     private Long reviewId;
 
