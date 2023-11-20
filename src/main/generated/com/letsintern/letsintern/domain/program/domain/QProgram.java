@@ -42,6 +42,8 @@ public class QProgram extends EntityPathBase<Program> {
 
     public final NumberPath<Integer> maxHeadcount = createNumber("maxHeadcount", Integer.class);
 
+    public final StringPath notice = createString("notice");
+
     public final StringPath startDate = createString("startDate");
 
     public final EnumPath<ProgramStatus> status = createEnum("status", ProgramStatus.class);

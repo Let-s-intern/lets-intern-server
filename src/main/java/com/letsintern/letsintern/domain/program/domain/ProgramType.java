@@ -5,6 +5,7 @@ public enum ProgramType {
     CHALLENGE_HALF,
     CHALLENGE_FULL,
     BOOTCAMP,
-    LETS_CHAT
+    LETS_CHAT,
+    ETC
 
 }

@@ -20,10 +20,10 @@ import java.util.Optional;
 public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
-    private static final QProgram qProgram = QProgram.program;
 
     @Override
     public Integer maxTh(ProgramType type) {
+        QProgram qProgram = QProgram.program;
         Integer maxTh = jpaQueryFactory
                             .select(qProgram.th.max())
                             .from(qProgram)
@@ -35,6 +35,7 @@ public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
 
     @Override
     public List<ProgramThumbnailVo> findProgramThumbnails(Pageable pageable) {
+        QProgram qProgram = QProgram.program;
         return jpaQueryFactory
                 .select(new QProgramThumbnailVo(
                         qProgram.id,
@@ -55,6 +56,7 @@ public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
 
     @Override
     public List<ProgramThumbnailVo> findProgramThumbnailsByType(String type, Pageable pageable) {
+        QProgram qProgram = QProgram.program;
         if(type.equals("CHALLENGE")) {
             return jpaQueryFactory
                     .select(new QProgramThumbnailVo(
@@ -96,10 +98,12 @@ public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
 
     @Override
     public Optional<ProgramDetailVo> findProgramDetailVo(Long programId) {
+        QProgram qProgram = QProgram.program;
         return Optional.ofNullable(jpaQueryFactory
                 .select(Projections.constructor(ProgramDetailVo.class,
                         qProgram.title,
-                        qProgram.contents
+                        qProgram.contents,
+                        qProgram.notice
                 ))
                 .from(qProgram)
                 .where(qProgram.id.eq(programId))
@@ -108,6 +112,7 @@ public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
 
     @Override
     public List<Program> findAllAdmin(Pageable pageable) {
+        QProgram qProgram = QProgram.program;
         return jpaQueryFactory
                 .selectFrom(qProgram)
                 .orderBy(qProgram.id.desc())
@@ -118,6 +123,7 @@ public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
 
     @Override
     public List<Program> findAllAdminByType(String type, Pageable pageable) {
+        QProgram qProgram = QProgram.program;
         if(type.equals("CHALLENGE")) {
             return jpaQueryFactory
                     .selectFrom(qProgram)
@@ -138,6 +144,7 @@ public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
 
     @Override
     public List<Program> findAllAdminByTypeAndTh(String type, Integer th, Pageable pageable) {
+        QProgram qProgram = QProgram.program;
         if(type.equals("CHALLENGE")) {
             return jpaQueryFactory
                     .selectFrom(qProgram)

@@ -90,6 +90,9 @@ public class ProgramHelper {
         if(programUpdateRequestDTO.getLink() != null) {
             program.setLink(programUpdateRequestDTO.getLink());
         }
+        if(programUpdateRequestDTO.getNotice() != null) {
+            program.setNotice(programUpdateRequestDTO.getNotice());
+        }
         if(programUpdateRequestDTO.getStatus() != null) {
             program.setStatus(programUpdateRequestDTO.getStatus());
         }

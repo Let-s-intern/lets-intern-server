@@ -62,6 +62,9 @@ public class Program {
     private String link;
 
     @NotNull
+    private String notice;
+
+    @NotNull
     @Column(length = 32)
     @Enumerated(EnumType.STRING)
     private ProgramStatus status = ProgramStatus.OPEN;
@@ -79,7 +82,7 @@ public class Program {
     @Builder
     private Program(ProgramType type, Integer th, String title, Integer maxHeadcount,
                     Date dueDate, Date announcementDate, Date startDate,
-                    String contents, ProgramWay way, String location, String link) {
+                    String contents, ProgramWay way, String location, String link, String notice) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy년 MM월 dd일 HH:MM");
         this.type = type;
         this.th = th;
@@ -92,6 +95,7 @@ public class Program {
         this.way = way;
         this.location = location;
         this.link = link;
+        this.notice = notice;
     }
 
     public static Program of(ProgramCreateRequestDTO programCreateRequestDTO) {
@@ -107,6 +111,7 @@ public class Program {
                 .way(programCreateRequestDTO.getWay())
                 .location(programCreateRequestDTO.getLocation())
                 .link(programCreateRequestDTO.getLink())
+                .notice(programCreateRequestDTO.getNotice())
                 .build();
     }
 }
