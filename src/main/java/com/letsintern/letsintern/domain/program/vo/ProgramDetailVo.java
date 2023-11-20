@@ -10,10 +10,12 @@ public class ProgramDetailVo {
 
     private String title;
     private String contents;
+    private String notice;
 
     @Builder
-    public ProgramDetailVo(String title, String contents) {
+    public ProgramDetailVo(String title, String contents, String notice) {
         this.title = title;
         this.contents = contents;
+        this.notice = notice;
     }
 }

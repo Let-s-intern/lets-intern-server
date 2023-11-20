@@ -35,6 +35,8 @@ public class ProgramCreateRequestDTO {
 
     private String link;
 
+    private String notice;
+
     private List<FaqDTO> faqDTOList;
 
 }
