@@ -9,9 +9,11 @@ import com.letsintern.letsintern.domain.user.exception.RefreshTokenNotFound;
 import com.letsintern.letsintern.domain.user.exception.UserNotFound;
 import com.letsintern.letsintern.domain.user.repository.UserRepository;
 import com.letsintern.letsintern.domain.user.util.RedisUtil;
+import com.letsintern.letsintern.domain.user.vo.AdminUserVo;
 import com.letsintern.letsintern.domain.user.vo.UserVo;
 import com.letsintern.letsintern.global.config.user.PrincipalDetailsService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,6 +22,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -118,7 +121,20 @@ public class UserHelper {
         return user.getId();
     }
 
-    public List<User> getUserTotalList() {
-        return userRepository.findAll();
+    public List<AdminUserVo> getAdminUserTotalList(Pageable pageable) {
+        return userRepository.findAllAdminUserVo(pageable);
+    }
+
+    public List<AdminUserVo> getAdminUserList(String type, String keyword) {
+        switch (type) {
+            case "name":
+                return userRepository.findAdminUserVoByName(keyword);
+            case "email":
+                return userRepository.findAdminUserVoByEmail(keyword);
+            case "phoneNum":
+                return userRepository.findAdminUserVoByPhoneNum(keyword);
+            default:
+                return new ArrayList<>();
+        }
     }
 }

@@ -7,13 +7,15 @@ import com.letsintern.letsintern.domain.user.dto.request.UserUpdateRequestDTO;
 import com.letsintern.letsintern.domain.user.dto.response.TokenResponse;
 import com.letsintern.letsintern.domain.user.dto.response.UserIdResponseDTO;
 import com.letsintern.letsintern.domain.user.dto.response.UserInfoResponseDTO;
-import com.letsintern.letsintern.domain.user.dto.response.UserTotalListDTO;
+import com.letsintern.letsintern.domain.user.dto.response.AdminUserListResponseDTO;
 import com.letsintern.letsintern.domain.user.service.UserService;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -71,9 +73,13 @@ public class UserController {
 
     @Operation(summary = "어드민 사용자 전체 목록")
     @GetMapping("/admin")
-    public UserTotalListDTO getUserTotalList(
-            @RequestParam(required = false) Long programId
-    ) {
-        return userService.getUserTotalList();
+    public AdminUserListResponseDTO getAdminUserTotalList(@PageableDefault(size = 20) Pageable pageable) {
+        return userService.getAdminUserTotalList(pageable);
+    }
+
+    @Operation(summary = "어드민 사용자 검색 (name, email, phoneNum)")
+    @GetMapping("/admin/search")
+    public AdminUserListResponseDTO getAdminUserList(@RequestParam String type, @RequestParam String keyword) {
+        return userService.getAdminUserList(type, keyword);
     }
 }
