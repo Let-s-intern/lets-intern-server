@@ -8,13 +8,15 @@ import com.letsintern.letsintern.domain.user.dto.request.UserUpdateRequestDTO;
 import com.letsintern.letsintern.domain.user.dto.response.TokenResponse;
 import com.letsintern.letsintern.domain.user.dto.response.UserIdResponseDTO;
 import com.letsintern.letsintern.domain.user.dto.response.UserInfoResponseDTO;
-import com.letsintern.letsintern.domain.user.dto.response.UserTotalListDTO;
+import com.letsintern.letsintern.domain.user.dto.response.AdminUserListResponseDTO;
 import com.letsintern.letsintern.domain.user.helper.UserHelper;
 import com.letsintern.letsintern.domain.user.mapper.UserMapper;
 import com.letsintern.letsintern.domain.user.repository.UserRepository;
+import com.letsintern.letsintern.domain.user.vo.AdminUserVo;
 import com.letsintern.letsintern.global.config.jwt.TokenProvider;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -95,10 +97,11 @@ public class UserService {
         );
     }
 
-    @Transactional
-    public UserTotalListDTO getUserTotalList() {
-        return userMapper.toUserTotalListResponseDTO(userHelper.getUserTotalList());
+    public AdminUserListResponseDTO getAdminUserTotalList(Pageable pageable) {
+        return userMapper.toUserTotalListResponseDTO(userHelper.getAdminUserTotalList(pageable));
     }
 
-
+    public AdminUserListResponseDTO getAdminUserList(String type, String keyword) {
+        return userMapper.toUserTotalListResponseDTO(userHelper.getAdminUserList(type, keyword));
+    }
 }
