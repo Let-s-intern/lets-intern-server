@@ -30,6 +30,8 @@ public class QApplication extends EntityPathBase<Application> {
 
     public final BooleanPath isApproved = createBoolean("isApproved");
 
+    public final StringPath preQuestions = createString("preQuestions");
+
     public final com.letsintern.letsintern.domain.program.domain.QProgram program;
 
     public final NumberPath<Long> reviewId = createNumber("reviewId", Long.class);

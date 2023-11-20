@@ -17,13 +17,14 @@ public class UserApplication extends Application {
 
     @Builder
     private UserApplication(Program program, User user, Integer grade, String wishCompany,
-                            String wishJob, String applyMotive) {
+                            String wishJob, String applyMotive, String preQuestions) {
         this.program = program;
         this.user = user;
         this.grade = grade;
         this.wishCompany = wishCompany;
         this.wishJob = wishJob;
         this.applyMotive = applyMotive;
+        this.preQuestions = preQuestions;
     }
 
     public static UserApplication of(Program program, User user, ApplicationCreateDTO applicationCreateDTO) {
@@ -34,6 +35,7 @@ public class UserApplication extends Application {
                 .wishCompany(applicationCreateDTO.getWishCompany())
                 .wishJob(applicationCreateDTO.getWishJob())
                 .applyMotive(applicationCreateDTO.getApplyMotive())
+                .preQuestions(applicationCreateDTO.getPreQuestions())
                 .build();
     }
 }

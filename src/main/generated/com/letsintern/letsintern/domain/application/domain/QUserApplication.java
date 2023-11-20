@@ -36,6 +36,9 @@ public class QUserApplication extends EntityPathBase<UserApplication> {
     //inherited
     public final BooleanPath isApproved;
 
+    //inherited
+    public final StringPath preQuestions;
+
     // inherited
     public final com.letsintern.letsintern.domain.program.domain.QProgram program;
 
@@ -73,6 +76,7 @@ public class QUserApplication extends EntityPathBase<UserApplication> {
         this.grade = _super.grade;
         this.id = _super.id;
         this.isApproved = _super.isApproved;
+        this.preQuestions = _super.preQuestions;
         this.program = _super.program;
         this.reviewId = _super.reviewId;
         this.user = inits.isInitialized("user") ? new com.letsintern.letsintern.domain.user.domain.QUser(forProperty("user")) : null;

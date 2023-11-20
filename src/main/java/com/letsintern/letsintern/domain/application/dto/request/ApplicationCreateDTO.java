@@ -21,6 +21,9 @@ public class ApplicationCreateDTO {
     @NotNull
     private String applyMotive;
 
+    @Nullable
+    private String preQuestions;
+
 
     /* 회원 추가 정보 */
     @Nullable

@@ -31,6 +31,9 @@ public abstract class Application {
     @NotNull
     String applyMotive;
 
+    @Nullable
+    String preQuestions;
+
     @NotNull
     private Boolean isApproved = false;
 
