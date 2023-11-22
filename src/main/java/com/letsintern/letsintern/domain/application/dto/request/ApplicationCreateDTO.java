@@ -1,5 +1,6 @@
 package com.letsintern.letsintern.domain.application.dto.request;
 
+import com.letsintern.letsintern.domain.application.domain.InflowPath;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -23,6 +24,9 @@ public class ApplicationCreateDTO {
 
     @Nullable
     private String preQuestions;
+
+    @NotNull
+    private InflowPath inflowPath;
 
 
     /* 회원 추가 정보 */

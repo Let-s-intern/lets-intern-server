@@ -37,6 +37,9 @@ public class QUserApplication extends EntityPathBase<UserApplication> {
     public final NumberPath<Long> id;
 
     //inherited
+    public final EnumPath<InflowPath> inflowPath;
+
+    //inherited
     public final BooleanPath isApproved;
 
     //inherited
@@ -79,6 +82,7 @@ public class QUserApplication extends EntityPathBase<UserApplication> {
         this.attendance = _super.attendance;
         this.grade = _super.grade;
         this.id = _super.id;
+        this.inflowPath = _super.inflowPath;
         this.isApproved = _super.isApproved;
         this.preQuestions = _super.preQuestions;
         this.program = _super.program;

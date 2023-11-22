@@ -35,6 +35,10 @@ public abstract class Application {
     String preQuestions;
 
     @NotNull
+    @Enumerated(EnumType.STRING)
+    InflowPath inflowPath;
+
+    @NotNull
     private Boolean isApproved = false;
 
     @NotNull

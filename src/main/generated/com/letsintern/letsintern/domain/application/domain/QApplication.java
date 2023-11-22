@@ -30,6 +30,8 @@ public class QApplication extends EntityPathBase<Application> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final EnumPath<InflowPath> inflowPath = createEnum("inflowPath", InflowPath.class);
+
     public final BooleanPath isApproved = createBoolean("isApproved");
 
     public final StringPath preQuestions = createString("preQuestions");
