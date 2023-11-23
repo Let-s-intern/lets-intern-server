@@ -85,6 +85,11 @@ public class UserService {
         return userMapper.toTokenResponse(newAccessToken, refreshToken);
     }
 
+    public Boolean checkDetailInfoExist(PrincipalDetails principalDetails) {
+        final User user = principalDetails.getUser();
+        return userHelper.checkDetailInfoExist(user);
+    }
+
     public UserInfoResponseDTO getUserInfo(PrincipalDetails principalDetails) {
         final User user = principalDetails.getUser();
         return userMapper.toUserInfoResponseDTO(user);

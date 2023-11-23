@@ -1,5 +1,6 @@
 package com.letsintern.letsintern.domain.user.helper;
 
+import com.letsintern.letsintern.domain.application.exception.ApplicationUserBadRequest;
 import com.letsintern.letsintern.domain.user.domain.User;
 import com.letsintern.letsintern.domain.user.dto.request.UserSignInRequestDTO;
 import com.letsintern.letsintern.domain.user.dto.request.UserUpdateRequestDTO;
@@ -21,6 +22,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,6 +86,12 @@ public class UserHelper {
         }
 
         return findUser;
+    }
+
+    /* 사용자 상세 정보 존재 여부 확인 (대학, 전공) */
+    public Boolean checkDetailInfoExist(User user) {
+        if(user.getUniversity() == null || user.getMajor() == null) return Boolean.FALSE;
+        return Boolean.TRUE;
     }
 
     public Long updateUserInfo(Long userId, UserUpdateRequestDTO userUpdateRequestDTO) {

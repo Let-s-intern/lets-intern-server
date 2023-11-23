@@ -9,6 +9,7 @@ import com.letsintern.letsintern.domain.application.dto.response.UserApplication
 import com.letsintern.letsintern.domain.application.helper.ApplicationHelper;
 import com.letsintern.letsintern.domain.application.mapper.ApplicationMapper;
 import com.letsintern.letsintern.domain.user.domain.User;
+import com.letsintern.letsintern.domain.user.helper.UserHelper;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -21,11 +22,7 @@ public class ApplicationService {
 
     private final ApplicationHelper applicationHelper;
     private final ApplicationMapper applicationMapper;
-
-    public void checkUserApplicationHistory(Long programId, PrincipalDetails principalDetails) {
-        final User user = principalDetails.getUser();
-        applicationHelper.checkUserApplicationHistory(programId, user);
-    }
+    private final UserHelper userHelper;
 
     public ApplicationCreateResponse createUserApplication(Long programId, ApplicationCreateDTO applicationCreateDTO, PrincipalDetails principalDetails) {
         final User user = principalDetails.getUser();

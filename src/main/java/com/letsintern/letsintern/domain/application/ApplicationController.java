@@ -29,20 +29,11 @@ public class ApplicationController {
     private final ApplicationService applicationService;
     private final UserService userService;
 
-    @Operation(summary = "기존 신청 유무, 지원자 추가 정보 유무 확인")
-    @GetMapping("/{programId}")
-    public ResponseEntity<Boolean> checkUserApplicationHistory(
-            @PathVariable Long programId,
-            @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        applicationService.checkUserApplicationHistory(programId, principalDetails);
-        return ResponseEntity.ok(true);
-    }
-
     @Operation(summary = "지원서 생성")
     @PostMapping("/{programId}")
     public ApplicationCreateResponse createUserApplication(
             @PathVariable Long programId,
-            @RequestParam(required = false) Boolean userDetailInfo,
+            @RequestParam(required = false, defaultValue = "false") Boolean detailInfo,
             @RequestBody ApplicationCreateDTO applicationCreateDTO,
             @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
@@ -51,12 +42,14 @@ public class ApplicationController {
             return applicationService.createGuestApplication(programId, applicationCreateDTO);
         }
 
-        // 회원 상세 정보 추가
-        if(userDetailInfo != null && userDetailInfo == true) {
-            if(applicationCreateDTO.getUniversity() == null || applicationCreateDTO.getMajor() == null) {
-                throw ApplicationUserBadRequest.EXCEPTION;
-            }
+        // 회원 상세 정보 추가하며 지원서 생성
+        else if(!detailInfo && (applicationCreateDTO.getUniversity() != null && applicationCreateDTO.getMajor() != null)) {
             userService.addUserDetailInfo(principalDetails, applicationCreateDTO.getUniversity(), applicationCreateDTO.getMajor());
+        }
+
+        // 상세 정보 추가 대상자이나, request DTO에 없음
+        else if(!detailInfo && !(applicationCreateDTO.getUniversity() != null && applicationCreateDTO.getMajor() != null)) {
+            throw ApplicationUserBadRequest.EXCEPTION;
         }
 
         // 회원 지원서 생성
