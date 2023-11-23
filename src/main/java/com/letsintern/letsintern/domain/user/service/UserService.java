@@ -1,6 +1,7 @@
 package com.letsintern.letsintern.domain.user.service;
 
 import com.letsintern.letsintern.domain.user.domain.User;
+import com.letsintern.letsintern.domain.user.domain.UserRole;
 import com.letsintern.letsintern.domain.user.dto.request.TokenRequestDTO;
 import com.letsintern.letsintern.domain.user.dto.request.UserSignInRequestDTO;
 import com.letsintern.letsintern.domain.user.dto.request.UserSignUpRequestDTO;
@@ -56,6 +57,7 @@ public class UserService {
         final User user = principalDetails.getUser();
         user.setUniversity(university);
         user.setMajor(major);
+        user.setRole(UserRole.ROLE_USER);
         userRepository.save(user);
     }
 
@@ -83,6 +85,11 @@ public class UserService {
 
         final String newAccessToken = tokenProvider.createAccessToken(user.getId(), authentication);
         return userMapper.toTokenResponse(newAccessToken, refreshToken);
+    }
+
+    public Boolean checkDetailInfoExist(PrincipalDetails principalDetails) {
+        final User user = principalDetails.getUser();
+        return userHelper.checkDetailInfoExist(user);
     }
 
     public UserInfoResponseDTO getUserInfo(PrincipalDetails principalDetails) {

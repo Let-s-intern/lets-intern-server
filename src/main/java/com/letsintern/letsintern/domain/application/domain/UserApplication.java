@@ -17,7 +17,7 @@ public class UserApplication extends Application {
 
     @Builder
     private UserApplication(Program program, User user, Integer grade, String wishCompany,
-                            String wishJob, String applyMotive, String preQuestions) {
+                            String wishJob, String applyMotive, String preQuestions, InflowPath inflowPath) {
         this.program = program;
         this.user = user;
         this.grade = grade;
@@ -25,6 +25,7 @@ public class UserApplication extends Application {
         this.wishJob = wishJob;
         this.applyMotive = applyMotive;
         this.preQuestions = preQuestions;
+        this.inflowPath = inflowPath;
     }
 
     public static UserApplication of(Program program, User user, ApplicationCreateDTO applicationCreateDTO) {
@@ -36,6 +37,7 @@ public class UserApplication extends Application {
                 .wishJob(applicationCreateDTO.getWishJob())
                 .applyMotive(applicationCreateDTO.getApplyMotive())
                 .preQuestions(applicationCreateDTO.getPreQuestions())
+                .inflowPath(applicationCreateDTO.getInflowPath())
                 .build();
     }
 }

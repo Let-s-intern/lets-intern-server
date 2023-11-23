@@ -30,7 +30,7 @@ public class ProgramThumbnailVo {
 
     @QueryProjection
     public ProgramThumbnailVo(Long id, ProgramStatus status, ProgramType type, Integer th, String title, Date dueDate, String startDate) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy년 MM월 dd일");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy년 MM월 dd일 HH:mm");
 
         this.id = id;
         this.status = status;

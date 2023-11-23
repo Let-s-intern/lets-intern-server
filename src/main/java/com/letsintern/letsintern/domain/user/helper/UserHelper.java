@@ -86,6 +86,12 @@ public class UserHelper {
         return findUser;
     }
 
+    /* 사용자 상세 정보 존재 여부 확인 (대학, 전공) */
+    public Boolean checkDetailInfoExist(User user) {
+        if(user.getUniversity() == null || user.getMajor() == null) return Boolean.FALSE;
+        return Boolean.TRUE;
+    }
+
     public Long updateUserInfo(Long userId, UserUpdateRequestDTO userUpdateRequestDTO) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> {

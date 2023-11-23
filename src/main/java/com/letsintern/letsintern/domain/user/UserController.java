@@ -16,6 +16,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -55,6 +56,12 @@ public class UserController {
     @GetMapping("/withdraw")
     public void withdraw(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         userService.withdraw(principalDetails);
+    }
+
+    @Operation(summary = "지원자 추가 정보 유무 확인")
+    @GetMapping("/detail-info")
+    public ResponseEntity<Boolean> checkDetailInfoExist(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        return ResponseEntity.ok(userService.checkDetailInfoExist(principalDetails));
     }
 
     @Operation(summary = "마이페이지 사용자 정보")

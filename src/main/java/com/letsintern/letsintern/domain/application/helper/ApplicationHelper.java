@@ -29,13 +29,11 @@ public class ApplicationHelper {
     private final ApplicationMapper applicationMapper;
     private final ProgramHelper programHelper;
 
-    public void checkUserApplicationHistory(Long programId, User user) {
-        /* 기존 신청 내역 확인 */
+
+    /* 회원 - 기존 신청 내역 확인 */
+    public void checkUserApplicationExist(Long programId, User user) {
         UserApplication userApplication = applicationRepository.findByProgramIdAndUserId(programId, user.getId());
         if(userApplication != null) throw DuplicateApplication.EXCEPTION;
-
-        /* 사용자 상세 정보 존재 여부 확인 */
-        if(user.getUniversity() == null || user.getMajor() == null) throw ApplicationUserBadRequest.EXCEPTION;
     }
 
     public ApplicationCreateResponse createUserApplication(Long programId, ApplicationCreateDTO applicationCreateDTO, User user) {
