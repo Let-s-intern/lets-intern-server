@@ -8,12 +8,14 @@ import com.letsintern.letsintern.domain.program.dto.response.ProgramDetailDTO;
 import com.letsintern.letsintern.domain.program.dto.response.ProgramIdResponseDTO;
 import com.letsintern.letsintern.domain.program.dto.response.ProgramListDTO;
 import com.letsintern.letsintern.domain.program.service.ProgramService;
+import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
@@ -42,8 +44,10 @@ public class ProgramController {
 
     @Operation(summary = "프로그램 1개 상세 보기")
     @GetMapping("/{programId}")
-    public ProgramDetailDTO getProgramDetailVo(@PathVariable Long programId) {
-        return programService.getProgramDetailDTO(programId);
+    public ProgramDetailDTO getProgramDetailVo(
+            @PathVariable Long programId,
+            @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        return programService.getProgramDetailDTO(programId, principalDetails);
     }
 
     @Operation(summary = "어드민 프로그램 목록 (전체, 타입, 타입&기수)")

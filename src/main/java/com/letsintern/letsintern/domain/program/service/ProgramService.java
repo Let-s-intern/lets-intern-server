@@ -12,6 +12,8 @@ import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
 import com.letsintern.letsintern.domain.program.helper.ProgramHelper;
 import com.letsintern.letsintern.domain.program.mapper.ProgramMapper;
 import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
+import com.letsintern.letsintern.domain.user.domain.User;
+import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -49,8 +51,12 @@ public class ProgramService {
         return programHelper.getAdminProgramList(type, th, pageable);
     }
 
-    public ProgramDetailDTO getProgramDetailDTO(Long programId) {
-        return programHelper.getProgramDetailVo(programId);
+    public ProgramDetailDTO getProgramDetailDTO(Long programId, PrincipalDetails principalDetails) {
+        if(principalDetails != null) {
+            final Long userId = principalDetails.getUser().getId();
+            return programHelper.getProgramDetailVo(programId, userId);
+        }
+        else return programHelper.getProgramDetailVo(programId, null);
     }
 
     public Program getProgram(Long programId) {

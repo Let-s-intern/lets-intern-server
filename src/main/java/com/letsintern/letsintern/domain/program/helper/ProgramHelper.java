@@ -1,5 +1,7 @@
 package com.letsintern.letsintern.domain.program.helper;
 
+import com.letsintern.letsintern.domain.application.domain.Application;
+import com.letsintern.letsintern.domain.application.repository.ApplicationRepository;
 import com.letsintern.letsintern.domain.faq.domain.Faq;
 import com.letsintern.letsintern.domain.faq.dto.FaqDTO;
 import com.letsintern.letsintern.domain.faq.repository.FaqRepository;
@@ -36,6 +38,8 @@ public class ProgramHelper {
     private final ProgramMapper programMapper;
     private final FaqRepository faqRepository;
     private final ReviewRepository reviewRepository;
+
+    private final ApplicationRepository applicationRepository;
 
     public Long createProgram(ProgramCreateRequestDTO programCreateRequestDTO) {
         Program savedProgram = programRepository.save(programMapper.toEntity(programCreateRequestDTO));
@@ -124,7 +128,7 @@ public class ProgramHelper {
         return programMapper.toProgramListDTO(programList);
     }
 
-    public ProgramDetailDTO getProgramDetailVo(Long programId) {
+    public ProgramDetailDTO getProgramDetailVo(Long programId, Long userId) {
         ProgramDetailVo programDetailVo = programRepository.findProgramDetailVo(programId)
                 .orElseThrow(() -> {
                     throw ProgramNotFound.EXCEPTION;
@@ -132,7 +136,12 @@ public class ProgramHelper {
         List<Faq> faqList = faqRepository.findAllByProgramId(programId);
         List<ReviewVo> reviewList = reviewRepository.findAllVosByProgramId(programId);
 
-        return ProgramDetailDTO.of(programDetailVo, faqList, reviewList);
+        if(userId != null) {
+            Application application = applicationRepository.findByProgramIdAndUserId(programId, userId);
+            if(application != null) return ProgramDetailDTO.of(programDetailVo, true, faqList, reviewList);
+        }
+
+        return ProgramDetailDTO.of(programDetailVo, false, faqList, reviewList);
     }
 
     public AdminProgramListDTO getAdminProgramList(String type, Integer th, Pageable pageable) {
