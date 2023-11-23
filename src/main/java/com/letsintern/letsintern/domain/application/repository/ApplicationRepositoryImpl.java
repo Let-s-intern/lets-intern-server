@@ -50,10 +50,9 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
         return jpaQueryFactory
                 .select(Projections.constructor(UserApplicationVo.class,
                         qUserApplication.id,
-                        qUserApplication.reviewId,
-                        qUserApplication.isApproved,
+                        qUserApplication.status,
                         qUserApplication.program.title,
-                        qUserApplication.program.status
+                        qUserApplication.reviewId
                 ))
                 .from(qUserApplication)
                 .where(qUserApplication.user.id.eq(userId))

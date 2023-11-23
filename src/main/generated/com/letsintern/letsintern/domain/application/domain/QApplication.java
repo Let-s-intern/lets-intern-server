@@ -40,6 +40,8 @@ public class QApplication extends EntityPathBase<Application> {
 
     public final NumberPath<Long> reviewId = createNumber("reviewId", Long.class);
 
+    public final EnumPath<ApplicationStatus> status = createEnum("status", ApplicationStatus.class);
+
     public final StringPath wishCompany = createString("wishCompany");
 
     public final StringPath wishJob = createString("wishJob");

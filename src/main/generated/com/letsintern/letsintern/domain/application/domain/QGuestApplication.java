@@ -58,6 +58,9 @@ public class QGuestApplication extends EntityPathBase<GuestApplication> {
     public final NumberPath<Long> reviewId;
 
     //inherited
+    public final EnumPath<ApplicationStatus> status;
+
+    //inherited
     public final StringPath wishCompany;
 
     //inherited
@@ -91,6 +94,7 @@ public class QGuestApplication extends EntityPathBase<GuestApplication> {
         this.preQuestions = _super.preQuestions;
         this.program = _super.program;
         this.reviewId = _super.reviewId;
+        this.status = _super.status;
         this.wishCompany = _super.wishCompany;
         this.wishJob = _super.wishJob;
     }

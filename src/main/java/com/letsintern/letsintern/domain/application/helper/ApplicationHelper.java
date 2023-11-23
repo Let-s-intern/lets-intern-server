@@ -78,6 +78,8 @@ public class ApplicationHelper {
                     throw ApplicationNotFound.EXCEPTION;
                 });
 
+        if(applicationUpdateDTO.getStatus() != null)
+            application.setStatus(applicationUpdateDTO.getStatus());
         if(applicationUpdateDTO.getIsApproved() != null)
             application.setIsApproved(applicationUpdateDTO.getIsApproved());
         if(applicationUpdateDTO.getGrade() != null)

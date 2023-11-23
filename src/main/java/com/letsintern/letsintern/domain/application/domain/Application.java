@@ -42,6 +42,9 @@ public abstract class Application {
     private Boolean isApproved = false;
 
     @NotNull
+    private ApplicationStatus status = ApplicationStatus.APPLIED;
+
+    @NotNull
     private Boolean attendance = true;
 
     @Nullable

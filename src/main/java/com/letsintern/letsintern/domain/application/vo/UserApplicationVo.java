@@ -9,39 +9,15 @@ import lombok.Getter;
 public class UserApplicationVo {
 
     private Long id;
-    private Long reviewId;
-    private String programTitle;
     private ApplicationStatus status;
+    private String programTitle;
+    private Long reviewId;
 
     @Builder
-    public UserApplicationVo(Long id, Long reviewId, Boolean isApproved, String programTitle, ProgramStatus programStatus) {
+    public UserApplicationVo(Long id, ApplicationStatus status, String programTitle, Long reviewId) {
         this.id = id;
-        this.reviewId = reviewId;
+        this.status = status;
         this.programTitle = programTitle;
-
-        // 지원 완료
-        if(!isApproved && (programStatus.equals(ProgramStatus.OPEN) || programStatus.equals(ProgramStatus.CLOSED))) {
-            this.status = ApplicationStatus.APPLIED;
-        }
-
-        // 미선발
-        else if(!isApproved && (programStatus.equals(ProgramStatus.SELECTED) || programStatus.equals(ProgramStatus.DONE))) {
-            this.status = ApplicationStatus.APPLIED_NOT_APPROVED;
-        }
-
-        // 참여중 (선발)
-        else if(isApproved && programStatus.equals(ProgramStatus.SELECTED)) {
-            this.status = ApplicationStatus.IN_PROGRESS;
-        }
-
-        // 참여 완료
-        else if(isApproved && programStatus.equals(ProgramStatus.DONE)) {
-            this.status = ApplicationStatus.DONE;
-        }
-
-        // 무효한 케이스 (Program CLOSED && Application isApproved)
-        else {
-            this.status = ApplicationStatus.APPLIED;
-        }
+        this.reviewId = reviewId;
     }
 }

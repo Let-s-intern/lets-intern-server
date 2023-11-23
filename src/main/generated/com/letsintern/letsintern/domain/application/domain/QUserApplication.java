@@ -51,6 +51,9 @@ public class QUserApplication extends EntityPathBase<UserApplication> {
     //inherited
     public final NumberPath<Long> reviewId;
 
+    //inherited
+    public final EnumPath<ApplicationStatus> status;
+
     public final com.letsintern.letsintern.domain.user.domain.QUser user;
 
     //inherited
@@ -87,6 +90,7 @@ public class QUserApplication extends EntityPathBase<UserApplication> {
         this.preQuestions = _super.preQuestions;
         this.program = _super.program;
         this.reviewId = _super.reviewId;
+        this.status = _super.status;
         this.user = inits.isInitialized("user") ? new com.letsintern.letsintern.domain.user.domain.QUser(forProperty("user")) : null;
         this.wishCompany = _super.wishCompany;
         this.wishJob = _super.wishJob;
