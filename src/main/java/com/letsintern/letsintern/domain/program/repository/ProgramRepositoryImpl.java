@@ -1,6 +1,7 @@
 package com.letsintern.letsintern.domain.program.repository;
 
 import com.letsintern.letsintern.domain.program.domain.Program;
+import com.letsintern.letsintern.domain.program.domain.ProgramStatus;
 import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import com.letsintern.letsintern.domain.program.domain.QProgram;
 import com.letsintern.letsintern.domain.program.vo.ProgramDetailVo;
@@ -8,10 +9,12 @@ import com.letsintern.letsintern.domain.program.vo.ProgramThumbnailVo;
 import com.letsintern.letsintern.domain.program.vo.QProgramThumbnailVo;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,6 +23,7 @@ import java.util.Optional;
 public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
+    private final EntityManager em;
 
     @Override
     public Integer maxTh(ProgramType type) {
@@ -140,6 +144,20 @@ public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
+    }
+
+    @Override
+    public void updateAllByDueDate(Date now) {
+        QProgram qProgram = QProgram.program;
+
+        jpaQueryFactory
+            .update(qProgram)
+            .set(qProgram.status, ProgramStatus.CLOSED)
+            .where(qProgram.status.eq(ProgramStatus.OPEN), qProgram.dueDate.before(now))
+            .execute();
+
+        em.flush();
+        em.clear();
     }
 
     @Override
