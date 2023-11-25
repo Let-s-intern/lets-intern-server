@@ -67,6 +67,15 @@ public class UserService {
     }
 
     @Transactional
+    public void changePassword(PrincipalDetails principalDetails, PwChangeDTO pwChangeDTO) {
+        userHelper.changePassword(
+                principalDetails.getUser().getId(),
+                pwChangeDTO.getCurrentPassword(),
+                pwChangeDTO.getNewPassword()
+        );
+    }
+
+    @Transactional
     public void sendPwResetMail(PwResetMailDTO pwResetMailDTO) {
         User user = userRepository.findByEmailAndName(pwResetMailDTO.getEmail(), pwResetMailDTO.getName())
                 .orElseThrow(() -> {

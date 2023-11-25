@@ -132,6 +132,19 @@ public class UserHelper {
         return user.getId();
     }
 
+    public void changePassword(Long userId, String currentPassword, String newPassword) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> {
+                    throw UserNotFound.EXCEPTION;
+                });
+
+        if(!matchesPassword(currentPassword, user.getPassword())) {
+            throw MismatchPassword.EXCEPTION;
+        }
+
+        user.setPassword(encodePassword(newPassword));
+    }
+
     public List<AdminUserVo> getAdminUserTotalList(Pageable pageable) {
         return userRepository.findAllAdminUserVo(pageable);
     }

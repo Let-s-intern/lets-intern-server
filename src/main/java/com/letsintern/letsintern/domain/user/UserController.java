@@ -49,6 +49,13 @@ public class UserController {
         return userService.reissueToken(tokenRequestDTO);
     }
 
+    @Operation(summary = "마이페이지 비밀번호 변경")
+    @PatchMapping("/password")
+    public void changePw(@AuthenticationPrincipal PrincipalDetails principalDetails,
+                         @RequestBody PwChangeDTO pwChangeDTO) {
+        userService.changePassword(principalDetails, pwChangeDTO);
+    }
+
     @Operation(summary = "비밀번호 재설정 메일 보내기")
     @PostMapping("/password")
     public void sendPwResetMail(@RequestBody PwResetMailDTO pwResetMailDTO) {
