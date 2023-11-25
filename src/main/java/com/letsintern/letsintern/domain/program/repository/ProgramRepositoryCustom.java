@@ -6,6 +6,7 @@ import com.letsintern.letsintern.domain.program.vo.ProgramDetailVo;
 import com.letsintern.letsintern.domain.program.vo.ProgramThumbnailVo;
 import org.springframework.data.domain.Pageable;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,4 +25,6 @@ public interface ProgramRepositoryCustom {
     List<Program> findAllAdminByTypeAndTh(String type, Integer th, Pageable pageable);
 
     List<Program> findAllAdminByType(String type, Pageable pageable);
+
+    void updateAllByDueDate(Date now);
 }
