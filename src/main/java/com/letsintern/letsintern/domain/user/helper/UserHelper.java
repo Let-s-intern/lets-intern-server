@@ -13,6 +13,7 @@ import com.letsintern.letsintern.domain.user.vo.AdminUserVo;
 import com.letsintern.letsintern.domain.user.vo.UserVo;
 import com.letsintern.letsintern.global.config.user.PrincipalDetailsService;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -41,6 +42,10 @@ public class UserHelper {
 
     public boolean matchesPassword(String rawPassword, String encodedPassword) {
         return passwordEncoder.matches(rawPassword, encodedPassword);
+    }
+
+    public String createRandomPw() {
+        return RandomStringUtils.randomAlphanumeric(8);
     }
 
     public Authentication userAuthorizationInput(User user) {

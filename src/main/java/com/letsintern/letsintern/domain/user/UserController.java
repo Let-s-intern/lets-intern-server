@@ -1,9 +1,6 @@
 package com.letsintern.letsintern.domain.user;
 
-import com.letsintern.letsintern.domain.user.dto.request.TokenRequestDTO;
-import com.letsintern.letsintern.domain.user.dto.request.UserSignInRequestDTO;
-import com.letsintern.letsintern.domain.user.dto.request.UserSignUpRequestDTO;
-import com.letsintern.letsintern.domain.user.dto.request.UserUpdateRequestDTO;
+import com.letsintern.letsintern.domain.user.dto.request.*;
 import com.letsintern.letsintern.domain.user.dto.response.TokenResponse;
 import com.letsintern.letsintern.domain.user.dto.response.UserIdResponseDTO;
 import com.letsintern.letsintern.domain.user.dto.response.UserInfoResponseDTO;
@@ -50,6 +47,12 @@ public class UserController {
     @PostMapping("/reissue")
     public TokenResponse reissueToken(@RequestBody TokenRequestDTO tokenRequestDTO) {
         return userService.reissueToken(tokenRequestDTO);
+    }
+
+    @Operation(summary = "비밀번호 재설정 메일 보내기")
+    @PostMapping("/password")
+    public void sendPwResetMail(@RequestBody PwResetMailDTO pwResetMailDTO) {
+        userService.sendPwResetMail(pwResetMailDTO);
     }
 
     @Operation(summary = "회원 탈퇴")

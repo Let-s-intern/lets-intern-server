@@ -2,18 +2,16 @@ package com.letsintern.letsintern.domain.user.service;
 
 import com.letsintern.letsintern.domain.user.domain.User;
 import com.letsintern.letsintern.domain.user.domain.UserRole;
-import com.letsintern.letsintern.domain.user.dto.request.TokenRequestDTO;
-import com.letsintern.letsintern.domain.user.dto.request.UserSignInRequestDTO;
-import com.letsintern.letsintern.domain.user.dto.request.UserSignUpRequestDTO;
-import com.letsintern.letsintern.domain.user.dto.request.UserUpdateRequestDTO;
+import com.letsintern.letsintern.domain.user.dto.request.*;
 import com.letsintern.letsintern.domain.user.dto.response.TokenResponse;
 import com.letsintern.letsintern.domain.user.dto.response.UserIdResponseDTO;
 import com.letsintern.letsintern.domain.user.dto.response.UserInfoResponseDTO;
 import com.letsintern.letsintern.domain.user.dto.response.AdminUserListResponseDTO;
+import com.letsintern.letsintern.domain.user.exception.UserNotFound;
 import com.letsintern.letsintern.domain.user.helper.UserHelper;
 import com.letsintern.letsintern.domain.user.mapper.UserMapper;
 import com.letsintern.letsintern.domain.user.repository.UserRepository;
-import com.letsintern.letsintern.domain.user.vo.AdminUserVo;
+import com.letsintern.letsintern.domain.user.util.EmailUtil;
 import com.letsintern.letsintern.global.config.jwt.TokenProvider;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +28,7 @@ public class UserService {
     private final UserHelper userHelper;
     private final UserMapper userMapper;
     private final TokenProvider tokenProvider;
+    private final EmailUtil emailUtil;
 
     @Transactional
     public UserIdResponseDTO signUp(UserSignUpRequestDTO userSignUpRequestDTO) {
@@ -65,6 +64,17 @@ public class UserService {
     public void signOut(PrincipalDetails principalDetails) {
         final User user = principalDetails.getUser();
         tokenProvider.deleteRefreshToken(user.getId());
+    }
+
+    @Transactional
+    public void sendPwResetMail(PwResetMailDTO pwResetMailDTO) {
+        User user = userRepository.findByEmailAndName(pwResetMailDTO.getEmail(), pwResetMailDTO.getName())
+                .orElseThrow(() -> {
+                    throw UserNotFound.EXCEPTION;
+                });
+        String randomPw = userHelper.createRandomPw();
+        user.setPassword(userHelper.encodePassword(randomPw));
+        emailUtil.sendEmail(pwResetMailDTO.getEmail(), randomPw);
     }
 
     @Transactional
