@@ -52,6 +52,7 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
                         qUserApplication.id,
                         qUserApplication.status,
                         qUserApplication.program.title,
+                        qUserApplication.program.type,
                         qUserApplication.reviewId
                 ))
                 .from(qUserApplication)
