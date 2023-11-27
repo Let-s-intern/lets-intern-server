@@ -3,10 +3,7 @@ package com.letsintern.letsintern.domain.user.service;
 import com.letsintern.letsintern.domain.user.domain.User;
 import com.letsintern.letsintern.domain.user.domain.UserRole;
 import com.letsintern.letsintern.domain.user.dto.request.*;
-import com.letsintern.letsintern.domain.user.dto.response.TokenResponse;
-import com.letsintern.letsintern.domain.user.dto.response.UserIdResponseDTO;
-import com.letsintern.letsintern.domain.user.dto.response.UserInfoResponseDTO;
-import com.letsintern.letsintern.domain.user.dto.response.AdminUserListResponseDTO;
+import com.letsintern.letsintern.domain.user.dto.response.*;
 import com.letsintern.letsintern.domain.user.exception.UserNotFound;
 import com.letsintern.letsintern.domain.user.helper.UserHelper;
 import com.letsintern.letsintern.domain.user.mapper.UserMapper;
@@ -128,5 +125,14 @@ public class UserService {
 
     public AdminUserListResponseDTO getAdminUserList(String type, String keyword) {
         return userMapper.toUserTotalListResponseDTO(userHelper.getAdminUserList(type, keyword));
+    }
+
+    public AdminManagerListResponse getAdminManagerList() {
+        return AdminManagerListResponse.from(userRepository.findManagerList());
+    }
+
+    @Transactional
+    public UserIdResponseDTO setUserManager(Long userId, Long managerId) {
+        return userMapper.toUserIdResponseDTO(userHelper.setUserManager(userId, managerId));
     }
 }

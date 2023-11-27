@@ -1,10 +1,7 @@
 package com.letsintern.letsintern.domain.user;
 
 import com.letsintern.letsintern.domain.user.dto.request.*;
-import com.letsintern.letsintern.domain.user.dto.response.TokenResponse;
-import com.letsintern.letsintern.domain.user.dto.response.UserIdResponseDTO;
-import com.letsintern.letsintern.domain.user.dto.response.UserInfoResponseDTO;
-import com.letsintern.letsintern.domain.user.dto.response.AdminUserListResponseDTO;
+import com.letsintern.letsintern.domain.user.dto.response.*;
 import com.letsintern.letsintern.domain.user.service.UserService;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import io.swagger.v3.oas.annotations.Operation;
@@ -98,5 +95,17 @@ public class UserController {
     @GetMapping("/admin/search")
     public AdminUserListResponseDTO getAdminUserList(@RequestParam String type, @RequestParam String keyword) {
         return userService.getAdminUserList(type, keyword);
+    }
+
+    @Operation(summary = "어드민 매니저 목록")
+    @GetMapping("/admin/manager")
+    public AdminManagerListResponse getAdminManagerList() {
+        return userService.getAdminManagerList();
+    }
+
+    @Operation(summary = "어드민 유저 담당 매니저 설정")
+    @GetMapping ("/admin/{userId}/{managerId}")
+    public UserIdResponseDTO setUserManager(@PathVariable Long userId, @PathVariable Long managerId) {
+        return userService.setUserManager(userId, managerId);
     }
 }
