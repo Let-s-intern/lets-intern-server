@@ -1,5 +1,6 @@
 package com.letsintern.letsintern.domain.user.repository;
 
+import com.letsintern.letsintern.domain.user.vo.AdminMangerVo;
 import com.letsintern.letsintern.domain.user.vo.AdminUserVo;
 import org.springframework.data.domain.Pageable;
 
@@ -14,4 +15,6 @@ public interface UserRepositoryCustom {
     List<AdminUserVo> findAdminUserVoByEmail(String email);
 
     List<AdminUserVo> findAdminUserVoByPhoneNum(String phoneNum);
+
+    List<AdminMangerVo> findManagerList();
 }

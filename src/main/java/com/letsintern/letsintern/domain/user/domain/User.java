@@ -64,7 +64,8 @@ public class User {
     @Column(length = 50)
     private String major;
 
-
+    @Nullable
+    private Long managerId;
 
 
     @Builder

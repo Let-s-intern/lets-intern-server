@@ -161,4 +161,14 @@ public class UserHelper {
                 return new ArrayList<>();
         }
     }
+
+    public Long setUserManager(Long userId, Long managerId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> {
+                    throw UserNotFound.EXCEPTION;
+                });
+
+        user.setManagerId(managerId);
+        return user.getId();
+    }
 }

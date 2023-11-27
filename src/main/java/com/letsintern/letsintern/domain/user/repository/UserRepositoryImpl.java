@@ -1,6 +1,8 @@
 package com.letsintern.letsintern.domain.user.repository;
 
 import com.letsintern.letsintern.domain.user.domain.QUser;
+import com.letsintern.letsintern.domain.user.domain.UserRole;
+import com.letsintern.letsintern.domain.user.vo.AdminMangerVo;
 import com.letsintern.letsintern.domain.user.vo.AdminUserVo;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -86,6 +88,20 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
                         qUser.signedUpAt))
                 .from(qUser)
                 .where(qUser.phoneNum.eq(phoneNum))
+                .fetch();
+    }
+
+    @Override
+    public List<AdminMangerVo> findManagerList() {
+        QUser qUser = QUser.user;
+
+        return jpaQueryFactory
+                .select(Projections.constructor(AdminMangerVo.class,
+                        qUser.id,
+                        qUser.name
+                ))
+                .from(qUser)
+                .where(qUser.role.eq(UserRole.ROLE_ADMIN))
                 .fetch();
     }
 }
