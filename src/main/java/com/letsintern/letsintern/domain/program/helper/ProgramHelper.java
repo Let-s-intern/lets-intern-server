@@ -56,10 +56,10 @@ public class ProgramHelper {
             program.setTh(programUpdateRequestDTO.getTh());
         }
         if(programUpdateRequestDTO.getTitle() != null) {
-            program.setTitle(program.getTitle());
+            program.setTitle(programUpdateRequestDTO.getTitle());
         }
         if(programUpdateRequestDTO.getHeadcount() != null) {
-            program.setHeadcount(program.getHeadcount());
+            program.setHeadcount(programUpdateRequestDTO.getHeadcount());
         }
         if(programUpdateRequestDTO.getDueDate() != null) {
             program.setDueDate(programUpdateRequestDTO.getDueDate());

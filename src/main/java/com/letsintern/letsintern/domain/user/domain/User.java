@@ -65,6 +65,8 @@ public class User {
     private String major;
 
 
+
+
     @Builder
     private User(String email, String name, String password, String phoneNum) {
         this.name = name;
