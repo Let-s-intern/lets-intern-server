@@ -11,7 +11,6 @@ import com.letsintern.letsintern.domain.application.mapper.ApplicationMapper;
 import com.letsintern.letsintern.domain.application.repository.ApplicationRepository;
 import com.letsintern.letsintern.domain.application.vo.UserApplicationVo;
 import com.letsintern.letsintern.domain.program.domain.ProgramStatus;
-import com.letsintern.letsintern.domain.program.helper.ProgramHelper;
 import com.letsintern.letsintern.domain.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -27,13 +26,13 @@ public class ApplicationHelper {
 
     private final ApplicationRepository applicationRepository;
     private final ApplicationMapper applicationMapper;
-    private final ProgramHelper programHelper;
 
 
     /* 회원 - 기존 신청 내역 확인 */
-    public void checkUserApplicationExist(Long programId, User user) {
-        UserApplication userApplication = applicationRepository.findByProgramIdAndUserId(programId, user.getId());
-        if(userApplication != null) throw DuplicateApplication.EXCEPTION;
+    public boolean checkUserApplicationExist(Long programId, Long userId) {
+        UserApplication userApplication = applicationRepository.findByProgramIdAndUserId(programId, userId);
+        if(userApplication != null) return true;
+        return false;
     }
 
     public ApplicationCreateResponse createUserApplication(Long programId, ApplicationCreateDTO applicationCreateDTO, User user) {

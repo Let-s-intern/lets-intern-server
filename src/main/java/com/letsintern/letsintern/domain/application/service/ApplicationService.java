@@ -6,10 +6,11 @@ import com.letsintern.letsintern.domain.application.dto.response.ApplicationCrea
 import com.letsintern.letsintern.domain.application.dto.response.ApplicationIdResponse;
 import com.letsintern.letsintern.domain.application.dto.response.ApplicationListResponse;
 import com.letsintern.letsintern.domain.application.dto.response.UserApplicationListResponse;
+import com.letsintern.letsintern.domain.application.exception.ApplicationUserBadRequest;
 import com.letsintern.letsintern.domain.application.helper.ApplicationHelper;
 import com.letsintern.letsintern.domain.application.mapper.ApplicationMapper;
 import com.letsintern.letsintern.domain.user.domain.User;
-import com.letsintern.letsintern.domain.user.helper.UserHelper;
+import com.letsintern.letsintern.domain.user.service.UserService;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -22,10 +23,19 @@ public class ApplicationService {
 
     private final ApplicationHelper applicationHelper;
     private final ApplicationMapper applicationMapper;
-    private final UserHelper userHelper;
+    private final UserService userService;
 
     public ApplicationCreateResponse createUserApplication(Long programId, ApplicationCreateDTO applicationCreateDTO, PrincipalDetails principalDetails) {
-        final User user = principalDetails.getUser();
+        User user = principalDetails.getUser();
+
+        /* 추가 정보 없는 사용자 */
+        if(!userService.checkDetailInfoExist(principalDetails)) {
+            if(applicationCreateDTO.getUniversity() == null || applicationCreateDTO.getMajor() == null) {
+                throw ApplicationUserBadRequest.EXCEPTION;  // 추가 정보 미입력
+            }
+            else userService.addUserDetailInfo(user, applicationCreateDTO.getUniversity(), applicationCreateDTO.getMajor());
+        }
+
         return applicationHelper.createUserApplication(programId, applicationCreateDTO, user);
     }
 
