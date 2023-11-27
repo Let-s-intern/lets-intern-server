@@ -3,6 +3,7 @@ package com.letsintern.letsintern.domain.faq.service;
 import com.letsintern.letsintern.domain.faq.dto.request.FaqCreateDTO;
 import com.letsintern.letsintern.domain.faq.dto.request.FaqUpdateDTO;
 import com.letsintern.letsintern.domain.faq.dto.response.FaqIdResponse;
+import com.letsintern.letsintern.domain.faq.dto.response.FaqVoListResponse;
 import com.letsintern.letsintern.domain.faq.helper.FaqHelper;
 import com.letsintern.letsintern.domain.faq.mapper.FaqMapper;
 import com.letsintern.letsintern.domain.faq.vo.FaqVo;
@@ -26,5 +27,9 @@ public class FaqService {
     @Transactional
     public FaqIdResponse updateFaq(Long faqId, FaqUpdateDTO faqUpdateDTO) {
         return faqMapper.toFaqIdResponse(faqHelper.updateFaq(faqId, faqUpdateDTO));
+    }
+
+    public FaqVoListResponse getProgramFaqList(ProgramType programType) {
+        return faqMapper.toFaqVoListResponse(faqHelper.getProgramFaqList(programType));
     }
 }

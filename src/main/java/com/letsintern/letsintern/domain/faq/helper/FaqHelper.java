@@ -44,7 +44,7 @@ public class FaqHelper {
         return faq.getId();
     }
 
-    public List<FaqVo> getFaqListByProgramType(ProgramType programType) {
+    public List<FaqVo> getProgramFaqList(ProgramType programType) {
         return faqRepository.findVoListByProgramType(programType);
     }
 }
