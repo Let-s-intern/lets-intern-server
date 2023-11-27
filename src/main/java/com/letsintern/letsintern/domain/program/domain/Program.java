@@ -1,13 +1,14 @@
 package com.letsintern.letsintern.domain.program.domain;
 
 import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequestDTO;
+import com.letsintern.letsintern.global.common.util.StringUtils;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Getter @Setter
@@ -20,7 +21,7 @@ public class Program {
     private Long id;
 
     @NotNull
-    @Column(length = 32)
+    @Column(length = 20)
     @Enumerated(EnumType.STRING)
     private ProgramType type;
 
@@ -32,7 +33,7 @@ public class Program {
     private String title;
 
     @NotNull
-    private Integer headcount = 0;
+    private Integer headcount;
 
     @NotNull
     private Date dueDate;
@@ -63,6 +64,9 @@ public class Program {
     private String notice;
 
     @NotNull
+    private String faqListStr;
+
+    @NotNull
     @Column(length = 10)
     @Enumerated(EnumType.STRING)
     private ProgramStatus status = ProgramStatus.OPEN;
@@ -70,11 +74,11 @@ public class Program {
     @NotNull
     private Boolean isVisible = false;
 
-
     @Builder
     private Program(ProgramType type, Integer th, String title, Integer headcount,
                     Date dueDate, Date announcementDate, Date startDate, Date endDate,
-                    String contents, ProgramWay way, String location, String link, String notice) {
+                    String contents, ProgramWay way, String location, String link, String notice,
+                    List<Integer> faqIdList) {
         this.type = type;
         this.th = th;
         this.title = title;
@@ -88,6 +92,7 @@ public class Program {
         this.location = location;
         this.link = link;
         this.notice = notice;
+        this.faqListStr = StringUtils.listToString(faqIdList);
     }
 
     public static Program of(ProgramCreateRequestDTO programCreateRequestDTO) {
@@ -99,11 +104,13 @@ public class Program {
                 .dueDate(programCreateRequestDTO.getDueDate())
                 .announcementDate(programCreateRequestDTO.getAnnouncementDate())
                 .startDate(programCreateRequestDTO.getStartDate())
+                .endDate(programCreateRequestDTO.getEndDate())
                 .contents(programCreateRequestDTO.getContents())
                 .way(programCreateRequestDTO.getWay())
                 .location(programCreateRequestDTO.getLocation())
                 .link(programCreateRequestDTO.getLink())
                 .notice(programCreateRequestDTO.getNotice())
+                .faqIdList(programCreateRequestDTO.getFaqIdList())
                 .build();
     }
 }

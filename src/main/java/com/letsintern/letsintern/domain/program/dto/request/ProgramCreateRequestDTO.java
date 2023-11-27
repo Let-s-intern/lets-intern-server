@@ -1,6 +1,5 @@
 package com.letsintern.letsintern.domain.program.dto.request;
 
-import com.letsintern.letsintern.domain.faq.dto.FaqDTO;
 import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import com.letsintern.letsintern.domain.program.domain.ProgramWay;
 import lombok.Getter;
@@ -27,7 +26,7 @@ public class ProgramCreateRequestDTO {
 
     private Date startDate;
 
-    private Date doneDate;
+    private Date endDate;
 
     private String contents;
 
@@ -39,6 +38,6 @@ public class ProgramCreateRequestDTO {
 
     private String notice;
 
-    private List<FaqDTO> faqDTOList;
+    private List<Integer> faqIdList;
 
 }

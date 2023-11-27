@@ -2,11 +2,9 @@ package com.letsintern.letsintern.domain.program.helper;
 
 import com.letsintern.letsintern.domain.application.domain.Application;
 import com.letsintern.letsintern.domain.application.repository.ApplicationRepository;
-import com.letsintern.letsintern.domain.faq.domain.Faq;
-import com.letsintern.letsintern.domain.faq.dto.FaqDTO;
 import com.letsintern.letsintern.domain.faq.repository.FaqRepository;
+import com.letsintern.letsintern.domain.faq.vo.FaqVo;
 import com.letsintern.letsintern.domain.program.domain.Program;
-import com.letsintern.letsintern.domain.program.domain.ProgramStatus;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramUpdateRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.response.AdminProgramListDTO;
@@ -17,16 +15,16 @@ import com.letsintern.letsintern.domain.program.mapper.ProgramMapper;
 import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
 import com.letsintern.letsintern.domain.program.vo.ProgramDetailVo;
 import com.letsintern.letsintern.domain.program.vo.ProgramThumbnailVo;
-import com.letsintern.letsintern.domain.review.domian.Review;
 import com.letsintern.letsintern.domain.review.repository.ReviewRepository;
 import com.letsintern.letsintern.domain.review.vo.ReviewVo;
+import com.letsintern.letsintern.global.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -42,13 +40,6 @@ public class ProgramHelper {
 
     public Long createProgram(ProgramCreateRequestDTO programCreateRequestDTO) {
         Program savedProgram = programRepository.save(programMapper.toEntity(programCreateRequestDTO));
-
-        if(programCreateRequestDTO.getFaqDTOList() != null) {
-            for(FaqDTO faqDTO : programCreateRequestDTO.getFaqDTOList()) {
-                faqRepository.save(Faq.of(savedProgram, faqDTO.getQuestion(), faqDTO.getAnswer()));
-            }
-        }
-
         return savedProgram.getId();
     }
 
@@ -73,13 +64,16 @@ public class ProgramHelper {
             program.setHeadcount(program.getHeadcount());
         }
         if(programUpdateRequestDTO.getDueDate() != null) {
-            program.setDueDate(simpleDateFormat.parse(programUpdateRequestDTO.getDueDate()));
+            program.setDueDate(programUpdateRequestDTO.getDueDate());
         }
         if(programUpdateRequestDTO.getAnnouncementDate() != null) {
             program.setAnnouncementDate(programUpdateRequestDTO.getAnnouncementDate());
         }
         if(programUpdateRequestDTO.getStartDate() != null) {
             program.setStartDate(programUpdateRequestDTO.getStartDate());
+        }
+        if(programUpdateRequestDTO.getEndDate() != null) {
+            program.setEndDate(programUpdateRequestDTO.getEndDate());
         }
         if(programUpdateRequestDTO.getContents() != null) {
             program.setContents(programUpdateRequestDTO.getContents());
@@ -99,24 +93,14 @@ public class ProgramHelper {
         if(programUpdateRequestDTO.getStatus() != null) {
             program.setStatus(programUpdateRequestDTO.getStatus());
         }
-        if(programUpdateRequestDTO.getIsApproved() != null) {
-            program.setIsApproved(programUpdateRequestDTO.getIsApproved());
-        }
         if(programUpdateRequestDTO.getIsVisible() != null) {
             program.setIsVisible(programUpdateRequestDTO.getIsVisible());
         }
+        if(programUpdateRequestDTO.getFaqIdList() != null) {
+            program.setFaqListStr(StringUtils.listToString(programUpdateRequestDTO.getFaqIdList()));
+        }
 
         return program.getId();
-    }
-
-    @Transactional
-    public void updateProgramHeadCount(Long programId) {
-        Program program = getExistingProgram(programId);
-        program.setHeadcount(program.getHeadcount() + 1);
-
-        if(program.getMaxHeadcount() > 0 && program.getHeadcount() >= program.getMaxHeadcount()) {
-            program.setStatus(ProgramStatus.CLOSED);
-        }
     }
 
     public ProgramListDTO getProgramThumbnailList(String type, Pageable pageable) {
@@ -132,7 +116,12 @@ public class ProgramHelper {
                 .orElseThrow(() -> {
                     throw ProgramNotFound.EXCEPTION;
                 });
-        List<Faq> faqList = faqRepository.findAllByProgramId(programId);
+
+        List<Integer> faqIdList = StringUtils.stringToList(programDetailVo.getFaqListStr());
+        List<FaqVo> faqList = new ArrayList<>();
+        for(Integer id : faqIdList) {
+            faqList.add(faqRepository.findVoById(Long.valueOf(id)));
+        }
         List<ReviewVo> reviewList = reviewRepository.findAllVosByProgramId(programId);
 
         if(userId != null) {

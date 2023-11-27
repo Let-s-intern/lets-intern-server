@@ -37,7 +37,6 @@ public class ApplicationHelper {
     }
 
     public ApplicationCreateResponse createUserApplication(Long programId, ApplicationCreateDTO applicationCreateDTO, User user) {
-        programHelper.updateProgramHeadCount(programId);
         UserApplication newUserApplication = applicationMapper.toUserEntity(programId, applicationCreateDTO, user);
         return applicationMapper.toApplicationCreateResponse(applicationRepository.save(newUserApplication));
     }
@@ -52,7 +51,6 @@ public class ApplicationHelper {
         GuestApplication guestApplication = applicationRepository.findByProgramIdAndGuestEmail(programId, applicationCreateDTO.getGuestEmail());
         if(guestApplication != null) throw DuplicateApplication.EXCEPTION;
 
-        programHelper.updateProgramHeadCount(programId);
         GuestApplication newGuestApplication = applicationMapper.toGuestEntity(programId, applicationCreateDTO);
         return applicationMapper.toApplicationCreateResponse(applicationRepository.save(newGuestApplication));
     }

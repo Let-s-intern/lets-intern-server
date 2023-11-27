@@ -28,8 +28,7 @@ public class ProgramThumbnailVo {
 
     private String startDate;
 
-    @QueryProjection
-    public ProgramThumbnailVo(Long id, ProgramStatus status, ProgramType type, Integer th, String title, Date dueDate, String startDate) {
+    public ProgramThumbnailVo(Long id, ProgramStatus status, ProgramType type, Integer th, String title, Date dueDate, Date startDate) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy년 MM월 dd일 HH:mm");
 
         this.id = id;
@@ -38,6 +37,6 @@ public class ProgramThumbnailVo {
         this.th = th;
         this.title = title;
         this.dueDate = simpleDateFormat.format(dueDate);
-        this.startDate = startDate;
+        this.startDate = simpleDateFormat.format(startDate);
     }
 }
