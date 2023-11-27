@@ -53,6 +53,7 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
                 .select(Projections.constructor(UserApplicationVo.class,
                         qUserApplication.id,
                         qUserApplication.status,
+                        qUserApplication.program.id,
                         qUserApplication.program.title,
                         qUserApplication.program.type,
                         qUserApplication.reviewId
