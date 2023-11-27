@@ -6,7 +6,6 @@ import com.letsintern.letsintern.domain.application.dto.response.ApplicationCrea
 import com.letsintern.letsintern.domain.application.dto.response.ApplicationIdResponse;
 import com.letsintern.letsintern.domain.application.dto.response.ApplicationListResponse;
 import com.letsintern.letsintern.domain.application.dto.response.UserApplicationListResponse;
-import com.letsintern.letsintern.domain.application.exception.ApplicationUserBadRequest;
 import com.letsintern.letsintern.domain.application.service.ApplicationService;
 import com.letsintern.letsintern.domain.user.domain.User;
 import com.letsintern.letsintern.domain.user.service.UserService;
@@ -27,29 +26,17 @@ import org.springframework.web.bind.annotation.*;
 public class ApplicationController {
 
     private final ApplicationService applicationService;
-    private final UserService userService;
 
     @Operation(summary = "지원서 생성")
     @PostMapping("/{programId}")
     public ApplicationCreateResponse createUserApplication(
             @PathVariable Long programId,
-            @RequestParam(required = false, defaultValue = "false") Boolean detailInfo,
             @RequestBody ApplicationCreateDTO applicationCreateDTO,
             @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
         // 비회원 지원서 생성
         if(principalDetails == null) {
             return applicationService.createGuestApplication(programId, applicationCreateDTO);
-        }
-
-        // 회원 상세 정보 추가하며 지원서 생성
-        else if(!detailInfo && (applicationCreateDTO.getUniversity() != null && applicationCreateDTO.getMajor() != null)) {
-            userService.addUserDetailInfo(principalDetails, applicationCreateDTO.getUniversity(), applicationCreateDTO.getMajor());
-        }
-
-        // 상세 정보 추가 대상자이나, request DTO에 없음
-        else if(!detailInfo && !(applicationCreateDTO.getUniversity() != null && applicationCreateDTO.getMajor() != null)) {
-            throw ApplicationUserBadRequest.EXCEPTION;
         }
 
         // 회원 지원서 생성

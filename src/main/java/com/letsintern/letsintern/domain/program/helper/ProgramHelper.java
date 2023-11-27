@@ -1,6 +1,6 @@
 package com.letsintern.letsintern.domain.program.helper;
 
-import com.letsintern.letsintern.domain.application.domain.Application;
+import com.letsintern.letsintern.domain.application.helper.ApplicationHelper;
 import com.letsintern.letsintern.domain.application.repository.ApplicationRepository;
 import com.letsintern.letsintern.domain.faq.repository.FaqRepository;
 import com.letsintern.letsintern.domain.faq.vo.FaqVo;
@@ -26,7 +26,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -37,20 +36,18 @@ public class ProgramHelper {
     private final FaqRepository faqRepository;
     private final ReviewRepository reviewRepository;
 
-    private final ApplicationRepository applicationRepository;
+    private final ApplicationHelper applicationHelper;
 
     public Long createProgram(ProgramCreateRequestDTO programCreateRequestDTO) {
         Program savedProgram = programRepository.save(programMapper.toEntity(programCreateRequestDTO));
         return savedProgram.getId();
     }
 
-    public Long updateProgram(Long programId, ProgramUpdateRequestDTO programUpdateRequestDTO) throws ParseException {
+    public Long updateProgram(Long programId, ProgramUpdateRequestDTO programUpdateRequestDTO) {
         Program program = programRepository.findById(programId)
                 .orElseThrow(() -> {
                     throw ProgramNotFound.EXCEPTION;
                 });
-
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy년 MM월 dd일 HH:mm");
 
         if(programUpdateRequestDTO.getType() != null) {
             program.setType(programUpdateRequestDTO.getType());
@@ -126,9 +123,9 @@ public class ProgramHelper {
       
         List<ReviewVo> reviewList = reviewRepository.findAllVosByProgramType(programDetailVo.getType());
 
-        if(userId != null) {
-            Application application = applicationRepository.findByProgramIdAndUserId(programId, userId);
-            if(application != null) return ProgramDetailDTO.of(programDetailVo, true, faqList, reviewList);
+        /* 회원 - 기존 신청 내역 존재 확인 */
+        if(userId != null && applicationHelper.checkUserApplicationExist(programId, userId)) {
+            return ProgramDetailDTO.of(programDetailVo, true, faqList, reviewList);
         }
 
         return ProgramDetailDTO.of(programDetailVo, false, faqList, reviewList);

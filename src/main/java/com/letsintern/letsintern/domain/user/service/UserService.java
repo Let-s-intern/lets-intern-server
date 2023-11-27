@@ -52,8 +52,7 @@ public class UserService {
     }
 
     @Transactional
-    public void addUserDetailInfo(PrincipalDetails principalDetails, String university, String major) {
-        final User user = principalDetails.getUser();
+    public void addUserDetailInfo(User user, String university, String major) {
         user.setUniversity(university);
         user.setMajor(major);
         user.setRole(UserRole.ROLE_USER);
