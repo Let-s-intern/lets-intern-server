@@ -1,6 +1,5 @@
 package com.letsintern.letsintern.domain.program.domain;
 
-import com.letsintern.letsintern.domain.faq.domain.Faq;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequestDTO;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
@@ -8,9 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Getter @Setter
@@ -35,21 +32,22 @@ public class Program {
     private String title;
 
     @NotNull
-    private Integer maxHeadcount = -1;
-
-    @NotNull
     private Integer headcount = 0;
 
     @NotNull
     private Date dueDate;
 
     @NotNull
-    private String announcementDate;
+    private Date announcementDate;
 
     @NotNull
-    private String startDate;
+    private Date startDate;
 
     @NotNull
+    private Date endDate;
+
+    @NotNull
+    @Column(length = 300)
     private String contents;
 
     @NotNull
@@ -65,32 +63,26 @@ public class Program {
     private String notice;
 
     @NotNull
-    @Column(length = 32)
+    @Column(length = 10)
     @Enumerated(EnumType.STRING)
     private ProgramStatus status = ProgramStatus.OPEN;
 
     @NotNull
-    private Boolean isApproved = false;
-
-    @NotNull
     private Boolean isVisible = false;
-
-    @OneToMany(mappedBy = "program", orphanRemoval = true)
-    List<Faq> faqList = new ArrayList<>();
 
 
     @Builder
-    private Program(ProgramType type, Integer th, String title, Integer maxHeadcount,
-                    Date dueDate, Date announcementDate, Date startDate,
+    private Program(ProgramType type, Integer th, String title, Integer headcount,
+                    Date dueDate, Date announcementDate, Date startDate, Date endDate,
                     String contents, ProgramWay way, String location, String link, String notice) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy년 MM월 dd일 HH:MM");
         this.type = type;
         this.th = th;
         this.title = title;
-        this.maxHeadcount = maxHeadcount;
+        this.headcount = headcount;
         this.dueDate = dueDate;
-        this.announcementDate = simpleDateFormat.format(announcementDate);
-        this.startDate = simpleDateFormat.format(startDate);
+        this.announcementDate = announcementDate;
+        this.startDate = startDate;
+        this.endDate = endDate;
         this.contents = contents;
         this.way = way;
         this.location = location;
@@ -103,7 +95,7 @@ public class Program {
                 .type(programCreateRequestDTO.getType())
                 .th(programCreateRequestDTO.getTh())
                 .title(programCreateRequestDTO.getTitle())
-                .maxHeadcount(programCreateRequestDTO.getMaxHeadcount())
+                .headcount(programCreateRequestDTO.getHeadcount())
                 .dueDate(programCreateRequestDTO.getDueDate())
                 .announcementDate(programCreateRequestDTO.getAnnouncementDate())
                 .startDate(programCreateRequestDTO.getStartDate())
