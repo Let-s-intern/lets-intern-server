@@ -3,11 +3,11 @@ package com.letsintern.letsintern.domain.program.helper;
 import com.letsintern.letsintern.domain.application.domain.Application;
 import com.letsintern.letsintern.domain.application.repository.ApplicationRepository;
 import com.letsintern.letsintern.domain.faq.domain.Faq;
-import com.letsintern.letsintern.domain.faq.dto.FaqDTO;
+import com.letsintern.letsintern.domain.faq.dto.request.FaqCreateDTO;
 import com.letsintern.letsintern.domain.faq.repository.FaqRepository;
+import com.letsintern.letsintern.domain.faq.vo.FaqVo;
 import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.program.domain.ProgramStatus;
-import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramUpdateRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.response.AdminProgramListDTO;
@@ -18,9 +18,9 @@ import com.letsintern.letsintern.domain.program.mapper.ProgramMapper;
 import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
 import com.letsintern.letsintern.domain.program.vo.ProgramDetailVo;
 import com.letsintern.letsintern.domain.program.vo.ProgramThumbnailVo;
-import com.letsintern.letsintern.domain.review.domian.Review;
 import com.letsintern.letsintern.domain.review.repository.ReviewRepository;
 import com.letsintern.letsintern.domain.review.vo.ReviewVo;
+import com.letsintern.letsintern.global.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
@@ -28,7 +28,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -43,13 +45,6 @@ public class ProgramHelper {
 
     public Long createProgram(ProgramCreateRequestDTO programCreateRequestDTO) {
         Program savedProgram = programRepository.save(programMapper.toEntity(programCreateRequestDTO));
-
-        if(programCreateRequestDTO.getFaqDTOList() != null) {
-            for(FaqDTO faqDTO : programCreateRequestDTO.getFaqDTOList()) {
-                faqRepository.save(Faq.of(savedProgram, faqDTO.getQuestion(), faqDTO.getAnswer()));
-            }
-        }
-
         return savedProgram.getId();
     }
 
@@ -106,6 +101,9 @@ public class ProgramHelper {
         if(programUpdateRequestDTO.getIsVisible() != null) {
             program.setIsVisible(programUpdateRequestDTO.getIsVisible());
         }
+        if(programUpdateRequestDTO.getFaqIdList() != null) {
+            program.setFaqListStr(programUpdateRequestDTO.getFaqIdList().stream().map(String::valueOf).collect(Collectors.joining(",")));
+        }
 
         return program.getId();
     }
@@ -133,7 +131,12 @@ public class ProgramHelper {
                 .orElseThrow(() -> {
                     throw ProgramNotFound.EXCEPTION;
                 });
-        List<Faq> faqList = faqRepository.findAllByProgramId(programId);
+
+        List<Integer> faqIdList = StringUtils.stringToList(programDetailVo.getFaqListStr());
+        List<FaqVo> faqList = new ArrayList<>();
+        for(Integer id : faqIdList) {
+            faqList.add(faqRepository.findVoById(Long.valueOf(id)));
+        }
         List<ReviewVo> reviewList = reviewRepository.findAllVosByProgramId(programId);
 
         if(userId != null) {
