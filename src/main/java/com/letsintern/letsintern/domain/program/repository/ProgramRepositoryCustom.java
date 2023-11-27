@@ -12,8 +12,6 @@ import java.util.Optional;
 
 public interface ProgramRepositoryCustom {
 
-    Integer maxTh(ProgramType type);
-
     List<ProgramThumbnailVo> findProgramThumbnails(Pageable pageable);
 
     List<ProgramThumbnailVo> findProgramThumbnailsByType(String type, Pageable pageable);
@@ -27,4 +25,6 @@ public interface ProgramRepositoryCustom {
     List<Program> findAllAdminByType(String type, Pageable pageable);
 
     void updateAllByDueDate(Date now);
+
+    void updateAllByEndDate(Date now);
 }

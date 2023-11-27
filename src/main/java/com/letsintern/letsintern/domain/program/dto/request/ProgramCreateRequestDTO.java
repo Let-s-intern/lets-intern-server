@@ -18,13 +18,15 @@ public class ProgramCreateRequestDTO {
 
     private String title;
 
-    private Integer maxHeadcount;
+    private Integer headcount;
 
     private Date dueDate;
 
     private Date announcementDate;
 
     private Date startDate;
+
+    private Date endDate;
 
     private String contents;
 

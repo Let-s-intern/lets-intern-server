@@ -1,6 +1,5 @@
 package com.letsintern.letsintern.domain.program.domain;
 
-import com.letsintern.letsintern.domain.faq.domain.Faq;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequestDTO;
 import com.letsintern.letsintern.global.common.util.StringUtils;
 import jakarta.annotation.Nullable;
@@ -8,8 +7,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,7 +22,7 @@ public class Program {
     private Long id;
 
     @NotNull
-    @Column(length = 32)
+    @Column(length = 20)
     @Enumerated(EnumType.STRING)
     private ProgramType type;
 
@@ -37,21 +34,22 @@ public class Program {
     private String title;
 
     @NotNull
-    private Integer maxHeadcount = -1;
-
-    @NotNull
-    private Integer headcount = 0;
+    private Integer headcount;
 
     @NotNull
     private Date dueDate;
 
     @NotNull
-    private String announcementDate;
+    private Date announcementDate;
 
     @NotNull
-    private String startDate;
+    private Date startDate;
 
     @NotNull
+    private Date endDate;
+
+    @NotNull
+    @Column(length = 300)
     private String contents;
 
     @NotNull
@@ -67,32 +65,29 @@ public class Program {
     private String notice;
 
     @NotNull
-    @Column(length = 32)
+    private String faqListStr;
+
+    @NotNull
+    @Column(length = 10)
     @Enumerated(EnumType.STRING)
     private ProgramStatus status = ProgramStatus.OPEN;
 
     @NotNull
-    private Boolean isApproved = false;
-
-    @NotNull
     private Boolean isVisible = false;
 
-    @Nullable
-    private String faqListStr;
-
-
     @Builder
-    private Program(ProgramType type, Integer th, String title, Integer maxHeadcount,
-                    Date dueDate, Date announcementDate, Date startDate, String contents,
-                    ProgramWay way, String location, String link, String notice, List<Integer> faqIdList) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy년 MM월 dd일 HH:MM");
+    private Program(ProgramType type, Integer th, String title, Integer headcount,
+                    Date dueDate, Date announcementDate, Date startDate, Date endDate,
+                    String contents, ProgramWay way, String location, String link, String notice,
+                    List<Integer> faqIdList) {
         this.type = type;
         this.th = th;
         this.title = title;
-        this.maxHeadcount = maxHeadcount;
+        this.headcount = headcount;
         this.dueDate = dueDate;
-        this.announcementDate = simpleDateFormat.format(announcementDate);
-        this.startDate = simpleDateFormat.format(startDate);
+        this.announcementDate = announcementDate;
+        this.startDate = startDate;
+        this.endDate = endDate;
         this.contents = contents;
         this.way = way;
         this.location = location;
@@ -106,15 +101,17 @@ public class Program {
                 .type(programCreateRequestDTO.getType())
                 .th(programCreateRequestDTO.getTh())
                 .title(programCreateRequestDTO.getTitle())
-                .maxHeadcount(programCreateRequestDTO.getMaxHeadcount())
+                .headcount(programCreateRequestDTO.getHeadcount())
                 .dueDate(programCreateRequestDTO.getDueDate())
                 .announcementDate(programCreateRequestDTO.getAnnouncementDate())
                 .startDate(programCreateRequestDTO.getStartDate())
+                .endDate(programCreateRequestDTO.getEndDate())
                 .contents(programCreateRequestDTO.getContents())
                 .way(programCreateRequestDTO.getWay())
                 .location(programCreateRequestDTO.getLocation())
                 .link(programCreateRequestDTO.getLink())
                 .notice(programCreateRequestDTO.getNotice())
+                .faqIdList(programCreateRequestDTO.getFaqIdList())
                 .build();
     }
 }

@@ -2,12 +2,9 @@ package com.letsintern.letsintern.domain.program.helper;
 
 import com.letsintern.letsintern.domain.application.domain.Application;
 import com.letsintern.letsintern.domain.application.repository.ApplicationRepository;
-import com.letsintern.letsintern.domain.faq.domain.Faq;
-import com.letsintern.letsintern.domain.faq.dto.request.FaqCreateDTO;
 import com.letsintern.letsintern.domain.faq.repository.FaqRepository;
 import com.letsintern.letsintern.domain.faq.vo.FaqVo;
 import com.letsintern.letsintern.domain.program.domain.Program;
-import com.letsintern.letsintern.domain.program.domain.ProgramStatus;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramUpdateRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.response.AdminProgramListDTO;
@@ -24,7 +21,6 @@ import com.letsintern.letsintern.global.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -69,13 +65,16 @@ public class ProgramHelper {
             program.setHeadcount(program.getHeadcount());
         }
         if(programUpdateRequestDTO.getDueDate() != null) {
-            program.setDueDate(simpleDateFormat.parse(programUpdateRequestDTO.getDueDate()));
+            program.setDueDate(programUpdateRequestDTO.getDueDate());
         }
         if(programUpdateRequestDTO.getAnnouncementDate() != null) {
             program.setAnnouncementDate(programUpdateRequestDTO.getAnnouncementDate());
         }
         if(programUpdateRequestDTO.getStartDate() != null) {
             program.setStartDate(programUpdateRequestDTO.getStartDate());
+        }
+        if(programUpdateRequestDTO.getEndDate() != null) {
+            program.setEndDate(programUpdateRequestDTO.getEndDate());
         }
         if(programUpdateRequestDTO.getContents() != null) {
             program.setContents(programUpdateRequestDTO.getContents());
@@ -95,27 +94,14 @@ public class ProgramHelper {
         if(programUpdateRequestDTO.getStatus() != null) {
             program.setStatus(programUpdateRequestDTO.getStatus());
         }
-        if(programUpdateRequestDTO.getIsApproved() != null) {
-            program.setIsApproved(programUpdateRequestDTO.getIsApproved());
-        }
         if(programUpdateRequestDTO.getIsVisible() != null) {
             program.setIsVisible(programUpdateRequestDTO.getIsVisible());
         }
         if(programUpdateRequestDTO.getFaqIdList() != null) {
-            program.setFaqListStr(programUpdateRequestDTO.getFaqIdList().stream().map(String::valueOf).collect(Collectors.joining(",")));
+            program.setFaqListStr(StringUtils.listToString(programUpdateRequestDTO.getFaqIdList()));
         }
 
         return program.getId();
-    }
-
-    @Transactional
-    public void updateProgramHeadCount(Long programId) {
-        Program program = getExistingProgram(programId);
-        program.setHeadcount(program.getHeadcount() + 1);
-
-        if(program.getMaxHeadcount() > 0 && program.getHeadcount() >= program.getMaxHeadcount()) {
-            program.setStatus(ProgramStatus.CLOSED);
-        }
     }
 
     public ProgramListDTO getProgramThumbnailList(String type, Pageable pageable) {
@@ -137,7 +123,8 @@ public class ProgramHelper {
         for(Integer id : faqIdList) {
             faqList.add(faqRepository.findVoById(Long.valueOf(id)));
         }
-        List<ReviewVo> reviewList = reviewRepository.findAllVosByProgramId(programId);
+      
+        List<ReviewVo> reviewList = reviewRepository.findAllVosByProgramType(programDetailVo.getType());
 
         if(userId != null) {
             Application application = applicationRepository.findByProgramIdAndUserId(programId, userId);

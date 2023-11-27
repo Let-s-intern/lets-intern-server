@@ -1,5 +1,6 @@
 package com.letsintern.letsintern.domain.review.domian;
 
+import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import com.letsintern.letsintern.domain.review.dto.request.ReviewCreateDTO;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
@@ -31,6 +32,9 @@ public class Review {
     @NotNull
     Long programId;
 
+    @NotNull
+    ProgramType programType;
+
     @Nullable
     String userName;
 
@@ -42,23 +46,25 @@ public class Review {
     ReviewStatus status = ReviewStatus.INVISIBLE;
 
     @Builder
-    private Review(Integer grade, String reviewContents, String suggestContents, Long programId, String username) {
+    private Review(Integer grade, String reviewContents, String suggestContents, Long programId, ProgramType programType, String username) {
         this.grade = grade;
         this.reviewContents = reviewContents;
         this.suggestContents = suggestContents;
         this.programId = programId;
+        this.programType = programType;
         if(username != null) this.userName = username;
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy년 MM월 dd일");
         this.createdAt = simpleDateFormat.format(new Date());
     }
 
-    public static Review of(ReviewCreateDTO reviewCreateDTO, Long programId, String username) {
+    public static Review of(ReviewCreateDTO reviewCreateDTO, Long programId, ProgramType programType, String username) {
         return Review.builder()
                 .grade(reviewCreateDTO.getGrade())
                 .reviewContents(reviewCreateDTO.getReviewContents())
                 .suggestContents(reviewCreateDTO.getSuggestContents())
                 .programId(programId)
+                .programType(programType)
                 .username(username)
                 .build();
     }

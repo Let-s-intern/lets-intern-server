@@ -1,7 +1,6 @@
 package com.letsintern.letsintern.domain.program.service;
 
 import com.letsintern.letsintern.domain.program.domain.Program;
-import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramUpdateRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.response.AdminProgramListDTO;
@@ -12,7 +11,6 @@ import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
 import com.letsintern.letsintern.domain.program.helper.ProgramHelper;
 import com.letsintern.letsintern.domain.program.mapper.ProgramMapper;
 import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
-import com.letsintern.letsintern.domain.user.domain.User;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;

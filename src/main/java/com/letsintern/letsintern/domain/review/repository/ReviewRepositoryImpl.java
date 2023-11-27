@@ -1,5 +1,6 @@
 package com.letsintern.letsintern.domain.review.repository;
 
+import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import com.letsintern.letsintern.domain.review.domian.QReview;
 import com.letsintern.letsintern.domain.review.domian.Review;
 import com.letsintern.letsintern.domain.review.domian.ReviewStatus;
@@ -32,7 +33,7 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
     }
 
     @Override
-    public List<ReviewVo> findAllVosByProgramId(Long programId) {
+    public List<ReviewVo> findAllVosByProgramType(ProgramType programType) {
         QReview qReview = QReview.review;
 
         return jpaQueryFactory
@@ -44,7 +45,7 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
                     qReview.createdAt
                 ))
                 .from(qReview)
-                .where(qReview.programId.eq(programId), qReview.status.eq(ReviewStatus.VISIBLE))
+                .where(qReview.programType.eq(programType), qReview.status.eq(ReviewStatus.VISIBLE))
                 .orderBy(qReview.id.desc())
                 .fetch();
     }

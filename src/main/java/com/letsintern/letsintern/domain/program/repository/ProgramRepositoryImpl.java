@@ -6,7 +6,6 @@ import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import com.letsintern.letsintern.domain.program.domain.QProgram;
 import com.letsintern.letsintern.domain.program.vo.ProgramDetailVo;
 import com.letsintern.letsintern.domain.program.vo.ProgramThumbnailVo;
-import com.letsintern.letsintern.domain.program.vo.QProgramThumbnailVo;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -26,22 +25,10 @@ public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
     private final EntityManager em;
 
     @Override
-    public Integer maxTh(ProgramType type) {
-        QProgram qProgram = QProgram.program;
-        Integer maxTh = jpaQueryFactory
-                            .select(qProgram.th.max())
-                            .from(qProgram)
-                            .where(qProgram.type.eq(type))
-                            .fetchOne();
-
-        return (maxTh == null) ? 0 : maxTh;
-    }
-
-    @Override
     public List<ProgramThumbnailVo> findProgramThumbnails(Pageable pageable) {
         QProgram qProgram = QProgram.program;
         return jpaQueryFactory
-                .select(new QProgramThumbnailVo(
+                .select(Projections.constructor(ProgramThumbnailVo.class,
                         qProgram.id,
                         qProgram.status,
                         qProgram.type,
@@ -51,7 +38,7 @@ public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
                         qProgram.startDate
                 ))
                 .from(qProgram)
-                .where(qProgram.isApproved.eq(true), qProgram.isVisible.eq(true))
+                .where(qProgram.isVisible.eq(true))
                 .orderBy(qProgram.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -63,7 +50,7 @@ public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
         QProgram qProgram = QProgram.program;
         if(type.equals("CHALLENGE")) {
             return jpaQueryFactory
-                    .select(new QProgramThumbnailVo(
+                    .select(Projections.constructor(ProgramThumbnailVo.class,
                             qProgram.id,
                             qProgram.status,
                             qProgram.type,
@@ -74,7 +61,7 @@ public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
                     ))
                     .from(qProgram)
                     .where(qProgram.type.eq(ProgramType.CHALLENGE_HALF).or(qProgram.type.eq(ProgramType.CHALLENGE_FULL)))
-                    .where(qProgram.isApproved.eq(true), qProgram.isVisible.eq(true))
+                    .where(qProgram.isVisible.eq(true))
                     .orderBy(qProgram.id.desc())
                     .offset(pageable.getOffset())
                     .limit(pageable.getPageSize())
@@ -82,7 +69,7 @@ public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
         }
 
         return jpaQueryFactory
-                .select(new QProgramThumbnailVo(
+                .select(Projections.constructor(ProgramThumbnailVo.class,
                         qProgram.id,
                         qProgram.status,
                         qProgram.type,
@@ -93,7 +80,7 @@ public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
                 ))
                 .from(qProgram)
                 .where(qProgram.type.eq(ProgramType.valueOf(type)))
-                .where(qProgram.isApproved.eq(true), qProgram.isVisible.eq(true))
+                .where(qProgram.isVisible.eq(true))
                 .orderBy(qProgram.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -108,6 +95,7 @@ public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
                         qProgram.title,
                         qProgram.contents,
                         qProgram.notice,
+                        qProgram.type,
                         qProgram.faqListStr
                 ))
                 .from(qProgram)
@@ -156,6 +144,20 @@ public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
             .set(qProgram.status, ProgramStatus.CLOSED)
             .where(qProgram.status.eq(ProgramStatus.OPEN), qProgram.dueDate.before(now))
             .execute();
+
+        em.flush();
+        em.clear();
+    }
+
+    @Override
+    public void updateAllByEndDate(Date now) {
+        QProgram qProgram = QProgram.program;
+
+        jpaQueryFactory
+                .update(qProgram)
+                .set(qProgram.status, ProgramStatus.DONE)
+                .where(qProgram.status.eq(ProgramStatus.CLOSED), qProgram.endDate.before(now))
+                .execute();
 
         em.flush();
         em.clear();

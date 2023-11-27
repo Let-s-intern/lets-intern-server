@@ -13,6 +13,7 @@ import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
 import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
 import com.letsintern.letsintern.domain.user.domain.User;
+import com.letsintern.letsintern.global.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -44,7 +45,7 @@ public class ApplicationMapper {
     }
 
     public ApplicationCreateResponse toApplicationCreateResponse(Application application) {
-        return ApplicationCreateResponse.from(application.getId(), application.getProgram().getAnnouncementDate());
+        return ApplicationCreateResponse.from(application.getId(), StringUtils.dateToString(application.getProgram().getAnnouncementDate()));
     }
 
     public ApplicationListResponse toApplicationListResponseDTO(List<Application> applicationList) {

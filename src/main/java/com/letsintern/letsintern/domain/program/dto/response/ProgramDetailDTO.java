@@ -1,6 +1,5 @@
 package com.letsintern.letsintern.domain.program.dto.response;
 
-import com.letsintern.letsintern.domain.faq.domain.Faq;
 import com.letsintern.letsintern.domain.faq.vo.FaqVo;
 import com.letsintern.letsintern.domain.program.vo.ProgramDetailVo;
 import com.letsintern.letsintern.domain.review.vo.ReviewVo;
@@ -13,7 +12,6 @@ import java.util.List;
 public class ProgramDetailDTO {
 
     private ProgramDetailVo programDetailVo;
-
     private boolean participated;
     private List<FaqVo> faqList;
     private List<ReviewVo> reviewList;

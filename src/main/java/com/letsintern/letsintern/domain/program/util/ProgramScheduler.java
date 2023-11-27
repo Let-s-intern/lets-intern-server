@@ -16,7 +16,13 @@ public class ProgramScheduler {
 
     @Transactional
     @Scheduled(cron = "5 0 0 * * ?")
-    public void updateProgramStatus() {
+    public void updateProgramStatusToClosed() {
         programRepository.updateAllByDueDate(new Date());
+    }
+
+    @Transactional
+    @Scheduled(cron = "45 0 0 * * ?")
+    public void updateProgramStatusToDone() {
+        programRepository.updateAllByEndDate(new Date());
     }
 }
