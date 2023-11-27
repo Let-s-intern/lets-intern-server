@@ -24,7 +24,6 @@ public class StringUtils {
         return convertedList;
     }
 
-
     public static SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy년 MM월 dd일 HH:mm");
 
     public static String dateToString(Date date) {

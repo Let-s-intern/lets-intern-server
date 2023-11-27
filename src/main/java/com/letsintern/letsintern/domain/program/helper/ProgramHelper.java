@@ -26,6 +26,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -122,6 +123,7 @@ public class ProgramHelper {
         for(Integer id : faqIdList) {
             faqList.add(faqRepository.findVoById(Long.valueOf(id)));
         }
+      
         List<ReviewVo> reviewList = reviewRepository.findAllVosByProgramType(programDetailVo.getType());
 
         if(userId != null) {
