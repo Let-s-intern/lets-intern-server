@@ -3,6 +3,9 @@ package com.letsintern.letsintern.domain.review.helper;
 import com.letsintern.letsintern.domain.application.domain.Application;
 import com.letsintern.letsintern.domain.application.exception.ApplicationNotFound;
 import com.letsintern.letsintern.domain.application.repository.ApplicationRepository;
+import com.letsintern.letsintern.domain.program.domain.Program;
+import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
+import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
 import com.letsintern.letsintern.domain.review.domian.Review;
 import com.letsintern.letsintern.domain.review.dto.request.ReviewCreateDTO;
 import com.letsintern.letsintern.domain.review.dto.request.ReviewUpdateDTO;
@@ -25,8 +28,15 @@ public class ReviewHelper {
     private final ReviewRepository reviewRepository;
     private final ReviewMapper reviewMapper;
 
+    private final ProgramRepository programRepository;
+
     public Long createLinkReview(Long programId, ReviewCreateDTO reviewCreateDTO) {
-        Review newReview = reviewMapper.toEntity(programId, reviewCreateDTO, null);
+        Program program = programRepository.findById(programId)
+                .orElseThrow(() -> {
+                    throw ProgramNotFound.EXCEPTION;
+                });
+
+        Review newReview = reviewMapper.toEntity(programId, program.getType(), reviewCreateDTO, null);
         return reviewRepository.save(newReview).getId();
     }
 
@@ -38,7 +48,7 @@ public class ReviewHelper {
             throw ReviewUnAuthorized.EXCEPTION;
         }
 
-        Review newReview = reviewMapper.toEntity(application.getProgram().getId(), reviewCreateDTO, username);
+        Review newReview = reviewMapper.toEntity(application.getProgram().getId(), application.getProgram().getType(), reviewCreateDTO, username);
         Long reviewId = reviewRepository.save(newReview).getId();
         application.setReviewId(reviewId);
 

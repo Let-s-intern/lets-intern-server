@@ -122,7 +122,7 @@ public class ProgramHelper {
         for(Integer id : faqIdList) {
             faqList.add(faqRepository.findVoById(Long.valueOf(id)));
         }
-        List<ReviewVo> reviewList = reviewRepository.findAllVosByProgramId(programId);
+        List<ReviewVo> reviewList = reviewRepository.findAllVosByProgramType(programDetailVo.getType());
 
         if(userId != null) {
             Application application = applicationRepository.findByProgramIdAndUserId(programId, userId);

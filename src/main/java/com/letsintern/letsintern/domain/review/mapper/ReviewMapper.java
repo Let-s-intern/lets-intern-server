@@ -1,6 +1,6 @@
 package com.letsintern.letsintern.domain.review.mapper;
 
-import com.letsintern.letsintern.domain.application.domain.Application;
+import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import com.letsintern.letsintern.domain.review.domian.Review;
 import com.letsintern.letsintern.domain.review.dto.request.ReviewCreateDTO;
 import com.letsintern.letsintern.domain.review.dto.response.ReviewIdResponse;
@@ -14,8 +14,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReviewMapper {
 
-    public Review toEntity(Long programId, ReviewCreateDTO reviewCreateDTO, String username) {
-        return Review.of(reviewCreateDTO, programId, username);
+    public Review toEntity(Long programId, ProgramType programType, ReviewCreateDTO reviewCreateDTO, String username) {
+        return Review.of(reviewCreateDTO, programId, programType, username);
     }
 
     public ReviewIdResponse toReviewIdResponse(Long reviewId) {
