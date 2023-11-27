@@ -5,6 +5,8 @@ import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import com.letsintern.letsintern.domain.program.domain.ProgramWay;
 import lombok.Getter;
 
+import java.util.List;
+
 @Getter
 public class ProgramUpdateRequestDTO {
 
@@ -39,4 +41,6 @@ public class ProgramUpdateRequestDTO {
     private Boolean isApproved;
 
     private Boolean isVisible;
+
+    private List<Integer> faqIdList;
 }

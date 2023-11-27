@@ -107,7 +107,8 @@ public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
                 .select(Projections.constructor(ProgramDetailVo.class,
                         qProgram.title,
                         qProgram.contents,
-                        qProgram.notice
+                        qProgram.notice,
+                        qProgram.faqListStr
                 ))
                 .from(qProgram)
                 .where(qProgram.id.eq(programId))

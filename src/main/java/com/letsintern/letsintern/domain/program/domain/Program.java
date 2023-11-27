@@ -2,6 +2,7 @@ package com.letsintern.letsintern.domain.program.domain;
 
 import com.letsintern.letsintern.domain.faq.domain.Faq;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequestDTO;
+import com.letsintern.letsintern.global.common.util.StringUtils;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -11,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter @Setter
@@ -75,14 +77,14 @@ public class Program {
     @NotNull
     private Boolean isVisible = false;
 
-    @OneToMany(mappedBy = "program", orphanRemoval = true)
-    List<Faq> faqList = new ArrayList<>();
+    @Nullable
+    private String faqListStr;
 
 
     @Builder
     private Program(ProgramType type, Integer th, String title, Integer maxHeadcount,
-                    Date dueDate, Date announcementDate, Date startDate,
-                    String contents, ProgramWay way, String location, String link, String notice) {
+                    Date dueDate, Date announcementDate, Date startDate, String contents,
+                    ProgramWay way, String location, String link, String notice, List<Integer> faqIdList) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy년 MM월 dd일 HH:MM");
         this.type = type;
         this.th = th;
@@ -96,6 +98,7 @@ public class Program {
         this.location = location;
         this.link = link;
         this.notice = notice;
+        this.faqListStr = StringUtils.listToString(faqIdList);
     }
 
     public static Program of(ProgramCreateRequestDTO programCreateRequestDTO) {

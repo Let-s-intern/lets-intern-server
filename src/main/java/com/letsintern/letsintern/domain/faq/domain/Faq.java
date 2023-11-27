@@ -1,7 +1,6 @@
 package com.letsintern.letsintern.domain.faq.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.letsintern.letsintern.domain.program.domain.Program;
+import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -18,26 +17,24 @@ public class Faq {
     private Long id;
 
     @NotNull
+    private ProgramType programType;
+
+    @NotNull
     private String question;
 
     @NotNull
     private String answer;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "program_id", nullable = false)
-    @JsonIgnore
-    Program program;
-
     @Builder
-    private Faq(Program program, String question, String answer) {
-        this.program = program;
+    private Faq(ProgramType programType, String question, String answer) {
+        this.programType = programType;
         this.question = question;
         this.answer = answer;
     }
 
-    public static Faq of(Program program, String question, String answer) {
+    public static Faq of(ProgramType programType, String question, String answer) {
         return Faq.builder()
-                .program(program)
+                .programType(programType)
                 .question(question)
                 .answer(answer)
                 .build();
