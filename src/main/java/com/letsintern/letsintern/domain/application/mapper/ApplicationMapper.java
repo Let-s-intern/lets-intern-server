@@ -4,10 +4,7 @@ import com.letsintern.letsintern.domain.application.domain.Application;
 import com.letsintern.letsintern.domain.application.domain.GuestApplication;
 import com.letsintern.letsintern.domain.application.domain.UserApplication;
 import com.letsintern.letsintern.domain.application.dto.request.ApplicationCreateDTO;
-import com.letsintern.letsintern.domain.application.dto.response.ApplicationCreateResponse;
-import com.letsintern.letsintern.domain.application.dto.response.ApplicationIdResponse;
-import com.letsintern.letsintern.domain.application.dto.response.ApplicationListResponse;
-import com.letsintern.letsintern.domain.application.dto.response.UserApplicationListResponse;
+import com.letsintern.letsintern.domain.application.dto.response.*;
 import com.letsintern.letsintern.domain.application.vo.UserApplicationVo;
 import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
@@ -56,6 +53,10 @@ public class ApplicationMapper {
         return UserApplicationListResponse.from(userApplicationList);
     }
 
+    public EmailListResponse toEmailListResponse(List<String> approvedEmailList, List<String> notApprovedEmailList) {
+        return EmailListResponse.of(approvedEmailList, notApprovedEmailList);
+    }
+
     private Program validateApply(Long programId, String phoneNum) {
         Program program = programRepository.findById(programId)
                 .orElseThrow(() -> {
@@ -66,4 +67,5 @@ public class ApplicationMapper {
 
         return program;
     }
+
 }

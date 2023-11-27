@@ -1,6 +1,7 @@
 package com.letsintern.letsintern.domain.application.repository;
 
 import com.letsintern.letsintern.domain.application.domain.Application;
+import com.letsintern.letsintern.domain.application.domain.ApplicationStatus;
 import com.letsintern.letsintern.domain.application.domain.GuestApplication;
 import com.letsintern.letsintern.domain.application.domain.UserApplication;
 import com.letsintern.letsintern.domain.application.vo.UserApplicationVo;
@@ -19,4 +20,7 @@ public interface ApplicationRepositoryCustom {
     UserApplication findByProgramIdAndUserId(Long programId, Long userId);
     GuestApplication findByProgramIdAndGuestEmail(Long programId, String email);
 
+    void updateAllStatusByProgramId(Long programId);
+
+    List<String> findAllEmailByStatus(Long programId, ApplicationStatus status);
 }

@@ -4,6 +4,7 @@ import com.letsintern.letsintern.domain.application.domain.*;
 import com.letsintern.letsintern.domain.application.vo.UserApplicationVo;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
@@ -15,6 +16,7 @@ import java.util.List;
 public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
+    private final EntityManager em;
 
     @Override
     public List<Application> findAllByProgramId(Long programId, Pageable pageable) {
@@ -82,5 +84,39 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
                 .selectFrom(qGuestApplication)
                 .where(qGuestApplication.program.id.eq(programId), qGuestApplication.guestEmail.eq(email))
                 .fetchFirst();
+    }
+
+    @Override
+    public void updateAllStatusByProgramId(Long programId) {
+        QApplication qApplication = QApplication.application;
+
+        jpaQueryFactory
+                .update(qApplication)
+                .set(qApplication.status, ApplicationStatus.APPLIED_NOT_APPROVED)
+                .where(qApplication.program.id.eq(programId), qApplication.isApproved.eq(false))
+                .execute();
+
+        em.flush();
+        em.clear();
+    }
+
+    @Override
+    public List<String> findAllEmailByStatus(Long programId, ApplicationStatus status) {
+        QUserApplication qUserApplication = QUserApplication.userApplication;
+        QGuestApplication qGuestApplication = QGuestApplication.guestApplication;
+
+        List<String> emailList = jpaQueryFactory
+                .select(qUserApplication.user.email)
+                .from(qUserApplication)
+                .where(qUserApplication.program.id.eq(programId), qUserApplication.status.eq(status))
+                .fetch();
+
+        emailList.addAll(jpaQueryFactory
+                .select(qGuestApplication.guestEmail)
+                .from(qGuestApplication)
+                .where(qGuestApplication.program.id.eq(programId), qGuestApplication.status.eq(status))
+                .fetch());
+
+        return emailList;
     }
 }

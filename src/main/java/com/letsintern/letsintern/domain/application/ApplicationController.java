@@ -2,10 +2,7 @@ package com.letsintern.letsintern.domain.application;
 
 import com.letsintern.letsintern.domain.application.dto.request.ApplicationCreateDTO;
 import com.letsintern.letsintern.domain.application.dto.request.ApplicationUpdateDTO;
-import com.letsintern.letsintern.domain.application.dto.response.ApplicationCreateResponse;
-import com.letsintern.letsintern.domain.application.dto.response.ApplicationIdResponse;
-import com.letsintern.letsintern.domain.application.dto.response.ApplicationListResponse;
-import com.letsintern.letsintern.domain.application.dto.response.UserApplicationListResponse;
+import com.letsintern.letsintern.domain.application.dto.response.*;
 import com.letsintern.letsintern.domain.application.service.ApplicationService;
 import com.letsintern.letsintern.domain.user.domain.User;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
@@ -77,4 +74,15 @@ public class ApplicationController {
         return applicationService.updateApplication(applicationId, applicationUpdateDTO);
     }
 
+    @Operation(summary = "어드민 미선발 지원자 상태 변경 (한번에)")
+    @GetMapping("/admin/not-approved/{programId}")
+    public String updateNotApprovedStatus(@PathVariable Long programId) {
+        return applicationService.updateApplicationNotApproved(programId);
+    }
+
+    @Operation(summary = "어드민 선발/미선발 이메일 목록")
+    @GetMapping("/admin/email/{programId}")
+    public EmailListResponse getEmailList(@PathVariable Long programId) {
+        return applicationService.getEmailList(programId);
+    }
 }
