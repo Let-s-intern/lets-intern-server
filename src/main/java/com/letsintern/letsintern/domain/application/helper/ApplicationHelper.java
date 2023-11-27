@@ -1,6 +1,7 @@
 package com.letsintern.letsintern.domain.application.helper;
 
 import com.letsintern.letsintern.domain.application.domain.Application;
+import com.letsintern.letsintern.domain.application.domain.ApplicationStatus;
 import com.letsintern.letsintern.domain.application.domain.GuestApplication;
 import com.letsintern.letsintern.domain.application.domain.UserApplication;
 import com.letsintern.letsintern.domain.application.dto.request.ApplicationCreateDTO;
@@ -75,22 +76,33 @@ public class ApplicationHelper {
                     throw ApplicationNotFound.EXCEPTION;
                 });
 
-        if(applicationUpdateDTO.getStatus() != null)
-            application.setStatus(applicationUpdateDTO.getStatus());
-        if(applicationUpdateDTO.getIsApproved() != null)
+        if (applicationUpdateDTO.getIsApproved() != null) {
             application.setIsApproved(applicationUpdateDTO.getIsApproved());
-        if(applicationUpdateDTO.getGrade() != null)
+
+            if (application.getStatus().equals(ApplicationStatus.APPLIED) && application.getIsApproved().equals(true)) {
+                application.setStatus(ApplicationStatus.IN_PROGRESS);
+            }
+
+            if (application.getStatus().equals(ApplicationStatus.APPLIED) && application.getIsApproved().equals(false)) {
+                application.setStatus(ApplicationStatus.APPLIED_NOT_APPROVED);
+            }
+        }
+
+        if (applicationUpdateDTO.getStatus() != null)
+            application.setStatus(applicationUpdateDTO.getStatus());
+        if (applicationUpdateDTO.getGrade() != null)
             application.setGrade(applicationUpdateDTO.getGrade());
-        if(applicationUpdateDTO.getWishCompany() != null)
+        if (applicationUpdateDTO.getWishCompany() != null)
             application.setWishCompany(applicationUpdateDTO.getWishCompany());
-        if(applicationUpdateDTO.getWishJob() != null)
+        if (applicationUpdateDTO.getWishJob() != null)
             application.setWishJob(application.getWishJob());
-        if(applicationUpdateDTO.getApplyMotive() != null)
+        if (applicationUpdateDTO.getApplyMotive() != null)
             application.setApplyMotive(application.getApplyMotive());
-        if(applicationUpdateDTO.getAttendance() != null)
+        if (applicationUpdateDTO.getAttendance() != null)
             application.setAttendance(applicationUpdateDTO.getAttendance());
 
         return application.getId();
+
     }
 
     private PageRequest makePageRequest(Pageable pageable) {
@@ -111,5 +123,10 @@ public class ApplicationHelper {
             throw ApplicationCannotDeleted.EXCEPTION;
         }
 
+    }
+
+    public String updateApplicationNotApproved(Long programId) {
+        applicationRepository.updateAllStatusByProgramId(programId);
+        return "success";
     }
 }

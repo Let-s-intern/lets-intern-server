@@ -1,14 +1,13 @@
 package com.letsintern.letsintern.domain.application.service;
 
+import com.letsintern.letsintern.domain.application.domain.ApplicationStatus;
 import com.letsintern.letsintern.domain.application.dto.request.ApplicationCreateDTO;
 import com.letsintern.letsintern.domain.application.dto.request.ApplicationUpdateDTO;
-import com.letsintern.letsintern.domain.application.dto.response.ApplicationCreateResponse;
-import com.letsintern.letsintern.domain.application.dto.response.ApplicationIdResponse;
-import com.letsintern.letsintern.domain.application.dto.response.ApplicationListResponse;
-import com.letsintern.letsintern.domain.application.dto.response.UserApplicationListResponse;
+import com.letsintern.letsintern.domain.application.dto.response.*;
 import com.letsintern.letsintern.domain.application.exception.ApplicationUserBadRequest;
 import com.letsintern.letsintern.domain.application.helper.ApplicationHelper;
 import com.letsintern.letsintern.domain.application.mapper.ApplicationMapper;
+import com.letsintern.letsintern.domain.application.repository.ApplicationRepository;
 import com.letsintern.letsintern.domain.user.domain.User;
 import com.letsintern.letsintern.domain.user.service.UserService;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
@@ -21,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ApplicationService {
 
+    private final ApplicationRepository applicationRepository;
     private final ApplicationHelper applicationHelper;
     private final ApplicationMapper applicationMapper;
     private final UserService userService;
@@ -66,5 +66,17 @@ public class ApplicationService {
     @Transactional
     public void deleteApplication(Long applicationId) {
         applicationHelper.deleteApplication(applicationId);
+    }
+
+    @Transactional
+    public String updateApplicationNotApproved(Long programId) {
+        return applicationHelper.updateApplicationNotApproved(programId);
+    }
+
+    public EmailListResponse getEmailList(Long programId) {
+        return applicationMapper.toEmailListResponse(
+                applicationRepository.findAllEmailByStatus(programId, ApplicationStatus.IN_PROGRESS),
+                applicationRepository.findAllEmailByStatus(programId, ApplicationStatus.APPLIED_NOT_APPROVED)
+        );
     }
 }

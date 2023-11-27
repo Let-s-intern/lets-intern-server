@@ -11,15 +11,18 @@ public class UserApplicationVo {
 
     private Long id;
     private ApplicationStatus status;
+
+    private Long programId;
     private String programTitle;
 
     private ProgramType programType;
     private Long reviewId;
 
     @Builder
-    public UserApplicationVo(Long id, ApplicationStatus status, String programTitle, ProgramType programType, Long reviewId) {
+    public UserApplicationVo(Long id, ApplicationStatus status, Long programId, String programTitle, ProgramType programType, Long reviewId) {
         this.id = id;
         this.status = status;
+        this.programId = programId;
         this.programTitle = programTitle;
         this.programType = programType;
         this.reviewId = reviewId;
