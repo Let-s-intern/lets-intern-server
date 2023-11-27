@@ -8,7 +8,6 @@ import com.letsintern.letsintern.domain.application.dto.response.ApplicationList
 import com.letsintern.letsintern.domain.application.dto.response.UserApplicationListResponse;
 import com.letsintern.letsintern.domain.application.service.ApplicationService;
 import com.letsintern.letsintern.domain.user.domain.User;
-import com.letsintern.letsintern.domain.user.service.UserService;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

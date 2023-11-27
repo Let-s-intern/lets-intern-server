@@ -28,23 +28,4 @@ public class ApplicationUpdateDTO {
     @Nullable
     private Boolean attendance;
 
-
-    /* 회원 추가 정보 */
-    @Nullable
-    private String university;
-
-    @Nullable
-    private String major;
-
-
-    /* 비회원 추가 정보 */
-
-    @Nullable
-    private String guestName;
-
-    @Nullable
-    private String guestPhoneNum;
-
-    @Nullable
-    private String guestEmail;
 }
