@@ -135,4 +135,9 @@ public class UserService {
     public UserIdResponseDTO setUserManager(Long userId, Long managerId) {
         return userMapper.toUserIdResponseDTO(userHelper.setUserManager(userId, managerId));
     }
+
+    public Boolean checkIsAdmin(PrincipalDetails principalDetails) {
+        final User user = principalDetails.getUser();
+        return user.getRole().equals(UserRole.ROLE_ADMIN);
+    }
 }

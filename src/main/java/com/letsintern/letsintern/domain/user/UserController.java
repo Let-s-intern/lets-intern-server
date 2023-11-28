@@ -71,6 +71,12 @@ public class UserController {
         return ResponseEntity.ok(userService.checkDetailInfoExist(principalDetails));
     }
 
+    @Operation(summary = "관리자 여부 확인")
+    @GetMapping("/isAdmin")
+    public ResponseEntity<Boolean> isAdmin(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        return ResponseEntity.ok(userService.checkIsAdmin(principalDetails));
+    }
+
     @Operation(summary = "마이페이지 사용자 정보")
     @GetMapping("")
     public UserInfoResponseDTO getUserInfo(@AuthenticationPrincipal PrincipalDetails principalDetails) {
