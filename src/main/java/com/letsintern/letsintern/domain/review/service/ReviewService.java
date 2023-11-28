@@ -6,6 +6,7 @@ import com.letsintern.letsintern.domain.review.dto.response.ReviewIdResponse;
 import com.letsintern.letsintern.domain.review.dto.response.ReviewListResponse;
 import com.letsintern.letsintern.domain.review.helper.ReviewHelper;
 import com.letsintern.letsintern.domain.review.mapper.ReviewMapper;
+import com.letsintern.letsintern.domain.review.vo.ReviewDetailVo;
 import com.letsintern.letsintern.domain.review.vo.ReviewVo;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
@@ -44,5 +45,9 @@ public class ReviewService {
 
     public ReviewVo getReview(Long reviewId) {
         return reviewHelper.getReview(reviewId);
+    }
+
+    public ReviewDetailVo getReviewDetail(Long reviewId) {
+        return reviewHelper.getReviewDetail(reviewId);
     }
 }

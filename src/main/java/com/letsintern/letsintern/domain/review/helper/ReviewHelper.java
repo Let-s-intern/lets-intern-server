@@ -13,6 +13,7 @@ import com.letsintern.letsintern.domain.review.exception.ReviewNotFound;
 import com.letsintern.letsintern.domain.review.exception.ReviewUnAuthorized;
 import com.letsintern.letsintern.domain.review.mapper.ReviewMapper;
 import com.letsintern.letsintern.domain.review.repository.ReviewRepository;
+import com.letsintern.letsintern.domain.review.vo.ReviewDetailVo;
 import com.letsintern.letsintern.domain.review.vo.ReviewVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -76,5 +77,18 @@ public class ReviewHelper {
                     throw ReviewNotFound.EXCEPTION;
                 });
         return reviewVo;
+    }
+
+    public ReviewDetailVo getReviewDetail(Long reviewId) {
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> {
+                    throw ReviewNotFound.EXCEPTION;
+                });
+
+        Program program = programRepository.findById(review.getProgramId())
+                .orElseThrow(() -> {
+                    throw ProgramNotFound.EXCEPTION;
+                });
+        return reviewMapper.toReviewDetailVo(review, program);
     }
 }

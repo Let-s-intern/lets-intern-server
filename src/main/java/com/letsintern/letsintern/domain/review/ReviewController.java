@@ -5,6 +5,7 @@ import com.letsintern.letsintern.domain.review.dto.request.ReviewUpdateDTO;
 import com.letsintern.letsintern.domain.review.dto.response.ReviewIdResponse;
 import com.letsintern.letsintern.domain.review.dto.response.ReviewListResponse;
 import com.letsintern.letsintern.domain.review.service.ReviewService;
+import com.letsintern.letsintern.domain.review.vo.ReviewDetailVo;
 import com.letsintern.letsintern.domain.review.vo.ReviewVo;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import io.swagger.v3.oas.annotations.Operation;
@@ -42,8 +43,8 @@ public class ReviewController {
 
     @GetMapping("/{reviewId}")
     @Operation(summary = "리뷰 1건 상세 보기")
-    public ReviewVo getReview(@PathVariable Long reviewId) {
-        return reviewService.getReview(reviewId);
+    public ReviewDetailVo getReviewDetail(@PathVariable Long reviewId) {
+        return reviewService.getReviewDetail(reviewId);
     }
 
     @GetMapping("/admin/{programId}")

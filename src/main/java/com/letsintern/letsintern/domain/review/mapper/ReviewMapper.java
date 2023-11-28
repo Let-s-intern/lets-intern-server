@@ -1,10 +1,12 @@
 package com.letsintern.letsintern.domain.review.mapper;
 
+import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import com.letsintern.letsintern.domain.review.domian.Review;
 import com.letsintern.letsintern.domain.review.dto.request.ReviewCreateDTO;
 import com.letsintern.letsintern.domain.review.dto.response.ReviewIdResponse;
 import com.letsintern.letsintern.domain.review.dto.response.ReviewListResponse;
+import com.letsintern.letsintern.domain.review.vo.ReviewDetailVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -24,5 +26,9 @@ public class ReviewMapper {
 
     public ReviewListResponse toReviewListResponseDTO(List<Review> reviewList) {
         return ReviewListResponse.from(reviewList);
+    }
+
+    public ReviewDetailVo toReviewDetailVo(Review review, Program program) {
+        return ReviewDetailVo.of(review, program);
     }
 }

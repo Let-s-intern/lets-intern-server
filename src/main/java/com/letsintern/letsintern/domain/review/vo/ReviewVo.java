@@ -16,6 +16,7 @@ public class ReviewVo {
 
     private String createdAt;
 
+
     @Builder
     public ReviewVo(Long id, String username, Integer grade, String reviewContents, String createdAt) {
         this.id = id;
