@@ -1,26 +1,24 @@
 package com.letsintern.letsintern.domain.application.repository;
 
 import com.letsintern.letsintern.domain.application.domain.Application;
-import com.letsintern.letsintern.domain.application.domain.ApplicationStatus;
-import com.letsintern.letsintern.domain.application.domain.GuestApplication;
-import com.letsintern.letsintern.domain.application.domain.UserApplication;
-import com.letsintern.letsintern.domain.application.vo.UserApplicationVo;
+import com.letsintern.letsintern.domain.application.vo.ApplicationAdminVo;
+import com.letsintern.letsintern.domain.application.vo.ApplicationVo;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 public interface ApplicationRepositoryCustom {
 
-    List<Application> findAllByProgramId(Long programId, Pageable pageable);
+    List<ApplicationAdminVo> findAllByProgramId(Long programId, Pageable pageable);
 
-    List<Application> findAllByProgramIdAndIsApproved(Long programId, Boolean isApproved, Pageable pageable);
+    List<ApplicationAdminVo> findAllByProgramIdAndIsApproved(Long programId, Boolean isApproved, Pageable pageable);
 
-    List<UserApplicationVo> findAllByUserId(Long userId, Pageable pageable);
+    List<ApplicationVo> findAllByUserId(Long userId, Pageable pageable);
 
-    UserApplication findByProgramIdAndUserId(Long programId, Long userId);
-    GuestApplication findByProgramIdAndGuestEmail(Long programId, String email);
+    Application findByProgramIdAndUserId(Long programId, Long userId);
+    Application findByProgramIdAndGuestEmail(Long programId, String email);
 
     void updateAllStatusByProgramId(Long programId);
 
-    List<String> findAllEmailByStatus(Long programId, ApplicationStatus status);
+    List<String> findAllEmailByIsApproved(Long programId, Boolean isApproved);
 }

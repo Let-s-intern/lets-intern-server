@@ -26,7 +26,15 @@ public class QApplication extends EntityPathBase<Application> {
 
     public final BooleanPath attendance = createBoolean("attendance");
 
+    public final StringPath createdAt = createString("createdAt");
+
     public final NumberPath<Integer> grade = createNumber("grade", Integer.class);
+
+    public final StringPath guestEmail = createString("guestEmail");
+
+    public final StringPath guestName = createString("guestName");
+
+    public final StringPath guestPhoneNum = createString("guestPhoneNum");
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
@@ -41,6 +49,8 @@ public class QApplication extends EntityPathBase<Application> {
     public final NumberPath<Long> reviewId = createNumber("reviewId", Long.class);
 
     public final EnumPath<ApplicationStatus> status = createEnum("status", ApplicationStatus.class);
+
+    public final com.letsintern.letsintern.domain.user.domain.QUser user;
 
     public final StringPath wishCompany = createString("wishCompany");
 
@@ -65,6 +75,7 @@ public class QApplication extends EntityPathBase<Application> {
     public QApplication(Class<? extends Application> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.program = inits.isInitialized("program") ? new com.letsintern.letsintern.domain.program.domain.QProgram(forProperty("program")) : null;
+        this.user = inits.isInitialized("user") ? new com.letsintern.letsintern.domain.user.domain.QUser(forProperty("user")) : null;
     }
 
 }

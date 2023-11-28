@@ -75,8 +75,9 @@ public class ApplicationService {
 
     public EmailListResponse getEmailList(Long programId) {
         return applicationMapper.toEmailListResponse(
-                applicationRepository.findAllEmailByStatus(programId, ApplicationStatus.IN_PROGRESS),
-                applicationRepository.findAllEmailByStatus(programId, ApplicationStatus.APPLIED_NOT_APPROVED)
+                applicationRepository.findAllEmailByIsApproved(programId, true),
+                applicationRepository.findAllEmailByIsApproved(programId, false)
         );
     }
+
 }

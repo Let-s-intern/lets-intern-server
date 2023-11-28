@@ -2,15 +2,14 @@ package com.letsintern.letsintern.domain.application.helper;
 
 import com.letsintern.letsintern.domain.application.domain.Application;
 import com.letsintern.letsintern.domain.application.domain.ApplicationStatus;
-import com.letsintern.letsintern.domain.application.domain.GuestApplication;
-import com.letsintern.letsintern.domain.application.domain.UserApplication;
 import com.letsintern.letsintern.domain.application.dto.request.ApplicationCreateDTO;
 import com.letsintern.letsintern.domain.application.dto.request.ApplicationUpdateDTO;
 import com.letsintern.letsintern.domain.application.dto.response.ApplicationCreateResponse;
 import com.letsintern.letsintern.domain.application.exception.*;
 import com.letsintern.letsintern.domain.application.mapper.ApplicationMapper;
 import com.letsintern.letsintern.domain.application.repository.ApplicationRepository;
-import com.letsintern.letsintern.domain.application.vo.UserApplicationVo;
+import com.letsintern.letsintern.domain.application.vo.ApplicationAdminVo;
+import com.letsintern.letsintern.domain.application.vo.ApplicationVo;
 import com.letsintern.letsintern.domain.program.domain.ProgramStatus;
 import com.letsintern.letsintern.domain.user.domain.User;
 import lombok.RequiredArgsConstructor;
@@ -31,13 +30,14 @@ public class ApplicationHelper {
 
     /* 회원 - 기존 신청 내역 확인 */
     public boolean checkUserApplicationExist(Long programId, Long userId) {
-        UserApplication userApplication = applicationRepository.findByProgramIdAndUserId(programId, userId);
-        if(userApplication != null) return true;
+        Application application = applicationRepository.findByProgramIdAndUserId(programId, userId);
+        if(application != null) return true;
         return false;
     }
 
     public ApplicationCreateResponse createUserApplication(Long programId, ApplicationCreateDTO applicationCreateDTO, User user) {
-        UserApplication newUserApplication = applicationMapper.toUserEntity(programId, applicationCreateDTO, user);
+        if(checkUserApplicationExist(programId, user.getId())) throw DuplicateApplication.EXCEPTION;
+        Application newUserApplication = applicationMapper.toEntity(programId, applicationCreateDTO, user);
         return applicationMapper.toApplicationCreateResponse(applicationRepository.save(newUserApplication));
     }
 
@@ -48,24 +48,24 @@ public class ApplicationHelper {
         }
 
         /* 기존 신청 내역 확인 */
-        GuestApplication guestApplication = applicationRepository.findByProgramIdAndGuestEmail(programId, applicationCreateDTO.getGuestEmail());
+        Application guestApplication = applicationRepository.findByProgramIdAndGuestEmail(programId, applicationCreateDTO.getGuestEmail());
         if(guestApplication != null) throw DuplicateApplication.EXCEPTION;
 
-        GuestApplication newGuestApplication = applicationMapper.toGuestEntity(programId, applicationCreateDTO);
+        Application newGuestApplication = applicationMapper.toEntity(programId, applicationCreateDTO, null);
         return applicationMapper.toApplicationCreateResponse(applicationRepository.save(newGuestApplication));
     }
 
-    public List<Application> getApplicationListOfProgramId(Long programId, Pageable pageable) {
+    public List<ApplicationAdminVo> getApplicationListOfProgramId(Long programId, Pageable pageable) {
         PageRequest pageRequest = makePageRequest(pageable);
         return applicationRepository.findAllByProgramId(programId, pageRequest);
     }
 
-    public List<Application> getApplicationListOfProgramIdAndApproved(Long programId, Boolean isApproved, Pageable pageable) {
+    public List<ApplicationAdminVo> getApplicationListOfProgramIdAndApproved(Long programId, Boolean isApproved, Pageable pageable) {
         PageRequest pageRequest = makePageRequest(pageable);
         return applicationRepository.findAllByProgramIdAndIsApproved(programId, isApproved, pageRequest);
     }
 
-    public List<UserApplicationVo> getApplicationListOfUserId(Long userId, Pageable pageable) {
+    public List<ApplicationVo> getApplicationListOfUserId(Long userId, Pageable pageable) {
         PageRequest pageRequest = makePageRequest(pageable);
         return applicationRepository.findAllByUserId(userId, pageRequest);
     }

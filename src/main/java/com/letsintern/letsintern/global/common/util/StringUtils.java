@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 
 public class StringUtils {
 
+
+
     public static String listToString(List<Integer> integerList) {
         return integerList.stream().map(String::valueOf)
                 .collect(Collectors.joining(","));
@@ -24,7 +26,7 @@ public class StringUtils {
         return convertedList;
     }
 
-    public static SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy년 MM월 dd일 HH:mm");
+    public static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy년 MM월 dd일 HH:mm");
 
     public static String dateToString(Date date) {
         return SIMPLE_DATE_FORMAT.format(date);
