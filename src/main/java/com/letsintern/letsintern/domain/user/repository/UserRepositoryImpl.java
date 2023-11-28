@@ -29,7 +29,8 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
                         qUser.phoneNum,
                         qUser.university,
                         qUser.major,
-                        qUser.signedUpAt))
+                        qUser.signedUpAt,
+                        qUser.managerId))
                 .from(qUser)
                 .orderBy(qUser.id.desc())
                 .offset(pageable.getOffset())

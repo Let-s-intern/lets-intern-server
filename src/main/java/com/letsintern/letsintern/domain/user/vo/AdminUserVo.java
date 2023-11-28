@@ -13,10 +13,12 @@ public class AdminUserVo {
     private String university;
     private String major;
     private String signedUpAt;
+    private Long managerId;
 
 
     @Builder
-    public AdminUserVo(Long id, String name, String email, String phoneNum, String university, String major, String signedUpAt) {
+    public AdminUserVo(Long id, String name, String email, String phoneNum,
+                       String university, String major, String signedUpAt, Long managerId) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -24,5 +26,6 @@ public class AdminUserVo {
         this.university = university;
         this.major = major;
         this.signedUpAt = signedUpAt;
+        this.managerId = managerId;
     }
 }
