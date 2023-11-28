@@ -70,4 +70,11 @@ public class ReviewHelper {
         return review.getId();
     }
 
+    public ReviewVo getReview(Long reviewId) {
+        ReviewVo reviewVo = reviewRepository.findVoReviewId(reviewId)
+                .orElseThrow(() -> {
+                    throw ReviewNotFound.EXCEPTION;
+                });
+        return reviewVo;
+    }
 }

@@ -6,9 +6,12 @@ import com.letsintern.letsintern.domain.review.vo.ReviewVo;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ReviewRepositoryCustom {
 
     List<Review> findAllByProgramId(Long programId, Pageable pageable);
     List<ReviewVo> findAllVosByProgramType(ProgramType programType);
+
+    Optional<ReviewVo> findVoReviewId(Long reviewId);
 }

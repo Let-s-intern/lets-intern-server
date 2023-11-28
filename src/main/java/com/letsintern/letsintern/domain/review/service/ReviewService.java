@@ -6,6 +6,7 @@ import com.letsintern.letsintern.domain.review.dto.response.ReviewIdResponse;
 import com.letsintern.letsintern.domain.review.dto.response.ReviewListResponse;
 import com.letsintern.letsintern.domain.review.helper.ReviewHelper;
 import com.letsintern.letsintern.domain.review.mapper.ReviewMapper;
+import com.letsintern.letsintern.domain.review.vo.ReviewVo;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -41,4 +42,7 @@ public class ReviewService {
         return reviewMapper.toReviewIdResponse(reviewHelper.updateReviewStatus(reviewId, reviewUpdateDTO));
     }
 
+    public ReviewVo getReview(Long reviewId) {
+        return reviewHelper.getReview(reviewId);
+    }
 }

@@ -1,11 +1,11 @@
 package com.letsintern.letsintern.domain.review;
 
-import com.letsintern.letsintern.domain.review.domian.ReviewStatus;
 import com.letsintern.letsintern.domain.review.dto.request.ReviewCreateDTO;
 import com.letsintern.letsintern.domain.review.dto.request.ReviewUpdateDTO;
 import com.letsintern.letsintern.domain.review.dto.response.ReviewIdResponse;
 import com.letsintern.letsintern.domain.review.dto.response.ReviewListResponse;
 import com.letsintern.letsintern.domain.review.service.ReviewService;
+import com.letsintern.letsintern.domain.review.vo.ReviewVo;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -40,7 +40,13 @@ public class ReviewController {
         return reviewService.createReview(applicationId, reviewCreateDTO, principalDetails);
     }
 
-    @GetMapping("/{programId}")
+    @GetMapping("/{reviewId}")
+    @Operation(summary = "리뷰 1건 상세 보기")
+    public ReviewVo getReview(@PathVariable Long reviewId) {
+        return reviewService.getReview(reviewId);
+    }
+
+    @GetMapping("/admin/{programId}")
     @Operation(summary = "어드민 프로그램 별 리뷰 목록")
     public ReviewListResponse getReviewListOfProgram(@PathVariable Long programId, @PageableDefault(size = 20) Pageable pageable) {
         return reviewService.getReviewListOfProgram(programId, pageable);
