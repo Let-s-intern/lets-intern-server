@@ -26,6 +26,8 @@ public class QApplication extends EntityPathBase<Application> {
 
     public final BooleanPath attendance = createBoolean("attendance");
 
+    public final StringPath createdAt = createString("createdAt");
+
     public final NumberPath<Integer> grade = createNumber("grade", Integer.class);
 
     public final NumberPath<Long> id = createNumber("id", Long.class);

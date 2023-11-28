@@ -31,6 +31,9 @@ public class QGuestApplication extends EntityPathBase<GuestApplication> {
     public final BooleanPath attendance;
 
     //inherited
+    public final StringPath createdAt;
+
+    //inherited
     public final NumberPath<Integer> grade;
 
     public final StringPath guestEmail = createString("guestEmail");
@@ -87,6 +90,7 @@ public class QGuestApplication extends EntityPathBase<GuestApplication> {
         this._super = new QApplication(type, metadata, inits);
         this.applyMotive = _super.applyMotive;
         this.attendance = _super.attendance;
+        this.createdAt = _super.createdAt;
         this.grade = _super.grade;
         this.id = _super.id;
         this.inflowPath = _super.inflowPath;

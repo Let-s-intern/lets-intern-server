@@ -7,8 +7,11 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-@Getter @Setter
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 @Entity
+@Getter @Setter
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type")
 public abstract class Application {
@@ -49,6 +52,9 @@ public abstract class Application {
 
     @Nullable
     private Long reviewId;
+
+    @NotNull
+    private String createdAt = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
