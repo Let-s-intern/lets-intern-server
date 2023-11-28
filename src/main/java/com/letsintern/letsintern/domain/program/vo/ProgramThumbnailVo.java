@@ -24,11 +24,11 @@ public class ProgramThumbnailVo {
 
     private String title;
 
-    private String dueDate;
+    private String endDate;
 
     private String startDate;
 
-    public ProgramThumbnailVo(Long id, ProgramStatus status, ProgramType type, Integer th, String title, Date dueDate, Date startDate) {
+    public ProgramThumbnailVo(Long id, ProgramStatus status, ProgramType type, Integer th, String title, Date endDate, Date startDate) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy년 MM월 dd일 HH:mm");
 
         this.id = id;
@@ -36,7 +36,7 @@ public class ProgramThumbnailVo {
         this.type = type;
         this.th = th;
         this.title = title;
-        this.dueDate = simpleDateFormat.format(dueDate);
+        this.endDate = simpleDateFormat.format(endDate);
         this.startDate = simpleDateFormat.format(startDate);
     }
 }
