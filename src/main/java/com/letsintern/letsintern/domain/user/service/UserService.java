@@ -13,6 +13,7 @@ import com.letsintern.letsintern.global.config.jwt.TokenProvider;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -139,5 +140,9 @@ public class UserService {
     public Boolean checkIsAdmin(PrincipalDetails principalDetails) {
         final User user = principalDetails.getUser();
         return user.getRole().equals(UserRole.ROLE_ADMIN);
+    }
+
+    public User getAdminUser(Long userId) {
+        return userHelper.findUser(userId);
     }
 }

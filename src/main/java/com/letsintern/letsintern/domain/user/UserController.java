@@ -1,5 +1,6 @@
 package com.letsintern.letsintern.domain.user;
 
+import com.letsintern.letsintern.domain.user.domain.User;
 import com.letsintern.letsintern.domain.user.dto.request.*;
 import com.letsintern.letsintern.domain.user.dto.response.*;
 import com.letsintern.letsintern.domain.user.service.UserService;
@@ -95,6 +96,12 @@ public class UserController {
     @GetMapping("/admin")
     public AdminUserListResponseDTO getAdminUserTotalList(@PageableDefault(size = 20) Pageable pageable) {
         return userService.getAdminUserTotalList(pageable);
+    }
+
+    @Operation(summary = "어드민 사용자 1명 정보")
+    @GetMapping("/admin/{userId}")
+    public ResponseEntity<User> getAdminUser(@PathVariable Long userId) {
+        return ResponseEntity.ok(userService.getAdminUser(userId));
     }
 
     @Operation(summary = "어드민 사용자 검색 (name, email, phoneNum)")
