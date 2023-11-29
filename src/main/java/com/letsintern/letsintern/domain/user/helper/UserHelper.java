@@ -67,9 +67,7 @@ public class UserHelper {
 
     public User findUser(Long userId) {
         return userRepository.findById(userId)
-                .orElseThrow(() -> {
-                    throw UserNotFound.EXCEPTION;
-                });
+                .orElseThrow(() -> UserNotFound.EXCEPTION);
     }
 
     public void findDuplicateUser(UserVo userVo) {
