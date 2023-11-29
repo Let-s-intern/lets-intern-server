@@ -8,6 +8,7 @@ import com.letsintern.letsintern.domain.faq.service.FaqService;
 import com.letsintern.letsintern.domain.faq.vo.FaqVo;
 import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/faq")
 @RequiredArgsConstructor
+@Tag(name = "Faq")
 public class FaqController {
 
     private final FaqService faqService;

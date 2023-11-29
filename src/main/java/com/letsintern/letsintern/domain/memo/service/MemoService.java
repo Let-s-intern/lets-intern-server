@@ -11,6 +11,7 @@ import com.letsintern.letsintern.domain.user.repository.UserRepository;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +26,17 @@ public class MemoService {
         return memoMapper.toMemoIdResponse(memoHelper.createMemo(targetUserId, memoDTO, user));
     }
 
+    @Transactional
+    public MemoIdResponse updateMemo(Long memoId, MemoDTO memoDTO) {
+        return memoMapper.toMemoIdResponse(memoHelper.updateMemo(memoId, memoDTO));
+    }
+
     public MemoListResponse getMemoListOfUser(Long targetUserId) {
         return memoHelper.getMemoListOfUser(targetUserId);
+    }
+
+    @Transactional
+    public void deleteMemo(Long memoId) {
+        memoHelper.deleteMemo(memoId);
     }
 }

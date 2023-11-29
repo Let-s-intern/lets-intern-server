@@ -3,6 +3,7 @@ package com.letsintern.letsintern.domain.memo.helper;
 import com.letsintern.letsintern.domain.memo.domain.Memo;
 import com.letsintern.letsintern.domain.memo.dto.request.MemoDTO;
 import com.letsintern.letsintern.domain.memo.dto.response.MemoListResponse;
+import com.letsintern.letsintern.domain.memo.exception.MemoNotFound;
 import com.letsintern.letsintern.domain.memo.mapper.MemoMapper;
 import com.letsintern.letsintern.domain.memo.repository.MemoRepository;
 import com.letsintern.letsintern.domain.user.domain.User;
@@ -21,7 +22,21 @@ public class MemoHelper {
         return memoRepository.save(newMemo).getId();
     }
 
+    public Long updateMemo(Long memoId, MemoDTO memoDTO) {
+        Memo memo = memoRepository.findById(memoId)
+                .orElseThrow(() -> {throw MemoNotFound.EXCEPTION;});
+        memo.setContents(memoDTO.getContents());
+        return memo.getId();
+    }
+
     public MemoListResponse getMemoListOfUser(Long targetUserId) {
         return MemoListResponse.from(memoRepository.findALlByTargetUserId(targetUserId));
+    }
+
+    public void deleteMemo(Long memoId) {
+        Memo memo = memoRepository.findById(memoId)
+                .orElseThrow(() -> {throw MemoNotFound.EXCEPTION;});
+
+        memoRepository.delete(memo);
     }
 }

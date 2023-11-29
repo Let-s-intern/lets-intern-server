@@ -28,9 +28,21 @@ public class MemoController {
         return memoService.createMemo(targetUserId, memoDTO, principal);
     }
 
+    @Operation(summary = "메모 수정")
+    @PatchMapping("/{memoId}")
+    public MemoIdResponse updateMemo(@PathVariable Long memoId, @RequestBody MemoDTO memoDTO) {
+        return memoService.updateMemo(memoId, memoDTO);
+    }
+
     @Operation(summary = "사용자 별 메모 목록 불러오기")
     @GetMapping("/{targetUserId}")
     public MemoListResponse getMemoListOfUser(@PathVariable Long targetUserId) {
         return memoService.getMemoListOfUser(targetUserId);
+    }
+
+    @Operation(summary = "메모 삭제")
+    @DeleteMapping("/{memoId}")
+    public void deleteMemo(@PathVariable Long memoId) {
+        memoService.deleteMemo(memoId);
     }
 }
