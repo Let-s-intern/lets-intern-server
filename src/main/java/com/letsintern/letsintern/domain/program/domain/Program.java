@@ -1,5 +1,7 @@
 package com.letsintern.letsintern.domain.program.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.letsintern.letsintern.domain.application.domain.Application;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequestDTO;
 import com.letsintern.letsintern.global.common.util.StringUtils;
 import jakarta.annotation.Nullable;
@@ -74,6 +76,10 @@ public class Program {
 
     @NotNull
     private Boolean isVisible = false;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "program", orphanRemoval = true)
+    List<Application> applicationList;
 
     @Builder
     private Program(ProgramType type, Integer th, String title, Integer headcount,
