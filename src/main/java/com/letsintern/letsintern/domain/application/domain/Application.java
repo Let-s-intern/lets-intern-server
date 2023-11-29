@@ -23,26 +23,59 @@ public class Application {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull Integer grade;
+    @NotNull
+    private Integer grade;
 
     @NotNull
     @Column(length = 100)
-    String wishCompany;
+    private String wishCompany;
 
     @NotNull
     @Column(length = 100)
-    String wishJob;
+    private String wishJob;
 
     @NotNull
-    String applyMotive;
+    private String applyMotive;
 
     @Nullable
-    String preQuestions;
+    private String preQuestions;
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    InflowPath inflowPath;
+    private InflowPath inflowPath;
 
+    @NotNull
+    @Size(max = 20)
+    private String name;
+
+    @NotNull
+    @Column(length = 15)
+    private String phoneNum;
+
+    @NotNull
+    @Size(max = 30)
+    private String email;
+
+    @NotNull
+    private ApplicationType type;
+
+    @Nullable
+    private Long reviewId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = true)
+    @JsonIgnore
+    private User user;
+
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "program_id", nullable = false)
+    @JsonIgnore
+    private Program program;
+
+
+
+    /* Default */
     @NotNull
     private Boolean isApproved = false;
 
@@ -52,42 +85,15 @@ public class Application {
     @NotNull
     private Boolean attendance = true;
 
-    @Nullable
-    private Long reviewId;
-
     @NotNull
     private String createdAt = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 
-    // User
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = true)
-    @Nullable
-    @JsonIgnore
-    private User user = null;
-
-    // Guest
-    @Nullable
-    @Size(max = 20)
-    private String guestName;
-
-    @Nullable
-    @Column(length = 15)
-    private String guestPhoneNum;
-
-    @Nullable
-    @Size(max = 255)
-    private String guestEmail;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "program_id", nullable = false)
-    @JsonIgnore
-    Program program;
 
 
     @Builder
     private Application(Program program, User user, Integer grade, String wishCompany, String wishJob,
                              String applyMotive, String preQuestions, InflowPath inflowPath,
-                             String guestName, String guestPhoneNum, String guestEmail) {
+                             String name, String phoneNum, String email) {
         this.program = program;
         this.user = user;
         this.grade = grade;
@@ -96,9 +102,22 @@ public class Application {
         this.applyMotive = applyMotive;
         this.preQuestions = preQuestions;
         this.inflowPath = inflowPath;
-        this.guestName = guestName;
-        this.guestPhoneNum = guestPhoneNum;
-        this.guestEmail = guestEmail;
+
+        /* 비회원 */
+        if(user == null) {
+            this.type = ApplicationType.GUEST;
+            this.name = name;
+            this.phoneNum = phoneNum;
+            this.email = email;
+        }
+
+        /* 회원 */
+        else {
+            this.type = ApplicationType.USER;
+            this.name = user.getName();
+            this.phoneNum = user.getPhoneNum();
+            this.email = user.getEmail();
+        }
     }
 
     public static Application of(Program program, User user, ApplicationCreateDTO applicationCreateDTO) {
@@ -111,9 +130,9 @@ public class Application {
                 .applyMotive(applicationCreateDTO.getApplyMotive())
                 .preQuestions(applicationCreateDTO.getPreQuestions())
                 .inflowPath(applicationCreateDTO.getInflowPath())
-                .guestName(applicationCreateDTO.getGuestName())
-                .guestPhoneNum(applicationCreateDTO.getGuestPhoneNum())
-                .guestEmail(applicationCreateDTO.getGuestEmail())
+                .name(applicationCreateDTO.getGuestName())
+                .phoneNum(applicationCreateDTO.getGuestPhoneNum())
+                .email(applicationCreateDTO.getGuestEmail())
                 .build();
     }
 }

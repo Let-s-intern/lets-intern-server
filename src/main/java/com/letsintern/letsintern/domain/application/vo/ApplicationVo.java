@@ -9,12 +9,15 @@ import lombok.Getter;
 public class ApplicationVo {
 
     private Long id;
+
     private ApplicationStatus status;
 
     private Long programId;
+
     private String programTitle;
 
     private ProgramType programType;
+
     private Long reviewId;
 
     @Builder

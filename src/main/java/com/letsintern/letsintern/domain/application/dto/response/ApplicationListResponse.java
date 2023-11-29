@@ -1,24 +1,22 @@
 package com.letsintern.letsintern.domain.application.dto.response;
 
-import com.letsintern.letsintern.domain.application.vo.ApplicationAdminVo;
+import com.letsintern.letsintern.domain.application.domain.Application;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Getter
-@NoArgsConstructor
 public class ApplicationListResponse {
 
-    private List<ApplicationAdminVo> applicationList;
+    private List<Application> applicationList;
 
     @Builder
-    private ApplicationListResponse(List<ApplicationAdminVo> applicationList) {
+    private ApplicationListResponse(List<Application> applicationList) {
         this.applicationList = applicationList;
     }
 
-    public static ApplicationListResponse from(List<ApplicationAdminVo> applicationList) {
+    public static ApplicationListResponse from(List<Application> applicationList) {
         return ApplicationListResponse.builder()
                 .applicationList(applicationList)
                 .build();
