@@ -1,6 +1,5 @@
 package com.letsintern.letsintern.domain.application.service;
 
-import com.letsintern.letsintern.domain.application.domain.ApplicationStatus;
 import com.letsintern.letsintern.domain.application.dto.request.ApplicationCreateDTO;
 import com.letsintern.letsintern.domain.application.dto.request.ApplicationUpdateDTO;
 import com.letsintern.letsintern.domain.application.dto.response.*;
@@ -43,18 +42,22 @@ public class ApplicationService {
         return applicationHelper.createGuestApplication(programId, applicationCreateDTO);
     }
 
-    public ApplicationListResponse getApplicationListOfProgram(Long programId, Pageable pageable) {
-        return applicationMapper.toApplicationListResponseDTO(applicationHelper.getApplicationListOfProgramId(programId, pageable));
+    public AdminApplicationListResponse getApplicationListOfProgram(Long programId, Pageable pageable) {
+        return applicationMapper.toAdminApplicationListResponse(applicationHelper.getApplicationListOfProgramId(programId, pageable));
     }
 
-    public ApplicationListResponse getApplicationListOfProgramAndApproved(Long programId, Boolean approved, Pageable pageable) {
-        return applicationMapper.toApplicationListResponseDTO(
+    public AdminApplicationListResponse getApplicationListOfProgramAndApproved(Long programId, Boolean approved, Pageable pageable) {
+        return applicationMapper.toAdminApplicationListResponse(
                 applicationHelper.getApplicationListOfProgramIdAndApproved(programId, approved, pageable)
         );
     }
 
     public UserApplicationListResponse getApplicationListOfUser(Long userId, Pageable pageable) {
         return applicationMapper.toUserApplicationListResponse(applicationHelper.getApplicationListOfUserId(userId, pageable));
+    }
+
+    public ApplicationListResponse getAdminApplicationListOfUserId(Long userId) {
+        return applicationMapper.toApplicationListResponse(applicationHelper.getAdminApplicationListOfUserId(userId));
     }
 
     @Transactional

@@ -50,22 +50,26 @@ public class ApplicationController {
 
     @Operation(summary = "마이페이지 지원 내역 취소")
     @DeleteMapping("/{applicationId}")
-    public ResponseEntity<String> deleteApplication(
-            @PathVariable Long applicationId,
-            @AuthenticationPrincipal PrincipalDetails principalDetails) {
+    public ResponseEntity<String> deleteApplication(@PathVariable Long applicationId) {
         applicationService.deleteApplication(applicationId);
         return ResponseEntity.ok("success");
     }
 
     @Operation(summary = "어드민 프로그램별 지원서 전체 목록")
     @GetMapping("/admin/{programId}")
-    public ApplicationListResponse getApplicationListOfProgram(
+    public AdminApplicationListResponse getApplicationListOfProgram(
             @PathVariable Long programId,
             @RequestParam(required = false) Boolean isApproved,
             @PageableDefault(size = 15) Pageable pageable) {
 
         if(isApproved != null) return applicationService.getApplicationListOfProgramAndApproved(programId, isApproved, pageable);
         return applicationService.getApplicationListOfProgram(programId, pageable);
+    }
+
+    @Operation(summary = "어드민 사용자 1명의 지원서 전체 목록")
+    @GetMapping("/admin/user/{userId}")
+    public ApplicationListResponse getAdminApplicationListOfUserId(@PathVariable Long userId) {
+        return applicationService.getAdminApplicationListOfUserId(userId);
     }
 
     @Operation(summary = "어드민 지원서 상태 변경")

@@ -31,16 +31,23 @@ public class ApplicationHelper {
     /* 회원 - 기존 신청 내역 확인 */
     public boolean checkUserApplicationExist(Long programId, Long userId) {
         Application application = applicationRepository.findByProgramIdAndUserId(programId, userId);
-        if(application != null) return true;
-        return false;
+        return application != null;
     }
 
+    /* 비회원 - 기존 신청 내역 확인 */
+    private boolean checkGuestApplicationExist(Long programId, String guestEmail) {
+        Application application = applicationRepository.findByProgramIdAndGuestEmail(programId, guestEmail);
+        return application != null;
+    }
+
+    /* 회원 - 지원서 생성 */
     public ApplicationCreateResponse createUserApplication(Long programId, ApplicationCreateDTO applicationCreateDTO, User user) {
         if(checkUserApplicationExist(programId, user.getId())) throw DuplicateApplication.EXCEPTION;
         Application newUserApplication = applicationMapper.toEntity(programId, applicationCreateDTO, user);
         return applicationMapper.toApplicationCreateResponse(applicationRepository.save(newUserApplication));
     }
 
+    /* 비회원 - 지원서 생성 */
     public ApplicationCreateResponse createGuestApplication(Long programId, ApplicationCreateDTO applicationCreateDTO) {
         /* 비회원 신청인 경우 name, phoneNum, email 입력 여부 확인 */
         if(applicationCreateDTO.getGuestName() == null || applicationCreateDTO.getGuestPhoneNum() == null || applicationCreateDTO.getGuestEmail() == null) {
@@ -48,28 +55,36 @@ public class ApplicationHelper {
         }
 
         /* 기존 신청 내역 확인 */
-        Application guestApplication = applicationRepository.findByProgramIdAndGuestEmail(programId, applicationCreateDTO.getGuestEmail());
-        if(guestApplication != null) throw DuplicateApplication.EXCEPTION;
+        if(checkGuestApplicationExist(programId, applicationCreateDTO.getGuestEmail())) throw DuplicateApplication.EXCEPTION;
 
         Application newGuestApplication = applicationMapper.toEntity(programId, applicationCreateDTO, null);
         return applicationMapper.toApplicationCreateResponse(applicationRepository.save(newGuestApplication));
     }
 
+    /* 프로그램 1개의 전체 지원서 목록 */
     public List<ApplicationAdminVo> getApplicationListOfProgramId(Long programId, Pageable pageable) {
         PageRequest pageRequest = makePageRequest(pageable);
         return applicationRepository.findAllByProgramId(programId, pageRequest);
     }
 
+    /* 프로그램 1개의 승인된 지원서 목록 */
     public List<ApplicationAdminVo> getApplicationListOfProgramIdAndApproved(Long programId, Boolean isApproved, Pageable pageable) {
         PageRequest pageRequest = makePageRequest(pageable);
         return applicationRepository.findAllByProgramIdAndIsApproved(programId, isApproved, pageRequest);
     }
 
+    /* 마이페이지 - 사용자 1명의 지원서 목록 */
     public List<ApplicationVo> getApplicationListOfUserId(Long userId, Pageable pageable) {
         PageRequest pageRequest = makePageRequest(pageable);
         return applicationRepository.findAllByUserId(userId, pageRequest);
     }
 
+    /* 어드민 - 사용자 1명의 지원서 목록 */
+    public List<Application> getAdminApplicationListOfUserId(Long userId) {
+        return applicationRepository.findAllByUserId(userId);
+    }
+
+    /* 지원서 1개 업데이트 */
     public Long updateApplication(Long applicationId, ApplicationUpdateDTO applicationUpdateDTO) {
         Application application = applicationRepository.findById(applicationId)
                 .orElseThrow(() -> {
@@ -105,12 +120,7 @@ public class ApplicationHelper {
 
     }
 
-    private PageRequest makePageRequest(Pageable pageable) {
-        int pageNum = pageable.getPageNumber();
-        int pageSize = pageable.getPageSize();
-        return PageRequest.of(pageNum, pageSize, Sort.by("id").descending());
-    }
-
+    /* 지원서 1개 삭제 */
     public void deleteApplication(Long applicationId) {
         Application application = applicationRepository.findById(applicationId)
                 .orElseThrow(() -> {
@@ -125,8 +135,16 @@ public class ApplicationHelper {
 
     }
 
+    /* 미선발자 한번에 status 변경 (APPLID >> APPLIED_NOT_APPROVED) */
     public String updateApplicationNotApproved(Long programId) {
         applicationRepository.updateAllStatusByProgramId(programId);
         return "success";
+    }
+
+
+    private PageRequest makePageRequest(Pageable pageable) {
+        int pageNum = pageable.getPageNumber();
+        int pageSize = pageable.getPageSize();
+        return PageRequest.of(pageNum, pageSize, Sort.by("id").descending());
     }
 }

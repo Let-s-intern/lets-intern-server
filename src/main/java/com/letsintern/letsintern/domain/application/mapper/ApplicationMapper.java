@@ -37,7 +37,11 @@ public class ApplicationMapper {
         return ApplicationCreateResponse.from(application.getId(), StringUtils.dateToString(application.getProgram().getAnnouncementDate()));
     }
 
-    public ApplicationListResponse toApplicationListResponseDTO(List<ApplicationAdminVo> applicationList) {
+    public AdminApplicationListResponse toAdminApplicationListResponse(List<ApplicationAdminVo> applicationList) {
+        return AdminApplicationListResponse.from(applicationList);
+    }
+
+    public ApplicationListResponse toApplicationListResponse(List<Application> applicationList) {
         return ApplicationListResponse.from(applicationList);
     }
 

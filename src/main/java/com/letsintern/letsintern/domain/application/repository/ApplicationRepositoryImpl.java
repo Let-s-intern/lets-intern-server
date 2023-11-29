@@ -25,22 +25,8 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
 
         return jpaQueryFactory
                 .select(Projections.constructor(ApplicationAdminVo.class,
-                        qApplication.id,
-                        qApplication.grade,
-                        qApplication.wishCompany,
-                        qApplication.wishJob,
-                        qApplication.applyMotive,
-                        qApplication.preQuestions,
-                        qApplication.inflowPath,
-                        qApplication.isApproved,
-                        qApplication.status,
-                        qApplication.attendance,
-                        qApplication.reviewId,
-                        qApplication.createdAt,
-                        qApplication.guestName,
-                        qApplication.guestPhoneNum,
-                        qApplication.guestEmail,
-                        qApplication.user))
+                        qApplication
+                ))
                 .where(qApplication.program.id.eq(programId))
                 .from(qApplication)
                 .orderBy(qApplication.id.desc())
@@ -55,22 +41,8 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
 
         return jpaQueryFactory
                 .select(Projections.constructor(ApplicationAdminVo.class,
-                        qApplication.id,
-                        qApplication.grade,
-                        qApplication.wishCompany,
-                        qApplication.wishJob,
-                        qApplication.applyMotive,
-                        qApplication.preQuestions,
-                        qApplication.inflowPath,
-                        qApplication.isApproved,
-                        qApplication.status,
-                        qApplication.attendance,
-                        qApplication.reviewId,
-                        qApplication.createdAt,
-                        qApplication.guestName,
-                        qApplication.guestPhoneNum,
-                        qApplication.guestEmail,
-                        qApplication.user))
+                        qApplication
+                ))
                 .from(qApplication)
                 .where(qApplication.program.id.eq(programId), qApplication.isApproved.eq(isApproved))
                 .orderBy(qApplication.id.desc())
@@ -101,6 +73,17 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
     }
 
     @Override
+    public List<Application> findAllByUserId(Long userId) {
+        QApplication qApplication = QApplication.application;
+        
+        return jpaQueryFactory
+                .selectFrom(qApplication)
+                .where(qApplication.user.id.eq(userId))
+                .orderBy(qApplication.id.desc())
+                .fetch();
+    }
+
+    @Override
     public Application findByProgramIdAndUserId(Long programId, Long userId) {
         QApplication qApplication = QApplication.application;
 
@@ -117,7 +100,7 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
 
         return jpaQueryFactory
                 .selectFrom(qApplication)
-                .where(qApplication.program.id.eq(programId), qApplication.guestEmail.eq(email))
+                .where(qApplication.program.id.eq(programId), qApplication.email.eq(email))
                 .fetchFirst();
     }
 
@@ -146,7 +129,7 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
                 .fetch();
 
         emailList.addAll(jpaQueryFactory
-                .select(qApplication.guestEmail)
+                .select(qApplication.email)
                 .from(qApplication)
                 .where(qApplication.program.id.eq(programId), qApplication.user.isNull(), qApplication.isApproved.eq(isApproved))
                 .fetch());

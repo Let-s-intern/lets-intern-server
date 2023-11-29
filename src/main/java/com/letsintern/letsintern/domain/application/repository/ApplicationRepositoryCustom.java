@@ -15,6 +15,8 @@ public interface ApplicationRepositoryCustom {
 
     List<ApplicationVo> findAllByUserId(Long userId, Pageable pageable);
 
+    List<Application> findAllByUserId(Long userId);
+
     Application findByProgramIdAndUserId(Long programId, Long userId);
     Application findByProgramIdAndGuestEmail(Long programId, String email);
 
