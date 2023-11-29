@@ -83,7 +83,7 @@ public class Application {
     private ApplicationStatus status = ApplicationStatus.APPLIED;
 
     @NotNull
-    private ApplicationAttendance attendance = ApplicationAttendance.Attended;
+    private ApplicationAttendance attendance = ApplicationAttendance.ATTENDED;
 
     @NotNull
     private String createdAt = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
