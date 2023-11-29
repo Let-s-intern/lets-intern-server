@@ -1,5 +1,6 @@
 package com.letsintern.letsintern.domain.application.dto.request;
 
+import com.letsintern.letsintern.domain.application.domain.ApplicationAttendance;
 import com.letsintern.letsintern.domain.application.domain.ApplicationStatus;
 import jakarta.annotation.Nullable;
 import lombok.Getter;
@@ -26,6 +27,6 @@ public class ApplicationUpdateDTO {
     private String applyMotive;
 
     @Nullable
-    private Boolean attendance;
+    private ApplicationAttendance attendance;
 
 }

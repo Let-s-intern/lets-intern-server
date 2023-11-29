@@ -83,7 +83,7 @@ public class Application {
     private ApplicationStatus status = ApplicationStatus.APPLIED;
 
     @NotNull
-    private Boolean attendance = true;
+    private ApplicationAttendance attendance = ApplicationAttendance.Attended;
 
     @NotNull
     private String createdAt = new SimpleDateFormat("yyyy-MM-dd").format(new Date());

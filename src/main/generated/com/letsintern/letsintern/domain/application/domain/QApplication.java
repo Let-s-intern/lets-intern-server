@@ -24,7 +24,7 @@ public class QApplication extends EntityPathBase<Application> {
 
     public final StringPath applyMotive = createString("applyMotive");
 
-    public final BooleanPath attendance = createBoolean("attendance");
+    public final EnumPath<ApplicationAttendance> attendance = createEnum("attendance", ApplicationAttendance.class);
 
     public final StringPath createdAt = createString("createdAt");
 
