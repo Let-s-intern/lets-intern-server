@@ -53,7 +53,7 @@ public class UserService {
     public void addUserDetailInfo(User user, String university, String major) {
         user.setUniversity(university);
         user.setMajor(major);
-        user.setRole(UserRole.ROLE_USER);
+        if(user.getRole().equals(UserRole.ROLE_ANONYMOUS)) user.setRole(UserRole.ROLE_USER);
         userRepository.save(user);
     }
 
