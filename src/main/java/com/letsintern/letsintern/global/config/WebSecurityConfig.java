@@ -66,7 +66,7 @@ public class WebSecurityConfig {
     };
 
     private final String[] GetPermittedPatterns = {
-            "/program/**"
+            "/user/isAdmin", "/program/**"
     };
 
     private final String[] PostPermittedPatterns = {
