@@ -50,31 +50,27 @@ public class WebSecurityConfig {
     };
 
     private final String[] AdminGetPatterns = {
-            "/application/admin/**", "/review/admin/**"
+            "/user/admin/**", "/memo/**", "/program/admin/**", "/faq/**", "/application/admin/**", "/review/admin/**"
     };
 
     private final String[] AdminPostPatterns = {
-            "/application/admin/**", "/review/admin/**"
+            "/memo/**", "/program", "/faq/**"
     };
 
     private final String[] AdminPatchPatterns = {
-            "/application/**", "/review/admin/**"
+            "/memo/**", "/program/**", "/faq/**", "/application/**", "/review/**"
     };
 
     private final String[] AdminDeletePatterns = {
-            "/application/admin/**", "/review/admin/**"
-    };
-
-    private final String[] UserAndAnonymousPatterns = {
-//            "/user/logout", "/application/list/mypage"
+            "/memo/**", "/program/**", "/faq/**"
     };
 
     private final String[] GetPermittedPatterns = {
-//            "/program/**"
+            "/program/**"
     };
 
     private final String[] PostPermittedPatterns = {
-//        "/user/signup", "/user/token/reissue", "/application/guest/create/**"
+            "/user/signup", "/user/signin", "/user/reissue", "/user/password", "/application/**", "/review", "/review/**"
     };
 
     private final String[] PatchPermittedPatterns = {
@@ -107,8 +103,7 @@ public class WebSecurityConfig {
                             .requestMatchers(HttpMethod.POST, AdminPostPatterns).hasAnyRole("ADMIN")
                             .requestMatchers(HttpMethod.PATCH, AdminPatchPatterns).hasAnyRole("ADMIN")
                             .requestMatchers(HttpMethod.DELETE, AdminDeletePatterns).hasAnyRole("ADMIN")
-                            .requestMatchers(UserAndAnonymousPatterns).hasAnyRole("USER", "ANONYMOUS")
-                            .anyRequest().permitAll();
+                            .anyRequest().hasAnyRole("USER", "ANONYMOUS");
                 })
                 .exceptionHandling(exceptionHandling -> {
                     exceptionHandling.accessDeniedHandler(jwtAccessDeniedHandler)
