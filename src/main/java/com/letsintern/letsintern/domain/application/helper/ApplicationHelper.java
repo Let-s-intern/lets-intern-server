@@ -10,7 +10,10 @@ import com.letsintern.letsintern.domain.application.mapper.ApplicationMapper;
 import com.letsintern.letsintern.domain.application.repository.ApplicationRepository;
 import com.letsintern.letsintern.domain.application.vo.ApplicationAdminVo;
 import com.letsintern.letsintern.domain.application.vo.ApplicationVo;
+import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.program.domain.ProgramStatus;
+import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
+import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
 import com.letsintern.letsintern.domain.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -26,6 +29,7 @@ public class ApplicationHelper {
 
     private final ApplicationRepository applicationRepository;
     private final ApplicationMapper applicationMapper;
+    private final ProgramRepository programRepository;
 
 
     /* 회원 - 기존 신청 내역 확인 */
@@ -44,6 +48,12 @@ public class ApplicationHelper {
     public ApplicationCreateResponse createUserApplication(Long programId, ApplicationCreateDTO applicationCreateDTO, User user) {
         if(checkUserApplicationExist(programId, user.getId())) throw DuplicateApplication.EXCEPTION;
         Application newUserApplication = applicationMapper.toEntity(programId, applicationCreateDTO, user);
+
+        Program program = programRepository.findById(programId)
+                .orElseThrow(() -> {
+                    throw ProgramNotFound.EXCEPTION;
+                });
+        program.setApplicationCount(program.getApplicationCount() + 1);
         return applicationMapper.toApplicationCreateResponse(applicationRepository.save(newUserApplication));
     }
 
@@ -58,6 +68,11 @@ public class ApplicationHelper {
         if(checkGuestApplicationExist(programId, applicationCreateDTO.getGuestEmail())) throw DuplicateApplication.EXCEPTION;
 
         Application newGuestApplication = applicationMapper.toEntity(programId, applicationCreateDTO, null);
+        Program program = programRepository.findById(programId)
+                .orElseThrow(() -> {
+                    throw ProgramNotFound.EXCEPTION;
+                });
+        program.setApplicationCount(program.getApplicationCount() + 1);
         return applicationMapper.toApplicationCreateResponse(applicationRepository.save(newGuestApplication));
     }
 
@@ -128,6 +143,7 @@ public class ApplicationHelper {
                 });
 
         if(application.getProgram().getStatus().equals(ProgramStatus.OPEN)) {
+            application.getProgram().setApplicationCount(application.getProgram().getApplicationCount() - 1);
             applicationRepository.delete(application);
         } else {
             throw ApplicationCannotDeleted.EXCEPTION;

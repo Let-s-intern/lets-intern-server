@@ -22,6 +22,8 @@ public class QProgram extends EntityPathBase<Program> {
 
     public final DateTimePath<java.util.Date> announcementDate = createDateTime("announcementDate", java.util.Date.class);
 
+    public final NumberPath<Integer> applicationCount = createNumber("applicationCount", Integer.class);
+
     public final ListPath<com.letsintern.letsintern.domain.application.domain.Application, com.letsintern.letsintern.domain.application.domain.QApplication> applicationList = this.<com.letsintern.letsintern.domain.application.domain.Application, com.letsintern.letsintern.domain.application.domain.QApplication>createList("applicationList", com.letsintern.letsintern.domain.application.domain.Application.class, com.letsintern.letsintern.domain.application.domain.QApplication.class, PathInits.DIRECT2);
 
     public final StringPath contents = createString("contents");

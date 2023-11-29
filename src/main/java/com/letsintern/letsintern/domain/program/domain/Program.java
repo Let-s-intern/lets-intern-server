@@ -39,6 +39,9 @@ public class Program {
     private Integer headcount;
 
     @NotNull
+    private Integer applicationCount = 0;
+
+    @NotNull
     private Date dueDate;
 
     @NotNull
