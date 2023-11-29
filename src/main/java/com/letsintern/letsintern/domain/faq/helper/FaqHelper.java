@@ -47,4 +47,11 @@ public class FaqHelper {
     public List<FaqVo> getProgramFaqList(ProgramType programType) {
         return faqRepository.findVoListByProgramType(programType);
     }
+
+    public void deleteFaq(Long faqId) {
+        Faq targetFaq = faqRepository.findById(faqId)
+                        .orElseThrow(() -> FaqNotFound.EXCEPTION);
+
+        faqRepository.delete(targetFaq);
+    }
 }

@@ -32,4 +32,9 @@ public class FaqService {
     public FaqVoListResponse getProgramFaqList(ProgramType programType) {
         return faqMapper.toFaqVoListResponse(faqHelper.getProgramFaqList(programType));
     }
+
+    @Transactional
+    public void deleteFaq(Long faqId) {
+        faqHelper.deleteFaq(faqId);
+    }
 }

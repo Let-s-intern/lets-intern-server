@@ -37,4 +37,10 @@ public class FaqController {
         return faqService.getProgramFaqList(programType);
     }
 
+    @Operation(summary = "FAQ 삭제")
+    @DeleteMapping("/{faqId}")
+    public void deleteFaq(@PathVariable Long faqId) {
+        faqService.deleteFaq(faqId);
+    }
+
 }
