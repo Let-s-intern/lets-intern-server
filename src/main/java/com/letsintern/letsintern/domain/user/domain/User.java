@@ -28,7 +28,7 @@ public class User {
     private Long id;
 
     @NotNull
-    @Size(max = 255)
+    @Size(max = 100)
     private String email;
 
     @NotNull
@@ -45,9 +45,11 @@ public class User {
     private String phoneNum;
 
     @NotNull
+    @Column(length = 10)
     private String signedUpAt;
 
     @Nullable
+    @Column(length = 10)
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
     private LocalDate deletedAt;
 

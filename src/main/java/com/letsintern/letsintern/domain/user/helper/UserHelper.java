@@ -71,7 +71,7 @@ public class UserHelper {
     }
 
     public void findDuplicateUser(UserVo userVo) {
-        if(userRepository.findByEmailOrPhoneNum(userVo.getEmail(), userVo.getPhoneNum()).isPresent()) {
+        if(userRepository.findByEmail(userVo.getEmail()).isPresent()) {
             throw DuplicateUser.EXCEPTION;
         }
     }
@@ -109,13 +109,10 @@ public class UserHelper {
             if(userRepository.findByEmail(userUpdateRequestDTO.getEmail()).isPresent()) {
                 throw DuplicateUser.EXCEPTION;
             }
-            user.setEmail(userUpdateRequestDTO.getEmail());
+            else user.setEmail(userUpdateRequestDTO.getEmail());
         }
 
         if(userUpdateRequestDTO.getPhoneNum() != null) {
-            if(userRepository.findByPhoneNum(userUpdateRequestDTO.getPhoneNum()).isPresent()) {
-                throw DuplicateUser.EXCEPTION;
-            }
             user.setPhoneNum(userUpdateRequestDTO.getPhoneNum());
         }
 
