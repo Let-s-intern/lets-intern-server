@@ -3,10 +3,7 @@ package com.letsintern.letsintern.domain.program.service;
 import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramUpdateRequestDTO;
-import com.letsintern.letsintern.domain.program.dto.response.AdminProgramListDTO;
-import com.letsintern.letsintern.domain.program.dto.response.ProgramDetailDTO;
-import com.letsintern.letsintern.domain.program.dto.response.ProgramIdResponseDTO;
-import com.letsintern.letsintern.domain.program.dto.response.ProgramListDTO;
+import com.letsintern.letsintern.domain.program.dto.response.*;
 import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
 import com.letsintern.letsintern.domain.program.helper.ProgramHelper;
 import com.letsintern.letsintern.domain.program.mapper.ProgramMapper;
@@ -47,6 +44,10 @@ public class ProgramService {
     @Transactional
     public AdminProgramListDTO getProgramAdminList(String type, Integer th, Pageable pageable) {
         return programHelper.getAdminProgramList(type, th, pageable);
+    }
+
+    public UserProgramVoResponse getAdminUserProgramList(Long userId) {
+        return programMapper.toUserProgramVoResponse(programHelper.getAdminUserProgramList(userId));
     }
 
     public ProgramDetailDTO getProgramDetailDTO(Long programId, PrincipalDetails principalDetails) {

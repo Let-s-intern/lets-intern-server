@@ -65,16 +65,20 @@ public class WebSecurityConfig {
             "/memo/**", "/program/**", "/faq/**"
     };
 
-    private final String[] GetPermittedPatterns = {
-            "/user/isAdmin", "/program/**"
+    private final String[] UserGetPatterns = {
+            "/user", "/user/withdraw", "/user/detail-info", "/application", "/review/**"
     };
 
-    private final String[] PostPermittedPatterns = {
-            "/user/signup", "/user/signin", "/user/reissue", "/user/password", "/application/**", "/review", "/review/**"
+    private final String[] UserPostPatterns = {
+            "/user/signout", "/review/**"
     };
 
-    private final String[] PatchPermittedPatterns = {
+    private final String[] UserPatchPatterns = {
+            "/user", "/user/password"
+    };
 
+    private final String[] UserDeletePatterns = {
+            "/application/**"
     };
 
     @Bean
@@ -95,15 +99,16 @@ public class WebSecurityConfig {
                 })
                 .authorizeHttpRequests(request -> {
                     request.requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                            .requestMatchers(HttpMethod.GET, GetPermittedPatterns).permitAll()
-                            .requestMatchers(HttpMethod.POST, PostPermittedPatterns).permitAll()
-                            .requestMatchers(HttpMethod.PATCH, PatchPermittedPatterns).permitAll()
                             .requestMatchers(SwaggerPatterns).permitAll()
+                            .requestMatchers(HttpMethod.GET, UserGetPatterns).hasAnyRole("USER", "ANONYMOUS")
+                            .requestMatchers(HttpMethod.POST, UserPostPatterns).hasAnyRole("USER", "ANONYMOUS")
+                            .requestMatchers(HttpMethod.PATCH, UserPatchPatterns).hasAnyRole("USER", "ANONYMOUS")
+                            .requestMatchers(HttpMethod.DELETE, UserDeletePatterns).hasAnyRole("USER", "ANONYMOUS")
                             .requestMatchers(HttpMethod.GET, AdminGetPatterns).hasAnyRole("ADMIN")
                             .requestMatchers(HttpMethod.POST, AdminPostPatterns).hasAnyRole("ADMIN")
                             .requestMatchers(HttpMethod.PATCH, AdminPatchPatterns).hasAnyRole("ADMIN")
                             .requestMatchers(HttpMethod.DELETE, AdminDeletePatterns).hasAnyRole("ADMIN")
-                            .anyRequest().hasAnyRole("USER", "ANONYMOUS");
+                            .anyRequest().permitAll();
                 })
                 .exceptionHandling(exceptionHandling -> {
                     exceptionHandling.accessDeniedHandler(jwtAccessDeniedHandler)

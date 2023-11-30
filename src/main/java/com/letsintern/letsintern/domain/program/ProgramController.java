@@ -3,10 +3,7 @@ package com.letsintern.letsintern.domain.program;
 import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramUpdateRequestDTO;
-import com.letsintern.letsintern.domain.program.dto.response.AdminProgramListDTO;
-import com.letsintern.letsintern.domain.program.dto.response.ProgramDetailDTO;
-import com.letsintern.letsintern.domain.program.dto.response.ProgramIdResponseDTO;
-import com.letsintern.letsintern.domain.program.dto.response.ProgramListDTO;
+import com.letsintern.letsintern.domain.program.dto.response.*;
 import com.letsintern.letsintern.domain.program.service.ProgramService;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import io.swagger.v3.oas.annotations.Operation;
@@ -57,6 +54,12 @@ public class ProgramController {
             @RequestParam(required = false) Integer th,
             @PageableDefault(size = 20) Pageable pageable) {
         return programService.getProgramAdminList(type, th, pageable);
+    }
+
+    @Operation(summary = "어드민 유저 1명의 프로그램 목록")
+    @GetMapping("/admin/user/{userId}")
+    public UserProgramVoResponse getAdminUserProgramList(@PathVariable Long userId) {
+        return programService.getAdminUserProgramList(userId);
     }
 
     @Operation(summary = "어드민 프로그램 1개 상세 보기")

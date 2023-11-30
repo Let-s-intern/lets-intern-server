@@ -4,7 +4,9 @@ import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.response.ProgramIdResponseDTO;
 import com.letsintern.letsintern.domain.program.dto.response.ProgramListDTO;
+import com.letsintern.letsintern.domain.program.dto.response.UserProgramVoResponse;
 import com.letsintern.letsintern.domain.program.vo.ProgramThumbnailVo;
+import com.letsintern.letsintern.domain.program.vo.UserProgramVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -24,5 +26,9 @@ public class ProgramMapper {
 
     public ProgramListDTO toProgramListDTO(List<ProgramThumbnailVo> programList) {
         return ProgramListDTO.from(programList);
+    }
+
+    public UserProgramVoResponse toUserProgramVoResponse(List<UserProgramVo> userProgramList) {
+        return UserProgramVoResponse.from(userProgramList);
     }
 }

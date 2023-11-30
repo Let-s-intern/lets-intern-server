@@ -1,6 +1,7 @@
 package com.letsintern.letsintern.domain.program.helper;
 
 import com.letsintern.letsintern.domain.application.helper.ApplicationHelper;
+import com.letsintern.letsintern.domain.application.repository.ApplicationRepository;
 import com.letsintern.letsintern.domain.faq.repository.FaqRepository;
 import com.letsintern.letsintern.domain.faq.vo.FaqVo;
 import com.letsintern.letsintern.domain.program.domain.Program;
@@ -9,11 +10,13 @@ import com.letsintern.letsintern.domain.program.dto.request.ProgramUpdateRequest
 import com.letsintern.letsintern.domain.program.dto.response.AdminProgramListDTO;
 import com.letsintern.letsintern.domain.program.dto.response.ProgramDetailDTO;
 import com.letsintern.letsintern.domain.program.dto.response.ProgramListDTO;
+import com.letsintern.letsintern.domain.program.dto.response.UserProgramVoResponse;
 import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
 import com.letsintern.letsintern.domain.program.mapper.ProgramMapper;
 import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
 import com.letsintern.letsintern.domain.program.vo.ProgramDetailVo;
 import com.letsintern.letsintern.domain.program.vo.ProgramThumbnailVo;
+import com.letsintern.letsintern.domain.program.vo.UserProgramVo;
 import com.letsintern.letsintern.domain.review.repository.ReviewRepository;
 import com.letsintern.letsintern.domain.review.vo.ReviewVo;
 import com.letsintern.letsintern.global.common.util.StringUtils;
@@ -23,6 +26,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -32,7 +36,7 @@ public class ProgramHelper {
     private final ProgramMapper programMapper;
     private final FaqRepository faqRepository;
     private final ReviewRepository reviewRepository;
-
+    private final ApplicationRepository applicationRepository;
     private final ApplicationHelper applicationHelper;
 
     public Long createProgram(ProgramCreateRequestDTO programCreateRequestDTO) {
@@ -138,6 +142,12 @@ public class ProgramHelper {
         }
 
         return AdminProgramListDTO.from(programRepository.findAllAdmin(pageable));
+    }
+
+    public List<UserProgramVo> getAdminUserProgramList(Long userId) {
+        return applicationRepository.findAllProgramByUserId(userId).stream()
+                .map(UserProgramVo::from)
+                .collect(Collectors.toList());
     }
 
     public Program getExistingProgram(Long programId) {
