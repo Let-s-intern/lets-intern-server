@@ -33,8 +33,6 @@ public class ProgramUpdateRequestDTO {
 
     private String location;
 
-    private String link;
-
     private String notice;
 
     private ProgramStatus status;

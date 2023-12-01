@@ -63,9 +63,6 @@ public class Program {
     @Nullable
     private String location;
 
-    @Nullable
-    private String link;
-
     @NotNull
     private String notice;
 
@@ -100,7 +97,6 @@ public class Program {
         this.contents = contents;
         this.way = way;
         this.location = location;
-        this.link = link;
         this.notice = notice;
         this.faqListStr = StringUtils.listToString(faqIdList);
     }
@@ -118,7 +114,6 @@ public class Program {
                 .contents(programCreateRequestDTO.getContents())
                 .way(programCreateRequestDTO.getWay())
                 .location(programCreateRequestDTO.getLocation())
-                .link(programCreateRequestDTO.getLink())
                 .notice(programCreateRequestDTO.getNotice())
                 .faqIdList(programCreateRequestDTO.getFaqIdList())
                 .build();

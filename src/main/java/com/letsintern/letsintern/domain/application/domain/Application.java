@@ -60,6 +60,9 @@ public class Application {
     private ApplicationType type;
 
     @Nullable
+    private ApplicationWay way;
+
+    @Nullable
     private Long reviewId;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -93,7 +96,7 @@ public class Application {
     @Builder
     private Application(Program program, User user, Integer grade, String wishCompany, String wishJob,
                              String applyMotive, String preQuestions, InflowPath inflowPath,
-                             String name, String phoneNum, String email) {
+                             String name, String phoneNum, String email, ApplicationWay way) {
         this.program = program;
         this.user = user;
         this.grade = grade;
@@ -102,6 +105,7 @@ public class Application {
         this.applyMotive = applyMotive;
         this.preQuestions = preQuestions;
         this.inflowPath = inflowPath;
+        if(way != null) this.way = way;
 
         /* 비회원 */
         if(user == null) {
@@ -133,6 +137,7 @@ public class Application {
                 .name(applicationCreateDTO.getGuestName())
                 .phoneNum(applicationCreateDTO.getGuestPhoneNum())
                 .email(applicationCreateDTO.getGuestEmail())
+                .way(applicationCreateDTO.getWay())
                 .build();
     }
 }

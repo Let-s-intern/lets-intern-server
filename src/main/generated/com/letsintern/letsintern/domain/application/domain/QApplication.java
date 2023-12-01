@@ -54,6 +54,8 @@ public class QApplication extends EntityPathBase<Application> {
 
     public final com.letsintern.letsintern.domain.user.domain.QUser user;
 
+    public final EnumPath<ApplicationWay> way = createEnum("way", ApplicationWay.class);
+
     public final StringPath wishCompany = createString("wishCompany");
 
     public final StringPath wishJob = createString("wishJob");
