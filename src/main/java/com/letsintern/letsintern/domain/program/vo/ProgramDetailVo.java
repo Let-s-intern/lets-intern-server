@@ -13,8 +13,6 @@ public class ProgramDetailVo {
     private String title;
     private String contents;
     private String notice;
-
-    @JsonIgnore
     private ProgramType type;
 
     @JsonIgnore
