@@ -9,6 +9,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import org.hibernate.annotations.Where;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -42,24 +43,27 @@ public class Application {
 
     @NotNull
     @Enumerated(EnumType.STRING)
+    @Column(length = 20)
     private InflowPath inflowPath;
 
-    @NotNull
+    @Nullable
     @Size(max = 20)
     private String name;
 
-    @NotNull
+    @Nullable
     @Column(length = 15)
     private String phoneNum;
 
-    @NotNull
+    @Nullable
     @Size(max = 30)
     private String email;
 
     @NotNull
+    @Column(length = 10)
     private ApplicationType type;
 
     @Nullable
+    @Column(length = 10)
     private ApplicationWay way;
 
     @Nullable
@@ -68,6 +72,7 @@ public class Application {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = true)
     @JsonIgnore
+    @Where(clause = "deleted_at != NULL")
     private User user;
 
 
@@ -118,9 +123,6 @@ public class Application {
         /* 회원 */
         else {
             this.type = ApplicationType.USER;
-            this.name = user.getName();
-            this.phoneNum = user.getPhoneNum();
-            this.email = user.getEmail();
         }
     }
 

@@ -2,6 +2,7 @@ package com.letsintern.letsintern.domain.user.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.letsintern.letsintern.domain.application.domain.Application;
 import com.letsintern.letsintern.domain.user.dto.request.UserSignUpRequestDTO;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
@@ -14,6 +15,7 @@ import org.hibernate.annotations.Where;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Getter @Setter
@@ -68,6 +70,10 @@ public class User {
 
     @Nullable
     private Long managerId;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<Application> applicationList;
 
 
     @Builder
