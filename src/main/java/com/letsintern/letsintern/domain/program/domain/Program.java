@@ -64,6 +64,7 @@ public class Program {
     private String location;
 
     @NotNull
+    @Column(length = 300)
     private String notice;
 
     @NotNull
