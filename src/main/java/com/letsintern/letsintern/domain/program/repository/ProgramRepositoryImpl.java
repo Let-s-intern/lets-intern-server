@@ -96,6 +96,8 @@ public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
                         qProgram.contents,
                         qProgram.notice,
                         qProgram.type,
+                        qProgram.way,
+                        qProgram.location,
                         qProgram.faqListStr
                 ))
                 .from(qProgram)
