@@ -27,6 +27,8 @@ public class QReview extends EntityPathBase<Review> {
 
     public final NumberPath<Long> programId = createNumber("programId", Long.class);
 
+    public final NumberPath<Integer> programTh = createNumber("programTh", Integer.class);
+
     public final EnumPath<com.letsintern.letsintern.domain.program.domain.ProgramType> programType = createEnum("programType", com.letsintern.letsintern.domain.program.domain.ProgramType.class);
 
     public final StringPath reviewContents = createString("reviewContents");

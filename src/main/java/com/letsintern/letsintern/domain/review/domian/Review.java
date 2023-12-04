@@ -35,6 +35,9 @@ public class Review {
     @NotNull
     ProgramType programType;
 
+    @NotNull
+    Integer programTh;
+
     @Nullable
     String userName;
 
@@ -46,25 +49,27 @@ public class Review {
     ReviewStatus status = ReviewStatus.INVISIBLE;
 
     @Builder
-    private Review(Integer grade, String reviewContents, String suggestContents, Long programId, ProgramType programType, String username) {
+    private Review(Integer grade, String reviewContents, String suggestContents, Long programId, ProgramType programType, Integer programTh, String username) {
         this.grade = grade;
         this.reviewContents = reviewContents;
         this.suggestContents = suggestContents;
         this.programId = programId;
         this.programType = programType;
+        this.programTh = programTh;
         if(username != null) this.userName = username;
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy년 MM월 dd일");
         this.createdAt = simpleDateFormat.format(new Date());
     }
 
-    public static Review of(ReviewCreateDTO reviewCreateDTO, Long programId, ProgramType programType, String username) {
+    public static Review of(ReviewCreateDTO reviewCreateDTO, Long programId, ProgramType programType, Integer programTh, String username) {
         return Review.builder()
                 .grade(reviewCreateDTO.getGrade())
                 .reviewContents(reviewCreateDTO.getReviewContents())
                 .suggestContents(reviewCreateDTO.getSuggestContents())
                 .programId(programId)
                 .programType(programType)
+                .programTh(programTh)
                 .username(username)
                 .build();
     }
