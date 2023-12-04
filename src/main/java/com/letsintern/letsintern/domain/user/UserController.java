@@ -104,6 +104,14 @@ public class UserController {
         return ResponseEntity.ok(userService.getAdminUser(userId));
     }
 
+//    @Operation(summary = "어드민 사용자 1명 수정")
+//    @PutMapping("/admin/{userId}")
+//    public UserIdResponseDTO updateAdminUser(@PathVariable Long userId, @RequestBody User user) {
+//        return userService.updateAdminUser(userId, user);
+//    }
+
+
+
     @Operation(summary = "어드민 사용자 검색 (name, email, phoneNum)")
     @GetMapping("/admin/search")
     public AdminUserListResponseDTO getAdminUserList(@RequestParam String type, @RequestParam String keyword) {

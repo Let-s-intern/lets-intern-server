@@ -145,4 +145,9 @@ public class UserService {
     public User getAdminUser(Long userId) {
         return userHelper.findUser(userId);
     }
+
+    @Transactional
+    public UserIdResponseDTO updateAdminUser(Long userId, User user) {
+        return userMapper.toUserIdResponseDTO(userHelper.updateAdminUserInfo(userId, user));
+    }
 }

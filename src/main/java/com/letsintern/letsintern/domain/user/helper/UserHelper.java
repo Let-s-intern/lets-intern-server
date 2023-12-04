@@ -3,6 +3,7 @@ package com.letsintern.letsintern.domain.user.helper;
 import com.letsintern.letsintern.domain.user.domain.User;
 import com.letsintern.letsintern.domain.user.dto.request.UserSignInRequestDTO;
 import com.letsintern.letsintern.domain.user.dto.request.UserUpdateRequestDTO;
+import com.letsintern.letsintern.domain.user.dto.response.UserIdResponseDTO;
 import com.letsintern.letsintern.domain.user.exception.DuplicateUser;
 import com.letsintern.letsintern.domain.user.exception.MismatchPassword;
 import com.letsintern.letsintern.domain.user.exception.RefreshTokenNotFound;
@@ -166,4 +167,18 @@ public class UserHelper {
         user.setManagerId(managerId);
         return user.getId();
     }
+
+    public Long updateAdminUserInfo(Long userId, User inputUser) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> {
+                    throw UserNotFound.EXCEPTION;
+                });
+
+        if(userRepository.findByEmail(inputUser.getEmail()).isPresent()) {
+            throw DuplicateUser.EXCEPTION;
+        }
+
+        return userRepository.save(inputUser).getId();
+    }
+
 }
