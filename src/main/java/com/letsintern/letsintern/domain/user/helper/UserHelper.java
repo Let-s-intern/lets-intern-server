@@ -121,7 +121,7 @@ public class UserHelper {
         }
 
         if(userUpdateRequestDTO.getMajor() != null) {
-            user.setMajor(user.getMajor());
+            user.setMajor(userUpdateRequestDTO.getMajor());
         }
 
         return user.getId();
