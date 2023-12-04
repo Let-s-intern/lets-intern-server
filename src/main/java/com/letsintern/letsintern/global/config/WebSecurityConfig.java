@@ -58,11 +58,11 @@ public class WebSecurityConfig {
     };
 
     private final String[] AdminPatchPatterns = {
-            "/memo/**", "/program/**", "/faq/**", "/application/**", "/review/**"
+            "/user/admin/**", "/memo/**", "/program/**", "/faq/**", "/application/**", "/review/**"
     };
 
     private final String[] AdminDeletePatterns = {
-            "/memo/**", "/program/**", "/faq/**"
+            "/memo/**", "/program/**", "/faq/**", "/user/admin/**"
     };
 
     private final String[] UserGetPatterns = {

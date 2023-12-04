@@ -128,6 +128,46 @@ public class UserHelper {
         return user.getId();
     }
 
+    public Long updateAdminUserInfo(Long userId, UserUpdateRequestDTO userUpdateRequestDTO) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> {
+                    throw UserNotFound.EXCEPTION;
+                });
+
+        if(userUpdateRequestDTO.getName() != null) {
+            user.setName(userUpdateRequestDTO.getName());
+        }
+
+        if(userUpdateRequestDTO.getEmail() != null) {
+            if(userRepository.findByEmail(userUpdateRequestDTO.getEmail()).isPresent()) {
+                throw DuplicateUser.EXCEPTION;
+            }
+            else user.setEmail(userUpdateRequestDTO.getEmail());
+        }
+
+        if(userUpdateRequestDTO.getPhoneNum() != null) {
+            user.setPhoneNum(userUpdateRequestDTO.getPhoneNum());
+        }
+
+        if(userUpdateRequestDTO.getUniversity() != null) {
+            user.setUniversity(userUpdateRequestDTO.getUniversity());
+        }
+
+        if(userUpdateRequestDTO.getMajor() != null) {
+            user.setMajor(user.getMajor());
+        }
+
+        if(userUpdateRequestDTO.getManagerId() != null) {
+            user.setManagerId(userUpdateRequestDTO.getManagerId());
+        }
+
+        if(userUpdateRequestDTO.getRole() != null) {
+            user.setRole(userUpdateRequestDTO.getRole());
+        }
+
+        return user.getId();
+    }
+
     public void changePassword(Long userId, String currentPassword, String newPassword) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> {
@@ -168,17 +208,5 @@ public class UserHelper {
         return user.getId();
     }
 
-    public Long updateAdminUserInfo(Long userId, User inputUser) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> {
-                    throw UserNotFound.EXCEPTION;
-                });
-
-        if(userRepository.findByEmail(inputUser.getEmail()).isPresent()) {
-            throw DuplicateUser.EXCEPTION;
-        }
-
-        return userRepository.save(inputUser).getId();
-    }
 
 }
