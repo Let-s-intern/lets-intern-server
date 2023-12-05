@@ -4,20 +4,22 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Getter
 @NoArgsConstructor
 public class ApplicationCreateResponse {
 
     private Long applicationId;
-    private String announcementDate;
+    private Date announcementDate;
 
     @Builder
-    private ApplicationCreateResponse(Long applicationId, String announcementDate) {
+    private ApplicationCreateResponse(Long applicationId, Date announcementDate) {
         this.applicationId = applicationId;
         this.announcementDate = announcementDate;
     }
 
-    public static ApplicationCreateResponse from(Long applicationId, String announcementDate) {
+    public static ApplicationCreateResponse from(Long applicationId, Date announcementDate) {
         return ApplicationCreateResponse.builder()
                 .applicationId(applicationId)
                 .announcementDate(announcementDate)
