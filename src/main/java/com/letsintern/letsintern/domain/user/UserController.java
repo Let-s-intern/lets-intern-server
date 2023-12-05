@@ -104,13 +104,17 @@ public class UserController {
         return ResponseEntity.ok(userService.getAdminUser(userId));
     }
 
-//    @Operation(summary = "어드민 사용자 1명 수정")
-//    @PutMapping("/admin/{userId}")
-//    public UserIdResponseDTO updateAdminUser(@PathVariable Long userId, @RequestBody User user) {
-//        return userService.updateAdminUser(userId, user);
-//    }
+    @Operation(summary = "어드민 사용자 1명 정보 수정")
+    @PatchMapping("/admin/{userId}")
+    public UserIdResponseDTO updateAdminUser(@PathVariable Long userId, @RequestBody UserUpdateRequestDTO userUpdateRequestDTO) {
+        return userService.updateAdminUser(userId, userUpdateRequestDTO);
+    }
 
-
+    @Operation(summary = "어드민 사용자 1명 삭제")
+    @DeleteMapping("/admin/{userId}")
+    public void deleteAdminUser(@PathVariable Long userId) {
+        userService.deleteAdminUser(userId);
+    }
 
     @Operation(summary = "어드민 사용자 검색 (name, email, phoneNum)")
     @GetMapping("/admin/search")

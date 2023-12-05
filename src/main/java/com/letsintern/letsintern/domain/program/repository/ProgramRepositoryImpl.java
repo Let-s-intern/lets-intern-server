@@ -34,7 +34,7 @@ public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
                         qProgram.type,
                         qProgram.th,
                         qProgram.title,
-                        qProgram.endDate,
+                        qProgram.dueDate,
                         qProgram.startDate
                 ))
                 .from(qProgram)
@@ -56,7 +56,7 @@ public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
                             qProgram.type,
                             qProgram.th,
                             qProgram.title,
-                            qProgram.endDate,
+                            qProgram.dueDate,
                             qProgram.startDate
                     ))
                     .from(qProgram)
@@ -75,7 +75,7 @@ public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
                         qProgram.type,
                         qProgram.th,
                         qProgram.title,
-                        qProgram.endDate,
+                        qProgram.dueDate,
                         qProgram.startDate
                 ))
                 .from(qProgram)

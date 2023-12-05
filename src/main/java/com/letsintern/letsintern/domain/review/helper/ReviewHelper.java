@@ -37,7 +37,7 @@ public class ReviewHelper {
                     throw ProgramNotFound.EXCEPTION;
                 });
 
-        Review newReview = reviewMapper.toEntity(programId, program.getType(), reviewCreateDTO, null);
+        Review newReview = reviewMapper.toEntity(programId, program.getType(), program.getTh(), reviewCreateDTO, null);
         return reviewRepository.save(newReview).getId();
     }
 
@@ -49,7 +49,12 @@ public class ReviewHelper {
             throw ReviewUnAuthorized.EXCEPTION;
         }
 
-        Review newReview = reviewMapper.toEntity(application.getProgram().getId(), application.getProgram().getType(), reviewCreateDTO, username);
+        Review newReview = reviewMapper.toEntity(
+                application.getProgram().getId(),
+                application.getProgram().getType(),
+                application.getProgram().getTh(),
+                reviewCreateDTO, username
+        );
         Long reviewId = reviewRepository.save(newReview).getId();
         application.setReviewId(reviewId);
 

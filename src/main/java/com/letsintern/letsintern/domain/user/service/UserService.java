@@ -13,7 +13,6 @@ import com.letsintern.letsintern.global.config.jwt.TokenProvider;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -120,6 +119,11 @@ public class UserService {
         );
     }
 
+    @Transactional
+    public UserIdResponseDTO updateAdminUser(Long userId, UserUpdateRequestDTO userUpdateRequestDTO) {
+        return userMapper.toUserIdResponseDTO(userHelper.updateAdminUserInfo(userId, userUpdateRequestDTO));
+    }
+
     public AdminUserListResponseDTO getAdminUserTotalList(Pageable pageable) {
         return userMapper.toUserTotalListResponseDTO(userHelper.getAdminUserTotalList(pageable));
     }
@@ -147,7 +151,12 @@ public class UserService {
     }
 
     @Transactional
-    public UserIdResponseDTO updateAdminUser(Long userId, User user) {
-        return userMapper.toUserIdResponseDTO(userHelper.updateAdminUserInfo(userId, user));
+    public void deleteAdminUser(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> {
+                    throw UserNotFound.EXCEPTION;
+                });
+        tokenProvider.deleteRefreshToken(user.getId());
+        userRepository.delete(user);
     }
 }
