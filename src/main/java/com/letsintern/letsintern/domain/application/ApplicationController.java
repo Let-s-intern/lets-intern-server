@@ -42,7 +42,7 @@ public class ApplicationController {
     @Operation(summary = "마이페이지 나의 지원서 목록")
     @GetMapping("")
     public UserApplicationListResponse getMyPageApplicationList(
-            @PageableDefault(size = 20) Pageable pageable,
+            @PageableDefault(size = 2000) Pageable pageable,
             @AuthenticationPrincipal PrincipalDetails principalDetails) {
         final User user = principalDetails.getUser();
         return applicationService.getApplicationListOfUser(user.getId(), pageable);
@@ -60,7 +60,7 @@ public class ApplicationController {
     public AdminApplicationListResponse getApplicationListOfProgram(
             @PathVariable Long programId,
             @RequestParam(required = false) Boolean isApproved,
-            @PageableDefault(size = 15) Pageable pageable) {
+            @PageableDefault(size = 1500) Pageable pageable) {
 
         if(isApproved != null) return applicationService.getApplicationListOfProgramAndApproved(programId, isApproved, pageable);
         return applicationService.getApplicationListOfProgram(programId, pageable);
