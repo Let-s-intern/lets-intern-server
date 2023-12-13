@@ -85,7 +85,7 @@ public class Program {
     @Builder
     private Program(ProgramType type, Integer th, String title, Integer headcount,
                     Date dueDate, Date announcementDate, Date startDate, Date endDate,
-                    String contents, ProgramWay way, String location, String link, String notice,
+                    String contents, ProgramWay way, String location, String notice,
                     List<Integer> faqIdList) {
         this.type = type;
         this.th = th;

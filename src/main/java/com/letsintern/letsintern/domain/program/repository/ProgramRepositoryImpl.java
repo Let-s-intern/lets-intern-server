@@ -92,6 +92,7 @@ public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
         QProgram qProgram = QProgram.program;
         return Optional.ofNullable(jpaQueryFactory
                 .select(Projections.constructor(ProgramDetailVo.class,
+                        qProgram.status,
                         qProgram.title,
                         qProgram.contents,
                         qProgram.notice,
