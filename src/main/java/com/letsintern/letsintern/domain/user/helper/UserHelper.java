@@ -5,6 +5,7 @@ import com.letsintern.letsintern.domain.user.dto.request.UserSignInRequestDTO;
 import com.letsintern.letsintern.domain.user.dto.request.UserUpdateRequestDTO;
 import com.letsintern.letsintern.domain.user.dto.response.UserIdResponseDTO;
 import com.letsintern.letsintern.domain.user.exception.*;
+import com.letsintern.letsintern.domain.user.oauth2.OAuth2UserInfo;
 import com.letsintern.letsintern.domain.user.repository.UserRepository;
 import com.letsintern.letsintern.domain.user.util.RedisUtil;
 import com.letsintern.letsintern.domain.user.vo.AdminUserVo;
@@ -78,9 +79,7 @@ public class UserHelper {
 
     public User findForSignIn(UserSignInRequestDTO userSignInRequestDTO) {
         User findUser = userRepository.findByEmail(userSignInRequestDTO.getEmail())
-                .orElseThrow(() -> {
-                    throw UserNotFound.EXCEPTION;
-                });
+                .orElseThrow(() -> UserNotFound.EXCEPTION);
 
         if(!matchesPassword(userSignInRequestDTO.getPassword(), findUser.getPassword())) {
             throw MismatchPassword.EXCEPTION;
@@ -97,9 +96,7 @@ public class UserHelper {
 
     public Long updateUserInfo(Long userId, UserUpdateRequestDTO userUpdateRequestDTO) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> {
-                    throw UserNotFound.EXCEPTION;
-                });
+                .orElseThrow(() -> UserNotFound.EXCEPTION);
 
         if(userUpdateRequestDTO.getName() != null) {
             user.setName(userUpdateRequestDTO.getName());

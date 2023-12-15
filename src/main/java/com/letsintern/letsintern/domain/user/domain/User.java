@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.letsintern.letsintern.domain.application.domain.Application;
 import com.letsintern.letsintern.domain.user.dto.request.UserSignUpRequestDTO;
+import com.letsintern.letsintern.domain.user.oauth2.AuthProvider;
+import com.letsintern.letsintern.domain.user.oauth2.OAuth2UserInfo;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -59,6 +61,12 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
+    @Nullable
+    @Enumerated(EnumType.STRING)
+    private AuthProvider authProvider;
+
+    @Nullable
+    private String oauth2Id;
 
     @Nullable
     @Column(length = 50)
@@ -77,11 +85,15 @@ public class User {
 
 
     @Builder
-    private User(String email, String name, String password, String phoneNum) {
+    private User(String email, String name, String password, String phoneNum,
+                 AuthProvider authProvider, String oauth2Id) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.phoneNum = phoneNum;
+
+        if(authProvider != null) this.authProvider = authProvider;
+        if(oauth2Id != null) this.oauth2Id = oauth2Id;
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         this.signedUpAt = simpleDateFormat.format(new Date());
@@ -95,6 +107,24 @@ public class User {
                 .password(encodedPassword)
                 .phoneNum(userSignUpRequestDTO.getUserVo().getPhoneNum())
                 .build();
+    }
+
+    public static User ofOAuth(OAuth2UserInfo oAuth2UserInfo, AuthProvider authProvider) {
+        return User.builder()
+                .email(oAuth2UserInfo.getEmail())
+                .name(oAuth2UserInfo.getName())
+                .password("")
+                .phoneNum("010")
+                .authProvider(authProvider)
+                .oauth2Id(oAuth2UserInfo.getOAuth2Id())
+                .build();
+    }
+
+    public User updateFrom(OAuth2UserInfo oAuth2UserInfo) {
+        this.oauth2Id = oAuth2UserInfo.getOAuth2Id();
+        this.name = oAuth2UserInfo.getName();
+        this.email = oAuth2UserInfo.getEmail();
+        return this;
     }
 }
 
