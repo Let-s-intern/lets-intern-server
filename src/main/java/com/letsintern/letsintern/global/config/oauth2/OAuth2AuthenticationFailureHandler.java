@@ -26,7 +26,6 @@ public class OAuth2AuthenticationFailureHandler extends SimpleUrlAuthenticationF
                 .map(Cookie::getValue)
                 .orElse("/");
 
-        System.out.println("OAuth2AuthenticationFailureHandler.onAuthenticationFailure __________________________ " + targetUrl);
 
         targetUrl = UriComponentsBuilder.fromUriString(targetUrl)
                 .queryParam("error", authenticationException.getLocalizedMessage())

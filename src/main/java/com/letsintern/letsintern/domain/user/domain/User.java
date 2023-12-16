@@ -66,9 +66,6 @@ public class User {
     private AuthProvider authProvider;
 
     @Nullable
-    private String oauth2Id;
-
-    @Nullable
     @Column(length = 50)
     private String university;
 
@@ -86,14 +83,13 @@ public class User {
 
     @Builder
     private User(String email, String name, String password, String phoneNum,
-                 AuthProvider authProvider, String oauth2Id) {
+                 AuthProvider authProvider) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.phoneNum = phoneNum;
 
         if(authProvider != null) this.authProvider = authProvider;
-        if(oauth2Id != null) this.oauth2Id = oauth2Id;
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         this.signedUpAt = simpleDateFormat.format(new Date());
@@ -116,12 +112,12 @@ public class User {
                 .password("")
                 .phoneNum("010")
                 .authProvider(authProvider)
-                .oauth2Id(oAuth2UserInfo.getOAuth2Id())
+                .password(oAuth2UserInfo.getOAuth2Id())
                 .build();
     }
 
     public User updateFrom(OAuth2UserInfo oAuth2UserInfo) {
-        this.oauth2Id = oAuth2UserInfo.getOAuth2Id();
+        this.password = oAuth2UserInfo.getOAuth2Id();
         this.name = oAuth2UserInfo.getName();
         this.email = oAuth2UserInfo.getEmail();
         return this;

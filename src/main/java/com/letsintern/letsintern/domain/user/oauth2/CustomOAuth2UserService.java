@@ -2,7 +2,6 @@ package com.letsintern.letsintern.domain.user.oauth2;
 
 import com.letsintern.letsintern.domain.user.domain.User;
 import com.letsintern.letsintern.domain.user.exception.DuplicateUser;
-import com.letsintern.letsintern.domain.user.oauth2.AuthProvider;
 import com.letsintern.letsintern.domain.user.repository.UserRepository;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +24,6 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest) throws OAuth2AuthenticationException {
         OAuth2UserService<OAuth2UserRequest, OAuth2User> oAuth2UserService = new DefaultOAuth2UserService();
         OAuth2User oAuth2User = oAuth2UserService.loadUser(oAuth2UserRequest);
-        System.out.println("CustomOAuth2UserService.loadUser ________________________ " + oAuth2User.getName());
         return processOAuth2User(oAuth2UserRequest, oAuth2User);
     }
 
@@ -33,12 +31,10 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         AuthProvider authProvider = AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId().toUpperCase());
         OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(authProvider, oAuth2User.getAttributes());
 
-        System.out.println("CustomOAuth2UserService.processOAuth2User _____________________ 1");
         if(!StringUtils.hasText(oAuth2UserInfo.getEmail())) {
             throw new RuntimeException("Email Not Found From OAuth2 Provider");
         }
 
-        System.out.println("CustomOAuth2UserService.processOAuth2User ______________________ 2");
 
         User user = userRepository.findByEmail(oAuth2UserInfo.getEmail()).orElse(null);
         if(user != null) {
@@ -49,8 +45,6 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         } else {
             user = registerUser(oAuth2UserInfo, authProvider);  // 신규 가입
         }
-
-        System.out.println("CustomOAuth2UserService.processOAuth2User _________________________ 3");
 
         return new PrincipalDetails(user);
     }

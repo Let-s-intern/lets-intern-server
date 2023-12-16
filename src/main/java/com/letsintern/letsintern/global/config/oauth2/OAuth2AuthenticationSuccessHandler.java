@@ -1,10 +1,11 @@
 package com.letsintern.letsintern.global.config.oauth2;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.letsintern.letsintern.domain.user.dto.response.TokenResponse;
 import com.letsintern.letsintern.domain.user.oauth2.CookieAuthorizationRequestRepository;
 import com.letsintern.letsintern.global.common.util.CookieUtils;
 import com.letsintern.letsintern.global.config.jwt.TokenProvider;
-import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -27,6 +28,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private String redirectUri;
     private final TokenProvider tokenProvider;
     private final CookieAuthorizationRequestRepository cookieAuthorizationRequestRepository;
+    private final ObjectMapper objectMapper;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
@@ -54,9 +56,17 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                 tokenProvider.createOAuth2RefreshToken(authentication)
         );
 
+        String result = null;
+
+        try {
+            result = objectMapper.writeValueAsString(tokenResponse);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
         return UriComponentsBuilder.fromHttpUrl(targetUrl)
-                .queryParam("response", tokenResponse.toString())
-                .build().encode().toUriString();
+                .queryParam("result", result)
+                .build().toUriString();
     }
 
     protected void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {
