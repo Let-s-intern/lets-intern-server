@@ -57,8 +57,16 @@ public class TokenProvider implements InitializingBean {
         return createToken(id, ACCESS_KEY, accessTokenExpirationTime, authentication);
     }
 
+    public String createOAuth2AccessToken(Authentication authentication) {
+        return createToken(((PrincipalDetails) authentication.getPrincipal()).getId(), ACCESS_KEY, accessTokenExpirationTime, authentication);
+    }
+
     public String createRefreshToken(Long id, Authentication authentication) {
         return createToken(id, REFRESH_KEY, refreshTokenExpirationTime, authentication);
+    }
+
+    public String createOAuth2RefreshToken(Authentication authentication) {
+        return createToken(((PrincipalDetails) authentication.getPrincipal()).getId(), ACCESS_KEY, refreshTokenExpirationTime, authentication);
     }
 
     private String createToken(Long id, String type, int expirationTime, Authentication authentication) {

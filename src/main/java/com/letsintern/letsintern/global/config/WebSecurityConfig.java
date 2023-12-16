@@ -5,6 +5,10 @@ import com.letsintern.letsintern.global.config.jwt.JwtAccessDeniedHandler;
 import com.letsintern.letsintern.global.config.jwt.JwtAuthenticationEntryPoint;
 import com.letsintern.letsintern.global.config.jwt.JwtAuthenticationFilter;
 import com.letsintern.letsintern.global.config.jwt.JwtExceptionHandlerFilter;
+import com.letsintern.letsintern.domain.user.oauth2.CookieAuthorizationRequestRepository;
+import com.letsintern.letsintern.domain.user.oauth2.CustomOAuth2UserService;
+import com.letsintern.letsintern.global.config.oauth2.OAuth2AuthenticationFailureHandler;
+import com.letsintern.letsintern.global.config.oauth2.OAuth2AuthenticationSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
@@ -44,6 +48,10 @@ public class WebSecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final JwtExceptionHandlerFilter jwtExceptionHandlerFilter;
     private final AccessDeniedFilter accessDeniedFilter;
+    private final CookieAuthorizationRequestRepository cookieAuthorizationRequestRepository;
+    private final CustomOAuth2UserService customOAuth2UserService;
+    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+    private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
 
     private final String[] SwaggerPatterns = {
             "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html"
@@ -108,7 +116,20 @@ public class WebSecurityConfig {
                             .requestMatchers(HttpMethod.POST, AdminPostPatterns).hasAnyRole("ADMIN")
                             .requestMatchers(HttpMethod.PATCH, AdminPatchPatterns).hasAnyRole("ADMIN")
                             .requestMatchers(HttpMethod.DELETE, AdminDeletePatterns).hasAnyRole("ADMIN")
+                            .requestMatchers("/oauth2/**").permitAll()
                             .anyRequest().permitAll();
+                })
+                .oauth2Login(oauth2 -> {
+                    oauth2.authorizationEndpoint(auth -> auth.baseUri("/oauth2/authorize")
+                                    .authorizationRequestRepository(cookieAuthorizationRequestRepository))
+                            .redirectionEndpoint(redirect -> redirect.baseUri("/oauth2/callback/*"))
+                            .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
+                            .successHandler(oAuth2AuthenticationSuccessHandler)
+                            .failureHandler(oAuth2AuthenticationFailureHandler);
+                })
+                .logout(logout -> {
+                    logout.clearAuthentication(true)
+                            .deleteCookies("JSESSIONID");
                 })
                 .exceptionHandling(exceptionHandling -> {
                     exceptionHandling.accessDeniedHandler(jwtAccessDeniedHandler)
