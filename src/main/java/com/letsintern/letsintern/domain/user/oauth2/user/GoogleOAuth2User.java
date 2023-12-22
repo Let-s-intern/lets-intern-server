@@ -1,7 +1,5 @@
 package com.letsintern.letsintern.domain.user.oauth2.user;
 
-import com.letsintern.letsintern.domain.user.oauth2.OAuth2UserInfo;
-
 import java.util.Map;
 
 public class GoogleOAuth2User extends OAuth2UserInfo {
@@ -22,5 +20,10 @@ public class GoogleOAuth2User extends OAuth2UserInfo {
     @Override
     public String getName() {
         return (String) attributes.get("name");
+    }
+
+    @Override
+    public String getPhoneNum() {
+        return "010";
     }
 }

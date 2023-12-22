@@ -3,9 +3,7 @@ package com.letsintern.letsintern.domain.user.helper;
 import com.letsintern.letsintern.domain.user.domain.User;
 import com.letsintern.letsintern.domain.user.dto.request.UserSignInRequestDTO;
 import com.letsintern.letsintern.domain.user.dto.request.UserUpdateRequestDTO;
-import com.letsintern.letsintern.domain.user.dto.response.UserIdResponseDTO;
 import com.letsintern.letsintern.domain.user.exception.*;
-import com.letsintern.letsintern.domain.user.oauth2.OAuth2UserInfo;
 import com.letsintern.letsintern.domain.user.repository.UserRepository;
 import com.letsintern.letsintern.domain.user.util.RedisUtil;
 import com.letsintern.letsintern.domain.user.vo.AdminUserVo;
@@ -24,8 +22,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.letsintern.letsintern.domain.user.exception.UserErrorCode.MYPAGE_MISMATCH_PASSWORD;
 
 @Component
 @RequiredArgsConstructor

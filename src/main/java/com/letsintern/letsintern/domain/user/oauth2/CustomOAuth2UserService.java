@@ -2,6 +2,7 @@ package com.letsintern.letsintern.domain.user.oauth2;
 
 import com.letsintern.letsintern.domain.user.domain.User;
 import com.letsintern.letsintern.domain.user.exception.DuplicateUser;
+import com.letsintern.letsintern.domain.user.oauth2.user.OAuth2UserInfo;
 import com.letsintern.letsintern.domain.user.repository.UserRepository;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package com.letsintern.letsintern.domain.user.oauth2;
+package com.letsintern.letsintern.domain.user.oauth2.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,4 +14,5 @@ public abstract class OAuth2UserInfo {
     public abstract String getOAuth2Id();
     public abstract String getEmail();
     public abstract String getName();
+    public abstract String getPhoneNum();
 }

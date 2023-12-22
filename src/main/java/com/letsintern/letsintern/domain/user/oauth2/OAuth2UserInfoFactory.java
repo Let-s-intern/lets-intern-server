@@ -3,6 +3,7 @@ package com.letsintern.letsintern.domain.user.oauth2;
 import com.letsintern.letsintern.domain.user.oauth2.user.GoogleOAuth2User;
 import com.letsintern.letsintern.domain.user.oauth2.user.KakaoOAuth2User;
 import com.letsintern.letsintern.domain.user.oauth2.user.NaverOAuth2User;
+import com.letsintern.letsintern.domain.user.oauth2.user.OAuth2UserInfo;
 
 import java.util.Map;
 

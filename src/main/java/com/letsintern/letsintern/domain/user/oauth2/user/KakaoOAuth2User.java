@@ -1,7 +1,5 @@
 package com.letsintern.letsintern.domain.user.oauth2.user;
 
-import com.letsintern.letsintern.domain.user.oauth2.OAuth2UserInfo;
-
 import java.util.Map;
 
 public class KakaoOAuth2User extends OAuth2UserInfo {
@@ -25,6 +23,11 @@ public class KakaoOAuth2User extends OAuth2UserInfo {
 
     @Override
     public String getName() {
-        return (String) ((Map<String, Object>) attributes.get("profile")).get("nickname");
+        return (String) attributes.get("name");
+    }
+
+    @Override
+    public String getPhoneNum() {
+        return "0" + ((String) attributes.get("phone_number")).substring(4);
     }
 }
