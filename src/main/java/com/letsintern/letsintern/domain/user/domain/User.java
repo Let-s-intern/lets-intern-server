@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.letsintern.letsintern.domain.application.domain.Application;
 import com.letsintern.letsintern.domain.user.dto.request.UserSignUpRequestDTO;
 import com.letsintern.letsintern.domain.user.oauth2.AuthProvider;
-import com.letsintern.letsintern.domain.user.oauth2.OAuth2UserInfo;
+import com.letsintern.letsintern.domain.user.oauth2.user.OAuth2UserInfo;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -109,10 +109,9 @@ public class User {
         return User.builder()
                 .email(oAuth2UserInfo.getEmail())
                 .name(oAuth2UserInfo.getName())
-                .password("")
-                .phoneNum("010")
-                .authProvider(authProvider)
                 .password(oAuth2UserInfo.getOAuth2Id())
+                .phoneNum(oAuth2UserInfo.getPhoneNum())
+                .authProvider(authProvider)
                 .build();
     }
 
