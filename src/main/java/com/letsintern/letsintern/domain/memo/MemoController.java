@@ -8,6 +8,8 @@ import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,8 +38,10 @@ public class MemoController {
 
     @Operation(summary = "사용자 별 메모 목록 불러오기")
     @GetMapping("/{targetUserId}")
-    public MemoListResponse getMemoListOfUser(@PathVariable Long targetUserId) {
-        return memoService.getMemoListOfUser(targetUserId);
+    public MemoListResponse getMemoListOfUser(
+            @PathVariable Long targetUserId,
+            @PageableDefault(size = 20) Pageable pageable) {
+        return memoService.getMemoListOfUser(targetUserId, pageable);
     }
 
     @Operation(summary = "메모 삭제")

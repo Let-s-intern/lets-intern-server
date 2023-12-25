@@ -1,22 +1,26 @@
 package com.letsintern.letsintern.domain.memo.dto.response;
 
 import com.letsintern.letsintern.domain.memo.domain.Memo;
+import com.letsintern.letsintern.global.common.dto.PageInfo;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
 @Getter
 public class MemoListResponse {
 
-    List<Memo> memoList;
+    private List<Memo> memoList;
+    private PageInfo pageInfo;
 
     @Builder
-    private MemoListResponse(List<Memo> memoList) {
-        this.memoList = memoList;
+    private MemoListResponse(Page<Memo> memoList) {
+        if(memoList.hasContent()) this.memoList = memoList.getContent();
+        this.pageInfo = PageInfo.of(memoList);
     }
 
-    public static MemoListResponse from(List<Memo> memoList) {
+    public static MemoListResponse from(Page<Memo> memoList) {
         return MemoListResponse.builder()
                 .memoList(memoList)
                 .build();
