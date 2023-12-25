@@ -36,9 +36,11 @@ public class Application {
     private String wishJob;
 
     @NotNull
+    @Size(max = 700)
     private String applyMotive;
 
     @Nullable
+    @Size(max = 300)
     private String preQuestions;
 
     @NotNull

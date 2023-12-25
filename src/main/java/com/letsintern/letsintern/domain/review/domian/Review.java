@@ -5,6 +5,7 @@ import com.letsintern.letsintern.domain.review.dto.request.ReviewCreateDTO;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.text.SimpleDateFormat;
@@ -24,9 +25,11 @@ public class Review {
     Integer grade;
 
     @NotNull
+    @Size(max = 500)
     String reviewContents;
 
     @Nullable
+    @Size(max = 500)
     String suggestContents;
 
     @NotNull
