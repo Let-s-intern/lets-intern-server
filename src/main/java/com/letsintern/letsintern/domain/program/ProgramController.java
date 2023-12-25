@@ -58,8 +58,10 @@ public class ProgramController {
 
     @Operation(summary = "어드민 유저 1명의 프로그램 목록")
     @GetMapping("/admin/user/{userId}")
-    public UserProgramVoResponse getAdminUserProgramList(@PathVariable Long userId) {
-        return programService.getAdminUserProgramList(userId);
+    public UserProgramVoResponse getAdminUserProgramList(
+            @PathVariable Long userId,
+            @PageableDefault(size = 20) Pageable pageable) {
+        return programService.getAdminUserProgramList(userId, pageable);
     }
 
     @Operation(summary = "어드민 프로그램 1개 상세 보기")

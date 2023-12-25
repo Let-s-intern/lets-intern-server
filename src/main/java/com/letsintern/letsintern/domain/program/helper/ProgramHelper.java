@@ -21,6 +21,7 @@ import com.letsintern.letsintern.domain.review.repository.ReviewRepository;
 import com.letsintern.letsintern.domain.review.vo.ReviewVo;
 import com.letsintern.letsintern.global.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
@@ -100,7 +101,7 @@ public class ProgramHelper {
     }
 
     public ProgramListDTO getProgramThumbnailList(String type, Pageable pageable) {
-        List<ProgramThumbnailVo> programList;
+        Page<ProgramThumbnailVo> programList;
         if(type != null) programList = programRepository.findProgramThumbnailsByType(type, pageable);
         else programList = programRepository.findProgramThumbnails(pageable);
 
@@ -141,10 +142,8 @@ public class ProgramHelper {
         return AdminProgramListDTO.from(programRepository.findAllAdmin(pageable));
     }
 
-    public List<UserProgramVo> getAdminUserProgramList(Long userId) {
-        return applicationRepository.findAllProgramByUserId(userId).stream()
-                .map(UserProgramVo::from)
-                .collect(Collectors.toList());
+    public Page<UserProgramVo> getAdminUserProgramList(Long userId, Pageable pageable) {
+        return applicationRepository.findAllProgramByUserId(userId, pageable);
     }
 
     public Program getExistingProgram(Long programId) {

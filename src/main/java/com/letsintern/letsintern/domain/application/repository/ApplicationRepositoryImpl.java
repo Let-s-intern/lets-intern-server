@@ -4,6 +4,7 @@ import com.letsintern.letsintern.domain.application.domain.*;
 import com.letsintern.letsintern.domain.application.vo.ApplicationAdminVo;
 import com.letsintern.letsintern.domain.application.vo.ApplicationVo;
 import com.letsintern.letsintern.domain.program.domain.Program;
+import com.letsintern.letsintern.domain.program.vo.UserProgramVo;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -124,15 +125,29 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
     }
 
     @Override
-    public List<Program> findAllProgramByUserId(Long userId) {
+    public Page<UserProgramVo> findAllProgramByUserId(Long userId, Pageable pageable) {
         QApplication qApplication = QApplication.application;
+        List<UserProgramVo> userProgramVos;
+        JPAQuery<Long> count;
 
-        return jpaQueryFactory
-                .select(qApplication.program)
+        userProgramVos = jpaQueryFactory
+                .select(Projections.constructor(UserProgramVo.class,
+                        qApplication.program.id,
+                        qApplication.program.type,
+                        qApplication.program.th,
+                        qApplication.program.title))
                 .from(qApplication)
                 .where(qApplication.user.id.eq(userId), qApplication.isApproved.eq(true))
                 .orderBy(qApplication.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
+
+        count = jpaQueryFactory.select(qApplication.count())
+                .from(qApplication)
+                .where(qApplication.user.id.eq(userId), qApplication.isApproved.eq(true));
+
+        return PageableExecutionUtils.getPage(userProgramVos, pageable, count::fetchOne);
     }
 
     @Override

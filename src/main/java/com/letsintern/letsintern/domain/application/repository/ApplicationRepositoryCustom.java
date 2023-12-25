@@ -4,6 +4,7 @@ import com.letsintern.letsintern.domain.application.domain.Application;
 import com.letsintern.letsintern.domain.application.vo.ApplicationAdminVo;
 import com.letsintern.letsintern.domain.application.vo.ApplicationVo;
 import com.letsintern.letsintern.domain.program.domain.Program;
+import com.letsintern.letsintern.domain.program.vo.UserProgramVo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -19,7 +20,7 @@ public interface ApplicationRepositoryCustom {
 
     Page<Application> findAllByUserIdAdmin(Long userId, Pageable pageable);
 
-    List<Program> findAllProgramByUserId(Long userId);
+    Page<UserProgramVo> findAllProgramByUserId(Long userId, Pageable pageable);
 
     Application findByProgramIdAndUserId(Long programId, Long userId);
     Application findByProgramIdAndGuestEmail(Long programId, String email);

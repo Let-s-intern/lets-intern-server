@@ -46,8 +46,8 @@ public class ProgramService {
         return programHelper.getAdminProgramList(type, th, pageable);
     }
 
-    public UserProgramVoResponse getAdminUserProgramList(Long userId) {
-        return programMapper.toUserProgramVoResponse(programHelper.getAdminUserProgramList(userId));
+    public UserProgramVoResponse getAdminUserProgramList(Long userId, Pageable pageable) {
+        return programMapper.toUserProgramVoResponse(programHelper.getAdminUserProgramList(userId, pageable));
     }
 
     public ProgramDetailDTO getProgramDetailDTO(Long programId, PrincipalDetails principalDetails) {
