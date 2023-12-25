@@ -42,7 +42,7 @@ public class ApplicationController {
     @Operation(summary = "마이페이지 나의 지원서 목록")
     @GetMapping("")
     public UserApplicationListResponse getMyPageApplicationList(
-            @PageableDefault(size = 2000) Pageable pageable,
+            @PageableDefault(size = 1000) Pageable pageable,
             @AuthenticationPrincipal PrincipalDetails principalDetails) {
         final User user = principalDetails.getUser();
         return applicationService.getApplicationListOfUser(user.getId(), pageable);
@@ -60,7 +60,7 @@ public class ApplicationController {
     public AdminApplicationListResponse getApplicationListOfProgram(
             @PathVariable Long programId,
             @RequestParam(required = false) Boolean isApproved,
-            @PageableDefault(size = 1500) Pageable pageable) {
+            @PageableDefault(size = 1000) Pageable pageable) {
 
         if(isApproved != null) return applicationService.getApplicationListOfProgramAndApproved(programId, isApproved, pageable);
         return applicationService.getApplicationListOfProgram(programId, pageable);
@@ -68,13 +68,17 @@ public class ApplicationController {
 
     @Operation(summary = "어드민 사용자 1명의 지원서 전체 목록")
     @GetMapping("/admin/user/{userId}")
-    public ApplicationListResponse getAdminApplicationListOfUserId(@PathVariable Long userId) {
-        return applicationService.getAdminApplicationListOfUserId(userId);
+    public ApplicationListResponse getAdminApplicationListOfUserId(
+            @PathVariable Long userId,
+            @PageableDefault(size = 1000) Pageable pageable) {
+        return applicationService.getAdminApplicationListOfUserId(userId, pageable);
     }
 
     @Operation(summary = "어드민 지원서 상태 변경")
     @PatchMapping("/{applicationId}")
-    public ApplicationIdResponse updateApplicationStatus(@PathVariable Long applicationId, @RequestBody ApplicationUpdateDTO applicationUpdateDTO) {
+    public ApplicationIdResponse updateApplicationStatus(
+            @PathVariable Long applicationId,
+            @RequestBody ApplicationUpdateDTO applicationUpdateDTO) {
         return applicationService.updateApplication(applicationId, applicationUpdateDTO);
     }
 

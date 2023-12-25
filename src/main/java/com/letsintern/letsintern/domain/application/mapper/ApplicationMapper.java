@@ -11,6 +11,7 @@ import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
 import com.letsintern.letsintern.domain.user.domain.User;
 import com.letsintern.letsintern.global.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -37,15 +38,15 @@ public class ApplicationMapper {
         return ApplicationCreateResponse.from(application.getId(), application.getProgram().getAnnouncementDate());
     }
 
-    public AdminApplicationListResponse toAdminApplicationListResponse(List<ApplicationAdminVo> applicationList) {
+    public AdminApplicationListResponse toAdminApplicationListResponse(Page<ApplicationAdminVo> applicationList) {
         return AdminApplicationListResponse.from(applicationList);
     }
 
-    public ApplicationListResponse toApplicationListResponse(List<Application> applicationList) {
+    public ApplicationListResponse toApplicationListResponse(Page<Application> applicationList) {
         return ApplicationListResponse.from(applicationList);
     }
 
-    public UserApplicationListResponse toUserApplicationListResponse(List<ApplicationVo> userApplicationList) {
+    public UserApplicationListResponse toUserApplicationListResponse(Page<ApplicationVo> userApplicationList) {
         return UserApplicationListResponse.from(userApplicationList);
     }
 

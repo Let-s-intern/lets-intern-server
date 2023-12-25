@@ -2,6 +2,7 @@ package com.letsintern.letsintern.global.common.dto;
 
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.data.domain.Page;
 
 @Getter
 public class PageInfo {
@@ -13,18 +14,18 @@ public class PageInfo {
 
     @Builder
     private PageInfo(int pageNum, int pageSize, long totalElements, long totalPages) {
-        this.pageNum = pageNum;
+        this.pageNum = pageNum + 1;
         this.pageSize = pageSize;
         this.totalElements = totalElements;
         this.totalPages = totalPages;
     }
 
-    public static PageInfo of(int pageNum, int pageSize, long totalElements, long totalPages) {
+    public static PageInfo of(Page<?> page) {
         return PageInfo.builder()
-                .pageNum(pageNum)
-                .pageSize(pageSize)
-                .totalElements(totalElements)
-                .totalPages(totalPages)
+                .pageNum(page.getNumber())
+                .pageSize(page.getSize())
+                .totalElements(page.getTotalElements())
+                .totalPages(page.getTotalPages())
                 .build();
     }
 }
