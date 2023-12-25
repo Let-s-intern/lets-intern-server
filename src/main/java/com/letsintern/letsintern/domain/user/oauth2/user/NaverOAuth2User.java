@@ -24,6 +24,6 @@ public class NaverOAuth2User extends OAuth2UserInfo {
 
     @Override
     public String getPhoneNum() {
-        return "010";
+        return (String) attributes.get("mobile");
     }
 }
