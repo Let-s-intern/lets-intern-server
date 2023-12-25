@@ -3,7 +3,6 @@ package com.letsintern.letsintern.domain.application.repository;
 import com.letsintern.letsintern.domain.application.domain.*;
 import com.letsintern.letsintern.domain.application.vo.ApplicationAdminVo;
 import com.letsintern.letsintern.domain.application.vo.ApplicationVo;
-import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.program.vo.UserProgramVo;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;

@@ -5,9 +5,12 @@ import com.letsintern.letsintern.domain.user.domain.UserRole;
 import com.letsintern.letsintern.domain.user.vo.AdminMangerVo;
 import com.letsintern.letsintern.domain.user.vo.AdminUserVo;
 import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -18,10 +21,12 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
     @Override
-    public List<AdminUserVo> findAllAdminUserVo(Pageable pageable) {
+    public Page<AdminUserVo> findAllAdminUserVo(Pageable pageable) {
         QUser qUser = QUser.user;
+        List<AdminUserVo> adminUserVos;
+        JPAQuery<Long> count;
 
-        return jpaQueryFactory
+        adminUserVos = jpaQueryFactory
                 .select(Projections.constructor(AdminUserVo.class,
                         qUser.id,
                         qUser.name,
@@ -36,60 +41,11 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
-    }
 
-    @Override
-    public List<AdminUserVo> findAdminUserVoByName(String name) {
-        QUser qUser = QUser.user;
+        count = jpaQueryFactory.select(qUser.count())
+                .from(qUser);
 
-        return jpaQueryFactory
-                .select(Projections.constructor(AdminUserVo.class,
-                        qUser.id,
-                        qUser.name,
-                        qUser.email,
-                        qUser.phoneNum,
-                        qUser.university,
-                        qUser.major,
-                        qUser.signedUpAt))
-                .from(qUser)
-                .where(qUser.name.eq(name))
-                .fetch();
-    }
-
-    @Override
-    public List<AdminUserVo> findAdminUserVoByEmail(String email) {
-        QUser qUser = QUser.user;
-
-        return jpaQueryFactory
-                .select(Projections.constructor(AdminUserVo.class,
-                        qUser.id,
-                        qUser.name,
-                        qUser.email,
-                        qUser.phoneNum,
-                        qUser.university,
-                        qUser.major,
-                        qUser.signedUpAt))
-                .from(qUser)
-                .where(qUser.email.eq(email))
-                .fetch();
-    }
-
-    @Override
-    public List<AdminUserVo> findAdminUserVoByPhoneNum(String phoneNum) {
-        QUser qUser = QUser.user;
-
-        return jpaQueryFactory
-                .select(Projections.constructor(AdminUserVo.class,
-                        qUser.id,
-                        qUser.name,
-                        qUser.email,
-                        qUser.phoneNum,
-                        qUser.university,
-                        qUser.major,
-                        qUser.signedUpAt))
-                .from(qUser)
-                .where(qUser.phoneNum.eq(phoneNum))
-                .fetch();
+        return PageableExecutionUtils.getPage(adminUserVos, pageable, count::fetchOne);
     }
 
     @Override

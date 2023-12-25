@@ -11,6 +11,7 @@ import com.letsintern.letsintern.domain.user.vo.UserVo;
 import com.letsintern.letsintern.global.config.user.PrincipalDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -173,21 +174,8 @@ public class UserHelper {
         user.setPassword(encodePassword(newPassword));
     }
 
-    public List<AdminUserVo> getAdminUserTotalList(Pageable pageable) {
+    public Page<AdminUserVo> getAdminUserTotalList(Pageable pageable) {
         return userRepository.findAllAdminUserVo(pageable);
-    }
-
-    public List<AdminUserVo> getAdminUserList(String type, String keyword) {
-        switch (type) {
-            case "name":
-                return userRepository.findAdminUserVoByName(keyword);
-            case "email":
-                return userRepository.findAdminUserVoByEmail(keyword);
-            case "phoneNum":
-                return userRepository.findAdminUserVoByPhoneNum(keyword);
-            default:
-                return new ArrayList<>();
-        }
     }
 
     public Long setUserManager(Long userId, Long managerId) {
