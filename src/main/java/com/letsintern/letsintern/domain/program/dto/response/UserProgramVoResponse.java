@@ -6,12 +6,13 @@ import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.domain.Page;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 public class UserProgramVoResponse {
 
-    private List<UserProgramVo> userProgramList;
+    private List<UserProgramVo> userProgramList = new ArrayList<>();
     private PageInfo pageInfo;
 
     @Builder

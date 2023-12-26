@@ -7,13 +7,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @NoArgsConstructor
 public class AdminUserListResponseDTO {
 
-    private List<AdminUserVo> userList;
+    private List<AdminUserVo> userList = new ArrayList<>();
     private PageInfo pageInfo;
 
     @Builder
