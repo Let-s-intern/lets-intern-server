@@ -7,13 +7,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @NoArgsConstructor
 public class UserApplicationListResponse {
 
-    private List<ApplicationVo> userApplicationList;
+    private List<ApplicationVo> userApplicationList = new ArrayList<>();
     private PageInfo pageInfo;
 
     @Builder

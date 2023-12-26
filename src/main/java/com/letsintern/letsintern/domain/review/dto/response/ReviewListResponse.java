@@ -6,12 +6,13 @@ import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.domain.Page;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 public class ReviewListResponse {
 
-    private List<Review> reviewList;
+    private List<Review> reviewList = new ArrayList<>();
     private PageInfo pageInfo;
 
     @Builder
