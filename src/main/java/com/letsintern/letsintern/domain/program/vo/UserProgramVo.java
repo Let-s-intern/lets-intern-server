@@ -14,7 +14,7 @@ public class UserProgramVo {
     private String title;
 
     @Builder
-    private UserProgramVo(Long id, ProgramType type, Integer th, String title) {
+    public UserProgramVo(Long id, ProgramType type, Integer th, String title) {
         this.id = id;
         this.type = type;
         this.th = th;

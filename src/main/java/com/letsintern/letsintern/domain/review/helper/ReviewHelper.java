@@ -16,6 +16,7 @@ import com.letsintern.letsintern.domain.review.repository.ReviewRepository;
 import com.letsintern.letsintern.domain.review.vo.ReviewDetailVo;
 import com.letsintern.letsintern.domain.review.vo.ReviewVo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
@@ -61,7 +62,7 @@ public class ReviewHelper {
         return reviewId;
     }
 
-    public List<Review> getReviewListOfProgram(Long programId, Pageable pageable) {
+    public Page<Review> getReviewListOfProgram(Long programId, Pageable pageable) {
         return reviewRepository.findAllByProgramId(programId, pageable);
     }
 

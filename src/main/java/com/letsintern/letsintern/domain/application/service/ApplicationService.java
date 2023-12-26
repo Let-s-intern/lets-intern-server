@@ -48,7 +48,8 @@ public class ApplicationService {
 
     public AdminApplicationListResponse getApplicationListOfProgramAndApproved(Long programId, Boolean approved, Pageable pageable) {
         return applicationMapper.toAdminApplicationListResponse(
-                applicationHelper.getApplicationListOfProgramIdAndApproved(programId, approved, pageable)
+                //applicationHelper.getApplicationListOfProgramIdAndApproved(programId, approved, pageable)
+                null
         );
     }
 
@@ -56,8 +57,8 @@ public class ApplicationService {
         return applicationMapper.toUserApplicationListResponse(applicationHelper.getApplicationListOfUserId(userId, pageable));
     }
 
-    public ApplicationListResponse getAdminApplicationListOfUserId(Long userId) {
-        return applicationMapper.toApplicationListResponse(applicationHelper.getAdminApplicationListOfUserId(userId));
+    public ApplicationListResponse getAdminApplicationListOfUserId(Long userId, Pageable pageable) {
+        return applicationMapper.toApplicationListResponse(applicationHelper.getAdminApplicationListOfUserId(userId, pageable));
     }
 
     @Transactional

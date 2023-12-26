@@ -8,6 +8,7 @@ import com.letsintern.letsintern.domain.memo.mapper.MemoMapper;
 import com.letsintern.letsintern.domain.memo.repository.MemoRepository;
 import com.letsintern.letsintern.domain.user.domain.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -29,8 +30,8 @@ public class MemoHelper {
         return memo.getId();
     }
 
-    public MemoListResponse getMemoListOfUser(Long targetUserId) {
-        return MemoListResponse.from(memoRepository.findALlByTargetUserId(targetUserId));
+    public MemoListResponse getMemoListOfUser(Long targetUserId, Pageable pageable) {
+        return MemoListResponse.from(memoRepository.findALlByTargetUserId(targetUserId, pageable));
     }
 
     public void deleteMemo(Long memoId) {

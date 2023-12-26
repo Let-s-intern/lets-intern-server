@@ -16,6 +16,7 @@ import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
 import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
 import com.letsintern.letsintern.domain.user.domain.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -77,26 +78,24 @@ public class ApplicationHelper {
     }
 
     /* 프로그램 1개의 전체 지원서 목록 */
-    public List<ApplicationAdminVo> getApplicationListOfProgramId(Long programId, Pageable pageable) {
+    public Page<ApplicationAdminVo> getApplicationListOfProgramId(Long programId, Pageable pageable) {
         PageRequest pageRequest = makePageRequest(pageable);
         return applicationRepository.findAllByProgramId(programId, pageRequest);
     }
 
     /* 프로그램 1개의 승인된 지원서 목록 */
-    public List<ApplicationAdminVo> getApplicationListOfProgramIdAndApproved(Long programId, Boolean isApproved, Pageable pageable) {
-        PageRequest pageRequest = makePageRequest(pageable);
-        return applicationRepository.findAllByProgramIdAndIsApproved(programId, isApproved, pageRequest);
+    public Page<ApplicationAdminVo> getApplicationListOfProgramIdAndApproved(Long programId, Boolean isApproved, Pageable pageable) {
+        return applicationRepository.findAllByProgramIdAndIsApproved(programId, isApproved, pageable);
     }
 
     /* 마이페이지 - 사용자 1명의 지원서 목록 */
-    public List<ApplicationVo> getApplicationListOfUserId(Long userId, Pageable pageable) {
-        PageRequest pageRequest = makePageRequest(pageable);
-        return applicationRepository.findAllByUserId(userId, pageRequest);
+    public Page<ApplicationVo> getApplicationListOfUserId(Long userId, Pageable pageable) {
+        return applicationRepository.findAllByUserId(userId, pageable);
     }
 
     /* 어드민 - 사용자 1명의 지원서 목록 */
-    public List<Application> getAdminApplicationListOfUserId(Long userId) {
-        return applicationRepository.findAllByUserId(userId);
+    public Page<Application> getAdminApplicationListOfUserId(Long userId, Pageable pageable) {
+        return applicationRepository.findAllByUserIdAdmin(userId, pageable);
     }
 
     /* 지원서 1개 업데이트 */

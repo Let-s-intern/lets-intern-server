@@ -128,10 +128,6 @@ public class UserService {
         return userMapper.toUserTotalListResponseDTO(userHelper.getAdminUserTotalList(pageable));
     }
 
-    public AdminUserListResponseDTO getAdminUserList(String type, String keyword) {
-        return userMapper.toUserTotalListResponseDTO(userHelper.getAdminUserList(type, keyword));
-    }
-
     public AdminManagerListResponse getAdminManagerList() {
         return AdminManagerListResponse.from(userRepository.findManagerList());
     }

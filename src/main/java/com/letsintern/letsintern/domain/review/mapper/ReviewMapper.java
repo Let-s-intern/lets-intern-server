@@ -8,6 +8,7 @@ import com.letsintern.letsintern.domain.review.dto.response.ReviewIdResponse;
 import com.letsintern.letsintern.domain.review.dto.response.ReviewListResponse;
 import com.letsintern.letsintern.domain.review.vo.ReviewDetailVo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -24,7 +25,7 @@ public class ReviewMapper {
         return ReviewIdResponse.of(reviewId);
     }
 
-    public ReviewListResponse toReviewListResponseDTO(List<Review> reviewList) {
+    public ReviewListResponse toReviewListResponseDTO(Page<Review> reviewList) {
         return ReviewListResponse.from(reviewList);
     }
 

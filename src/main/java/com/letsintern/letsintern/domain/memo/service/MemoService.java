@@ -10,6 +10,7 @@ import com.letsintern.letsintern.domain.user.exception.UserNotFound;
 import com.letsintern.letsintern.domain.user.repository.UserRepository;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,8 +32,8 @@ public class MemoService {
         return memoMapper.toMemoIdResponse(memoHelper.updateMemo(memoId, memoDTO));
     }
 
-    public MemoListResponse getMemoListOfUser(Long targetUserId) {
-        return memoHelper.getMemoListOfUser(targetUserId);
+    public MemoListResponse getMemoListOfUser(Long targetUserId, Pageable pageable) {
+        return memoHelper.getMemoListOfUser(targetUserId, pageable);
     }
 
     @Transactional

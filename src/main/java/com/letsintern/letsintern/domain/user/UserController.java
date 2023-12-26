@@ -116,12 +116,6 @@ public class UserController {
         userService.deleteAdminUser(userId);
     }
 
-    @Operation(summary = "어드민 사용자 검색 (name, email, phoneNum)")
-    @GetMapping("/admin/search")
-    public AdminUserListResponseDTO getAdminUserList(@RequestParam String type, @RequestParam String keyword) {
-        return userService.getAdminUserList(type, keyword);
-    }
-
     @Operation(summary = "어드민 매니저 목록")
     @GetMapping("/admin/manager")
     public AdminManagerListResponse getAdminManagerList() {

@@ -17,6 +17,12 @@ spring:
   datasource:
     - secret
 
+  data:
+    web:
+      pageable:
+        default-page-size: 10
+        one-indexed-parameters: true
+
 springdoc:
   version: 0.0.1
   default-consumes-media-type: application/json

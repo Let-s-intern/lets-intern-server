@@ -7,6 +7,7 @@ import com.letsintern.letsintern.domain.user.dto.response.UserIdResponseDTO;
 import com.letsintern.letsintern.domain.user.dto.response.UserInfoResponseDTO;
 import com.letsintern.letsintern.domain.user.dto.response.AdminUserListResponseDTO;
 import com.letsintern.letsintern.domain.user.vo.AdminUserVo;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -30,7 +31,7 @@ public class UserMapper {
         return UserInfoResponseDTO.from(user);
     }
 
-    public AdminUserListResponseDTO toUserTotalListResponseDTO(List<AdminUserVo> userList) {
+    public AdminUserListResponseDTO toUserTotalListResponseDTO(Page<AdminUserVo> userList) {
         return AdminUserListResponseDTO.from(userList);
     }
 }
