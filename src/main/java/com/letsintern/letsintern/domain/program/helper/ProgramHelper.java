@@ -5,6 +5,7 @@ import com.letsintern.letsintern.domain.application.repository.ApplicationReposi
 import com.letsintern.letsintern.domain.faq.repository.FaqRepository;
 import com.letsintern.letsintern.domain.faq.vo.FaqVo;
 import com.letsintern.letsintern.domain.program.domain.Program;
+import com.letsintern.letsintern.domain.program.domain.ProgramStatus;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramUpdateRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.response.AdminProgramListDTO;
@@ -25,6 +26,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -64,6 +66,10 @@ public class ProgramHelper {
             program.setHeadcount(programUpdateRequestDTO.getHeadcount());
         }
         if(programUpdateRequestDTO.getDueDate() != null) {
+            if(programUpdateRequestDTO.getDueDate().isAfter(LocalDateTime.now()))
+                program.setStatus(ProgramStatus.OPEN);
+            else
+                program.setStatus(ProgramStatus.CLOSED);
             program.setDueDate(programUpdateRequestDTO.getDueDate());
         }
         if(programUpdateRequestDTO.getAnnouncementDate() != null) {
