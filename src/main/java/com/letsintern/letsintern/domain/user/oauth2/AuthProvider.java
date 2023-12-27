@@ -4,7 +4,12 @@ import lombok.Getter;
 
 @Getter
 public enum AuthProvider {
-    GOOGLE,
-    KAKAO,
-    NAVER;
+    KAKAO("카카오"),
+    NAVER("네이버");
+
+    private final String value;
+
+    AuthProvider(String value) {
+        this.value = value;
+    }
 }
