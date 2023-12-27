@@ -6,9 +6,8 @@ import com.letsintern.letsintern.domain.review.domian.Review;
 import com.letsintern.letsintern.global.common.util.StringUtils;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Getter
 public class ReviewDetailVo {
@@ -30,7 +29,7 @@ public class ReviewDetailVo {
 
     @Builder
     public ReviewDetailVo(Long id, String username, Integer grade, String reviewContents, String createdAt,
-                          ProgramType programType, String programTitle, Date startDate, Date endDate) {
+                          ProgramType programType, String programTitle, LocalDateTime startDate, LocalDateTime endDate) {
         this.id = id;
         this.username = username;
         this.grade = grade;

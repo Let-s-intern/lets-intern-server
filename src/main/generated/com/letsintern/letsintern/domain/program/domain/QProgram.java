@@ -20,7 +20,7 @@ public class QProgram extends EntityPathBase<Program> {
 
     public static final QProgram program = new QProgram("program");
 
-    public final DateTimePath<java.util.Date> announcementDate = createDateTime("announcementDate", java.util.Date.class);
+    public final DateTimePath<java.time.LocalDateTime> announcementDate = createDateTime("announcementDate", java.time.LocalDateTime.class);
 
     public final NumberPath<Integer> applicationCount = createNumber("applicationCount", Integer.class);
 
@@ -28,9 +28,9 @@ public class QProgram extends EntityPathBase<Program> {
 
     public final StringPath contents = createString("contents");
 
-    public final DateTimePath<java.util.Date> dueDate = createDateTime("dueDate", java.util.Date.class);
+    public final DateTimePath<java.time.LocalDateTime> dueDate = createDateTime("dueDate", java.time.LocalDateTime.class);
 
-    public final DateTimePath<java.util.Date> endDate = createDateTime("endDate", java.util.Date.class);
+    public final DateTimePath<java.time.LocalDateTime> endDate = createDateTime("endDate", java.time.LocalDateTime.class);
 
     public final StringPath faqListStr = createString("faqListStr");
 
@@ -44,7 +44,7 @@ public class QProgram extends EntityPathBase<Program> {
 
     public final StringPath notice = createString("notice");
 
-    public final DateTimePath<java.util.Date> startDate = createDateTime("startDate", java.util.Date.class);
+    public final DateTimePath<java.time.LocalDateTime> startDate = createDateTime("startDate", java.time.LocalDateTime.class);
 
     public final EnumPath<ProgramStatus> status = createEnum("status", ProgramStatus.class);
 

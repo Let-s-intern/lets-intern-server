@@ -1,6 +1,7 @@
 package com.letsintern.letsintern.global.common.util;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -28,7 +29,7 @@ public class StringUtils {
 
     public static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy년 MM월 dd일 HH:mm");
 
-    public static String dateToString(Date date) {
+    public static String dateToString(LocalDateTime date) {
         return SIMPLE_DATE_FORMAT.format(date);
     }
 }

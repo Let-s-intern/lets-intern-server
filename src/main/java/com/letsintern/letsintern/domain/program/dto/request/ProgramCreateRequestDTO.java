@@ -5,6 +5,7 @@ import com.letsintern.letsintern.domain.program.domain.ProgramWay;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -20,13 +21,13 @@ public class ProgramCreateRequestDTO {
 
     private Integer headcount;
 
-    private Date dueDate;
+    private LocalDateTime dueDate;
 
-    private Date announcementDate;
+    private LocalDateTime announcementDate;
 
-    private Date startDate;
+    private LocalDateTime startDate;
 
-    private Date endDate;
+    private LocalDateTime endDate;
 
     private String contents;
 

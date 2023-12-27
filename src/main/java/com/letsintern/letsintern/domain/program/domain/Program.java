@@ -9,6 +9,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -42,16 +43,16 @@ public class Program {
     private Integer applicationCount = 0;
 
     @NotNull
-    private Date dueDate;
+    private LocalDateTime dueDate;
 
     @NotNull
-    private Date announcementDate;
+    private LocalDateTime announcementDate;
 
     @NotNull
-    private Date startDate;
+    private LocalDateTime startDate;
 
     @NotNull
-    private Date endDate;
+    private LocalDateTime endDate;
 
     @NotNull
     @Column(length = 300)
@@ -84,7 +85,7 @@ public class Program {
 
     @Builder
     private Program(ProgramType type, Integer th, String title, Integer headcount,
-                    Date dueDate, Date announcementDate, Date startDate, Date endDate,
+                    LocalDateTime dueDate, LocalDateTime announcementDate, LocalDateTime startDate, LocalDateTime endDate,
                     String contents, ProgramWay way, String location, String notice,
                     List<Integer> faqIdList) {
         this.type = type;

@@ -8,6 +8,7 @@ import jakarta.persistence.Enumerated;
 import lombok.Getter;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -24,13 +25,11 @@ public class ProgramThumbnailVo {
 
     private String title;
 
-    private Date dueDate;
+    private LocalDateTime dueDate;
 
-    private Date startDate;
+    private LocalDateTime startDate;
 
-    public ProgramThumbnailVo(Long id, ProgramStatus status, ProgramType type, Integer th, String title, Date dueDate, Date startDate) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy년 MM월 dd일 HH:mm");
-
+    public ProgramThumbnailVo(Long id, ProgramStatus status, ProgramType type, Integer th, String title, LocalDateTime dueDate, LocalDateTime startDate) {
         this.id = id;
         this.status = status;
         this.type = type;

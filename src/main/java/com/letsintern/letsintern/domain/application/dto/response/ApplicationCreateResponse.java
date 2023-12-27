@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -11,15 +12,15 @@ import java.util.Date;
 public class ApplicationCreateResponse {
 
     private Long applicationId;
-    private Date announcementDate;
+    private LocalDateTime announcementDate;
 
     @Builder
-    private ApplicationCreateResponse(Long applicationId, Date announcementDate) {
+    private ApplicationCreateResponse(Long applicationId, LocalDateTime announcementDate) {
         this.applicationId = applicationId;
         this.announcementDate = announcementDate;
     }
 
-    public static ApplicationCreateResponse from(Long applicationId, Date announcementDate) {
+    public static ApplicationCreateResponse from(Long applicationId, LocalDateTime announcementDate) {
         return ApplicationCreateResponse.builder()
                 .applicationId(applicationId)
                 .announcementDate(announcementDate)

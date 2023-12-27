@@ -5,7 +5,7 @@ import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import com.letsintern.letsintern.domain.program.domain.ProgramWay;
 import lombok.Getter;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -19,13 +19,13 @@ public class ProgramUpdateRequestDTO {
 
     private Integer headcount;
 
-    private Date dueDate;
+    private LocalDateTime dueDate;
 
-    private Date announcementDate;
+    private LocalDateTime announcementDate;
 
-    private Date startDate;
+    private LocalDateTime startDate;
 
-    private Date endDate;
+    private LocalDateTime endDate;
 
     private String contents;
 
