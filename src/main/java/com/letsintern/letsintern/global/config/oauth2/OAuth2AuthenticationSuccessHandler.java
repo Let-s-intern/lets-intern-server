@@ -3,9 +3,11 @@ package com.letsintern.letsintern.global.config.oauth2;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.letsintern.letsintern.domain.user.dto.response.TokenResponse;
+import com.letsintern.letsintern.domain.user.exception.Oauth2DuplicateUser;
 import com.letsintern.letsintern.domain.user.oauth2.CookieAuthorizationRequestRepository;
 import com.letsintern.letsintern.global.common.util.CookieUtils;
 import com.letsintern.letsintern.global.config.jwt.TokenProvider;
+import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -32,7 +34,12 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
-        String targetUrl = determineTargetUrl(request, response, authentication);
+        String targetUrl;
+        if(((PrincipalDetails) authentication.getPrincipal()).isDifferentProvider())
+            targetUrl = determineTargetUrlException(request, response, authentication);
+        else
+            targetUrl = determineTargetUrl(request, response, authentication);
+
         if(response.isCommitted()) {
             logger.debug("Response has already been committed");
             return;
@@ -42,7 +49,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 
-    protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+    protected String getRedirectUri(HttpServletRequest request, HttpServletResponse response) {
         Optional<String> redirectUri = CookieUtils.getCookie(request, CookieAuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME)
                 .map(Cookie::getValue);
 
@@ -50,7 +57,11 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             throw new RuntimeException("Redirect URIs are not matched");
         }
 
-        String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
+        return redirectUri.orElse(getDefaultTargetUrl());
+    }
+    protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+        String targetUrl = getRedirectUri(request, response);
+
         TokenResponse tokenResponse = TokenResponse.of(
                 tokenProvider.createOAuth2AccessToken(authentication),
                 tokenProvider.createOAuth2RefreshToken(authentication)
@@ -66,6 +77,21 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         return UriComponentsBuilder.fromHttpUrl(targetUrl)
                 .queryParam("result", result)
+                .build().toUriString();
+    }
+
+    protected String determineTargetUrlException(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+        String targetUrl = getRedirectUri(request, response);
+        String error = null;
+
+        try {
+            error = objectMapper.writeValueAsString(Oauth2DuplicateUser.EXCEPTION.getErrorReason());
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
+        return UriComponentsBuilder.fromHttpUrl(targetUrl)
+                .queryParam("error", error)
                 .build().toUriString();
     }
 

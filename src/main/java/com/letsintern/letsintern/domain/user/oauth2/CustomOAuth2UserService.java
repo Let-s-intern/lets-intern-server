@@ -38,13 +38,22 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
 
         User user = userRepository.findByEmail(oAuth2UserInfo.getEmail()).orElse(null);
+
+        // 이미 회원 가입된 이메일
         if(user != null) {
-            if(!user.getAuthProvider().equals(authProvider)) {
-                throw DuplicateUser.EXCEPTION;
+            if(!user.getAuthProvider().equals(authProvider)) {  // 다른 provider에서 시도
+                PrincipalDetails principalDetails = new PrincipalDetails(user);
+                principalDetails.setDifferentProvider(true);
+                return principalDetails;
             }
-            user = updateUser(user, oAuth2UserInfo);            // 이미 회원 가입된 이메일
-        } else {
-            user = registerUser(oAuth2UserInfo, authProvider);  // 신규 가입
+            else {  // 동일 provider에서 시도
+                user = updateUser(user, oAuth2UserInfo);
+            }
+        }
+
+        // 신규 가입
+        else {
+            user = registerUser(oAuth2UserInfo, authProvider);
         }
 
         return new PrincipalDetails(user);
