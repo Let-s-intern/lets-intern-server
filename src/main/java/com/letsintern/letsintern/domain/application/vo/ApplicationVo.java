@@ -5,6 +5,8 @@ import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 @Getter
 public class ApplicationVo {
 
@@ -20,13 +22,23 @@ public class ApplicationVo {
 
     private Long reviewId;
 
+    private LocalDateTime announcementDate;
+
+    private LocalDateTime startDate;
+
+    private LocalDateTime endDate;
+
     @Builder
-    public ApplicationVo(Long id, ApplicationStatus status, Long programId, String programTitle, ProgramType programType, Long reviewId) {
+    public ApplicationVo(Long id, ApplicationStatus status, Long programId, String programTitle, ProgramType programType,
+                         Long reviewId, LocalDateTime announcementDate, LocalDateTime startDate, LocalDateTime endDate) {
         this.id = id;
         this.status = status;
         this.programId = programId;
         this.programTitle = programTitle;
         this.programType = programType;
         this.reviewId = reviewId;
+        this.announcementDate = announcementDate;
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 }

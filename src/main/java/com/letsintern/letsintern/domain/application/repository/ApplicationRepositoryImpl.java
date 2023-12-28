@@ -86,7 +86,10 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
                         qApplication.program.id,
                         qApplication.program.title,
                         qApplication.program.type,
-                        qApplication.reviewId
+                        qApplication.reviewId,
+                        qApplication.program.announcementDate,
+                        qApplication.program.startDate,
+                        qApplication.program.endDate
                 ))
                 .from(qApplication)
                 .where(qApplication.user.id.eq(userId))
