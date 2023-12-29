@@ -72,10 +72,6 @@ public class ApplicationService {
         applicationHelper.deleteApplication(applicationId);
     }
 
-    @Transactional
-    public String updateApplicationNotApproved(Long programId) {
-        return applicationHelper.updateApplicationNotApproved(programId);
-    }
 
     public EmailListResponse getEmailList(Long programId) {
         return applicationMapper.toEmailListResponse(

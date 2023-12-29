@@ -3,6 +3,8 @@ package com.letsintern.letsintern.domain.application.repository;
 import com.letsintern.letsintern.domain.application.domain.*;
 import com.letsintern.letsintern.domain.application.vo.ApplicationAdminVo;
 import com.letsintern.letsintern.domain.application.vo.ApplicationVo;
+import com.letsintern.letsintern.domain.program.domain.ProgramStatus;
+import com.letsintern.letsintern.domain.program.domain.QProgram;
 import com.letsintern.letsintern.domain.program.vo.UserProgramVo;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -14,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -174,13 +177,17 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
     }
 
     @Override
-    public void updateAllStatusByProgramId(Long programId) {
+    public void updateAllApplicationByAnnouncementDate(LocalDateTime now) {
         QApplication qApplication = QApplication.application;
 
         jpaQueryFactory
                 .update(qApplication)
                 .set(qApplication.status, ApplicationStatus.APPLIED_NOT_APPROVED)
-                .where(qApplication.program.id.eq(programId), qApplication.isApproved.eq(false))
+                .where(
+                        qApplication.program.status.eq(ProgramStatus.CLOSED),
+                        qApplication.program.announcementDate.before(now),
+                        qApplication.status.eq(ApplicationStatus.APPLIED),
+                        qApplication.isApproved.eq(false))
                 .execute();
 
         em.flush();
