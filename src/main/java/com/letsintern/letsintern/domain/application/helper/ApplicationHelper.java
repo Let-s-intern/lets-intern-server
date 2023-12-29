@@ -150,13 +150,6 @@ public class ApplicationHelper {
 
     }
 
-    /* 미선발자 한번에 status 변경 (APPLID >> APPLIED_NOT_APPROVED) */
-    public String updateApplicationNotApproved(Long programId) {
-        applicationRepository.updateAllStatusByProgramId(programId);
-        return "success";
-    }
-
-
     private PageRequest makePageRequest(Pageable pageable) {
         int pageNum = pageable.getPageNumber();
         int pageSize = pageable.getPageSize();

@@ -8,6 +8,7 @@ import com.letsintern.letsintern.domain.program.vo.UserProgramVo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ApplicationRepositoryCustom {
@@ -25,7 +26,7 @@ public interface ApplicationRepositoryCustom {
     Application findByProgramIdAndUserId(Long programId, Long userId);
     Application findByProgramIdAndGuestEmail(Long programId, String email);
 
-    void updateAllStatusByProgramId(Long programId);
+    void updateAllApplicationByAnnouncementDate(LocalDateTime now);
 
     List<String> findAllEmailByIsApproved(Long programId, Boolean isApproved);
 }
