@@ -16,13 +16,13 @@ public class ProgramScheduler {
     private final ProgramRepository programRepository;
 
     @Transactional
-    @Scheduled(cron = "5 0 0 * * ?")
+    @Scheduled(cron = "5 19 0,15,18,21 * * ?")
     public void updateProgramStatusToClosed() {
         programRepository.updateAllByDueDate(LocalDateTime.now());
     }
 
     @Transactional
-    @Scheduled(cron = "45 0 0 * * ?")
+    @Scheduled(cron = "45 19 11-23 * * ?")
     public void updateProgramStatusToDone() {
         programRepository.updateAllByEndDate(LocalDateTime.now());
     }
