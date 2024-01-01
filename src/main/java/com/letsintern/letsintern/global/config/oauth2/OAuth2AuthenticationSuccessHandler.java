@@ -28,6 +28,9 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     @Value("${spring.security.oauth2.authorizedRedirectUri}")
     private String redirectUri;
+
+    @Value("${spring.security.oauth2.authorizedRedirectUri-local}")
+    private String redirectUriLocal;
     private final TokenProvider tokenProvider;
     private final CookieAuthorizationRequestRepository cookieAuthorizationRequestRepository;
     private final ObjectMapper objectMapper;
@@ -103,9 +106,10 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private boolean isAuthorizedRedirectUri(String uri) {
         URI clientRedirectUri = URI.create(uri);
         URI authorizedUri = URI.create(redirectUri);
+        URI authorizedUriLocal = URI.create(redirectUriLocal);
 
-        if(authorizedUri.getHost().equalsIgnoreCase(clientRedirectUri.getHost())
-                && authorizedUri.getPort() == clientRedirectUri.getPort()) {
+        if((authorizedUri.getHost().equalsIgnoreCase(clientRedirectUri.getHost()) && authorizedUri.getPort() == clientRedirectUri.getPort())
+        || ((authorizedUriLocal.getHost().equalsIgnoreCase(clientRedirectUri.getHost()) && authorizedUriLocal.getPort() == clientRedirectUri.getPort()))) {
             return true;
         }
         return false;
