@@ -8,7 +8,7 @@ import com.letsintern.letsintern.domain.user.exception.UserNotFound;
 import com.letsintern.letsintern.domain.user.helper.UserHelper;
 import com.letsintern.letsintern.domain.user.mapper.UserMapper;
 import com.letsintern.letsintern.domain.user.repository.UserRepository;
-import com.letsintern.letsintern.domain.user.util.EmailUtil;
+import com.letsintern.letsintern.global.common.util.EmailUtils;
 import com.letsintern.letsintern.global.config.jwt.TokenProvider;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ public class UserService {
     private final UserHelper userHelper;
     private final UserMapper userMapper;
     private final TokenProvider tokenProvider;
-    private final EmailUtil emailUtil;
+    private final EmailUtils emailUtils;
 
     @Transactional
     public UserIdResponseDTO signUp(UserSignUpRequestDTO userSignUpRequestDTO) {
@@ -79,7 +79,8 @@ public class UserService {
                 });
         String randomPw = userHelper.createRandomPw();
         user.setPassword(userHelper.encodePassword(randomPw));
-        emailUtil.sendEmail(pwResetMailDTO.getEmail(), randomPw);
+
+        emailUtils.sendPasswordResetEmail(pwResetMailDTO.getEmail(), randomPw);
     }
 
     @Transactional

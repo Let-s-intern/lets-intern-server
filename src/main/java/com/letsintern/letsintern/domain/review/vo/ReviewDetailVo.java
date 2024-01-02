@@ -37,8 +37,8 @@ public class ReviewDetailVo {
         this.createdAt = createdAt;
         this.programType = programType;
         this.programTitle = programTitle;
-        this.startDate = StringUtils.SIMPLE_DATE_FORMAT.format(startDate);
-        this.endDate = StringUtils.SIMPLE_DATE_FORMAT.format(endDate);
+        this.startDate = StringUtils.dateToString(startDate);
+        this.endDate = StringUtils.dateToString(endDate);
     }
 
     public static ReviewDetailVo of(Review review, Program program) {
