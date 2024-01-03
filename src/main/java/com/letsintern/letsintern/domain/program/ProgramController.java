@@ -4,6 +4,7 @@ import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramUpdateRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.response.*;
+import com.letsintern.letsintern.domain.program.helper.ZoomAuthenticationHelper;
 import com.letsintern.letsintern.domain.program.service.ProgramService;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,6 +25,11 @@ import java.text.ParseException;
 public class ProgramController {
 
     private final ProgramService programService;
+    private final ZoomAuthenticationHelper zoomAuthenticationHelper;
+    @GetMapping("/zoom")
+    public ResponseEntity<String> zoom() throws Exception {
+        return ResponseEntity.ok(zoomAuthenticationHelper.getAccessToken());
+    }
 
     @Operation(summary = "AWS Target Group 상태 확인용")
     @GetMapping("/tg")
