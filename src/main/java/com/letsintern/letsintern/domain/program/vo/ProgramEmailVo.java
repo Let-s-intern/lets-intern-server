@@ -19,8 +19,13 @@ public class ProgramEmailVo {
     private ProgramWay way;
     private String location;
 
+    private String link;
+
+    private String linkPassword;
+
     @Builder
-    private ProgramEmailVo(ProgramType type, Integer th, String title, LocalDateTime startDate, LocalDateTime endDate, ProgramWay way, String location) {
+    private ProgramEmailVo(ProgramType type, Integer th, String title, LocalDateTime startDate, LocalDateTime endDate,
+                           ProgramWay way, String location, String link, String linkPassword) {
         this.type = type;
         this.th = th;
         this.title = title;
@@ -28,6 +33,8 @@ public class ProgramEmailVo {
         this.endDate = endDate;
         this.way = way;
         this.location = location;
+        this.link = link;
+        this.linkPassword = linkPassword;
     }
 
     public static ProgramEmailVo from(Program program) {
@@ -39,6 +46,8 @@ public class ProgramEmailVo {
                 .endDate(program.getEndDate())
                 .way(program.getWay())
                 .location(program.getLocation())
+                .link(program.getLink())
+                .linkPassword(program.getLinkPassword())
                 .build();
     }
 }
