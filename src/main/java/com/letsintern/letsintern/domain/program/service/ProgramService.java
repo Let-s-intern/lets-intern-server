@@ -27,7 +27,7 @@ public class ProgramService {
 
 
     @Transactional
-    public ProgramIdResponseDTO createProgram(ProgramCreateRequestDTO programCreateRequestDTO) {
+    public ProgramIdResponseDTO createProgram(ProgramCreateRequestDTO programCreateRequestDTO) throws Exception {
         return programMapper.toProgramIdResponseDTO(programHelper.createProgram(programCreateRequestDTO));
     }
 

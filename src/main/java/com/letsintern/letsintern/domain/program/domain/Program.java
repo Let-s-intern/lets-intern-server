@@ -3,6 +3,7 @@ package com.letsintern.letsintern.domain.program.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.letsintern.letsintern.domain.application.domain.Application;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequestDTO;
+import com.letsintern.letsintern.domain.program.dto.response.ZoomMeetingCreateResponse;
 import com.letsintern.letsintern.global.common.util.StringUtils;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
@@ -10,9 +11,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Entity
 @Getter @Setter
@@ -64,6 +63,13 @@ public class Program {
     @Nullable
     private String location;
 
+    @Nullable
+    private String link;
+
+    @Nullable
+    @Column(length = 8)
+    private String linkPassword;
+
     @NotNull
     @Column(length = 300)
     private String notice;
@@ -87,7 +93,7 @@ public class Program {
     private Program(ProgramType type, Integer th, String title, Integer headcount,
                     LocalDateTime dueDate, LocalDateTime announcementDate, LocalDateTime startDate, LocalDateTime endDate,
                     String contents, ProgramWay way, String location, String notice,
-                    List<Integer> faqIdList) {
+                    List<Integer> faqIdList, ZoomMeetingCreateResponse zoomMeetingCreateResponse) {
         this.type = type;
         this.th = th;
         this.title = title;
@@ -101,9 +107,14 @@ public class Program {
         this.location = location;
         this.notice = notice;
         this.faqListStr = StringUtils.listToString(faqIdList);
+
+        if((way.equals(ProgramWay.ONLINE) || way.equals(ProgramWay.ALL)) && zoomMeetingCreateResponse != null) {
+            this.link = zoomMeetingCreateResponse.getJoin_url();
+            this.linkPassword = zoomMeetingCreateResponse.getPassword();
+        }
     }
 
-    public static Program of(ProgramCreateRequestDTO programCreateRequestDTO) {
+    public static Program of(ProgramCreateRequestDTO programCreateRequestDTO, ZoomMeetingCreateResponse zoomMeetingCreateResponse) {
         return Program.builder()
                 .type(programCreateRequestDTO.getType())
                 .th(programCreateRequestDTO.getTh())
@@ -118,6 +129,7 @@ public class Program {
                 .location(programCreateRequestDTO.getLocation())
                 .notice(programCreateRequestDTO.getNotice())
                 .faqIdList(programCreateRequestDTO.getFaqIdList())
+                .zoomMeetingCreateResponse(zoomMeetingCreateResponse)
                 .build();
     }
 }

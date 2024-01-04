@@ -21,7 +21,7 @@ public class ZoomMeetingCreateDTO implements Serializable {
 
     private String topic;
 
-    private Integer type = 2;   //
+    private Integer type = 2;
 
     @Builder
     public ZoomMeetingCreateDTO(String agenda, Integer duration, LocalDateTime startTime, String topic) {

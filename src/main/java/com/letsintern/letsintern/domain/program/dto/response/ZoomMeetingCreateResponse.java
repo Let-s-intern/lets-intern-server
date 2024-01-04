@@ -16,8 +16,6 @@ public class ZoomMeetingCreateResponse implements Serializable {
 
     private String join_url;
 
-    private Boolean pre_schedule;
-
     private String start_time;
 
     private String password;
