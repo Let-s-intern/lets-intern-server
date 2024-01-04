@@ -14,7 +14,9 @@ import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.program.domain.ProgramStatus;
 import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
 import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
+import com.letsintern.letsintern.domain.program.vo.ProgramEmailVo;
 import com.letsintern.letsintern.domain.user.domain.User;
+import com.letsintern.letsintern.global.common.util.EmailUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,6 +33,7 @@ public class ApplicationHelper {
     private final ApplicationRepository applicationRepository;
     private final ApplicationMapper applicationMapper;
     private final ProgramRepository programRepository;
+    private final EmailUtils emailUtils;
 
 
     /* 회원 - 기존 신청 내역 확인 */
@@ -48,14 +51,18 @@ public class ApplicationHelper {
     /* 회원 - 지원서 생성 */
     public ApplicationCreateResponse createUserApplication(Long programId, ApplicationCreateDTO applicationCreateDTO, User user) {
         if(checkUserApplicationExist(programId, user.getId())) throw DuplicateApplication.EXCEPTION;
+
         Application newUserApplication = applicationMapper.toEntity(programId, applicationCreateDTO, user);
+        Application savedApplication = applicationRepository.save(newUserApplication);
 
         Program program = programRepository.findById(programId)
                 .orElseThrow(() -> {
                     throw ProgramNotFound.EXCEPTION;
                 });
         program.setApplicationCount(program.getApplicationCount() + 1);
-        return applicationMapper.toApplicationCreateResponse(applicationRepository.save(newUserApplication));
+
+        emailUtils.sendApplicationApprovedEmail(user.getEmail(), user.getName(), ProgramEmailVo.from(program));
+        return applicationMapper.toApplicationCreateResponse(savedApplication);
     }
 
     /* 비회원 - 지원서 생성 */
@@ -69,12 +76,16 @@ public class ApplicationHelper {
         if(checkGuestApplicationExist(programId, applicationCreateDTO.getGuestEmail())) throw DuplicateApplication.EXCEPTION;
 
         Application newGuestApplication = applicationMapper.toEntity(programId, applicationCreateDTO, null);
+        Application savedApplication = applicationRepository.save(newGuestApplication);
+
         Program program = programRepository.findById(programId)
                 .orElseThrow(() -> {
                     throw ProgramNotFound.EXCEPTION;
                 });
         program.setApplicationCount(program.getApplicationCount() + 1);
-        return applicationMapper.toApplicationCreateResponse(applicationRepository.save(newGuestApplication));
+
+        emailUtils.sendApplicationApprovedEmail(applicationCreateDTO.getGuestEmail(), applicationCreateDTO.getGuestName(), ProgramEmailVo.from(program));
+        return applicationMapper.toApplicationCreateResponse(savedApplication);
     }
 
     /* 프로그램 1개의 전체 지원서 목록 */

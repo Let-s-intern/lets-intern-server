@@ -6,12 +6,10 @@ import com.letsintern.letsintern.domain.faq.repository.FaqRepository;
 import com.letsintern.letsintern.domain.faq.vo.FaqVo;
 import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.program.domain.ProgramStatus;
+import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramUpdateRequestDTO;
-import com.letsintern.letsintern.domain.program.dto.response.AdminProgramListDTO;
-import com.letsintern.letsintern.domain.program.dto.response.ProgramDetailDTO;
-import com.letsintern.letsintern.domain.program.dto.response.ProgramListDTO;
-import com.letsintern.letsintern.domain.program.dto.response.UserProgramVoResponse;
+import com.letsintern.letsintern.domain.program.dto.response.*;
 import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
 import com.letsintern.letsintern.domain.program.mapper.ProgramMapper;
 import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
@@ -42,8 +40,21 @@ public class ProgramHelper {
     private final ApplicationRepository applicationRepository;
     private final ApplicationHelper applicationHelper;
 
-    public Long createProgram(ProgramCreateRequestDTO programCreateRequestDTO) {
-        Program savedProgram = programRepository.save(programMapper.toEntity(programCreateRequestDTO));
+    private final ZoomMeetingApiHelper zoomMeetingApiHelper;
+
+    public Long createProgram(ProgramCreateRequestDTO programCreateRequestDTO) throws Exception {
+        ZoomMeetingCreateResponse zoomMeetingCreateResponse = null;
+
+        // Zoom Meeting 생성
+        if(programCreateRequestDTO.getType().equals(ProgramType.LETS_CHAT)) {
+            zoomMeetingCreateResponse = zoomMeetingApiHelper.createMeeting(
+                    programCreateRequestDTO.getType(),
+                    programCreateRequestDTO.getTitle(),
+                    programCreateRequestDTO.getTh(),
+                    programCreateRequestDTO.getStartDate());
+        }
+
+        Program savedProgram = programRepository.save(programMapper.toEntity(programCreateRequestDTO, zoomMeetingCreateResponse));
         return savedProgram.getId();
     }
 

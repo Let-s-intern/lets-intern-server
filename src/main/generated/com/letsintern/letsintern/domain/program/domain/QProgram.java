@@ -40,6 +40,10 @@ public class QProgram extends EntityPathBase<Program> {
 
     public final BooleanPath isVisible = createBoolean("isVisible");
 
+    public final StringPath link = createString("link");
+
+    public final StringPath linkPassword = createString("linkPassword");
+
     public final StringPath location = createString("location");
 
     public final StringPath notice = createString("notice");

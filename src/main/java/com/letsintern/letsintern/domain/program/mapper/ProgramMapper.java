@@ -5,6 +5,7 @@ import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequest
 import com.letsintern.letsintern.domain.program.dto.response.ProgramIdResponseDTO;
 import com.letsintern.letsintern.domain.program.dto.response.ProgramListDTO;
 import com.letsintern.letsintern.domain.program.dto.response.UserProgramVoResponse;
+import com.letsintern.letsintern.domain.program.dto.response.ZoomMeetingCreateResponse;
 import com.letsintern.letsintern.domain.program.vo.ProgramThumbnailVo;
 import com.letsintern.letsintern.domain.program.vo.UserProgramVo;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +18,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProgramMapper {
 
-    public Program toEntity(ProgramCreateRequestDTO programCreateRequestDTO) {
-        return Program.of(programCreateRequestDTO);
+    public Program toEntity(ProgramCreateRequestDTO programCreateRequestDTO, ZoomMeetingCreateResponse zoomMeetingCreateResponse) {
+        return Program.of(programCreateRequestDTO, zoomMeetingCreateResponse);
     }
 
     public ProgramIdResponseDTO toProgramIdResponseDTO(Long programId) {
