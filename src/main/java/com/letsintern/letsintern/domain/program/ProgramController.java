@@ -3,9 +3,7 @@ package com.letsintern.letsintern.domain.program;
 import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramUpdateRequestDTO;
-import com.letsintern.letsintern.domain.program.dto.request.ZoomCreateDTO;
 import com.letsintern.letsintern.domain.program.dto.response.*;
-import com.letsintern.letsintern.domain.program.helper.ZoomMeetingApiHelper;
 import com.letsintern.letsintern.domain.program.service.ProgramService;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,12 +24,6 @@ import java.text.ParseException;
 public class ProgramController {
 
     private final ProgramService programService;
-    private final ZoomMeetingApiHelper zoomMeetingApiHelper;
-
-    @PostMapping("/zoom")
-    public ResponseEntity<ZoomMeetingCreateResponse> zoom(@RequestBody ZoomCreateDTO requestDTO) throws Exception {
-        return ResponseEntity.ok(zoomMeetingApiHelper.createMeeting(requestDTO.getType(), requestDTO.getTitle(), requestDTO.getTh(), requestDTO.getStartDate()));
-    }
 
     @Operation(summary = "AWS Target Group 상태 확인용")
     @GetMapping("/tg")
