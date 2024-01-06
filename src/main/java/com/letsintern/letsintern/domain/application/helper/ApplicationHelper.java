@@ -12,6 +12,7 @@ import com.letsintern.letsintern.domain.application.vo.ApplicationAdminVo;
 import com.letsintern.letsintern.domain.application.vo.ApplicationVo;
 import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.program.domain.ProgramStatus;
+import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
 import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
 import com.letsintern.letsintern.domain.program.vo.ProgramEmailVo;
@@ -61,7 +62,10 @@ public class ApplicationHelper {
                 });
         program.setApplicationCount(program.getApplicationCount() + 1);
 
-        emailUtils.sendApplicationApprovedEmail(user.getEmail(), user.getName(), ProgramEmailVo.from(program));
+        if(program.getType().equals(ProgramType.LETS_CHAT)) {
+            emailUtils.sendApplicationApprovedEmail(user.getEmail(), user.getName(), ProgramEmailVo.from(program));
+        }
+
         return applicationMapper.toApplicationCreateResponse(savedApplication);
     }
 
@@ -84,7 +88,10 @@ public class ApplicationHelper {
                 });
         program.setApplicationCount(program.getApplicationCount() + 1);
 
-        emailUtils.sendApplicationApprovedEmail(applicationCreateDTO.getGuestEmail(), applicationCreateDTO.getGuestName(), ProgramEmailVo.from(program));
+        if(program.getType().equals(ProgramType.LETS_CHAT)) {
+            emailUtils.sendApplicationApprovedEmail(applicationCreateDTO.getGuestEmail(), applicationCreateDTO.getGuestName(), ProgramEmailVo.from(program));
+        }
+
         return applicationMapper.toApplicationCreateResponse(savedApplication);
     }
 
