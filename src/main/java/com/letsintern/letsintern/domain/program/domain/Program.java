@@ -82,6 +82,11 @@ public class Program {
     @Enumerated(EnumType.STRING)
     private ProgramStatus status = ProgramStatus.OPEN;
 
+    @Nullable
+    @Column(length = 10)
+    @Enumerated(EnumType.STRING)
+    private MailStatus mailStatus;
+
     @NotNull
     private Boolean isVisible = false;
 
@@ -107,6 +112,10 @@ public class Program {
         this.location = location;
         this.notice = notice;
         this.faqListStr = StringUtils.listToString(faqIdList);
+
+        if(type.equals(ProgramType.LETS_CHAT)) {
+            this.mailStatus = MailStatus.YET;
+        }
 
         if((way.equals(ProgramWay.ONLINE) || way.equals(ProgramWay.ALL)) && zoomMeetingCreateResponse != null) {
             this.link = zoomMeetingCreateResponse.getJoin_url();

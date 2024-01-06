@@ -46,6 +46,8 @@ public class QProgram extends EntityPathBase<Program> {
 
     public final StringPath location = createString("location");
 
+    public final EnumPath<MailStatus> mailStatus = createEnum("mailStatus", MailStatus.class);
+
     public final StringPath notice = createString("notice");
 
     public final DateTimePath<java.time.LocalDateTime> startDate = createDateTime("startDate", java.time.LocalDateTime.class);

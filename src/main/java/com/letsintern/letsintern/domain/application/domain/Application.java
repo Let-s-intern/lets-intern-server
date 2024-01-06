@@ -3,6 +3,7 @@ package com.letsintern.letsintern.domain.application.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.letsintern.letsintern.domain.application.dto.request.ApplicationCreateDTO;
 import com.letsintern.letsintern.domain.program.domain.Program;
+import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import com.letsintern.letsintern.domain.user.domain.User;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
@@ -113,6 +114,8 @@ public class Application {
         this.preQuestions = preQuestions;
         this.inflowPath = inflowPath;
         if(way != null) this.way = way;
+
+        if(program.getType().equals(ProgramType.LETS_CHAT)) this.status = ApplicationStatus.IN_PROGRESS;
 
         /* 비회원 */
         if(user == null) {
