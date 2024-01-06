@@ -16,7 +16,7 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
 
     private User user;
 
-    private boolean differentProvider = false;
+    private boolean duplicateEmail = false;
 
     @Setter
     private Map<String, Object> attributes;

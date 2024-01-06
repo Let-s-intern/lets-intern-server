@@ -1,14 +1,12 @@
 package com.letsintern.letsintern.domain.program.repository;
 
 import com.letsintern.letsintern.domain.program.domain.Program;
-import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import com.letsintern.letsintern.domain.program.vo.ProgramDetailVo;
 import com.letsintern.letsintern.domain.program.vo.ProgramThumbnailVo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,7 +24,7 @@ public interface ProgramRepositoryCustom {
 
     Page<Program> findAllAdminByType(String type, Pageable pageable);
 
-    void updateAllByDueDate(LocalDateTime now);
+    List<Long> findProgramIdAndUpdateStatusToDone(LocalDateTime now);
 
-    void updateAllByEndDate(LocalDateTime now);
+    void updateAllByDueDate(LocalDateTime now);
 }

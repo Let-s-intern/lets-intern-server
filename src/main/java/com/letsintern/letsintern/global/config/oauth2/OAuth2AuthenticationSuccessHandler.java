@@ -38,8 +38,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         String targetUrl;
-        if(((PrincipalDetails) authentication.getPrincipal()).isDifferentProvider())
-            targetUrl = determineTargetUrlException(request, response, authentication);
+        if(((PrincipalDetails) authentication.getPrincipal()).isDuplicateEmail())
+            targetUrl = determineTargetUrlException(request, response);
         else
             targetUrl = determineTargetUrl(request, response, authentication);
 
@@ -83,7 +83,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                 .build().toUriString();
     }
 
-    protected String determineTargetUrlException(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+    protected String determineTargetUrlException(HttpServletRequest request, HttpServletResponse response) {
         String targetUrl = getRedirectUri(request, response);
         String error = null;
 

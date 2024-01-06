@@ -28,5 +28,7 @@ public interface ApplicationRepositoryCustom {
 
     void updateAllApplicationByAnnouncementDate(LocalDateTime now);
 
+    void updateAllApplicationStatusDone(Long programId);
+
     List<String> findAllEmailByIsApproved(Long programId, Boolean isApproved);
 }

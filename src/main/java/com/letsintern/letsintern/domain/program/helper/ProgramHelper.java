@@ -45,7 +45,7 @@ public class ProgramHelper {
     public Long createProgram(ProgramCreateRequestDTO programCreateRequestDTO) throws Exception {
         ZoomMeetingCreateResponse zoomMeetingCreateResponse = null;
 
-        // Zoom Meeting 생성
+        // [렛츠챗] Zoom Meeting 생성
         if(programCreateRequestDTO.getType().equals(ProgramType.LETS_CHAT)) {
             zoomMeetingCreateResponse = zoomMeetingApiHelper.createMeeting(
                     programCreateRequestDTO.getType(),

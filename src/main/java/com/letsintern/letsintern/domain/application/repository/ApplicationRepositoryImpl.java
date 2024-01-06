@@ -4,7 +4,6 @@ import com.letsintern.letsintern.domain.application.domain.*;
 import com.letsintern.letsintern.domain.application.vo.ApplicationAdminVo;
 import com.letsintern.letsintern.domain.application.vo.ApplicationVo;
 import com.letsintern.letsintern.domain.program.domain.ProgramStatus;
-import com.letsintern.letsintern.domain.program.domain.QProgram;
 import com.letsintern.letsintern.domain.program.vo.UserProgramVo;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -188,6 +187,22 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
                         qApplication.program.announcementDate.before(now),
                         qApplication.status.eq(ApplicationStatus.APPLIED),
                         qApplication.isApproved.eq(false))
+                .execute();
+
+        em.flush();
+        em.clear();
+    }
+
+    @Override
+    public void updateAllApplicationStatusDone(Long programId) {
+        QApplication qApplication = QApplication.application;
+
+        jpaQueryFactory
+                .update(qApplication)
+                .set(qApplication.status, ApplicationStatus.DONE)
+                .where(
+                        qApplication.program.id.eq(programId),
+                        qApplication.status.eq(ApplicationStatus.IN_PROGRESS))
                 .execute();
 
         em.flush();

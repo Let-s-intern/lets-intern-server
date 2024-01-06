@@ -1,10 +1,6 @@
 package com.letsintern.letsintern.domain.program.repository;
 
-import com.letsintern.letsintern.domain.application.domain.QApplication;
-import com.letsintern.letsintern.domain.program.domain.Program;
-import com.letsintern.letsintern.domain.program.domain.ProgramStatus;
-import com.letsintern.letsintern.domain.program.domain.ProgramType;
-import com.letsintern.letsintern.domain.program.domain.QProgram;
+import com.letsintern.letsintern.domain.program.domain.*;
 import com.letsintern.letsintern.domain.program.vo.ProgramDetailVo;
 import com.letsintern.letsintern.domain.program.vo.ProgramThumbnailVo;
 import com.querydsl.core.types.Projections;
@@ -18,7 +14,6 @@ import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -193,6 +188,8 @@ public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
         return PageableExecutionUtils.getPage(programList, pageable, count::fetchOne);
     }
 
+
+
     @Override
     public Page<Program> findAllAdminByTypeAndTh(String type, Integer th, Pageable pageable) {
         QProgram qProgram = QProgram.program;
@@ -235,6 +232,27 @@ public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
     }
 
     @Override
+    public List<Long> findProgramIdAndUpdateStatusToDone(LocalDateTime now) {
+        QProgram qProgram = QProgram.program;
+
+        List<Long> programIdList = jpaQueryFactory
+                .select(qProgram.id).from(qProgram)
+                .where(qProgram.status.eq(ProgramStatus.CLOSED), qProgram.endDate.before(now))
+                .fetch();
+
+        jpaQueryFactory
+                .update(qProgram)
+                .set(qProgram.status, ProgramStatus.DONE)
+                .where(qProgram.status.eq(ProgramStatus.CLOSED), qProgram.endDate.before(now))
+                .execute();
+
+        em.flush();
+        em.clear();
+
+        return programIdList;
+    }
+
+    @Override
     public void updateAllByDueDate(LocalDateTime now) {
         QProgram qProgram = QProgram.program;
 
@@ -243,20 +261,6 @@ public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
             .set(qProgram.status, ProgramStatus.CLOSED)
             .where(qProgram.status.eq(ProgramStatus.OPEN), qProgram.dueDate.before(now))
             .execute();
-
-        em.flush();
-        em.clear();
-    }
-
-    @Override
-    public void updateAllByEndDate(LocalDateTime now) {
-        QProgram qProgram = QProgram.program;
-
-        jpaQueryFactory
-                .update(qProgram)
-                .set(qProgram.status, ProgramStatus.DONE)
-                .where(qProgram.status.eq(ProgramStatus.CLOSED), qProgram.endDate.before(now))
-                .execute();
 
         em.flush();
         em.clear();

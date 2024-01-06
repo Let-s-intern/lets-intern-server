@@ -53,6 +53,10 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 
 
+	// batch
+	implementation 'org.springframework.boot:spring-boot-starter-batch'
+
+
 	// swagger
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.0'
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-api:2.0.0'
