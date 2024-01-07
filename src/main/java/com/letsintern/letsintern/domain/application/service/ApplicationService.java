@@ -24,6 +24,7 @@ public class ApplicationService {
     private final ApplicationMapper applicationMapper;
     private final UserService userService;
 
+    @Transactional
     public ApplicationCreateResponse createUserApplication(Long programId, ApplicationCreateDTO applicationCreateDTO, PrincipalDetails principalDetails) {
         User user = principalDetails.getUser();
 
@@ -38,6 +39,7 @@ public class ApplicationService {
         return applicationHelper.createUserApplication(programId, applicationCreateDTO, user);
     }
 
+    @Transactional
     public ApplicationCreateResponse createGuestApplication(Long programId, ApplicationCreateDTO applicationCreateDTO) {
         return applicationHelper.createGuestApplication(programId, applicationCreateDTO);
     }
