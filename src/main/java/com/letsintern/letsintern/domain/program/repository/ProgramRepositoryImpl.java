@@ -125,7 +125,11 @@ public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
                         qProgram.type,
                         qProgram.way,
                         qProgram.location,
-                        qProgram.faqListStr
+                        qProgram.faqListStr,
+                        qProgram.dueDate,
+                        qProgram.announcementDate,
+                        qProgram.startDate,
+                        qProgram.endDate
                 ))
                 .from(qProgram)
                 .where(qProgram.id.eq(programId))

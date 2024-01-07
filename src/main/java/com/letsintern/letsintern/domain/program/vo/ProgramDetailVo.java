@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Getter
 @NoArgsConstructor
 public class ProgramDetailVo {
@@ -20,12 +22,18 @@ public class ProgramDetailVo {
     private ProgramWay way;
     private String location;
 
+    private LocalDateTime dueDate;
+    private LocalDateTime announcementDate;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
+
     @JsonIgnore
     private String faqListStr;
 
     @Builder
     public ProgramDetailVo(ProgramStatus status, String title, String contents, String notice,
-                           ProgramType type, ProgramWay way, String location, String faqListStr) {
+                           ProgramType type, ProgramWay way, String location, String faqListStr,
+                           LocalDateTime dueDate, LocalDateTime announcementDate, LocalDateTime startDate, LocalDateTime endDate) {
         this.status = status;
         this.title = title;
         this.contents = contents;
@@ -34,5 +42,9 @@ public class ProgramDetailVo {
         this.way = way;
         this.location = location;
         this.faqListStr = faqListStr;
+        this.dueDate = dueDate;
+        this.announcementDate = announcementDate;
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 }
