@@ -1,5 +1,6 @@
 package com.letsintern.letsintern.domain.program.repository;
 
+import com.letsintern.letsintern.domain.program.domain.MailStatus;
 import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.program.vo.ProgramDetailVo;
 import com.letsintern.letsintern.domain.program.vo.ProgramThumbnailVo;
@@ -23,6 +24,10 @@ public interface ProgramRepositoryCustom {
     Page<Program> findAllAdminByTypeAndTh(String type, Integer th, Pageable pageable);
 
     Page<Program> findAllAdminByType(String type, Pageable pageable);
+
+    List<Program> findAllLetsChatByMailStatus(MailStatus mailStatus);
+
+    List<Program> findAllLetsChatByMailStatusAndAnnouncementDate(MailStatus mailStatus, LocalDateTime now);
 
     List<Long> findProgramIdAndUpdateStatusToDone(LocalDateTime now);
 

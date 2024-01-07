@@ -192,6 +192,23 @@ public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
         return PageableExecutionUtils.getPage(programList, pageable, count::fetchOne);
     }
 
+    @Override
+    public List<Program> findAllLetsChatByMailStatus(MailStatus mailStatus) {
+        QProgram qProgram = QProgram.program;
+        return jpaQueryFactory
+                .selectFrom(qProgram)
+                .where(qProgram.type.eq(ProgramType.LETS_CHAT), qProgram.mailStatus.eq(mailStatus))
+                .fetch();
+    }
+
+    @Override
+    public List<Program> findAllLetsChatByMailStatusAndAnnouncementDate(MailStatus mailStatus, LocalDateTime now) {
+        QProgram qProgram = QProgram.program;
+        return jpaQueryFactory
+                .selectFrom(qProgram)
+                .where(qProgram.type.eq(ProgramType.LETS_CHAT), qProgram.mailStatus.eq(mailStatus), qProgram.announcementDate.before(now))
+                .fetch();
+    }
 
 
     @Override
