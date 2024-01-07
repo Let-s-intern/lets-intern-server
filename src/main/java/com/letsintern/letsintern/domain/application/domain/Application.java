@@ -115,7 +115,10 @@ public class Application {
         this.inflowPath = inflowPath;
         if(way != null) this.way = way;
 
-        if(program.getType().equals(ProgramType.LETS_CHAT)) this.status = ApplicationStatus.IN_PROGRESS;
+        if(program.getType().equals(ProgramType.LETS_CHAT)) {
+            this.isApproved = true;
+            this.status = ApplicationStatus.IN_PROGRESS;
+        }
 
         /* 비회원 */
         if(user == null) {

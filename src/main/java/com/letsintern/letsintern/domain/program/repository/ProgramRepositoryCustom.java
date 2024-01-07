@@ -27,6 +27,8 @@ public interface ProgramRepositoryCustom {
 
     List<Program> findAllLetsChatByMailStatus(MailStatus mailStatus);
 
+    List<Program> findAllLetsChatByMailStatusAndAnnouncementDate(MailStatus mailStatus, LocalDateTime now);
+
     List<Long> findProgramIdAndUpdateStatusToDone(LocalDateTime now);
 
     void updateAllByDueDate(LocalDateTime now);

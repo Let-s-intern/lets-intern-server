@@ -197,6 +197,15 @@ public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
                 .fetch();
     }
 
+    @Override
+    public List<Program> findAllLetsChatByMailStatusAndAnnouncementDate(MailStatus mailStatus, LocalDateTime now) {
+        QProgram qProgram = QProgram.program;
+        return jpaQueryFactory
+                .selectFrom(qProgram)
+                .where(qProgram.type.eq(ProgramType.LETS_CHAT), qProgram.mailStatus.eq(mailStatus), qProgram.announcementDate.before(now))
+                .fetch();
+    }
+
 
     @Override
     public Page<Program> findAllAdminByTypeAndTh(String type, Integer th, Pageable pageable) {

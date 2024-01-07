@@ -13,6 +13,7 @@ import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -22,7 +23,22 @@ public class MailScheduler {
 
     private final ProgramRepository programRepository;
     private final JobLauncher jobLauncher;
+    private final RemindMailJobConfig remindMailJobConfig;
     private final ReviewMailJobConfig reviewMailJobConfig;
+
+    @Scheduled(cron = "0 10 0,15,18 * * ?")
+    public void sendRemindMail() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
+        List<Program> mailStatusYetPrograms = programRepository.findAllLetsChatByMailStatusAndAnnouncementDate(MailStatus.YET, LocalDateTime.now());
+        for(Program program : mailStatusYetPrograms) {
+            jobLauncher.run(
+                    remindMailJobConfig.remindMailJob(),
+                    new JobParametersBuilder()
+                            .addLong("programId", program.getId())
+                            .addLong("time", new Date().getTime())
+                            .toJobParameters()
+            );
+        }
+    }
 
     @Scheduled(cron = "0 10 10 * * ?")
     public void sendReviewMail() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
@@ -35,8 +51,7 @@ public class MailScheduler {
                             .addLong("time", new Date().getTime())
                             .toJobParameters()
             );
-            program.setMailStatus(MailStatus.REVIEW);
-            programRepository.save(program);
         }
     }
+
 }
