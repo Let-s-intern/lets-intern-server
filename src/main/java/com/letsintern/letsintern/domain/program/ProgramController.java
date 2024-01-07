@@ -31,6 +31,12 @@ public class ProgramController {
         return ResponseEntity.ok("success");
     }
 
+    @Operation(summary = "브랜드 스토리 진행 완료 프로그램 개수")
+    @GetMapping("/count")
+    public ResponseEntity<Long> getProgramCount() {
+        return ResponseEntity.ok(programService.getDoneProgramCount());
+    }
+
     @Operation(summary = "프로그램 목록 (전체, 타입 - CHALLENGE, BOOTCAMP, LETS_CHAT)")
     @GetMapping("")
     public ProgramListDTO getProgramThumbnailList(

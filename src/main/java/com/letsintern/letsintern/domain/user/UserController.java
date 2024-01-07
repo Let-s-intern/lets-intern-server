@@ -47,6 +47,12 @@ public class UserController {
         return userService.reissueToken(tokenRequestDTO);
     }
 
+    @Operation(summary = "브랜드 스토리 전체 회원 수")
+    @GetMapping("/count")
+    public ResponseEntity<Long> getUserCount() {
+        return ResponseEntity.ok(userService.getUserCount());
+    }
+
     @Operation(summary = "마이페이지 비밀번호 변경")
     @PatchMapping("/password")
     public void changePw(@AuthenticationPrincipal PrincipalDetails principalDetails,

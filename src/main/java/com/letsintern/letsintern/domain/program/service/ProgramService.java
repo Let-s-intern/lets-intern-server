@@ -1,6 +1,7 @@
 package com.letsintern.letsintern.domain.program.service;
 
 import com.letsintern.letsintern.domain.program.domain.Program;
+import com.letsintern.letsintern.domain.program.domain.ProgramStatus;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramUpdateRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.response.*;
@@ -24,6 +25,10 @@ public class ProgramService {
     private final ProgramMapper programMapper;
 
     private final ProgramRepository programRepository;
+
+    public Long getDoneProgramCount() {
+        return programRepository.countByStatusEquals(ProgramStatus.DONE);
+    }
 
 
     @Transactional

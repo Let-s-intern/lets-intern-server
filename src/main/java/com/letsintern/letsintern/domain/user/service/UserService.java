@@ -156,4 +156,8 @@ public class UserService {
         tokenProvider.deleteRefreshToken(user.getId());
         userRepository.delete(user);
     }
+
+    public Long getUserCount() {
+        return userRepository.countBy();
+    }
 }
