@@ -3,7 +3,6 @@ package com.letsintern.letsintern.domain.program.util.batch;
 import com.letsintern.letsintern.domain.program.domain.MailStatus;
 import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
-import com.letsintern.letsintern.domain.program.util.batch.review.ReviewMailJobConfig;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.JobParametersInvalidException;
@@ -14,6 +13,7 @@ import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -24,17 +24,19 @@ public class MailScheduler {
     private final JobLauncher jobLauncher;
     private final ReviewMailJobConfig reviewMailJobConfig;
 
-    @Scheduled(fixedRate = 1000000)
+    @Scheduled(cron = "0 10 10 * * ?")
     public void sendReviewMail() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
-        List<Program> mailStatusYetPrograms = programRepository.findAllLetsChatByMailStatus(MailStatus.YET);
-        for(Program program : mailStatusYetPrograms) {
+        List<Program> mailStatusRemindPrograms = programRepository.findAllLetsChatByMailStatus(MailStatus.REMIND);
+        for(Program program : mailStatusRemindPrograms) {
             jobLauncher.run(
                     reviewMailJobConfig.reviewMailJob(),
                     new JobParametersBuilder()
-                            .addLong("programIdStr", program.getId())
+                            .addLong("programId", program.getId())
+                            .addLong("time", new Date().getTime())
                             .toJobParameters()
             );
+            program.setMailStatus(MailStatus.REVIEW);
+            programRepository.save(program);
         }
-
     }
 }
