@@ -25,7 +25,7 @@ public interface ProgramRepositoryCustom {
 
     Page<Program> findAllAdminByType(String type, Pageable pageable);
 
-    List<Program> findAllLetsChatByMailStatus(MailStatus mailStatus);
+    List<Program> findAllLetsChatByMailStatusAndEndDate(MailStatus mailStatus, LocalDateTime now);
 
     List<Program> findAllLetsChatByMailStatusAndAnnouncementDate(MailStatus mailStatus, LocalDateTime now);
 

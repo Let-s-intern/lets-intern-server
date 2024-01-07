@@ -42,7 +42,7 @@ public class MailScheduler {
 
     @Scheduled(cron = "0 10 10 * * ?")
     public void sendReviewMail() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
-        List<Program> mailStatusRemindPrograms = programRepository.findAllLetsChatByMailStatus(MailStatus.REMIND);
+        List<Program> mailStatusRemindPrograms = programRepository.findAllLetsChatByMailStatusAndEndDate(MailStatus.REMIND, LocalDateTime.now());
         for(Program program : mailStatusRemindPrograms) {
             jobLauncher.run(
                     reviewMailJobConfig.reviewMailJob(),

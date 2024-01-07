@@ -193,11 +193,11 @@ public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
     }
 
     @Override
-    public List<Program> findAllLetsChatByMailStatus(MailStatus mailStatus) {
+    public List<Program> findAllLetsChatByMailStatusAndEndDate(MailStatus mailStatus, LocalDateTime now) {
         QProgram qProgram = QProgram.program;
         return jpaQueryFactory
                 .selectFrom(qProgram)
-                .where(qProgram.type.eq(ProgramType.LETS_CHAT), qProgram.mailStatus.eq(mailStatus))
+                .where(qProgram.type.eq(ProgramType.LETS_CHAT), qProgram.mailStatus.eq(mailStatus), qProgram.endDate.before(now))
                 .fetch();
     }
 
