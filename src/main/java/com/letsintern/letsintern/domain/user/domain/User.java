@@ -76,6 +76,13 @@ public class User {
     @Nullable
     private Long managerId;
 
+    @Nullable
+    @Enumerated(EnumType.STRING)
+    private AccountType accountType;
+
+    @Nullable
+    private String accountNumber;
+
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Application> applicationList;

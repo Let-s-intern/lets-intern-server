@@ -1,5 +1,6 @@
 package com.letsintern.letsintern.domain.user.dto.request;
 
+import com.letsintern.letsintern.domain.user.domain.AccountType;
 import com.letsintern.letsintern.domain.user.domain.UserRole;
 import lombok.Getter;
 
@@ -14,4 +15,7 @@ public class UserUpdateRequestDTO {
 
     private Long managerId;
     private UserRole role;
+
+    private AccountType accountType;
+    private String accountNumber;
 }

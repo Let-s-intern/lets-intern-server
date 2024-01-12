@@ -118,6 +118,14 @@ public class UserHelper {
             user.setMajor(userUpdateRequestDTO.getMajor());
         }
 
+        if(userUpdateRequestDTO.getAccountType() != null) {
+            user.setAccountType(userUpdateRequestDTO.getAccountType());
+        }
+
+        if(userUpdateRequestDTO.getAccountNumber() != null) {
+            user.setAccountNumber(userUpdateRequestDTO.getAccountNumber());
+        }
+
         return user.getId();
     }
 
@@ -156,6 +164,14 @@ public class UserHelper {
 
         if(userUpdateRequestDTO.getRole() != null) {
             user.setRole(userUpdateRequestDTO.getRole());
+        }
+
+        if(userUpdateRequestDTO.getAccountType() != null) {
+            user.setAccountType(userUpdateRequestDTO.getAccountType());
+        }
+
+        if(userUpdateRequestDTO.getAccountNumber() != null) {
+            user.setAccountNumber(userUpdateRequestDTO.getAccountNumber());
         }
 
         return user.getId();

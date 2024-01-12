@@ -19,8 +19,11 @@ public class ApplicationAdminVo {
         if(application.getUser() != null) {
             final User user = application.getUser();
             this.optionalInfo = UserOptionalInfoVo.of(
+                    application.getUser().getId(),
                     application.getUser().getUniversity(),
-                    application.getUser().getMajor()
+                    application.getUser().getMajor(),
+                    application.getUser().getAccountType(),
+                    application.getUser().getAccountNumber()
             );
             this.application.setName(user.getName());
             this.application.setPhoneNum(user.getPhoneNum());
