@@ -5,6 +5,7 @@ import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import com.letsintern.letsintern.domain.program.domain.ProgramWay;
 import com.letsintern.letsintern.domain.program.vo.ProgramEmailVo;
+import jakarta.mail.Message;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -60,7 +61,7 @@ public class EmailUtils {
 
     private SimpleMailMessage createRemindMessage(List<Application> applicationList, Program program) {
         String[] emailAddressList = getEmailAddressList(applicationList);
-        simpleMailMessage.setTo(emailAddressList);
+        simpleMailMessage.setBcc(emailAddressList);
         simpleMailMessage.setSubject("[렛츠인턴] D-1 리마인드 안내: " + program.getTitle());
 
         simpleMailMessage.setText(
@@ -78,7 +79,7 @@ public class EmailUtils {
 
     private SimpleMailMessage createReviewMessage(List<Application> applicationList, Program program) {
         String[] emailAddressList = getEmailAddressList(applicationList);
-        simpleMailMessage.setTo(emailAddressList);
+        simpleMailMessage.setBcc(emailAddressList);
         simpleMailMessage.setSubject("[렛츠인턴] " + program.getType().getValue() + " #" + program.getTh() + ". " + program.getTitle() + " 후기 작성 안내");
 
         simpleMailMessage.setText(
