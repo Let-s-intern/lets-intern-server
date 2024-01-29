@@ -1,5 +1,6 @@
 package com.letsintern.letsintern.domain.user.service;
 
+import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import com.letsintern.letsintern.domain.user.domain.User;
 import com.letsintern.letsintern.domain.user.domain.UserRole;
 import com.letsintern.letsintern.domain.user.dto.request.*;
@@ -125,8 +126,8 @@ public class UserService {
         return userMapper.toUserIdResponseDTO(userHelper.updateAdminUserInfo(userId, userUpdateRequestDTO));
     }
 
-    public AdminUserListResponseDTO getAdminUserTotalList(Pageable pageable) {
-        return userMapper.toUserTotalListResponseDTO(userHelper.getAdminUserTotalList(pageable));
+    public AdminUserListResponseDTO getAdminUserTotalList(ProgramType programType, Integer programTh, String name, String email, String phoneNum, Pageable pageable) {
+        return userMapper.toUserTotalListResponseDTO(userHelper.getAdminUserTotalList(programType, programTh, name, email, phoneNum, pageable));
     }
 
     public AdminManagerListResponse getAdminManagerList() {

@@ -1,5 +1,6 @@
 package com.letsintern.letsintern.domain.user;
 
+import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import com.letsintern.letsintern.domain.user.domain.User;
 import com.letsintern.letsintern.domain.user.dto.request.*;
 import com.letsintern.letsintern.domain.user.dto.response.*;
@@ -100,8 +101,13 @@ public class UserController {
 
     @Operation(summary = "어드민 사용자 전체 목록")
     @GetMapping("/admin")
-    public AdminUserListResponseDTO getAdminUserTotalList(@PageableDefault(size = 20) Pageable pageable) {
-        return userService.getAdminUserTotalList(pageable);
+    public AdminUserListResponseDTO getAdminUserTotalList(@RequestParam(required = false) ProgramType programType,
+                                                          @RequestParam(required = false) Integer programTh,
+                                                          @RequestParam(required = false) String name,
+                                                          @RequestParam(required = false) String email,
+                                                          @RequestParam(required = false) String phoneNum,
+                                                          @PageableDefault(size = 20) Pageable pageable) {
+        return userService.getAdminUserTotalList(programType, programTh, name, email, phoneNum, pageable);
     }
 
     @Operation(summary = "어드민 사용자 1명 정보")
