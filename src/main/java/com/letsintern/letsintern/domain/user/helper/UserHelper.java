@@ -1,5 +1,6 @@
 package com.letsintern.letsintern.domain.user.helper;
 
+import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import com.letsintern.letsintern.domain.user.domain.User;
 import com.letsintern.letsintern.domain.user.dto.request.UserSignInRequestDTO;
 import com.letsintern.letsintern.domain.user.dto.request.UserUpdateRequestDTO;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -190,7 +192,13 @@ public class UserHelper {
         user.setPassword(encodePassword(newPassword));
     }
 
-    public Page<AdminUserVo> getAdminUserTotalList(Pageable pageable) {
+    public Page<AdminUserVo> getAdminUserTotalList(ProgramType programType, Integer programTh, String name, String email, String phoneNum, Pageable pageable) {
+        if(programType != null || programTh != null || name != null || email != null || phoneNum != null) {
+            if(programType == null && programTh != null) {
+                throw AdminUserFilterOnlyProgramTh.EXCEPTION;
+            }
+            return userRepository.findAllAdminUserVoFiltered(programType, programTh, name, email, phoneNum, pageable);
+        }
         return userRepository.findAllAdminUserVo(pageable);
     }
 
