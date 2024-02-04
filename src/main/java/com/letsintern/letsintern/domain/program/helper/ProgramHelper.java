@@ -131,9 +131,9 @@ public class ProgramHelper {
                     throw ProgramNotFound.EXCEPTION;
                 });
 
-        List<Integer> faqIdList = StringUtils.stringToList(programDetailVo.getFaqListStr());
+        List<Long> faqIdList = StringUtils.stringToList(programDetailVo.getFaqListStr());
         List<FaqVo> faqList = new ArrayList<>();
-        for(Integer id : faqIdList) {
+        for(Long id : faqIdList) {
             faqList.add(faqRepository.findVoById(Long.valueOf(id)));
         }
       

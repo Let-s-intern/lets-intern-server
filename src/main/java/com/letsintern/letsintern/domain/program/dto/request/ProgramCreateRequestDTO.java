@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -37,6 +36,6 @@ public class ProgramCreateRequestDTO {
 
     private String notice;
 
-    private List<Integer> faqIdList;
+    private List<Long> faqIdList;
 
 }

@@ -39,5 +39,5 @@ public class ProgramUpdateRequestDTO {
 
     private Boolean isVisible;
 
-    private List<Integer> faqIdList;
+    private List<Long> faqIdList;
 }
