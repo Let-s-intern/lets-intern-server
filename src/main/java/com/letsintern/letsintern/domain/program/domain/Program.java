@@ -98,7 +98,7 @@ public class Program {
     private Program(ProgramType type, Integer th, String title, Integer headcount,
                     LocalDateTime dueDate, LocalDateTime announcementDate, LocalDateTime startDate, LocalDateTime endDate,
                     String contents, ProgramWay way, String location, String notice,
-                    List<Integer> faqIdList, ZoomMeetingCreateResponse zoomMeetingCreateResponse) {
+                    List<Long> faqIdList, ZoomMeetingCreateResponse zoomMeetingCreateResponse) {
         this.type = type;
         this.th = th;
         this.title = title;

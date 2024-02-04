@@ -11,17 +11,17 @@ import java.util.stream.Collectors;
 @Component
 public class StringUtils {
 
-    public static String listToString(List<Integer> integerList) {
-        return integerList.stream().map(String::valueOf)
+    public static String listToString(List<Long> longList) {
+        return longList.stream().map(String::valueOf)
                 .collect(Collectors.joining(","));
     }
 
-    public static List<Integer> stringToList(String strList) {
+    public static List<Long> stringToList(String strList) {
         String[] convertedArray = strList.split(",");
-        List<Integer> convertedList = new ArrayList<>();
+        List<Long> convertedList = new ArrayList<>();
 
         for(String strNum : convertedArray) {
-            convertedList.add(Integer.parseInt(strNum));
+            convertedList.add(Long.parseLong(strNum));
         }
 
         return convertedList;
