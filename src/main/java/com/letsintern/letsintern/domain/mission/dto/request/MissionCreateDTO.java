@@ -1,12 +1,20 @@
 package com.letsintern.letsintern.domain.mission.dto.request;
 
+import com.letsintern.letsintern.domain.mission.domain.MissionType;
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 public class MissionCreateDTO {
+
+    @NotNull
+    private Integer refund;
+
+    @NotNull
+    private MissionType type;
 
     @NotNull
     private String title;
@@ -17,10 +25,7 @@ public class MissionCreateDTO {
     @NotNull
     private Integer th;
 
-    @NotNull
-    private LocalDateTime startDate;
-
-    @NotNull
-    private LocalDateTime endDate;
+    @Nullable
+    private List<Long> contentsIdList;
 
 }

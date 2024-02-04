@@ -1,13 +1,16 @@
 package com.letsintern.letsintern.domain.mission.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.letsintern.letsintern.domain.mission.dto.request.MissionCreateDTO;
 import com.letsintern.letsintern.domain.program.domain.Program;
+import com.letsintern.letsintern.global.common.util.StringUtils;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDateTime;
-
+import java.util.List;
 
 @Entity
 @Getter @Setter
@@ -20,7 +23,14 @@ public class Mission {
     private Long id;
 
     @NotNull
-    private Integer attendanceCount = 0;
+    private Integer attendanceCount;
+
+    @NotNull
+    private Integer refund;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private MissionType type;
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -41,8 +51,14 @@ public class Mission {
     @NotNull
     private LocalDateTime endDate;
 
+    @Nullable
+    private String contentsListStr;
+
     @NotNull
-    private Boolean isRefunded = false;
+    private Boolean isVisible;
+
+    @NotNull
+    private Boolean isRefunded;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "program_id", nullable = false)
@@ -50,23 +66,32 @@ public class Mission {
     private Program program;
 
     @Builder
-    private Mission(Program program, String title, String contents, Integer th, LocalDateTime startDate, LocalDateTime endDate) {
+    private Mission(Program program, Integer refund, MissionType type, String title, String contents, Integer th, List<Long> contentsIdList) {
         this.program = program;
+        this.attendanceCount = 0;
+        this.refund = refund;
+        this.type = type;
         this.title = title;
         this.contents = contents;
+
         this.th = th;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.startDate = program.getStartDate().plusDays(th-1);
+        this.endDate = program.getStartDate().plusDays(th);
+
+        this.contentsListStr = StringUtils.listToString(contentsIdList);
+        this.isVisible = false;
+        this.isRefunded = false;
     }
 
-    public static Mission of(Program program, String title, String contents, Integer th, LocalDateTime startDate, LocalDateTime endDate) {
+    public static Mission of(Program program, MissionCreateDTO missionCreateDTO) {
         return Mission.builder()
                 .program(program)
-                .title(title)
-                .contents(contents)
-                .th(th)
-                .startDate(startDate)
-                .endDate(endDate)
+                .refund(missionCreateDTO.getRefund())
+                .type(missionCreateDTO.getType())
+                .title(missionCreateDTO.getTitle())
+                .contents(missionCreateDTO.getContents())
+                .th(missionCreateDTO.getTh())
+                .contentsIdList(missionCreateDTO.getContentsIdList())
                 .build();
     }
 }

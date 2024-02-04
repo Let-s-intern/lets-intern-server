@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 public class MissionMapper {
 
     public Mission toEntity(Program program, MissionCreateDTO missionCreateDTO) {
-        return Mission.of(program, missionCreateDTO.getTitle(), missionCreateDTO.getContents(), missionCreateDTO.getTh(), missionCreateDTO.getStartDate(), missionCreateDTO.getEndDate());
+        return Mission.of(program, missionCreateDTO);
     }
 
     public MissionIdResponse toMissionIdResponse(Long missionId) {

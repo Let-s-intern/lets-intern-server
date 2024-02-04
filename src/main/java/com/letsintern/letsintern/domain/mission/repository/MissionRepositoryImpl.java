@@ -30,12 +30,14 @@ public class MissionRepositoryImpl implements MissionRepositoryCustom {
         missionAdminVos = jpaQueryFactory
                 .select(Projections.constructor(MissionAdminVo.class,
                         qMission.id,
-                        qMission.title,
                         qMission.th,
+                        qMission.title,
                         qMission.startDate,
                         qMission.endDate,
                         qMission.isRefunded,
+                        qMission.contentsListStr,
                         qMission.attendanceCount,
+                        qMission.isVisible,
                         qMission.status))
                 .from(qMission)
                 .where(qMission.program.id.eq(programId))
