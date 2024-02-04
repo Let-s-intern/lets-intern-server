@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.time.LocalDate;
+
 @Entity
 @Getter
 @Setter
@@ -37,6 +39,9 @@ public class Contents {
     @NotNull
     private Boolean isVisible = false;
 
+    @NotNull
+    private LocalDate createdAt;
+
     @Builder
     private Contents(String title, ContentsType type, ContentsTopic topic, String link, String fileListStr) {
         this.title = title;
@@ -44,6 +49,7 @@ public class Contents {
         this.topic = topic;
         this.link = link;
         if(fileListStr != null) this.fileListStr = fileListStr;
+        this.createdAt = LocalDate.now();
     }
 
     public static Contents of(ContentsCreateDTO contentsCreateDTO, String fileListStr) {

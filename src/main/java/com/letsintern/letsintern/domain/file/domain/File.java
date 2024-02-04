@@ -19,6 +19,9 @@ public class File {
     private Long id;
 
     @NotNull
+    private String originalFilename;
+
+    @NotNull
     private String s3Url;
 
     @NotNull
@@ -29,14 +32,16 @@ public class File {
     private LocalDate createdAt;
 
     @Builder
-    private File(String s3Url, ContentsTopic contentsTopic) {
+    private File(String originalFilename, String s3Url, ContentsTopic contentsTopic) {
+        this.originalFilename = originalFilename;
         this.s3Url = s3Url;
         this.contentsTopic = contentsTopic;
         this.createdAt = LocalDate.now();
     }
 
-    public static File of(String s3Url, ContentsTopic contentsTopic) {
+    public static File of(String originalFilename, String s3Url, ContentsTopic contentsTopic) {
         return File.builder()
+                .originalFilename(originalFilename)
                 .s3Url(s3Url)
                 .contentsTopic(contentsTopic)
                 .build();
