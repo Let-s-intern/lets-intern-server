@@ -4,12 +4,10 @@ import com.letsintern.letsintern.domain.mission.dto.request.MissionCreateDTO;
 import com.letsintern.letsintern.domain.mission.dto.response.MissionAdminListResponse;
 import com.letsintern.letsintern.domain.mission.mapper.MissionMapper;
 import com.letsintern.letsintern.domain.mission.repository.MissionRepository;
-import com.letsintern.letsintern.domain.mission.vo.MissionAdminVo;
 import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
 import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
