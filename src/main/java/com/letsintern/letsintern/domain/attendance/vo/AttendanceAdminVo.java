@@ -1,7 +1,6 @@
 package com.letsintern.letsintern.domain.attendance.vo;
 
 import com.letsintern.letsintern.domain.attendance.domain.AttendanceStatus;
-import com.letsintern.letsintern.domain.user.domain.AccountType;
 import com.letsintern.letsintern.domain.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;

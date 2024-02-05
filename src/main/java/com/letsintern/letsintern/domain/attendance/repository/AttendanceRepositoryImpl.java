@@ -25,24 +25,43 @@ public class AttendanceRepositoryImpl implements AttendanceRepositoryCustom {
         List<AttendanceAdminVo> attendanceAdminVos;
         JPAQuery<Long> count;
 
-        attendanceAdminVos = jpaQueryFactory
-                .select(Projections.constructor(AttendanceAdminVo.class,
-                        qAttendance.id,
-                        qAttendance.user,
-                        qAttendance.status,
-                        qAttendance.link,
-                        qAttendance.isRefunded))
-                .from(qAttendance)
-                .where(qAttendance.mission.id.eq(missionId))
-                .orderBy(qAttendance.id.desc())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
+        if(missionId != null) {
+            attendanceAdminVos = jpaQueryFactory
+                    .select(Projections.constructor(AttendanceAdminVo.class,
+                            qAttendance.id,
+                            qAttendance.user,
+                            qAttendance.status,
+                            qAttendance.link,
+                            qAttendance.isRefunded))
+                    .from(qAttendance)
+                    .where(qAttendance.mission.id.eq(missionId))
+                    .orderBy(qAttendance.id.desc())
+                    .offset(pageable.getOffset())
+                    .limit(pageable.getPageSize())
+                    .fetch();
 
-        count = jpaQueryFactory.select(qAttendance.count())
-                .from(qAttendance)
-                .where(qAttendance.mission.id.eq(missionId))
-                .from(qAttendance);
+            count = jpaQueryFactory.select(qAttendance.count())
+                    .from(qAttendance)
+                    .where(qAttendance.mission.id.eq(missionId));
+        }
+
+        else {
+            attendanceAdminVos = jpaQueryFactory
+                    .select(Projections.constructor(AttendanceAdminVo.class,
+                            qAttendance.id,
+                            qAttendance.user,
+                            qAttendance.status,
+                            qAttendance.link,
+                            qAttendance.isRefunded))
+                    .from(qAttendance)
+                    .orderBy(qAttendance.id.desc())
+                    .offset(pageable.getOffset())
+                    .limit(pageable.getPageSize())
+                    .fetch();
+
+            count = jpaQueryFactory.select(qAttendance.count())
+                    .from(qAttendance);
+        }
 
         return PageableExecutionUtils.getPage(attendanceAdminVos, pageable, count::fetchOne);
     }
