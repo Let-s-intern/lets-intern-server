@@ -9,6 +9,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -47,7 +49,8 @@ public class Attendance {
         this.mission = mission;
         this.user = user;
         this.link = link;
-        this.status = AttendanceStatus.CREATED;
+        if(mission.getEndDate().isAfter(LocalDateTime.now())) this.status = AttendanceStatus.CREATED;
+        else this.status = AttendanceStatus.LATE;
         this.isRefunded = false;
     }
 

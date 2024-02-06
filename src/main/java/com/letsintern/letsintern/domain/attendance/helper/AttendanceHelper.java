@@ -3,6 +3,7 @@ package com.letsintern.letsintern.domain.attendance.helper;
 import com.letsintern.letsintern.domain.attendance.domain.Attendance;
 import com.letsintern.letsintern.domain.attendance.dto.request.AttendanceCreateDTO;
 import com.letsintern.letsintern.domain.attendance.dto.response.AttendanceAdminListResponse;
+import com.letsintern.letsintern.domain.attendance.exception.AttendanceAlreadyExists;
 import com.letsintern.letsintern.domain.attendance.mapper.AttendanceMapper;
 import com.letsintern.letsintern.domain.attendance.repository.AttendanceRepository;
 import com.letsintern.letsintern.domain.attendance.vo.AttendanceAdminVo;
@@ -26,11 +27,15 @@ public class AttendanceHelper {
     private final MissionRepository missionRepository;
 
     public Long createAttendance(Long missionId, AttendanceCreateDTO attendanceCreateDTO, User user) {
-        final Mission mission = missionRepository.findById(missionId).orElseThrow(() -> MissionNotFound.EXCEPTION);
+        Mission mission = missionRepository.findById(missionId).orElseThrow(() -> MissionNotFound.EXCEPTION);
+
         // 이미 출석한 경우 처리
-        // 지각 제출 처리
-        // 제출 불가능한 경우 처리
+        final Attendance attendance = attendanceRepository.findByMissionIdAndUserId(missionId, user.getId());
+        if(attendance != null) throw AttendanceAlreadyExists.EXCEPTION;
+
         // Mission.attendanceCount++
+        mission.setAttendanceCount(mission.getAttendanceCount() + 1);
+
         return attendanceRepository.save(attendanceMapper.toEntity(mission, attendanceCreateDTO, user)).getId();
     }
 

@@ -14,7 +14,8 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 public enum AttendanceErrorCode implements BaseErrorCode {
 
     ATTENDANCE_NOT_FOUND(NOT_FOUND, "ATTENDANCE_404_1", "존재하지 않는 출석입니다."),
-    ATTENDANCE_CANNOT_CREATED(BAD_REQUEST, "ATTENDANCE_400_1", "출석 인증이 불가능합니다.");
+    ATTENDANCE_CANNOT_CREATED(BAD_REQUEST, "ATTENDANCE_400_1", "출석 인증이 불가능합니다."),
+    ATTENDANCE_ALREADY_EXISTS(BAD_REQUEST, "ATTENDANCE_400_2", "이미 제출한 출석 인증이 존재합니다.");
 
     private HttpStatus status;
     private String code;
