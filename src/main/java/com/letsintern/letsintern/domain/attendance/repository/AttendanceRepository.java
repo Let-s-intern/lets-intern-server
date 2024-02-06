@@ -4,4 +4,6 @@ import com.letsintern.letsintern.domain.attendance.domain.Attendance;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AttendanceRepository extends JpaRepository<Attendance, Long>, AttendanceRepositoryCustom {
+    Attendance findByMissionIdAndUserId(Long missionId, Long id);
+
 }
