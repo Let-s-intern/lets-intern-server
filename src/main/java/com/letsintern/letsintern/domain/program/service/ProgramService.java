@@ -1,5 +1,11 @@
 package com.letsintern.letsintern.domain.program.service;
 
+import com.letsintern.letsintern.domain.application.domain.Application;
+import com.letsintern.letsintern.domain.application.exception.ApplicationNotFound;
+import com.letsintern.letsintern.domain.application.helper.ApplicationHelper;
+import com.letsintern.letsintern.domain.application.repository.ApplicationRepository;
+import com.letsintern.letsintern.domain.mission.helper.MissionHelper;
+import com.letsintern.letsintern.domain.notice.helper.NoticeHelper;
 import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.program.domain.ProgramStatus;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequestDTO;
@@ -9,6 +15,7 @@ import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
 import com.letsintern.letsintern.domain.program.helper.ProgramHelper;
 import com.letsintern.letsintern.domain.program.mapper.ProgramMapper;
 import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
+import com.letsintern.letsintern.domain.user.domain.User;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +33,11 @@ public class ProgramService {
     private final ProgramMapper programMapper;
 
     private final ProgramRepository programRepository;
+
+    private final ApplicationHelper applicationHelper;
+    private final ApplicationRepository applicationRepository;
+    private final MissionHelper missionHelper;
+    private final NoticeHelper noticeHelper;
 
     public Long getDoneProgramCount() {
         return programRepository.countByStatusEquals(ProgramStatus.DONE);
@@ -73,5 +86,40 @@ public class ProgramService {
                     throw ProgramNotFound.EXCEPTION;
                 });
         programRepository.delete(program);
+    }
+
+    @Transactional
+    public void saveFinalHeadCount(Long programId) {
+        programHelper.saveFinalHeadCount(programId);
+    }
+
+    @Transactional(readOnly = true)
+    public ProgramDashboardResponse getProgramDashboard(Long programId, PrincipalDetails principalDetails, Pageable pageable) {
+        final Program program = programRepository.findById(programId).orElseThrow(() -> ProgramNotFound.EXCEPTION);
+        final User user = principalDetails.getUser();
+        final Application application = applicationRepository.findByProgramIdAndUserId(programId, user.getId());
+        if(application == null) throw  ApplicationNotFound.EXCEPTION;
+
+        return programMapper.toProgramDashboardResponse(
+                missionHelper.getDailyMission(program.getId(), program.getStartDate()),
+                noticeHelper.getNoticeList(programId, pageable),
+                missionHelper.getMissionDashboardList(programId, user.getId()),
+                application.getRefund(),
+                program.getRefundTotal(),
+                program.getFinalHeadCount()
+        );
+    }
+
+    @Transactional(readOnly = true)
+    public ProgramMyDashboardResponse getProgramMyDashboard(Long programId, PrincipalDetails principalDetails) {
+        final Program program = programRepository.findById(programId).orElseThrow(() -> ProgramNotFound.EXCEPTION);
+        final User user = principalDetails.getUser();
+        final Application application = applicationRepository.findByProgramIdAndUserId(programId, user.getId());
+        if(application == null) throw  ApplicationNotFound.EXCEPTION;
+
+        return programMapper.toProgramMyDashboardResponse(
+                missionHelper.getDailyMissionDetail(program.getId(), program.getStartDate(), user.getId()),
+                missionHelper.getMissionDashboardList(programId, user.getId())
+        );
     }
 }

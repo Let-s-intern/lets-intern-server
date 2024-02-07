@@ -34,6 +34,8 @@ public class QProgram extends EntityPathBase<Program> {
 
     public final StringPath faqListStr = createString("faqListStr");
 
+    public final NumberPath<Integer> finalHeadCount = createNumber("finalHeadCount", Integer.class);
+
     public final NumberPath<Integer> headcount = createNumber("headcount", Integer.class);
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
@@ -49,6 +51,8 @@ public class QProgram extends EntityPathBase<Program> {
     public final EnumPath<MailStatus> mailStatus = createEnum("mailStatus", MailStatus.class);
 
     public final StringPath notice = createString("notice");
+
+    public final NumberPath<Integer> refundTotal = createNumber("refundTotal", Integer.class);
 
     public final DateTimePath<java.time.LocalDateTime> startDate = createDateTime("startDate", java.time.LocalDateTime.class);
 

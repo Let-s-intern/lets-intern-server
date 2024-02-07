@@ -10,6 +10,7 @@ import com.letsintern.letsintern.domain.contents.vo.ContentsAdminVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -22,14 +23,17 @@ public class ContentsService {
     private final ContentsHelper contentsHelper;
     private final ContentsMapper contentsMapper;
 
+    @Transactional
     public ContentsIdResponse createContents(ContentsCreateDTO contentsCreateDTO, List<MultipartFile> files) throws IOException {
         return contentsMapper.toContentsIdResponse(contentsHelper.createContents(contentsCreateDTO, files));
     }
 
+    @Transactional(readOnly = true)
     public ContentsAdminListResponse getContentsAdminList(ContentsTopic contentsTopic, Pageable pageable) {
         return contentsMapper.toContentsAdminListResponse(contentsHelper.getContentsAdminList(contentsTopic, pageable));
     }
 
+    @Transactional(readOnly = true)
     public ContentsAdminVo getContentsDetail(Long contentsId) {
         return contentsHelper.getContentsDetail(contentsId);
     }

@@ -42,6 +42,12 @@ public class Program {
     private Integer applicationCount = 0;
 
     @NotNull
+    private Integer finalHeadCount = 0;
+
+    @NotNull
+    private Integer refundTotal = 0;
+
+    @NotNull
     private LocalDateTime dueDate;
 
     @NotNull

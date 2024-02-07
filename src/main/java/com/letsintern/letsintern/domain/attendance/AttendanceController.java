@@ -34,4 +34,6 @@ public class AttendanceController {
     public AttendanceAdminListResponse getAttendanceAdminList(@RequestParam(required = false) Long missionId, @PageableDefault(size = 20) Pageable pageable) {
         return attendanceService.getAttendanceAdminList(missionId, pageable);
     }
+
+    // [어드민] 보증금 미션 Attendance status PASSED로 변경 시 Application.refund에 환급 금액 더하기
 }

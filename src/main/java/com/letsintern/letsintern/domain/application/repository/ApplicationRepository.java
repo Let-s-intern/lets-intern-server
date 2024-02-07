@@ -1,6 +1,7 @@
 package com.letsintern.letsintern.domain.application.repository;
 
 import com.letsintern.letsintern.domain.application.domain.Application;
+import com.letsintern.letsintern.domain.application.domain.ApplicationStatus;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -12,5 +13,7 @@ public interface ApplicationRepository extends JpaRepository<Application, Long>,
     Optional<Application> findById(Long id);
 
     List<Application> findAllByProgramIdAndIsApproved(Long programId, Boolean isApproved);
+
+    Integer countAllByProgramIdAndStatus(Long programId, ApplicationStatus status);
 
 }

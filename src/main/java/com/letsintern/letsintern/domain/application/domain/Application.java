@@ -99,6 +99,11 @@ public class Application {
     @NotNull
     private String createdAt = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 
+    @NotNull
+    private Integer refund = 0;
+
+    @Nullable
+    private String introduction;
 
 
     @Builder
@@ -131,6 +136,10 @@ public class Application {
         /* 회원 */
         else {
             this.type = ApplicationType.USER;
+
+            if(program.getType().equals(ProgramType.CHALLENGE_FULL) || program.getType().equals(ProgramType.CHALLENGE_HALF)) {
+                this.introduction = "안녕하세요, " + user.getName() + "입니다";
+            }
         }
     }
 
