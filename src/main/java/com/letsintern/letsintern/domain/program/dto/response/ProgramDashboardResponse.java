@@ -13,7 +13,7 @@ import java.util.List;
 @Getter
 public class ProgramDashboardResponse {
 
-    private MissionDashboardVo todayMission;
+    private MissionDashboardVo dailyMission;
 
     private List<Notice> noticeList;
 
@@ -23,24 +23,28 @@ public class ProgramDashboardResponse {
 
     private Integer totalRefund;
 
+    private Integer finalHeadCount;
+
     @Builder
-    private ProgramDashboardResponse(MissionDashboardVo todayMission, Page<Notice> noticeList,
-                                     List<MissionDashboardListVo> missionList, Integer currentRefund, Integer totalRefund) {
-        this.todayMission = todayMission;
+    private ProgramDashboardResponse(MissionDashboardVo dailyMission, Page<Notice> noticeList, List<MissionDashboardListVo> missionList,
+                                     Integer currentRefund, Integer totalRefund, Integer finalHeadCount) {
+        this.dailyMission = dailyMission;
         this.noticeList = (noticeList.hasContent()) ? noticeList.getContent() : new ArrayList<>();
         this.missionList = missionList;
         this.currentRefund = currentRefund;
         this.totalRefund = totalRefund;
+        this.finalHeadCount = finalHeadCount;
     }
 
-    public static ProgramDashboardResponse of(MissionDashboardVo todayMission, Page<Notice> noticeList,
-                                              List<MissionDashboardListVo> missionList, Integer currentRefund, Integer totalRefund) {
+    public static ProgramDashboardResponse of(MissionDashboardVo dailyMission, Page<Notice> noticeList, List<MissionDashboardListVo> missionList,
+                                              Integer currentRefund, Integer totalRefund, Integer finalHeadCount) {
         return ProgramDashboardResponse.builder()
-                .todayMission(todayMission)
+                .dailyMission(dailyMission)
                 .noticeList(noticeList)
                 .missionList(missionList)
                 .currentRefund(currentRefund)
                 .totalRefund(totalRefund)
+                .finalHeadCount(finalHeadCount)
                 .build();
     }
 }

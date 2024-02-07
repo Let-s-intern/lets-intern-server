@@ -7,6 +7,7 @@ import com.letsintern.letsintern.domain.mission.mapper.MissionMapper;
 import com.letsintern.letsintern.domain.mission.repository.MissionRepository;
 import com.letsintern.letsintern.domain.mission.vo.MissionDashboardListVo;
 import com.letsintern.letsintern.domain.mission.vo.MissionDashboardVo;
+import com.letsintern.letsintern.domain.mission.vo.MissionMyDashboardVo;
 import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
 import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
@@ -37,10 +38,16 @@ public class MissionHelper {
         return missionMapper.toMissionAdminListResponse(missionRepository.getMissionAdminList(programId, pageable));
     }
 
-    public MissionDashboardVo getTodayMission(Long programId, LocalDateTime startDate) {
+    public MissionDashboardVo getDailyMission(Long programId, LocalDateTime startDate) {
         LocalDate today = LocalDate.now();
         Period period = Period.between(LocalDate.from(startDate), today);
         return missionRepository.getMissionDashboardVo(programId, period.getDays() + 1).orElse(null);
+    }
+
+    public MissionMyDashboardVo getDailyMissionDetail(Long programId, LocalDateTime startDate, Long userId) {
+        LocalDate today = LocalDate.now();
+        Period period = Period.between(LocalDate.from(startDate), today);
+        return missionRepository.getMissionMyDashboardVo(programId, period.getDays() + 1, userId).orElse(null);
     }
 
     public List<MissionDashboardListVo> getMissionDashboardList(Long programId, Long userId) {

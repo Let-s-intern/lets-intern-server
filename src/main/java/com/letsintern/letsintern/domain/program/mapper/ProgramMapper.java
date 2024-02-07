@@ -2,6 +2,7 @@ package com.letsintern.letsintern.domain.program.mapper;
 
 import com.letsintern.letsintern.domain.mission.vo.MissionDashboardListVo;
 import com.letsintern.letsintern.domain.mission.vo.MissionDashboardVo;
+import com.letsintern.letsintern.domain.mission.vo.MissionMyDashboardVo;
 import com.letsintern.letsintern.domain.notice.domain.Notice;
 import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequestDTO;
@@ -34,8 +35,12 @@ public class ProgramMapper {
         return UserProgramVoResponse.from(userProgramList);
     }
 
-    public ProgramDashboardResponse toProgramDashboardResponse(MissionDashboardVo todayMission, Page<Notice> noticeList,
-                                                                 List<MissionDashboardListVo> missionList, Integer currentRefund, Integer totalRefund) {
-        return ProgramDashboardResponse.of(todayMission, noticeList, missionList, currentRefund, totalRefund);
+    public ProgramDashboardResponse toProgramDashboardResponse(MissionDashboardVo dailyMission, Page<Notice> noticeList, List<MissionDashboardListVo> missionList,
+                                                               Integer currentRefund, Integer totalRefund, Integer finalHeadCount) {
+        return ProgramDashboardResponse.of(dailyMission, noticeList, missionList, currentRefund, totalRefund, finalHeadCount);
+    }
+
+    public ProgramMyDashboardResponse toProgramMyDashboardResponse(MissionMyDashboardVo dailyMission, List<MissionDashboardListVo> missionList) {
+        return ProgramMyDashboardResponse.of(dailyMission, missionList);
     }
 }

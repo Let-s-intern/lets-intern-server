@@ -101,11 +101,25 @@ public class ProgramService {
         if(application == null) throw  ApplicationNotFound.EXCEPTION;
 
         return programMapper.toProgramDashboardResponse(
-                missionHelper.getTodayMission(program.getId(), program.getStartDate()),
+                missionHelper.getDailyMission(program.getId(), program.getStartDate()),
                 noticeHelper.getNoticeList(programId, pageable),
                 missionHelper.getMissionDashboardList(programId, user.getId()),
                 application.getRefund(),
-                program.getRefundTotal()
+                program.getRefundTotal(),
+                program.getFinalHeadCount()
+        );
+    }
+
+    @Transactional(readOnly = true)
+    public ProgramMyDashboardResponse getProgramMyDashboard(Long programId, PrincipalDetails principalDetails) {
+        final Program program = programRepository.findById(programId).orElseThrow(() -> ProgramNotFound.EXCEPTION);
+        final User user = principalDetails.getUser();
+        final Application application = applicationRepository.findByProgramIdAndUserId(programId, user.getId());
+        if(application == null) throw  ApplicationNotFound.EXCEPTION;
+
+        return programMapper.toProgramMyDashboardResponse(
+                missionHelper.getDailyMissionDetail(program.getId(), program.getStartDate(), user.getId()),
+                missionHelper.getMissionDashboardList(programId, user.getId())
         );
     }
 }

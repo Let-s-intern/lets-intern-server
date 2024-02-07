@@ -1,11 +1,11 @@
 package com.letsintern.letsintern.domain.mission.repository;
 
-import com.letsintern.letsintern.domain.attendance.domain.AttendanceStatus;
 import com.letsintern.letsintern.domain.attendance.domain.QAttendance;
 import com.letsintern.letsintern.domain.mission.domain.QMission;
 import com.letsintern.letsintern.domain.mission.vo.MissionAdminVo;
 import com.letsintern.letsintern.domain.mission.vo.MissionDashboardListVo;
 import com.letsintern.letsintern.domain.mission.vo.MissionDashboardVo;
+import com.letsintern.letsintern.domain.mission.vo.MissionMyDashboardVo;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -37,6 +37,9 @@ public class MissionRepositoryImpl implements MissionRepositoryCustom {
                         qMission.id,
                         qMission.th,
                         qMission.title,
+                        qMission.contents,
+                        qMission.guide,
+                        qMission.template,
                         qMission.startDate,
                         qMission.endDate,
                         qMission.isRefunded,
@@ -70,6 +73,31 @@ public class MissionRepositoryImpl implements MissionRepositoryCustom {
                         qMission.guide,
                         qMission.endDate))
                 .from(qMission)
+                .where(qMission.program.id.eq(programId).and(qMission.th.eq(th)))
+                .fetchFirst());
+    }
+
+    @Override
+    public Optional<MissionMyDashboardVo> getMissionMyDashboardVo(Long programId, Integer th, Long userId) {
+        QMission qMission = QMission.mission;
+        QAttendance qAttendance = QAttendance.attendance;
+        return Optional.ofNullable(jpaQueryFactory
+                .select(Projections.constructor(MissionMyDashboardVo.class,
+                        qMission.id,
+                        qMission.th,
+                        qMission.title,
+                        qMission.contents,
+                        qMission.guide,
+                        qMission.template,
+                        qMission.endDate,
+                        qMission.contentsListStr,
+                        qAttendance))
+                .from(qMission)
+                .leftJoin(qAttendance)
+                .on(
+                        qAttendance.mission.eq(qMission),
+                        qAttendance.user.id.eq(userId)
+                )
                 .where(qMission.program.id.eq(programId).and(qMission.th.eq(th)))
                 .fetchFirst());
     }

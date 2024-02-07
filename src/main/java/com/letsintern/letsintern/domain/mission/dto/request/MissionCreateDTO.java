@@ -32,6 +32,9 @@ public class MissionCreateDTO {
     @NotNull
     private Integer th;
 
+    @NotNull
+    private String template;
+
     @Nullable
     private List<Long> contentsIdList;
 

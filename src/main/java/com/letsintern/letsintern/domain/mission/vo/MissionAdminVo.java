@@ -16,6 +16,12 @@ public class MissionAdminVo {
 
     private String title;
 
+    private String contents;
+
+    private String guide;
+
+    private String template;
+
     private LocalDateTime startDate;
 
     private LocalDateTime endDate;
@@ -30,11 +36,14 @@ public class MissionAdminVo {
 
     private MissionStatus status;
 
-    public MissionAdminVo(Long id, Integer th, String title, LocalDateTime startDate, LocalDateTime endDate,
+    public MissionAdminVo(Long id, Integer th, String title, String contents, String guide, String template, LocalDateTime startDate, LocalDateTime endDate,
                           Boolean isRefunded, String contentsListStr, Integer attendanceCount, Boolean isVisible, MissionStatus status) {
         this.id = id;
         this.th = th;
         this.title = title;
+        this.contents = contents;
+        this.guide = guide;
+        this.template = template;
         this.startDate = startDate;
         this.endDate = endDate;
         this.isRefunded = isRefunded;

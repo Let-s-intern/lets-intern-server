@@ -58,6 +58,9 @@ public class Mission {
     @NotNull
     private LocalDateTime endDate;
 
+    @NotNull
+    private String template;
+
     @Nullable
     private String contentsListStr;
 
@@ -73,7 +76,7 @@ public class Mission {
     private Program program;
 
     @Builder
-    private Mission(Program program, MissionTopic topic, MissionType type, Integer refund, String title, String contents, String guide, Integer th, List<Long> contentsIdList) {
+    private Mission(Program program, MissionTopic topic, MissionType type, Integer refund, String title, String contents, String guide, Integer th, String template, List<Long> contentsIdList) {
         this.program = program;
         this.type = type;
         this.topic = topic;
@@ -88,6 +91,7 @@ public class Mission {
         this.startDate = program.getStartDate().plusDays(th-1);
         this.endDate = program.getStartDate().plusDays(th);
 
+        this.template = template;
         this.contentsListStr = StringUtils.listToString(contentsIdList);
         this.isVisible = false;
         this.isRefunded = false;
@@ -103,6 +107,7 @@ public class Mission {
                 .contents(missionCreateDTO.getContents())
                 .guide(missionCreateDTO.getGuide())
                 .th(missionCreateDTO.getTh())
+                .template(missionCreateDTO.getTemplate())
                 .contentsIdList(missionCreateDTO.getContentsIdList())
                 .build();
     }

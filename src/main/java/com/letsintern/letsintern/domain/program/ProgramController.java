@@ -102,9 +102,15 @@ public class ProgramController {
         programService.saveFinalHeadCount(programId);
     }
 
-    @Operation(summary = "유저 대시보드 프로그램 정보")
+    @Operation(summary = "유저 챌린지 대시보드 - 대시보드")
     @GetMapping("/{programId}/dashboard")
     public ProgramDashboardResponse getProgramDashboard(@PathVariable Long programId, @AuthenticationPrincipal PrincipalDetails principalDetails, @PageableDefault(size = 6) Pageable pageable) {
         return programService.getProgramDashboard(programId, principalDetails, pageable);
+    }
+
+    @Operation(summary = "유저 챌린지 대시보드 - 나의 기록장")
+    @GetMapping("/{programId}/dashboard/my")
+    public ProgramMyDashboardResponse getProgramMyDashboard(@PathVariable Long programId, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        return programService.getProgramMyDashboard(programId, principalDetails);
     }
 }
