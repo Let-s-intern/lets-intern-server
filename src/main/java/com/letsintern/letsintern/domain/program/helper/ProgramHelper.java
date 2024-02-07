@@ -1,5 +1,6 @@
 package com.letsintern.letsintern.domain.program.helper;
 
+import com.letsintern.letsintern.domain.application.domain.ApplicationStatus;
 import com.letsintern.letsintern.domain.application.helper.ApplicationHelper;
 import com.letsintern.letsintern.domain.application.repository.ApplicationRepository;
 import com.letsintern.letsintern.domain.faq.repository.FaqRepository;
@@ -169,5 +170,10 @@ public class ProgramHelper {
                     throw ProgramNotFound.EXCEPTION;
                 });
         return program;
+    }
+
+    public void saveFinalHeadCount(Long programId) {
+        Program program = programRepository.findById(programId).orElseThrow(() -> ProgramNotFound.EXCEPTION);
+        program.setFinalHeadCount(applicationRepository.countAllByProgramIdAndStatus(programId, ApplicationStatus.IN_PROGRESS));
     }
 }

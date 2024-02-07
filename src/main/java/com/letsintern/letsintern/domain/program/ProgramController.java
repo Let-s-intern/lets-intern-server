@@ -96,4 +96,15 @@ public class ProgramController {
         return ResponseEntity.ok(null);
     }
 
+    @Operation(summary = "어드민 프로그램 최종 참여자수 저장")
+    @GetMapping("/{programId}/headcount")
+    public void saveFinalHeadCount(@PathVariable Long programId) {
+        programService.saveFinalHeadCount(programId);
+    }
+
+    @Operation(summary = "유저 대시보드 프로그램 정보")
+    @GetMapping("/{programId}/dashboard")
+    public ProgramDashboardResponse getProgramDashboard(@PathVariable Long programId, @AuthenticationPrincipal PrincipalDetails principalDetails, @PageableDefault(size = 6) Pageable pageable) {
+        return programService.getProgramDashboard(programId, principalDetails, pageable);
+    }
 }

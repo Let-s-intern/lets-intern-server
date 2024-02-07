@@ -36,6 +36,8 @@ public class QApplication extends EntityPathBase<Application> {
 
     public final EnumPath<InflowPath> inflowPath = createEnum("inflowPath", InflowPath.class);
 
+    public final StringPath introduction = createString("introduction");
+
     public final BooleanPath isApproved = createBoolean("isApproved");
 
     public final StringPath name = createString("name");
@@ -45,6 +47,8 @@ public class QApplication extends EntityPathBase<Application> {
     public final StringPath preQuestions = createString("preQuestions");
 
     public final com.letsintern.letsintern.domain.program.domain.QProgram program;
+
+    public final NumberPath<Integer> refund = createNumber("refund", Integer.class);
 
     public final NumberPath<Long> reviewId = createNumber("reviewId", Long.class);
 

@@ -1,11 +1,11 @@
 package com.letsintern.letsintern.domain.program.mapper;
 
+import com.letsintern.letsintern.domain.mission.vo.MissionDashboardListVo;
+import com.letsintern.letsintern.domain.mission.vo.MissionDashboardVo;
+import com.letsintern.letsintern.domain.notice.domain.Notice;
 import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequestDTO;
-import com.letsintern.letsintern.domain.program.dto.response.ProgramIdResponseDTO;
-import com.letsintern.letsintern.domain.program.dto.response.ProgramListDTO;
-import com.letsintern.letsintern.domain.program.dto.response.UserProgramVoResponse;
-import com.letsintern.letsintern.domain.program.dto.response.ZoomMeetingCreateResponse;
+import com.letsintern.letsintern.domain.program.dto.response.*;
 import com.letsintern.letsintern.domain.program.vo.ProgramThumbnailVo;
 import com.letsintern.letsintern.domain.program.vo.UserProgramVo;
 import lombok.RequiredArgsConstructor;
@@ -32,5 +32,10 @@ public class ProgramMapper {
 
     public UserProgramVoResponse toUserProgramVoResponse(Page<UserProgramVo> userProgramList) {
         return UserProgramVoResponse.from(userProgramList);
+    }
+
+    public ProgramDashboardResponse toProgramDashboardResponse(MissionDashboardVo todayMission, Page<Notice> noticeList,
+                                                                 List<MissionDashboardListVo> missionList, Integer currentRefund, Integer totalRefund) {
+        return ProgramDashboardResponse.of(todayMission, noticeList, missionList, currentRefund, totalRefund);
     }
 }

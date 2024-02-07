@@ -23,24 +23,31 @@ public class Mission {
     private Long id;
 
     @NotNull
-    private Integer attendanceCount;
-
-    @NotNull
-    private Integer refund;
-
-    @NotNull
     @Enumerated(EnumType.STRING)
     private MissionType type;
 
     @NotNull
     @Enumerated(EnumType.STRING)
+    private MissionTopic topic;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
     private MissionStatus status = MissionStatus.CREATED;
+
+    @Nullable
+    private Integer refund;
+
+    @NotNull
+    private Integer attendanceCount;
 
     @NotNull
     private String title;
 
     @NotNull
     private String contents;
+
+    @NotNull
+    private String guide;
 
     @NotNull
     private Integer th;
@@ -66,13 +73,16 @@ public class Mission {
     private Program program;
 
     @Builder
-    private Mission(Program program, Integer refund, MissionType type, String title, String contents, Integer th, List<Long> contentsIdList) {
+    private Mission(Program program, MissionTopic topic, MissionType type, Integer refund, String title, String contents, String guide, Integer th, List<Long> contentsIdList) {
         this.program = program;
-        this.attendanceCount = 0;
-        this.refund = refund;
         this.type = type;
+        this.topic = topic;
+
+        this.refund = refund;
+        this.attendanceCount = 0;
         this.title = title;
         this.contents = contents;
+        this.guide = guide;
 
         this.th = th;
         this.startDate = program.getStartDate().plusDays(th-1);
@@ -86,10 +96,12 @@ public class Mission {
     public static Mission of(Program program, MissionCreateDTO missionCreateDTO) {
         return Mission.builder()
                 .program(program)
-                .refund(missionCreateDTO.getRefund())
                 .type(missionCreateDTO.getType())
+                .topic(missionCreateDTO.getTopic())
+                .refund(missionCreateDTO.getRefund())
                 .title(missionCreateDTO.getTitle())
                 .contents(missionCreateDTO.getContents())
+                .guide(missionCreateDTO.getGuide())
                 .th(missionCreateDTO.getTh())
                 .contentsIdList(missionCreateDTO.getContentsIdList())
                 .build();

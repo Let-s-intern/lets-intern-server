@@ -4,6 +4,6 @@ public enum ContentsType {
 
     ESSENTIAL,
     ADDITIONAL,
-    LIMITED;
+    LIMITED
 
 }
