@@ -1,5 +1,6 @@
 package com.letsintern.letsintern.domain.mission.helper;
 
+import com.letsintern.letsintern.domain.mission.domain.MissionDashboardListStatus;
 import com.letsintern.letsintern.domain.mission.dto.request.MissionCreateDTO;
 import com.letsintern.letsintern.domain.mission.dto.response.MissionAdminListResponse;
 import com.letsintern.letsintern.domain.mission.exception.MissionNotFound;
@@ -52,5 +53,17 @@ public class MissionHelper {
 
     public List<MissionDashboardListVo> getMissionDashboardList(Long programId, Long userId) {
         return missionRepository.getMissionDashboardList(programId, userId);
+    }
+
+    public Object getMissionDetail(Long missionId, MissionDashboardListStatus status, Long userId) {
+        switch (status) {
+            case DONE -> {
+                return missionRepository.getMissionMyDashboardCompleted(missionId, userId);
+            }
+            case YET, ABSENT -> {
+                return missionRepository.getMissionMyDashboardUncompleted(missionId);
+            }
+        }
+        return null;
     }
 }

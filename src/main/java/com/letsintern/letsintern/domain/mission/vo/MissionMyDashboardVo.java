@@ -31,7 +31,7 @@ public class MissionMyDashboardVo {
 
     private boolean isAttended;
 
-    private String link;
+    private String attendanceLink;
 
     @Builder
     public MissionMyDashboardVo(Long id, Integer th, String title, String contents, String guide, String template, LocalDateTime endDate,
@@ -47,7 +47,7 @@ public class MissionMyDashboardVo {
 
         if(attendance != null) {
             this.isAttended = true;
-            this.link = attendance.getLink();
+            this.attendanceLink = attendance.getLink();
         } else {
             this.isAttended = false;
         }

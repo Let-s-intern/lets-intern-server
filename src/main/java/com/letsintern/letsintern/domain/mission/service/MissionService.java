@@ -1,10 +1,13 @@
 package com.letsintern.letsintern.domain.mission.service;
 
+import com.letsintern.letsintern.domain.mission.domain.MissionDashboardListStatus;
 import com.letsintern.letsintern.domain.mission.dto.request.MissionCreateDTO;
 import com.letsintern.letsintern.domain.mission.dto.response.MissionAdminListResponse;
 import com.letsintern.letsintern.domain.mission.dto.response.MissionIdResponse;
 import com.letsintern.letsintern.domain.mission.helper.MissionHelper;
 import com.letsintern.letsintern.domain.mission.mapper.MissionMapper;
+import com.letsintern.letsintern.domain.user.domain.User;
+import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -25,5 +28,11 @@ public class MissionService {
     @Transactional(readOnly = true)
     public MissionAdminListResponse getMissionAdminList(Long programId, Pageable pageable) {
         return missionHelper.getMissionAdminList(programId, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Object getMissionDetail(Long missionId, MissionDashboardListStatus status, PrincipalDetails principalDetails) {
+        final User user = principalDetails.getUser();
+        return missionHelper.getMissionDetail(missionId, status, user.getId());
     }
 }
