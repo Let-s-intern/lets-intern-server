@@ -5,6 +5,7 @@ import com.letsintern.letsintern.domain.mission.dto.request.MissionCreateDTO;
 import com.letsintern.letsintern.domain.mission.dto.response.MissionAdminListResponse;
 import com.letsintern.letsintern.domain.mission.dto.response.MissionIdResponse;
 import com.letsintern.letsintern.domain.mission.service.MissionService;
+import com.letsintern.letsintern.domain.mission.dto.response.MissionMyDashboardListResponse;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -36,9 +37,15 @@ public class MissionController {
         return missionService.getMissionAdminList(programId, pageable);
     }
 
-    @GetMapping("/{missionId}/t")
+    @Operation(summary = "유저 챌린지 대시보드 - 나의 기록장 미션 리스트")
+    @GetMapping("/{programId}/list")
+    public MissionMyDashboardListResponse getMissionMyDashboardList(@PathVariable Long programId, @RequestParam MissionDashboardListStatus status, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        return missionService.getMissionMyDashboardList(programId, status, principalDetails);
+    }
+
+    @GetMapping("/{missionId}/detail")
     @Operation(summary = "유저 대시보드 - 나의 기록장 미션 리스트 1개 상세 보기")
-    private ResponseEntity<?> getMissionDetail(@PathVariable Long missionId, @RequestParam MissionDashboardListStatus status, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        return ResponseEntity.ok(missionService.getMissionDetail(missionId, status, principalDetails));
+    private ResponseEntity<?> getMissionMyDashboardDetail(@PathVariable Long missionId, @RequestParam MissionDashboardListStatus status, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        return ResponseEntity.ok(missionService.getMissionMyDashboardDetail(missionId, status, principalDetails));
     }
 }

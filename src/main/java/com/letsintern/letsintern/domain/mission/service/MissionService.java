@@ -6,6 +6,7 @@ import com.letsintern.letsintern.domain.mission.dto.response.MissionAdminListRes
 import com.letsintern.letsintern.domain.mission.dto.response.MissionIdResponse;
 import com.letsintern.letsintern.domain.mission.helper.MissionHelper;
 import com.letsintern.letsintern.domain.mission.mapper.MissionMapper;
+import com.letsintern.letsintern.domain.mission.dto.response.MissionMyDashboardListResponse;
 import com.letsintern.letsintern.domain.user.domain.User;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
@@ -30,9 +31,16 @@ public class MissionService {
         return missionHelper.getMissionAdminList(programId, pageable);
     }
 
-    @Transactional(readOnly = true)
-    public Object getMissionDetail(Long missionId, MissionDashboardListStatus status, PrincipalDetails principalDetails) {
+    @Transactional
+    public MissionMyDashboardListResponse getMissionMyDashboardList(Long programId, MissionDashboardListStatus status, PrincipalDetails principalDetails) {
         final User user = principalDetails.getUser();
-        return missionHelper.getMissionDetail(missionId, status, user.getId());
+        return missionMapper.toMissionMyDashboardListResponse(missionHelper.getMissionMyDashboardList(programId, status, user.getId()));
     }
+
+    @Transactional(readOnly = true)
+    public Object getMissionMyDashboardDetail(Long missionId, MissionDashboardListStatus status, PrincipalDetails principalDetails) {
+        final User user = principalDetails.getUser();
+        return missionHelper.getMissionMyDashboardDetail(missionId, status, user.getId());
+    }
+
 }

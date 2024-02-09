@@ -124,7 +124,7 @@ public class MissionRepositoryImpl implements MissionRepositoryCustom {
     }
 
     @Override
-    public List<MissionMyDashboardListVo> getMissionMyDashboardList(Long programId, Long userId, MissionDashboardListStatus status) {
+    public List<MissionMyDashboardListVo> getMissionMyDashboardList(Long programId, MissionDashboardListStatus status, Long userId) {
         QMission qMission = QMission.mission;
         QAttendance qAttendance = QAttendance.attendance;
 

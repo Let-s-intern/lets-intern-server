@@ -8,11 +8,11 @@ import com.letsintern.letsintern.domain.mission.mapper.MissionMapper;
 import com.letsintern.letsintern.domain.mission.repository.MissionRepository;
 import com.letsintern.letsintern.domain.mission.vo.MissionDashboardListVo;
 import com.letsintern.letsintern.domain.mission.vo.MissionDashboardVo;
+import com.letsintern.letsintern.domain.mission.vo.MissionMyDashboardListVo;
 import com.letsintern.letsintern.domain.mission.vo.MissionMyDashboardVo;
 import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
 import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
-import com.letsintern.letsintern.domain.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
@@ -55,15 +55,20 @@ public class MissionHelper {
         return missionRepository.getMissionDashboardList(programId, userId);
     }
 
-    public Object getMissionDetail(Long missionId, MissionDashboardListStatus status, Long userId) {
+    public List<MissionMyDashboardListVo> getMissionMyDashboardList(Long programId, MissionDashboardListStatus status, Long userId) {
+        return missionRepository.getMissionMyDashboardList(programId, status, userId);
+    }
+
+    public Object getMissionMyDashboardDetail(Long missionId, MissionDashboardListStatus status, Long userId) {
         switch (status) {
             case DONE -> {
-                return missionRepository.getMissionMyDashboardCompleted(missionId, userId);
+                return missionRepository.getMissionMyDashboardCompleted(missionId, userId).orElseThrow(() -> MissionNotFound.EXCEPTION);
             }
             case YET, ABSENT -> {
-                return missionRepository.getMissionMyDashboardUncompleted(missionId);
+                return missionRepository.getMissionMyDashboardUncompleted(missionId).orElseThrow(() -> MissionNotFound.EXCEPTION);
             }
         }
-        return null;
+        return missionRepository.getMissionMyDashboardUncompleted(missionId).orElseThrow(() -> MissionNotFound.EXCEPTION);
     }
+
 }

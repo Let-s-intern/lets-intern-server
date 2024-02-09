@@ -18,7 +18,7 @@ public interface MissionRepositoryCustom {
 
     List<MissionDashboardListVo> getMissionDashboardList(Long programId, Long userId);
 
-    List<MissionMyDashboardListVo> getMissionMyDashboardList(Long programId, Long userId, MissionDashboardListStatus status);
+    List<MissionMyDashboardListVo> getMissionMyDashboardList(Long programId, MissionDashboardListStatus status, Long userId);
 
     Optional<MissionMyDashboardCompletedVo> getMissionMyDashboardCompleted(Long missionId, Long userId);
 
