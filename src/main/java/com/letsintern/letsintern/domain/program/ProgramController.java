@@ -113,4 +113,10 @@ public class ProgramController {
     public ProgramMyDashboardResponse getProgramMyDashboard(@PathVariable Long programId, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         return programService.getProgramMyDashboard(programId, principalDetails);
     }
+
+    @Operation(summary = "유저 챌린지 대시보드 - 모두의 기록장")
+    @GetMapping("/{programId}/dashboard/entire")
+    public ProgramEntireDashboardResponse getProgramEntireDashboard(@PathVariable Long programId, @AuthenticationPrincipal PrincipalDetails principalDetails, @PageableDefault(size = 9) Pageable pageable) {
+        return programService.getProgramEntireDashboard(programId, principalDetails, pageable);
+    }
 }
