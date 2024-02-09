@@ -1,5 +1,6 @@
 package com.letsintern.letsintern.domain.program.mapper;
 
+import com.letsintern.letsintern.domain.application.vo.ApplicationEntireDashboardVo;
 import com.letsintern.letsintern.domain.mission.vo.MissionDashboardListVo;
 import com.letsintern.letsintern.domain.mission.vo.MissionDashboardVo;
 import com.letsintern.letsintern.domain.mission.vo.MissionMyDashboardVo;
@@ -42,5 +43,9 @@ public class ProgramMapper {
 
     public ProgramMyDashboardResponse toProgramMyDashboardResponse(MissionMyDashboardVo dailyMission, List<MissionDashboardListVo> missionList) {
         return ProgramMyDashboardResponse.of(dailyMission, missionList);
+    }
+
+    public ProgramEntireDashboardResponse toProgramEntireDashboardResponse(ApplicationEntireDashboardVo myDashboard, Page<ApplicationEntireDashboardVo> dashboardList) {
+        return ProgramEntireDashboardResponse.of(myDashboard, dashboardList);
     }
 }

@@ -119,7 +119,17 @@ public class ProgramService {
 
         return programMapper.toProgramMyDashboardResponse(
                 missionHelper.getDailyMissionDetail(program.getId(), program.getStartDate(), user.getId()),
-                missionHelper.getMissionDashboardList(programId, user.getId())
+                missionHelper.getMissionDashboardList(program.getId(), user.getId())
+        );
+    }
+
+    public ProgramEntireDashboardResponse getProgramEntireDashboard(Long programId, PrincipalDetails principalDetails, Pageable pageable) {
+        final Program program = programRepository.findById(programId).orElseThrow(() -> ProgramNotFound.EXCEPTION);
+        final User user = principalDetails.getUser();
+
+        return programMapper.toProgramEntireDashboardResponse(
+                applicationHelper.getMyDashboard(program.getId(), user.getId()),
+                applicationHelper.getDashboardList(program.getId(), user.getId(), pageable)
         );
     }
 }

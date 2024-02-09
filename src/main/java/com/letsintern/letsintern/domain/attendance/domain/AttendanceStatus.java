@@ -6,6 +6,7 @@ public enum AttendanceStatus {
     PASSED,
     WRONG,
     UPDATED,
-    LATE
+    LATE,
+    ABSENT
 
 }

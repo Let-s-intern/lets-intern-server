@@ -9,6 +9,7 @@ import com.letsintern.letsintern.domain.application.exception.*;
 import com.letsintern.letsintern.domain.application.mapper.ApplicationMapper;
 import com.letsintern.letsintern.domain.application.repository.ApplicationRepository;
 import com.letsintern.letsintern.domain.application.vo.ApplicationAdminVo;
+import com.letsintern.letsintern.domain.application.vo.ApplicationEntireDashboardVo;
 import com.letsintern.letsintern.domain.application.vo.ApplicationVo;
 import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.program.domain.ProgramStatus;
@@ -172,5 +173,13 @@ public class ApplicationHelper {
         int pageNum = pageable.getPageNumber();
         int pageSize = pageable.getPageSize();
         return PageRequest.of(pageNum, pageSize, Sort.by("id").descending());
+    }
+
+    public ApplicationEntireDashboardVo getMyDashboard(Long programId, Long userId) {
+        return applicationRepository.getEntireDashboardMyVo(programId, userId).orElseThrow(() -> ApplicationNotFound.EXCEPTION);
+    }
+
+    public Page<ApplicationEntireDashboardVo> getDashboardList(Long programId, Long userId, Pageable pageable) {
+        return applicationRepository.getEntireDashboardList(programId, userId, pageable);
     }
 }

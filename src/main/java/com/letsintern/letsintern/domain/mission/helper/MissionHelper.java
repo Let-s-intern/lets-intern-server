@@ -1,18 +1,17 @@
 package com.letsintern.letsintern.domain.mission.helper;
 
+import com.letsintern.letsintern.domain.mission.domain.MissionDashboardListStatus;
 import com.letsintern.letsintern.domain.mission.dto.request.MissionCreateDTO;
 import com.letsintern.letsintern.domain.mission.dto.response.MissionAdminListResponse;
 import com.letsintern.letsintern.domain.mission.exception.MissionNotFound;
 import com.letsintern.letsintern.domain.mission.mapper.MissionMapper;
 import com.letsintern.letsintern.domain.mission.repository.MissionRepository;
-import com.letsintern.letsintern.domain.mission.vo.MissionDashboardListVo;
-import com.letsintern.letsintern.domain.mission.vo.MissionDashboardVo;
-import com.letsintern.letsintern.domain.mission.vo.MissionMyDashboardVo;
+import com.letsintern.letsintern.domain.mission.vo.*;
 import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
 import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
-import com.letsintern.letsintern.domain.user.domain.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
@@ -34,8 +33,13 @@ public class MissionHelper {
         return missionRepository.save(missionMapper.toEntity(program, missionCreateDTO)).getId();
     }
 
-    public MissionAdminListResponse getMissionAdminList(Long programId, Pageable pageable) {
-        return missionMapper.toMissionAdminListResponse(missionRepository.getMissionAdminList(programId, pageable));
+
+    public List<MissionAdminSimpleVo> getMissionAdminSimpleList(Long programId) {
+        return missionRepository.getMissionAdminSimpleList(programId);
+    }
+
+    public Page<MissionAdminVo> getMissionAdminList(Long programId, Pageable pageable) {
+        return missionRepository.getMissionAdminList(programId, pageable);
     }
 
     public MissionDashboardVo getDailyMission(Long programId, LocalDateTime startDate) {
@@ -52,5 +56,21 @@ public class MissionHelper {
 
     public List<MissionDashboardListVo> getMissionDashboardList(Long programId, Long userId) {
         return missionRepository.getMissionDashboardList(programId, userId);
+    }
+
+    public List<MissionMyDashboardListVo> getMissionMyDashboardList(Long programId, MissionDashboardListStatus status, Long userId) {
+        return missionRepository.getMissionMyDashboardList(programId, status, userId);
+    }
+
+    public Object getMissionMyDashboardDetail(Long missionId, MissionDashboardListStatus status, Long userId) {
+        switch (status) {
+            case DONE -> {
+                return missionRepository.getMissionMyDashboardCompleted(missionId, userId).orElseThrow(() -> MissionNotFound.EXCEPTION);
+            }
+            case YET, ABSENT -> {
+                return missionRepository.getMissionMyDashboardUncompleted(missionId).orElseThrow(() -> MissionNotFound.EXCEPTION);
+            }
+        }
+        return missionRepository.getMissionMyDashboardUncompleted(missionId).orElseThrow(() -> MissionNotFound.EXCEPTION);
     }
 }

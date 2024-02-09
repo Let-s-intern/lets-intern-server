@@ -2,6 +2,7 @@ package com.letsintern.letsintern.domain.application.repository;
 
 import com.letsintern.letsintern.domain.application.domain.Application;
 import com.letsintern.letsintern.domain.application.vo.ApplicationAdminVo;
+import com.letsintern.letsintern.domain.application.vo.ApplicationEntireDashboardVo;
 import com.letsintern.letsintern.domain.application.vo.ApplicationVo;
 import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.program.vo.UserProgramVo;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface ApplicationRepositoryCustom {
 
@@ -31,4 +33,8 @@ public interface ApplicationRepositoryCustom {
     void updateAllApplicationStatusDone(Long programId);
 
     List<String> findAllEmailByIsApproved(Long programId, Boolean isApproved);
+
+    Optional<ApplicationEntireDashboardVo> getEntireDashboardMyVo(Long programId, Long userId);
+
+    Page<ApplicationEntireDashboardVo> getEntireDashboardList(Long programId, Long userId, Pageable pageable);
 }

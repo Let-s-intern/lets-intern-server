@@ -2,6 +2,7 @@ package com.letsintern.letsintern.domain.attendance.repository;
 
 import com.letsintern.letsintern.domain.attendance.domain.QAttendance;
 import com.letsintern.letsintern.domain.attendance.vo.AttendanceAdminVo;
+import com.letsintern.letsintern.domain.attendance.vo.AttendanceDashboardVo;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -64,5 +65,20 @@ public class AttendanceRepositoryImpl implements AttendanceRepositoryCustom {
         }
 
         return PageableExecutionUtils.getPage(attendanceAdminVos, pageable, count::fetchOne);
+    }
+
+    @Override
+    public List<AttendanceDashboardVo> getAttendanceDashboardVos(Long programId, Long userId) {
+        QAttendance qAttendance = QAttendance.attendance;
+        return jpaQueryFactory
+                .select(Projections.constructor(AttendanceDashboardVo.class,
+                        qAttendance.id,
+                        qAttendance.link,
+                        qAttendance.mission.th,
+                        qAttendance.mission.title))
+                .from(qAttendance)
+                .where(qAttendance.user.id.eq(userId).and(qAttendance.mission.program.id.eq(programId)))
+                .orderBy(qAttendance.mission.th.asc())
+                .fetch();
     }
 }

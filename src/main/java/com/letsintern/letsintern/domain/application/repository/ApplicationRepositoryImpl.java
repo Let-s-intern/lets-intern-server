@@ -2,6 +2,7 @@ package com.letsintern.letsintern.domain.application.repository;
 
 import com.letsintern.letsintern.domain.application.domain.*;
 import com.letsintern.letsintern.domain.application.vo.ApplicationAdminVo;
+import com.letsintern.letsintern.domain.application.vo.ApplicationEntireDashboardVo;
 import com.letsintern.letsintern.domain.application.vo.ApplicationVo;
 import com.letsintern.letsintern.domain.program.domain.ProgramStatus;
 import com.letsintern.letsintern.domain.program.vo.UserProgramVo;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -226,5 +228,56 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
                 .fetch());
 
         return emailList;
+    }
+
+    @Override
+    public Optional<ApplicationEntireDashboardVo> getEntireDashboardMyVo(Long programId, Long userId) {
+        QApplication qApplication = QApplication.application;
+
+        return Optional.ofNullable(jpaQueryFactory
+                .select(Projections.constructor(ApplicationEntireDashboardVo.class,
+                        qApplication.id,
+                        qApplication.user.name,
+                        qApplication.wishJob,
+                        qApplication.introduction))
+                .from(qApplication)
+                .where(
+                        qApplication.program.id.eq(programId),
+                        qApplication.user.id.eq(userId),
+                        qApplication.status.in(ApplicationStatus.IN_PROGRESS, ApplicationStatus.DONE))
+                .fetchFirst());
+    }
+
+    @Override
+    public Page<ApplicationEntireDashboardVo> getEntireDashboardList(Long programId, Long userId, Pageable pageable) {
+        QApplication qApplication = QApplication.application;
+        List<ApplicationEntireDashboardVo> applicationEntireDashboardVos;
+        JPAQuery<Long> count;
+
+        applicationEntireDashboardVos = jpaQueryFactory
+                .select(Projections.constructor(ApplicationEntireDashboardVo.class,
+                        qApplication.id,
+                        qApplication.user.name,
+                        qApplication.wishJob,
+                        qApplication.introduction))
+                .from(qApplication)
+                .where(
+                        qApplication.program.id.eq(programId),
+                        qApplication.user.id.ne(userId),
+                        qApplication.status.in(ApplicationStatus.IN_PROGRESS, ApplicationStatus.DONE))
+                .orderBy(qApplication.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        count = jpaQueryFactory
+                .select(qApplication.count())
+                .from(qApplication)
+                .where(
+                        qApplication.program.id.eq(programId),
+                        qApplication.user.id.ne(userId),
+                        qApplication.status.in(ApplicationStatus.IN_PROGRESS, ApplicationStatus.DONE));
+
+        return PageableExecutionUtils.getPage(applicationEntireDashboardVos, pageable, count::fetchOne);
     }
 }
