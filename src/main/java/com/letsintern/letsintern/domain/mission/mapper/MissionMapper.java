@@ -3,8 +3,10 @@ package com.letsintern.letsintern.domain.mission.mapper;
 import com.letsintern.letsintern.domain.mission.domain.Mission;
 import com.letsintern.letsintern.domain.mission.dto.request.MissionCreateDTO;
 import com.letsintern.letsintern.domain.mission.dto.response.MissionAdminListResponse;
+import com.letsintern.letsintern.domain.mission.dto.response.MissionAdminSimpleListResponse;
 import com.letsintern.letsintern.domain.mission.dto.response.MissionIdResponse;
 import com.letsintern.letsintern.domain.mission.dto.response.MissionMyDashboardListResponse;
+import com.letsintern.letsintern.domain.mission.vo.MissionAdminSimpleVo;
 import com.letsintern.letsintern.domain.mission.vo.MissionAdminVo;
 import com.letsintern.letsintern.domain.mission.vo.MissionMyDashboardListVo;
 import com.letsintern.letsintern.domain.program.domain.Program;
@@ -24,6 +26,10 @@ public class MissionMapper {
         return MissionIdResponse.from(missionId);
     }
 
+    public MissionAdminSimpleListResponse toMissionAdminSimpleListResponse(List<MissionAdminSimpleVo> missionAdminSimpleList) {
+        return MissionAdminSimpleListResponse.from(missionAdminSimpleList);
+    }
+
     public MissionAdminListResponse toMissionAdminListResponse(Page<MissionAdminVo> missionAdminList) {
         return MissionAdminListResponse.from(missionAdminList);
     }
@@ -31,4 +37,5 @@ public class MissionMapper {
     public MissionMyDashboardListResponse toMissionMyDashboardListResponse(List<MissionMyDashboardListVo> missionMyDashboardList) {
         return MissionMyDashboardListResponse.from(missionMyDashboardList);
     }
+
 }

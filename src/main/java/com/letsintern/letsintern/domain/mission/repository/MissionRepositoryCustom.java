@@ -12,6 +12,8 @@ public interface MissionRepositoryCustom {
 
     Page<MissionAdminVo> getMissionAdminList(Long programId, Pageable pageable);
 
+    List<MissionAdminSimpleVo> getMissionAdminSimpleList(Long programId);
+
     Optional<MissionDashboardVo> getMissionDashboardVo(Long programId, Integer th);
 
     Optional<MissionMyDashboardVo> getMissionMyDashboardVo(Long programId, Integer th, Long userId);

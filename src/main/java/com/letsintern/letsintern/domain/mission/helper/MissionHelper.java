@@ -6,14 +6,12 @@ import com.letsintern.letsintern.domain.mission.dto.response.MissionAdminListRes
 import com.letsintern.letsintern.domain.mission.exception.MissionNotFound;
 import com.letsintern.letsintern.domain.mission.mapper.MissionMapper;
 import com.letsintern.letsintern.domain.mission.repository.MissionRepository;
-import com.letsintern.letsintern.domain.mission.vo.MissionDashboardListVo;
-import com.letsintern.letsintern.domain.mission.vo.MissionDashboardVo;
-import com.letsintern.letsintern.domain.mission.vo.MissionMyDashboardListVo;
-import com.letsintern.letsintern.domain.mission.vo.MissionMyDashboardVo;
+import com.letsintern.letsintern.domain.mission.vo.*;
 import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
 import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
@@ -35,8 +33,13 @@ public class MissionHelper {
         return missionRepository.save(missionMapper.toEntity(program, missionCreateDTO)).getId();
     }
 
-    public MissionAdminListResponse getMissionAdminList(Long programId, Pageable pageable) {
-        return missionMapper.toMissionAdminListResponse(missionRepository.getMissionAdminList(programId, pageable));
+
+    public List<MissionAdminSimpleVo> getMissionAdminSimpleList(Long programId) {
+        return missionRepository.getMissionAdminSimpleList(programId);
+    }
+
+    public Page<MissionAdminVo> getMissionAdminList(Long programId, Pageable pageable) {
+        return missionRepository.getMissionAdminList(programId, pageable);
     }
 
     public MissionDashboardVo getDailyMission(Long programId, LocalDateTime startDate) {
@@ -70,5 +73,4 @@ public class MissionHelper {
         }
         return missionRepository.getMissionMyDashboardUncompleted(missionId).orElseThrow(() -> MissionNotFound.EXCEPTION);
     }
-
 }

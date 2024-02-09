@@ -3,6 +3,7 @@ package com.letsintern.letsintern.domain.mission.service;
 import com.letsintern.letsintern.domain.mission.domain.MissionDashboardListStatus;
 import com.letsintern.letsintern.domain.mission.dto.request.MissionCreateDTO;
 import com.letsintern.letsintern.domain.mission.dto.response.MissionAdminListResponse;
+import com.letsintern.letsintern.domain.mission.dto.response.MissionAdminSimpleListResponse;
 import com.letsintern.letsintern.domain.mission.dto.response.MissionIdResponse;
 import com.letsintern.letsintern.domain.mission.helper.MissionHelper;
 import com.letsintern.letsintern.domain.mission.mapper.MissionMapper;
@@ -27,8 +28,13 @@ public class MissionService {
     }
 
     @Transactional(readOnly = true)
+    public MissionAdminSimpleListResponse getMissionAdminSimpleList(Long programId) {
+        return missionMapper.toMissionAdminSimpleListResponse(missionHelper.getMissionAdminSimpleList(programId));
+    }
+
+    @Transactional(readOnly = true)
     public MissionAdminListResponse getMissionAdminList(Long programId, Pageable pageable) {
-        return missionHelper.getMissionAdminList(programId, pageable);
+        return missionMapper.toMissionAdminListResponse(missionHelper.getMissionAdminList(programId, pageable));
     }
 
     @Transactional
@@ -42,5 +48,4 @@ public class MissionService {
         final User user = principalDetails.getUser();
         return missionHelper.getMissionMyDashboardDetail(missionId, status, user.getId());
     }
-
 }

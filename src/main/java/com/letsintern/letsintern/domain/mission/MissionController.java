@@ -3,6 +3,7 @@ package com.letsintern.letsintern.domain.mission;
 import com.letsintern.letsintern.domain.mission.domain.MissionDashboardListStatus;
 import com.letsintern.letsintern.domain.mission.dto.request.MissionCreateDTO;
 import com.letsintern.letsintern.domain.mission.dto.response.MissionAdminListResponse;
+import com.letsintern.letsintern.domain.mission.dto.response.MissionAdminSimpleListResponse;
 import com.letsintern.letsintern.domain.mission.dto.response.MissionIdResponse;
 import com.letsintern.letsintern.domain.mission.service.MissionService;
 import com.letsintern.letsintern.domain.mission.dto.response.MissionMyDashboardListResponse;
@@ -29,6 +30,12 @@ public class MissionController {
     @Operation(summary = "미션 생성하기")
     private MissionIdResponse createMission(@PathVariable Long programId, @Valid @RequestBody MissionCreateDTO missionCreateDTO) {
         return missionService.createMission(programId, missionCreateDTO);
+    }
+
+    @GetMapping("/{programId}/simple")
+    @Operation(summary = "프로그램별 미션 전체 목록 - 미션 제출 현황")
+    private MissionAdminSimpleListResponse getMissionAdminSimpleList(@PathVariable Long programId) {
+        return missionService.getMissionAdminSimpleList(programId);
     }
 
     @GetMapping("/{programId}")

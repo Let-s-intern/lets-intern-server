@@ -7,7 +7,6 @@ import com.letsintern.letsintern.domain.mission.vo.*;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +22,6 @@ import java.util.Optional;
 public class MissionRepositoryImpl implements MissionRepositoryCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
-    private final EntityManager entityManager;
 
     @Override
     public Page<MissionAdminVo> getMissionAdminList(Long programId, Pageable pageable) {
@@ -58,6 +56,23 @@ public class MissionRepositoryImpl implements MissionRepositoryCustom {
                 .where(qMission.program.id.eq(programId));
 
         return PageableExecutionUtils.getPage(missionAdminVos, pageable, count::fetchOne);
+    }
+
+    @Override
+    public List<MissionAdminSimpleVo> getMissionAdminSimpleList(Long programId) {
+        QMission qMission = QMission.mission;
+        return jpaQueryFactory
+                .select(Projections.constructor(MissionAdminSimpleVo.class,
+                        qMission.id,
+                        qMission.th,
+                        qMission.startDate,
+                        qMission.attendanceCount,
+                        qMission.program.finalHeadCount,
+                        qMission.status))
+                .from(qMission)
+                .where(qMission.program.id.eq(programId))
+                .orderBy(qMission.th.asc())
+                .fetch();
     }
 
     @Override

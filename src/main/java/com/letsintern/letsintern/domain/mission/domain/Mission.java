@@ -88,8 +88,9 @@ public class Mission {
         this.guide = guide;
 
         this.th = th;
-        this.startDate = program.getStartDate().plusDays(th-1);
-        this.endDate = program.getStartDate().plusDays(th);
+        if(th == 1) this.startDate = program.getStartDate();
+        else this.startDate = program.getStartDate().plusDays(th - 1).withHour(6);
+        this.endDate = this.startDate.withHour(23).withMinute(59).withSecond(59);
 
         this.template = template;
         this.contentsListStr = StringUtils.listToString(contentsIdList);
