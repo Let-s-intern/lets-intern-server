@@ -3,6 +3,7 @@ package com.letsintern.letsintern.domain.contents;
 import com.letsintern.letsintern.domain.contents.domain.Contents;
 import com.letsintern.letsintern.domain.contents.domain.ContentsTopic;
 import com.letsintern.letsintern.domain.contents.dto.request.ContentsCreateDTO;
+import com.letsintern.letsintern.domain.contents.dto.request.ContentsUpdateDTO;
 import com.letsintern.letsintern.domain.contents.dto.response.ContentsAdminListResponse;
 import com.letsintern.letsintern.domain.contents.dto.response.ContentsIdResponse;
 import com.letsintern.letsintern.domain.contents.service.ContentsService;
@@ -44,5 +45,11 @@ public class ContentsController {
     @Operation(summary = "어드민 컨텐츠 1개 상세 보기")
     private ContentsAdminVo getContentsDetail(@PathVariable Long contentsId) {
         return contentsService.getContentsDetail(contentsId);
+    }
+
+    @PatchMapping("/{contentsId}")
+    @Operation(summary = "어드민 컨텐츠 수정")
+    private ContentsIdResponse updateContents(@PathVariable Long contentsId, @RequestBody ContentsUpdateDTO contentsUpdateDTO) {
+        return contentsService.updateContents(contentsId, contentsUpdateDTO);
     }
 }

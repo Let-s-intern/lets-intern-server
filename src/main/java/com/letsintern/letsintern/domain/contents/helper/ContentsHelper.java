@@ -3,12 +3,15 @@ package com.letsintern.letsintern.domain.contents.helper;
 import com.letsintern.letsintern.domain.contents.domain.Contents;
 import com.letsintern.letsintern.domain.contents.domain.ContentsTopic;
 import com.letsintern.letsintern.domain.contents.dto.request.ContentsCreateDTO;
+import com.letsintern.letsintern.domain.contents.dto.request.ContentsUpdateDTO;
+import com.letsintern.letsintern.domain.contents.dto.response.ContentsIdResponse;
 import com.letsintern.letsintern.domain.contents.exception.ContentsNotFound;
 import com.letsintern.letsintern.domain.contents.mapper.ContentsMapper;
 import com.letsintern.letsintern.domain.contents.repository.ContentsRepository;
 import com.letsintern.letsintern.domain.contents.vo.ContentsAdminVo;
 import com.letsintern.letsintern.domain.file.helper.S3Helper;
 import com.letsintern.letsintern.domain.file.service.FileService;
+import com.letsintern.letsintern.global.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -47,5 +50,23 @@ public class ContentsHelper {
 
     public ContentsAdminVo getContentsDetail(Long contentsId) {
         return contentsRepository.findContentsAdminVo(contentsId).orElseThrow(() -> ContentsNotFound.EXCEPTION);
+    }
+
+    public Long updateContents(Long contentsId, ContentsUpdateDTO contentsUpdateDTO) {
+        Contents contents = contentsRepository.findById(contentsId).orElseThrow(() -> ContentsNotFound.EXCEPTION);
+        if(contentsUpdateDTO.getTitle() != null)
+            contents.setTitle(contentsUpdateDTO.getTitle());
+        if(contentsUpdateDTO.getType() != null)
+            contents.setType(contentsUpdateDTO.getType());
+        if(contentsUpdateDTO.getTopic() != null)
+            contents.setTopic(contentsUpdateDTO.getTopic());
+        if(contentsUpdateDTO.getLink() != null)
+            contents.setLink(contentsUpdateDTO.getLink());
+        if(contentsUpdateDTO.getFileIdList() != null)
+            contents.setFileListStr(StringUtils.listToString(contentsUpdateDTO.getFileIdList()));
+        if(contentsUpdateDTO.getIsVisible() != null)
+            contents.setIsVisible(contentsUpdateDTO.getIsVisible());
+
+        return contents.getId();
     }
 }

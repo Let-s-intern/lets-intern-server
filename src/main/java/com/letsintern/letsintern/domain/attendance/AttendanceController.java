@@ -1,5 +1,6 @@
 package com.letsintern.letsintern.domain.attendance;
 
+import com.letsintern.letsintern.domain.attendance.dto.request.AttendanceAdminUpdateDTO;
 import com.letsintern.letsintern.domain.attendance.dto.request.AttendanceCreateDTO;
 import com.letsintern.letsintern.domain.attendance.dto.response.AttendanceAdminListResponse;
 import com.letsintern.letsintern.domain.attendance.dto.response.AttendanceDashboardResponse;
@@ -34,6 +35,12 @@ public class AttendanceController {
     @Operation(summary = "어드민 출석 목록 보기")
     public AttendanceAdminListResponse getAttendanceAdminList(@RequestParam(required = false) Long missionId, @PageableDefault(size = 20) Pageable pageable) {
         return attendanceService.getAttendanceAdminList(missionId, pageable);
+    }
+
+    @PatchMapping("/{attendanceId}")
+    @Operation(summary = "어드민 출석 업데이트")
+    public AttendanceIdResponse updateAttendanceAdmin(@PathVariable Long attendanceId, @RequestBody AttendanceAdminUpdateDTO attendanceAdminUpdateDTO) {
+        return attendanceService.updateAttendanceAdmin(attendanceId, attendanceAdminUpdateDTO);
     }
 
     @GetMapping("/{applicationId}")

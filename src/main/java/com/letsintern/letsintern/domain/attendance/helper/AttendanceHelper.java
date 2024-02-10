@@ -4,9 +4,11 @@ import com.letsintern.letsintern.domain.application.domain.Application;
 import com.letsintern.letsintern.domain.application.exception.ApplicationNotFound;
 import com.letsintern.letsintern.domain.application.repository.ApplicationRepository;
 import com.letsintern.letsintern.domain.attendance.domain.Attendance;
+import com.letsintern.letsintern.domain.attendance.dto.request.AttendanceAdminUpdateDTO;
 import com.letsintern.letsintern.domain.attendance.dto.request.AttendanceCreateDTO;
 import com.letsintern.letsintern.domain.attendance.dto.response.AttendanceAdminListResponse;
 import com.letsintern.letsintern.domain.attendance.exception.AttendanceAlreadyExists;
+import com.letsintern.letsintern.domain.attendance.exception.AttendanceNotFound;
 import com.letsintern.letsintern.domain.attendance.mapper.AttendanceMapper;
 import com.letsintern.letsintern.domain.attendance.repository.AttendanceRepository;
 import com.letsintern.letsintern.domain.attendance.vo.AttendanceAdminVo;
@@ -51,5 +53,15 @@ public class AttendanceHelper {
 
     public List<AttendanceDashboardVo> getAttendanceDashboardList(Application application) {
         return attendanceRepository.getAttendanceDashboardVos(application.getProgram().getId(), application.getUser().getId());
+    }
+
+    public Long updateAttendanceAdmin(Long attendanceId, AttendanceAdminUpdateDTO attendanceAdminUpdateDTO) {
+        Attendance attendance = attendanceRepository.findById(attendanceId).orElseThrow(() -> AttendanceNotFound.EXCEPTION);
+        if(attendanceAdminUpdateDTO.getLink() != null) attendance.setLink(attendanceAdminUpdateDTO.getLink());
+        if(attendanceAdminUpdateDTO.getStatus() != null) attendance.setStatus(attendanceAdminUpdateDTO.getStatus());
+        if(attendanceAdminUpdateDTO.getComments() != null) attendance.setComments(attendanceAdminUpdateDTO.getComments());
+        if(attendanceAdminUpdateDTO.getIsRefunded() != null) attendance.setIsRefunded(attendanceAdminUpdateDTO.getIsRefunded());
+
+        return attendance.getId();
     }
 }

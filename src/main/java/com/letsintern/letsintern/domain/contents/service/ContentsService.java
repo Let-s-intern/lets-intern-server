@@ -2,6 +2,7 @@ package com.letsintern.letsintern.domain.contents.service;
 
 import com.letsintern.letsintern.domain.contents.domain.ContentsTopic;
 import com.letsintern.letsintern.domain.contents.dto.request.ContentsCreateDTO;
+import com.letsintern.letsintern.domain.contents.dto.request.ContentsUpdateDTO;
 import com.letsintern.letsintern.domain.contents.dto.response.ContentsAdminListResponse;
 import com.letsintern.letsintern.domain.contents.dto.response.ContentsIdResponse;
 import com.letsintern.letsintern.domain.contents.helper.ContentsHelper;
@@ -36,5 +37,10 @@ public class ContentsService {
     @Transactional(readOnly = true)
     public ContentsAdminVo getContentsDetail(Long contentsId) {
         return contentsHelper.getContentsDetail(contentsId);
+    }
+
+    @Transactional
+    public ContentsIdResponse updateContents(Long contentsId, ContentsUpdateDTO contentsUpdateDTO) {
+        return contentsMapper.toContentsIdResponse(contentsHelper.updateContents(contentsId, contentsUpdateDTO));
     }
 }
