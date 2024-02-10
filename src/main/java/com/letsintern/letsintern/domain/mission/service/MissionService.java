@@ -2,6 +2,7 @@ package com.letsintern.letsintern.domain.mission.service;
 
 import com.letsintern.letsintern.domain.mission.domain.MissionDashboardListStatus;
 import com.letsintern.letsintern.domain.mission.dto.request.MissionCreateDTO;
+import com.letsintern.letsintern.domain.mission.dto.request.MissionUpdateDTO;
 import com.letsintern.letsintern.domain.mission.dto.response.MissionAdminListResponse;
 import com.letsintern.letsintern.domain.mission.dto.response.MissionAdminSimpleListResponse;
 import com.letsintern.letsintern.domain.mission.dto.response.MissionIdResponse;
@@ -38,6 +39,11 @@ public class MissionService {
     }
 
     @Transactional
+    public MissionIdResponse updateMission(Long missionId, MissionUpdateDTO missionUpdateDTO) {
+        return missionMapper.toMissionIdResponse(missionHelper.updateMission(missionId, missionUpdateDTO));
+    }
+
+    @Transactional
     public MissionMyDashboardListResponse getMissionMyDashboardList(Long programId, MissionDashboardListStatus status, PrincipalDetails principalDetails) {
         final User user = principalDetails.getUser();
         return missionMapper.toMissionMyDashboardListResponse(missionHelper.getMissionMyDashboardList(programId, status, user.getId()));
@@ -48,4 +54,5 @@ public class MissionService {
         final User user = principalDetails.getUser();
         return missionHelper.getMissionMyDashboardDetail(missionId, status, user.getId());
     }
+
 }
