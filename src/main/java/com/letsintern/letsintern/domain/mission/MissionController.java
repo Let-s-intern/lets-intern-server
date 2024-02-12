@@ -8,6 +8,7 @@ import com.letsintern.letsintern.domain.mission.dto.response.MissionAdminSimpleL
 import com.letsintern.letsintern.domain.mission.dto.response.MissionIdResponse;
 import com.letsintern.letsintern.domain.mission.service.MissionService;
 import com.letsintern.letsintern.domain.mission.dto.response.MissionMyDashboardListResponse;
+import com.letsintern.letsintern.domain.mission.vo.MissionAdminDetailVo;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -43,6 +44,12 @@ public class MissionController {
     @Operation(summary = "프로그램별 미션 전체 목록")
     public MissionAdminListResponse getMissionAdminList(@PathVariable Long programId, @PageableDefault(size = 20) Pageable pageable) {
         return missionService.getMissionAdminList(programId, pageable);
+    }
+
+    @GetMapping("/detail/{missionId}")
+    @Operation(summary = "어드민 미션 1개 상세보기")
+    public MissionAdminDetailVo getMissionAdmin(@PathVariable Long missionId) {
+        return missionService.getMissionAdmin(missionId);
     }
 
     @PatchMapping("/{missionId}")

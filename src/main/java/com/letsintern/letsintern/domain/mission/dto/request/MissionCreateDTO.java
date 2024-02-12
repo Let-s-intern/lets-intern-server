@@ -36,7 +36,7 @@ public class MissionCreateDTO {
     @NotNull
     private String template;
 
-    @Nullable
+    @NotNull
     private ContentsTopic essentialContentsTopic;
 
     @Nullable

@@ -10,7 +10,6 @@ import com.letsintern.letsintern.domain.mission.domain.Mission;
 import com.letsintern.letsintern.domain.mission.domain.MissionDashboardListStatus;
 import com.letsintern.letsintern.domain.mission.dto.request.MissionCreateDTO;
 import com.letsintern.letsintern.domain.mission.dto.request.MissionUpdateDTO;
-import com.letsintern.letsintern.domain.mission.dto.response.MissionAdminListResponse;
 import com.letsintern.letsintern.domain.mission.exception.MissionNotFound;
 import com.letsintern.letsintern.domain.mission.mapper.MissionMapper;
 import com.letsintern.letsintern.domain.mission.repository.MissionRepository;
@@ -18,7 +17,6 @@ import com.letsintern.letsintern.domain.mission.vo.*;
 import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
 import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
-import com.letsintern.letsintern.global.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -55,6 +53,10 @@ public class MissionHelper {
 
     public Page<MissionAdminVo> getMissionAdminList(Long programId, Pageable pageable) {
         return missionRepository.getMissionAdminList(programId, pageable);
+    }
+
+    public MissionAdminDetailVo getMissionAdmin(Long missionId) {
+        return missionRepository.getMissionAdminDetailVo(missionId).orElseThrow(() -> MissionNotFound.EXCEPTION);
     }
 
     public Long updateMission(Long missionId, MissionUpdateDTO missionUpdateDTO) {

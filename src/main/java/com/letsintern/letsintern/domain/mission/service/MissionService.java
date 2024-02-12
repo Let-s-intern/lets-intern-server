@@ -9,6 +9,7 @@ import com.letsintern.letsintern.domain.mission.dto.response.MissionIdResponse;
 import com.letsintern.letsintern.domain.mission.helper.MissionHelper;
 import com.letsintern.letsintern.domain.mission.mapper.MissionMapper;
 import com.letsintern.letsintern.domain.mission.dto.response.MissionMyDashboardListResponse;
+import com.letsintern.letsintern.domain.mission.vo.MissionAdminDetailVo;
 import com.letsintern.letsintern.domain.user.domain.User;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +37,11 @@ public class MissionService {
     @Transactional(readOnly = true)
     public MissionAdminListResponse getMissionAdminList(Long programId, Pageable pageable) {
         return missionMapper.toMissionAdminListResponse(missionHelper.getMissionAdminList(programId, pageable));
+    }
+
+    @Transactional(readOnly = true)
+    public MissionAdminDetailVo getMissionAdmin(Long missionId) {
+        return missionHelper.getMissionAdmin(missionId);
     }
 
     @Transactional
