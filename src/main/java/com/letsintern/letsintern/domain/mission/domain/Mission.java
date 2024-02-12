@@ -1,16 +1,15 @@
 package com.letsintern.letsintern.domain.mission.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.letsintern.letsintern.domain.contents.domain.Contents;
 import com.letsintern.letsintern.domain.mission.dto.request.MissionCreateDTO;
 import com.letsintern.letsintern.domain.program.domain.Program;
-import com.letsintern.letsintern.global.common.util.StringUtils;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Getter @Setter
@@ -62,7 +61,13 @@ public class Mission {
     private String template;
 
     @Nullable
-    private String contentsListStr;
+    private Long essentialContentsId;
+
+    @Nullable
+    private Long additionalContentsId;
+
+    @Nullable
+    private Long limitedContentsId;
 
     @NotNull
     private Boolean isVisible;
@@ -76,7 +81,8 @@ public class Mission {
     private Program program;
 
     @Builder
-    private Mission(Program program, MissionTopic topic, MissionType type, Integer refund, String title, String contents, String guide, Integer th, String template, List<Long> contentsIdList) {
+    private Mission(Program program, MissionTopic topic, MissionType type, Integer refund, String title, String contents, String guide, Integer th, String template,
+                    Contents essentialContents, Contents additionalContents, Contents limitedContents) {
         this.program = program;
         this.type = type;
         this.topic = topic;
@@ -93,12 +99,16 @@ public class Mission {
         this.endDate = this.startDate.withHour(23).withMinute(59).withSecond(59);
 
         this.template = template;
-        this.contentsListStr = StringUtils.listToString(contentsIdList);
+
+        if(essentialContents != null) this.essentialContentsId = essentialContents.getId();
+        if(additionalContents != null) this.additionalContentsId = additionalContents.getId();
+        if(limitedContents != null) this.limitedContentsId = limitedContents.getId();
+
         this.isVisible = false;
         this.isRefunded = false;
     }
 
-    public static Mission of(Program program, MissionCreateDTO missionCreateDTO) {
+    public static Mission of(Program program, MissionCreateDTO missionCreateDTO, Contents essentialContents, Contents additionalContents, Contents limitedContents) {
         return Mission.builder()
                 .program(program)
                 .type(missionCreateDTO.getType())
@@ -109,7 +119,9 @@ public class Mission {
                 .guide(missionCreateDTO.getGuide())
                 .th(missionCreateDTO.getTh())
                 .template(missionCreateDTO.getTemplate())
-                .contentsIdList(missionCreateDTO.getContentsIdList())
+                .essentialContents(essentialContents)
+                .additionalContents(additionalContents)
+                .limitedContents(limitedContents)
                 .build();
     }
 }

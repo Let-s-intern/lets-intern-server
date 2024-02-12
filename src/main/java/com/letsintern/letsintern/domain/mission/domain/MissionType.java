@@ -4,5 +4,5 @@ public enum MissionType {
 
     GENERAL,
     ADDITIONAL,
-    REFUND;
+    REFUND
 }

@@ -1,11 +1,10 @@
 package com.letsintern.letsintern.domain.mission.vo;
 
+import com.letsintern.letsintern.domain.contents.domain.ContentsTopic;
 import com.letsintern.letsintern.domain.mission.domain.MissionStatus;
-import com.letsintern.letsintern.global.common.util.StringUtils;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 public class MissionAdminVo {
@@ -16,19 +15,13 @@ public class MissionAdminVo {
 
     private String title;
 
-    private String contents;
-
-    private String guide;
-
-    private String template;
-
     private LocalDateTime startDate;
 
     private LocalDateTime endDate;
 
     private Boolean isRefunded;
 
-    private List<Long> contentsIdList;
+    private ContentsTopic essentialContentsTopic;
 
     private Integer attendanceCount;
 
@@ -36,18 +29,15 @@ public class MissionAdminVo {
 
     private MissionStatus status;
 
-    public MissionAdminVo(Long id, Integer th, String title, String contents, String guide, String template, LocalDateTime startDate, LocalDateTime endDate,
-                          Boolean isRefunded, String contentsListStr, Integer attendanceCount, Boolean isVisible, MissionStatus status) {
+    public MissionAdminVo(Long id, Integer th, String title, LocalDateTime startDate, LocalDateTime endDate,
+                          Boolean isRefunded, ContentsTopic essentialContentsTopic, Integer attendanceCount, Boolean isVisible, MissionStatus status) {
         this.id = id;
         this.th = th;
         this.title = title;
-        this.contents = contents;
-        this.guide = guide;
-        this.template = template;
         this.startDate = startDate;
         this.endDate = endDate;
         this.isRefunded = isRefunded;
-        if(contentsListStr != null && !contentsListStr.equals("")) this.contentsIdList = StringUtils.stringToList(contentsListStr);
+        if(essentialContentsTopic != null) this.essentialContentsTopic = essentialContentsTopic;
         this.attendanceCount = attendanceCount;
         this.isVisible = isVisible;
         this.status = status;
