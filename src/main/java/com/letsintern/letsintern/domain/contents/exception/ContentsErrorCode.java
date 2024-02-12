@@ -13,7 +13,10 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 @AllArgsConstructor
 public enum ContentsErrorCode implements BaseErrorCode {
 
-    CONTENTS_NOT_FOUND(NOT_FOUND, "CONTENTS_404_1", "존재하지 않는 컨텐츠입니다.");
+    CONTENTS_NOT_FOUND(NOT_FOUND, "CONTENTS_404_1", "존재하지 않는 컨텐츠입니다."),
+    ESSENTIAL_CONTENTS_NOT_FOUND(NOT_FOUND, "CONTENTS_404_2", "존재하지 않는 필수 컨텐츠입니다."),
+    ADDITIONAL_CONTENTS_NOT_FOUND(NOT_FOUND, "CONTENTS_404_3", "존재하지 않는 추가 컨텐츠입니다."),
+    LIMITED_CONTENTS_NOT_FOUND(NOT_FOUND, "CONTENTS_404_4", "존재하지 않는 제한 컨텐츠입니다.");
 
     private HttpStatus status;
     private String code;

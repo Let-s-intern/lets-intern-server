@@ -1,5 +1,6 @@
 package com.letsintern.letsintern.domain.mission.mapper;
 
+import com.letsintern.letsintern.domain.contents.domain.Contents;
 import com.letsintern.letsintern.domain.mission.domain.Mission;
 import com.letsintern.letsintern.domain.mission.dto.request.MissionCreateDTO;
 import com.letsintern.letsintern.domain.mission.dto.response.MissionAdminListResponse;
@@ -18,8 +19,8 @@ import java.util.List;
 @Component
 public class MissionMapper {
 
-    public Mission toEntity(Program program, MissionCreateDTO missionCreateDTO) {
-        return Mission.of(program, missionCreateDTO);
+    public Mission toEntity(Program program, MissionCreateDTO missionCreateDTO, Contents essentialContents, Contents additionalContents, Contents limitedContents) {
+        return Mission.of(program, missionCreateDTO, essentialContents, additionalContents, limitedContents);
     }
 
     public MissionIdResponse toMissionIdResponse(Long missionId) {

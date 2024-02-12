@@ -1,5 +1,6 @@
 package com.letsintern.letsintern.domain.mission.dto.request;
 
+import com.letsintern.letsintern.domain.contents.domain.ContentsTopic;
 import com.letsintern.letsintern.domain.mission.domain.MissionTopic;
 import com.letsintern.letsintern.domain.mission.domain.MissionType;
 import jakarta.annotation.Nullable;
@@ -36,6 +37,12 @@ public class MissionCreateDTO {
     private String template;
 
     @Nullable
-    private List<Long> contentsIdList;
+    private ContentsTopic essentialContentsTopic;
+
+    @Nullable
+    private ContentsTopic additionalContentsTopic;
+
+    @Nullable
+    private ContentsTopic limitedContentsTopic;
 
 }

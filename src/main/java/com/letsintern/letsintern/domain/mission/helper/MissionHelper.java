@@ -1,5 +1,11 @@
 package com.letsintern.letsintern.domain.mission.helper;
 
+import com.letsintern.letsintern.domain.contents.domain.Contents;
+import com.letsintern.letsintern.domain.contents.domain.ContentsType;
+import com.letsintern.letsintern.domain.contents.exception.AdditionalContentsNotFound;
+import com.letsintern.letsintern.domain.contents.exception.EssentialContentsNotFound;
+import com.letsintern.letsintern.domain.contents.exception.LimitedContentsNotFound;
+import com.letsintern.letsintern.domain.contents.repository.ContentsRepository;
 import com.letsintern.letsintern.domain.mission.domain.Mission;
 import com.letsintern.letsintern.domain.mission.domain.MissionDashboardListStatus;
 import com.letsintern.letsintern.domain.mission.dto.request.MissionCreateDTO;
@@ -31,9 +37,15 @@ public class MissionHelper {
     private final MissionMapper missionMapper;
     private final ProgramRepository programRepository;
 
+    private final ContentsRepository contentsRepository;
+
     public Long createMission(Long programId, MissionCreateDTO missionCreateDTO) {
         final Program program = programRepository.findById(programId).orElseThrow(() -> ProgramNotFound.EXCEPTION);
-        return missionRepository.save(missionMapper.toEntity(program, missionCreateDTO)).getId();
+        final Contents essentialContents = (missionCreateDTO.getEssentialContentsTopic() != null) ? contentsRepository.findByTypeAndTopic(ContentsType.ESSENTIAL, missionCreateDTO.getEssentialContentsTopic()).orElseThrow(() -> EssentialContentsNotFound.EXCEPTION) : null;
+        final Contents additionalContents = (missionCreateDTO.getAdditionalContentsTopic() != null) ? contentsRepository.findByTypeAndTopic(ContentsType.ADDITIONAL, missionCreateDTO.getAdditionalContentsTopic()).orElseThrow(() -> AdditionalContentsNotFound.EXCEPTION) : null;
+        final Contents limitedContents = (missionCreateDTO.getLimitedContentsTopic() != null) ? contentsRepository.findByTypeAndTopic(ContentsType.LIMITED, missionCreateDTO.getLimitedContentsTopic()).orElseThrow(() -> LimitedContentsNotFound.EXCEPTION) : null;
+
+        return missionRepository.save(missionMapper.toEntity(program, missionCreateDTO, essentialContents, additionalContents, limitedContents)).getId();
     }
 
 
@@ -70,8 +82,18 @@ public class MissionHelper {
         }
         if(missionUpdateDTO.getTemplate() != null)
             mission.setTemplate(missionUpdateDTO.getTemplate());
-        if(missionUpdateDTO.getContentsIdList() != null)
-            mission.setContentsListStr(StringUtils.listToString(missionUpdateDTO.getContentsIdList()));
+        if(missionUpdateDTO.getEssentialContentsTopic() != null) {
+            final Contents essentialContents = contentsRepository.findByTypeAndTopic(ContentsType.ESSENTIAL, missionUpdateDTO.getEssentialContentsTopic()).orElseThrow(() -> EssentialContentsNotFound.EXCEPTION);
+            mission.setEssentialContentsId(essentialContents.getId());
+        }
+        if(missionUpdateDTO.getAdditionalContentsTopic() != null) {
+            final Contents additionalContents = contentsRepository.findByTypeAndTopic(ContentsType.ADDITIONAL, missionUpdateDTO.getAdditionalContentsTopic()).orElseThrow(() -> AdditionalContentsNotFound.EXCEPTION);
+            mission.setAdditionalContentsId(additionalContents.getId());
+        }
+        if(missionUpdateDTO.getLimitedContentsTopic() != null) {
+            final Contents limitedContents = contentsRepository.findByTypeAndTopic(ContentsType.LIMITED, missionUpdateDTO.getLimitedContentsTopic()).orElseThrow(() -> LimitedContentsNotFound.EXCEPTION);
+            mission.setLimitedContentsId(limitedContents.getId());
+        }
         if(missionUpdateDTO.getIsVisible() != null)
             mission.setIsVisible(missionUpdateDTO.getIsVisible());
         if(missionUpdateDTO.getIsRefunded() != null)
