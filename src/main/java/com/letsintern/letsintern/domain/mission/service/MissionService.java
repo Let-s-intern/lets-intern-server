@@ -49,6 +49,10 @@ public class MissionService {
         return missionMapper.toMissionIdResponse(missionHelper.updateMission(missionId, missionUpdateDTO));
     }
 
+    public void deleteMission(Long missionId) {
+        missionHelper.deleteMission(missionId);
+    }
+
     @Transactional
     public MissionMyDashboardListResponse getMissionMyDashboardList(Long programId, MissionDashboardListStatus status, PrincipalDetails principalDetails) {
         final User user = principalDetails.getUser();

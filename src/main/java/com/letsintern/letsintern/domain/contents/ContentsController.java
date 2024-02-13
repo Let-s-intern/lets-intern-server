@@ -52,4 +52,10 @@ public class ContentsController {
     private ContentsIdResponse updateContents(@PathVariable Long contentsId, @RequestBody ContentsUpdateDTO contentsUpdateDTO) {
         return contentsService.updateContents(contentsId, contentsUpdateDTO);
     }
+
+    @DeleteMapping("/{contentsId}")
+    @Operation(summary = "어드민 컨텐츠 삭제")
+    private void deleteContents(@PathVariable Long contentsId) {
+        contentsService.deleteContents(contentsId);
+    }
 }

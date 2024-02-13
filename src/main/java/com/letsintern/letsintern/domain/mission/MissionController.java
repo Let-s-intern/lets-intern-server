@@ -58,6 +58,12 @@ public class MissionController {
         return missionService.updateMission(missionId, missionUpdateDTO);
     }
 
+    @DeleteMapping("/{missionId}")
+    @Operation(summary = "어드민 미션 삭제")
+    public void deleteMission(@PathVariable Long missionId) {
+        missionService.deleteMission(missionId);
+    }
+
     @Operation(summary = "유저 챌린지 대시보드 - 나의 기록장 미션 리스트")
     @GetMapping("/{programId}/list")
     public MissionMyDashboardListResponse getMissionMyDashboardList(@PathVariable Long programId, @RequestParam MissionDashboardListStatus status, @AuthenticationPrincipal PrincipalDetails principalDetails) {

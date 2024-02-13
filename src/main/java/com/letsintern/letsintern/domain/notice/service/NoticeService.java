@@ -28,8 +28,11 @@ public class NoticeService {
         return noticeMapper.toNoticeIdResponse(noticeHelper.updateNotice(noticeId, noticeUpdateDTO));
     }
 
+    public void deleteNotice(Long noticeId) {
+        noticeHelper.deleteNotice(noticeId);
+    }
+
     public NoticeListResponse getNoticeList(Long programId, Pageable pageable) {
         return noticeMapper.toNoticeListResponse(noticeHelper.getNoticeList(programId, pageable));
     }
-
 }

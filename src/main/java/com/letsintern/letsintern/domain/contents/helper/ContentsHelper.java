@@ -69,4 +69,9 @@ public class ContentsHelper {
 
         return contents.getId();
     }
+
+    public void deleteContents(Long contentsId) {
+        Contents contents = contentsRepository.findById(contentsId).orElseThrow(() -> ContentsNotFound.EXCEPTION);
+        contentsRepository.delete(contents);
+    }
 }

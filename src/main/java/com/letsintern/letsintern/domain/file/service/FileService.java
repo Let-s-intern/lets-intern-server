@@ -1,10 +1,12 @@
 package com.letsintern.letsintern.domain.file.service;
 
 import com.letsintern.letsintern.domain.contents.domain.ContentsTopic;
+import com.letsintern.letsintern.domain.file.dto.response.FileAdminListResponse;
 import com.letsintern.letsintern.domain.file.helper.FileHelper;
 import com.letsintern.letsintern.domain.file.vo.S3SavedFileVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.UrlResource;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +23,16 @@ public class FileService {
     }
 
     @Transactional(readOnly = true)
+    public FileAdminListResponse getFileAdminList(ContentsTopic contentsTopic, Pageable pageable) {
+        return fileHelper.getFileAdminList(contentsTopic, pageable);
+    }
+
+    @Transactional(readOnly = true)
     public ResponseEntity<UrlResource> downloadFile(Long fileId) {
         return fileHelper.downloadFile(fileId);
+    }
+
+    public void deleteFile(Long fileId) {
+        fileHelper.deleteFile(fileId);
     }
 }

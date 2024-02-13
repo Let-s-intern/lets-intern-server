@@ -1,6 +1,7 @@
 package com.letsintern.letsintern.domain.mission.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.letsintern.letsintern.domain.attendance.domain.Attendance;
 import com.letsintern.letsintern.domain.contents.domain.Contents;
 import com.letsintern.letsintern.domain.mission.dto.request.MissionCreateDTO;
 import com.letsintern.letsintern.domain.program.domain.Program;
@@ -10,6 +11,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter @Setter
@@ -79,6 +81,10 @@ public class Mission {
     @JoinColumn(name = "program_id", nullable = false)
     @JsonIgnore
     private Program program;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "mission", orphanRemoval = true)
+    private List<Attendance> attendanceList;
 
     @Builder
     private Mission(Program program, MissionTopic topic, MissionType type, Integer refund, String title, String contents, String guide, Integer th, String template,
