@@ -104,6 +104,11 @@ public class MissionHelper {
         return mission.getId();
     }
 
+    public void deleteMission(Long missionId) {
+        Mission mission = missionRepository.findById(missionId).orElseThrow(() -> MissionNotFound.EXCEPTION);
+        missionRepository.delete(mission);
+    }
+
     public MissionDashboardVo getDailyMission(Long programId, LocalDateTime startDate) {
         LocalDate today = LocalDate.now();
         Period period = Period.between(LocalDate.from(startDate), today);
@@ -136,8 +141,4 @@ public class MissionHelper {
         return missionRepository.getMissionMyDashboardUncompleted(missionId).orElseThrow(() -> MissionNotFound.EXCEPTION);
     }
 
-    public void deleteMission(Long missionId) {
-        Mission mission = missionRepository.findById(missionId).orElseThrow(() -> MissionNotFound.EXCEPTION);
-        missionRepository.delete(mission);
-    }
 }

@@ -43,4 +43,8 @@ public class ContentsService {
     public ContentsIdResponse updateContents(Long contentsId, ContentsUpdateDTO contentsUpdateDTO) {
         return contentsMapper.toContentsIdResponse(contentsHelper.updateContents(contentsId, contentsUpdateDTO));
     }
+
+    public void deleteContents(Long contentsId) {
+        contentsHelper.deleteContents(contentsId);
+    }
 }
