@@ -136,4 +136,8 @@ public class MissionHelper {
         return missionRepository.getMissionMyDashboardUncompleted(missionId).orElseThrow(() -> MissionNotFound.EXCEPTION);
     }
 
+    public void deleteMission(Long missionId) {
+        Mission mission = missionRepository.findById(missionId).orElseThrow(() -> MissionNotFound.EXCEPTION);
+        missionRepository.delete(mission);
+    }
 }

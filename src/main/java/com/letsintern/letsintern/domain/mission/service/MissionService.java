@@ -61,4 +61,7 @@ public class MissionService {
         return missionHelper.getMissionMyDashboardDetail(missionId, status, user.getId());
     }
 
+    public void deleteMission(Long missionId) {
+        missionHelper.deleteMission(missionId);
+    }
 }
