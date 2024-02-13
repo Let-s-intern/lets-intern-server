@@ -74,12 +74,14 @@ public class MissionRepositoryImpl implements MissionRepositoryCustom {
                         qMission.th,
                         qMission.title,
                         qMission.contents,
+                        qMission.guide,
                         qMission.template,
                         qMission.startDate,
                         qMission.endDate,
                         qEssentialContents.topic,
                         qAdditionalContents.topic,
                         qLimitedContents.topic,
+                        qMission.refund,
                         qMission.isRefunded))
                 .from(qMission)
                         .leftJoin(qEssentialContents)
