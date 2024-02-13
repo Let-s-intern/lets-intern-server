@@ -38,9 +38,13 @@ public class NoticeHelper {
         return notice.getId();
     }
 
+    public void deleteNotice(Long noticeId) {
+        Notice notice = noticeRepository.findById(noticeId).orElseThrow(() -> NoticeNotFound.EXCEPTION);
+        noticeRepository.delete(notice);
+    }
+
     public Page<Notice> getNoticeList(Long programId, Pageable pageable) {
         final Program program = programRepository.findById(programId).orElseThrow(() -> ProgramNotFound.EXCEPTION);
         return noticeRepository.findAllByProgramIdOrderByIdDesc(programId, pageable);
     }
-
 }

@@ -33,6 +33,12 @@ public class NoticeController {
         return noticeService.updateNotice(noticeId, noticeUpdateDTO);
     }
 
+    @DeleteMapping("/{noticeId}")
+    @Operation(summary = "어드민 공지사항 삭제")
+    public void deleteNotice(@PathVariable Long noticeId) {
+        noticeService.deleteNotice(noticeId);
+    }
+
     @GetMapping("/{programId}")
     @Operation(summary = "프로그램 별 공지사항 목록")
     public NoticeListResponse getNoticeList(@PathVariable Long programId, @PageableDefault(size = 10) Pageable pageable) {
