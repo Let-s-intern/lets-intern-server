@@ -2,6 +2,8 @@ package com.letsintern.letsintern.domain.mission.vo;
 
 import com.letsintern.letsintern.domain.contents.domain.ContentsTopic;
 import com.letsintern.letsintern.domain.mission.domain.MissionStatus;
+import com.letsintern.letsintern.domain.mission.domain.MissionTopic;
+import com.letsintern.letsintern.domain.mission.domain.MissionType;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -12,6 +14,10 @@ public class MissionAdminDetailVo {
     private Long id;
 
     private Integer th;
+
+    private MissionType type;
+
+    private MissionTopic topic;
 
     private String title;
 
@@ -35,10 +41,12 @@ public class MissionAdminDetailVo {
 
     private Boolean isRefunded;
 
-    public MissionAdminDetailVo(Long id, Integer th, String title, String contents, String guide, String template, LocalDateTime startDate, LocalDateTime endDate,
+    public MissionAdminDetailVo(Long id, Integer th, MissionType type, MissionTopic topic, String title, String contents, String guide, String template, LocalDateTime startDate, LocalDateTime endDate,
                                 ContentsTopic essentialContentsTopic, ContentsTopic additionalContentsTopic, ContentsTopic limitedContentsTopic, Integer refund, Boolean isRefunded) {
         this.id = id;
         this.th = th;
+        this.type = type;
+        this.topic = topic;
         this.title = title;
         this.contents = contents;
         this.guide = guide;
