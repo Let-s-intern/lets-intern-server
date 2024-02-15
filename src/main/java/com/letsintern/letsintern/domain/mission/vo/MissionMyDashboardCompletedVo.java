@@ -2,6 +2,7 @@ package com.letsintern.letsintern.domain.mission.vo;
 
 import com.letsintern.letsintern.domain.attendance.domain.Attendance;
 import com.letsintern.letsintern.domain.attendance.domain.AttendanceStatus;
+import com.letsintern.letsintern.domain.mission.domain.MissionStatus;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -16,11 +17,11 @@ public class MissionMyDashboardCompletedVo {
 
     private String contents;
 
-    private Long essentialContentsId;
+    private String essentialContentsLink;
 
-    private Long additionalContentsId;
+    private String additionalContentsLink;
 
-    private Long limitedContentsId;
+    private String limitedContentsLink;
 
     private AttendanceStatus attendanceStatus;
 
@@ -29,17 +30,21 @@ public class MissionMyDashboardCompletedVo {
     private String attendanceComments;
 
     @Builder
-    public MissionMyDashboardCompletedVo(Long id, Integer th, String title, String contents,
-                                         Long essentialContentsId, Long additionalContentsId, Long limitedContentsId, Attendance attendance) {
+    public MissionMyDashboardCompletedVo(Long id, Integer th, MissionStatus status, String title, String contents,
+                                         String essentialContentsLink, String additionalContentsLink, String limitedContentsLink, Attendance attendance) {
         this.id = id;
         this.th = th;
         this.title = title;
         this.contents = contents;
-        this.essentialContentsId = essentialContentsId;
-        this.additionalContentsId = additionalContentsId;
-        this.limitedContentsId = limitedContentsId;
-        this.attendanceStatus = attendance.getStatus();
-        this.attendanceLink = attendance.getLink();
-        this.attendanceComments = attendance.getComments();
+        this.essentialContentsLink = essentialContentsLink;
+        this.additionalContentsLink = additionalContentsLink;
+        if(status.equals(MissionStatus.DONE) && (attendance != null && attendance.getStatus().equals(AttendanceStatus.PASSED))) {
+            this.limitedContentsLink = limitedContentsLink;
+        }
+        if(attendance != null) {
+            this.attendanceStatus = attendance.getStatus();
+            this.attendanceLink = attendance.getLink();
+            this.attendanceComments = attendance.getComments();
+        }
     }
 }

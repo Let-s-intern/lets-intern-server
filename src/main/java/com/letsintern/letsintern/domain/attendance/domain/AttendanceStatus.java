@@ -1,12 +1,19 @@
 package com.letsintern.letsintern.domain.attendance.domain;
 
+import lombok.Getter;
+
 public enum AttendanceStatus {
 
-    CREATED,
-    PASSED,
-    WRONG,
-    UPDATED,
-    LATE,
-    ABSENT
+    CREATED("확인중"),
+    PASSED("확인 완료"),
+    WRONG("반려"),
+    UPDATED("수정됨"),
+    LATE("지각");
 
+    @Getter
+    private final String value;
+
+    AttendanceStatus(String value) {
+        this.value = value;
+    }
 }

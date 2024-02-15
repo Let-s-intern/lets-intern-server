@@ -26,6 +26,7 @@ public interface ApplicationRepositoryCustom {
     Page<UserProgramVo> findAllProgramByUserId(Long userId, Pageable pageable);
 
     Application findByProgramIdAndUserId(Long programId, Long userId);
+
     Application findByProgramIdAndGuestEmail(Long programId, String email);
 
     void updateAllApplicationByAnnouncementDate(LocalDateTime now);

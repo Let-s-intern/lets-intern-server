@@ -42,6 +42,9 @@ public class Mission {
     private Integer attendanceCount;
 
     @NotNull
+    private Integer lateAttendanceCount;
+
+    @NotNull
     private String title;
 
     @NotNull
@@ -95,6 +98,7 @@ public class Mission {
 
         this.refund = refund;
         this.attendanceCount = 0;
+        this.lateAttendanceCount = 0;
         this.title = title;
         this.contents = contents;
         this.guide = guide;
