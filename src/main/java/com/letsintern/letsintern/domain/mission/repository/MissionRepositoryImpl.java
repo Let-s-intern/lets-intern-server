@@ -132,7 +132,8 @@ public class MissionRepositoryImpl implements MissionRepositoryCustom {
     @Override
     public Optional<MissionMyDashboardVo> getMissionMyDashboardVo(Long programId, Integer th, Long userId) {
         QMission qMission = QMission.mission;
-        QContents qContents = QContents.contents;
+        QContents qEssentialContents = new QContents("essential");
+        QContents qAdditionalContents = new QContents("additional");
         QAttendance qAttendance = QAttendance.attendance;
         return Optional.ofNullable(jpaQueryFactory
                 .select(Projections.constructor(MissionMyDashboardVo.class,
@@ -143,7 +144,8 @@ public class MissionRepositoryImpl implements MissionRepositoryCustom {
                         qMission.guide,
                         qMission.template,
                         qMission.endDate,
-                        qContents.link,
+                        qEssentialContents.link,
+                        qAdditionalContents.link,
                         qAttendance))
                 .from(qMission)
                 .leftJoin(qAttendance)
@@ -151,10 +153,10 @@ public class MissionRepositoryImpl implements MissionRepositoryCustom {
                         qAttendance.mission.eq(qMission),
                         qAttendance.user.id.eq(userId)
                 )
-                .leftJoin(qContents)
-                .on(
-                        qContents.id.eq(qMission.essentialContentsId)
-                )
+                .leftJoin(qEssentialContents)
+                .on(qEssentialContents.id.eq(qMission.essentialContentsId))
+                .leftJoin(qAdditionalContents)
+                .on(qAdditionalContents.id.eq(qMission.additionalContentsId))
                 .where(qMission.program.id.eq(programId).and(qMission.th.eq(th)))
                 .fetchFirst());
     }
@@ -249,16 +251,20 @@ public class MissionRepositoryImpl implements MissionRepositoryCustom {
     public Optional<MissionMyDashboardCompletedVo> getMissionMyDashboardCompleted(Long missionId, Long userId) {
         QMission qMission = QMission.mission;
         QAttendance qAttendance = QAttendance.attendance;
+        QContents qEssentialContents = new QContents("essential");
+        QContents qAdditionalContents = new QContents("additional");
+        QContents qLimitedContents = new QContents("limited");
 
         return Optional.ofNullable(jpaQueryFactory
                 .select(Projections.constructor(MissionMyDashboardCompletedVo.class,
                         qMission.id,
                         qMission.th,
+                        qMission.status,
                         qMission.title,
                         qMission.contents,
-                        qMission.essentialContentsId,
-                        qMission.additionalContentsId,
-                        qMission.limitedContentsId,
+                        qEssentialContents.link,
+                        qAdditionalContents.link,
+                        qLimitedContents.link,
                         qAttendance))
                 .from(qMission)
                 .leftJoin(qAttendance)
@@ -266,6 +272,12 @@ public class MissionRepositoryImpl implements MissionRepositoryCustom {
                         qAttendance.mission.eq(qMission),
                         qAttendance.user.id.eq(userId)
                 )
+                .leftJoin(qEssentialContents)
+                .on(qMission.essentialContentsId.eq(qEssentialContents.id))
+                .leftJoin(qAdditionalContents)
+                .on(qMission.additionalContentsId.eq(qAdditionalContents.id))
+                .leftJoin(qLimitedContents)
+                .on(qMission.limitedContentsId.eq(qLimitedContents.id))
                 .where(qMission.id.eq(missionId))
                 .fetchFirst());
     }

@@ -27,11 +27,13 @@ public class MissionMyDashboardVo {
 
     private String essentialContentsLink;
 
+    private String additionalContentsLink;
+
     private String attendanceLink;
 
     @Builder
     public MissionMyDashboardVo(Long id, Integer th, String title, String contents, String guide, String template, LocalDateTime endDate,
-                                String essentialContentsLink, Attendance attendance) {
+                                String essentialContentsLink, String additionalContentsLink, Attendance attendance) {
         this.id = id;
         this.th = th;
         this.title = title;
@@ -40,6 +42,7 @@ public class MissionMyDashboardVo {
         this.template = template;
         this.endDate = endDate;
         if(essentialContentsLink != null) this.essentialContentsLink = essentialContentsLink;
+        if(additionalContentsLink != null) this.additionalContentsLink = additionalContentsLink;
 
         if(attendance != null) {
             this.isAttended = true;
