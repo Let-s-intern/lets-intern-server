@@ -72,6 +72,8 @@ public class MissionRepositoryImpl implements MissionRepositoryCustom {
                 .select(Projections.constructor(MissionAdminDetailVo.class,
                         qMission.id,
                         qMission.th,
+                        qMission.type,
+                        qMission.topic,
                         qMission.title,
                         qMission.contents,
                         qMission.guide,
