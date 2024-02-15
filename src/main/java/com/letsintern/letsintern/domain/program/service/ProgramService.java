@@ -4,7 +4,11 @@ import com.letsintern.letsintern.domain.application.domain.Application;
 import com.letsintern.letsintern.domain.application.exception.ApplicationNotFound;
 import com.letsintern.letsintern.domain.application.helper.ApplicationHelper;
 import com.letsintern.letsintern.domain.application.repository.ApplicationRepository;
+import com.letsintern.letsintern.domain.attendance.domain.AttendanceStatus;
+import com.letsintern.letsintern.domain.attendance.repository.AttendanceRepository;
+import com.letsintern.letsintern.domain.mission.domain.MissionStatus;
 import com.letsintern.letsintern.domain.mission.helper.MissionHelper;
+import com.letsintern.letsintern.domain.mission.vo.MissionDashboardVo;
 import com.letsintern.letsintern.domain.notice.helper.NoticeHelper;
 import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.program.domain.ProgramStatus;
@@ -38,6 +42,7 @@ public class ProgramService {
     private final ApplicationRepository applicationRepository;
     private final MissionHelper missionHelper;
     private final NoticeHelper noticeHelper;
+    private final AttendanceRepository attendanceRepository;
 
     public Long getDoneProgramCount() {
         return programRepository.countByStatusEquals(ProgramStatus.DONE);
@@ -100,13 +105,18 @@ public class ProgramService {
         final Application application = applicationRepository.findByProgramIdAndUserId(programId, user.getId());
         if(application == null) throw  ApplicationNotFound.EXCEPTION;
 
+        MissionDashboardVo dailyMission =  missionHelper.getDailyMission(program.getId(), program.getStartDate());
+        Integer yesterdayHeadCount = dailyMission == null ? null : attendanceRepository.countAllByMissionProgramIdAndMissionThAndStatus(programId, dailyMission.getTh() - 1, AttendanceStatus.PASSED);
+
         return programMapper.toProgramDashboardResponse(
-                missionHelper.getDailyMission(program.getId(), program.getStartDate()),
+                user.getName(),
+                dailyMission,
                 noticeHelper.getNoticeList(programId, pageable),
                 missionHelper.getMissionDashboardList(programId, user.getId()),
                 application.getRefund(),
                 program.getRefundTotal(),
-                program.getFinalHeadCount()
+                program.getFinalHeadCount(),
+                yesterdayHeadCount
         );
     }
 

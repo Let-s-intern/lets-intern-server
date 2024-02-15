@@ -13,6 +13,7 @@ import java.util.List;
 @Getter
 public class ProgramDashboardResponse {
 
+    private String userName;
     private MissionDashboardVo dailyMission;
 
     private List<Notice> noticeList;
@@ -25,26 +26,32 @@ public class ProgramDashboardResponse {
 
     private Integer finalHeadCount;
 
+    private Integer yesterdayHeadCount;
+
     @Builder
-    private ProgramDashboardResponse(MissionDashboardVo dailyMission, Page<Notice> noticeList, List<MissionDashboardListVo> missionList,
-                                     Integer currentRefund, Integer totalRefund, Integer finalHeadCount) {
+    private ProgramDashboardResponse(String userName, MissionDashboardVo dailyMission, Page<Notice> noticeList, List<MissionDashboardListVo> missionList,
+                                     Integer currentRefund, Integer totalRefund, Integer finalHeadCount, Integer yesterdayHeadCount) {
+        this.userName = userName;
         this.dailyMission = dailyMission;
         this.noticeList = (noticeList.hasContent()) ? noticeList.getContent() : new ArrayList<>();
         this.missionList = missionList;
         this.currentRefund = currentRefund;
         this.totalRefund = totalRefund;
         this.finalHeadCount = finalHeadCount;
+        if(dailyMission.getTh() >= 2 && dailyMission.getTh() <= 14) this.yesterdayHeadCount = yesterdayHeadCount;
     }
 
-    public static ProgramDashboardResponse of(MissionDashboardVo dailyMission, Page<Notice> noticeList, List<MissionDashboardListVo> missionList,
-                                              Integer currentRefund, Integer totalRefund, Integer finalHeadCount) {
+    public static ProgramDashboardResponse of(String userName, MissionDashboardVo dailyMission, Page<Notice> noticeList, List<MissionDashboardListVo> missionList,
+                                              Integer currentRefund, Integer totalRefund, Integer finalHeadCount, Integer yesterdayHeadCount) {
         return ProgramDashboardResponse.builder()
+                .userName(userName)
                 .dailyMission(dailyMission)
                 .noticeList(noticeList)
                 .missionList(missionList)
                 .currentRefund(currentRefund)
                 .totalRefund(totalRefund)
                 .finalHeadCount(finalHeadCount)
+                .yesterdayHeadCount(yesterdayHeadCount)
                 .build();
     }
 }
