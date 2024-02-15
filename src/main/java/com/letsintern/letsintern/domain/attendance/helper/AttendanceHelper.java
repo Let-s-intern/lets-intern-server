@@ -4,9 +4,9 @@ import com.letsintern.letsintern.domain.application.domain.Application;
 import com.letsintern.letsintern.domain.application.exception.ApplicationNotFound;
 import com.letsintern.letsintern.domain.application.repository.ApplicationRepository;
 import com.letsintern.letsintern.domain.attendance.domain.Attendance;
+import com.letsintern.letsintern.domain.attendance.domain.AttendanceStatus;
 import com.letsintern.letsintern.domain.attendance.dto.request.AttendanceAdminUpdateDTO;
 import com.letsintern.letsintern.domain.attendance.dto.request.AttendanceCreateDTO;
-import com.letsintern.letsintern.domain.attendance.dto.response.AttendanceAdminListResponse;
 import com.letsintern.letsintern.domain.attendance.exception.AttendanceAlreadyExists;
 import com.letsintern.letsintern.domain.attendance.exception.AttendanceNotFound;
 import com.letsintern.letsintern.domain.attendance.mapper.AttendanceMapper;
@@ -14,6 +14,7 @@ import com.letsintern.letsintern.domain.attendance.repository.AttendanceReposito
 import com.letsintern.letsintern.domain.attendance.vo.AttendanceAdminVo;
 import com.letsintern.letsintern.domain.attendance.vo.AttendanceDashboardVo;
 import com.letsintern.letsintern.domain.mission.domain.Mission;
+import com.letsintern.letsintern.domain.mission.domain.MissionType;
 import com.letsintern.letsintern.domain.mission.exception.MissionNotFound;
 import com.letsintern.letsintern.domain.mission.repository.MissionRepository;
 import com.letsintern.letsintern.domain.user.domain.User;
@@ -36,13 +37,21 @@ public class AttendanceHelper {
 
     public Long createAttendance(Long missionId, AttendanceCreateDTO attendanceCreateDTO, User user) {
         Mission mission = missionRepository.findById(missionId).orElseThrow(() -> MissionNotFound.EXCEPTION);
+        Application application = applicationRepository.findByProgramIdAndUserId(mission.getProgram().getId(), user.getId());
+        if(application == null) throw ApplicationNotFound.EXCEPTION;
 
         // 이미 출석한 경우 처리
         final Attendance attendance = attendanceRepository.findByMissionIdAndUserId(missionId, user.getId());
         if(attendance != null) throw AttendanceAlreadyExists.EXCEPTION;
 
-        // Mission.attendanceCount++
+        // Mission.attendanceCount++, Mission.lateAttendance++
         mission.setAttendanceCount(mission.getAttendanceCount() + 1);
+        if(mission.getEndDate().isBefore(LocalDateTime.now())) mission.setLateAttendanceCount(mission.getLateAttendanceCount() + 1);
+
+        // 보증금 미션인 경우, Application.refund 적립
+        if(mission.getType().equals(MissionType.REFUND)) {
+            application.setRefund(application.getRefund() + mission.getRefund());
+        }
 
         return attendanceRepository.save(attendanceMapper.toEntity(mission, attendanceCreateDTO, user)).getId();
     }
@@ -58,7 +67,13 @@ public class AttendanceHelper {
     public Long updateAttendanceAdmin(Long attendanceId, AttendanceAdminUpdateDTO attendanceAdminUpdateDTO) {
         Attendance attendance = attendanceRepository.findById(attendanceId).orElseThrow(() -> AttendanceNotFound.EXCEPTION);
         if(attendanceAdminUpdateDTO.getLink() != null) attendance.setLink(attendanceAdminUpdateDTO.getLink());
-        if(attendanceAdminUpdateDTO.getStatus() != null) attendance.setStatus(attendanceAdminUpdateDTO.getStatus());
+        if(attendanceAdminUpdateDTO.getStatus() != null) {
+            // 제출된 출석을 반려하는 경우
+            if(!attendance.getStatus().equals(AttendanceStatus.WRONG) && attendanceAdminUpdateDTO.getStatus().equals(AttendanceStatus.WRONG)) {
+                attendance.setComments(null);
+            }
+            attendance.setStatus(attendanceAdminUpdateDTO.getStatus());
+        }
         if(attendanceAdminUpdateDTO.getComments() != null) attendance.setComments(attendanceAdminUpdateDTO.getComments());
         if(attendanceAdminUpdateDTO.getIsRefunded() != null) attendance.setIsRefunded(attendanceAdminUpdateDTO.getIsRefunded());
 
