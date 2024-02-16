@@ -172,6 +172,7 @@ public class MissionRepositoryImpl implements MissionRepositoryCustom {
                         qMission.th,
                         qMission.topic,
                         qMission.type,
+                        qMission.startDate,
                         qAttendance))
                 .from(qMission)
                 .leftJoin(qAttendance)
