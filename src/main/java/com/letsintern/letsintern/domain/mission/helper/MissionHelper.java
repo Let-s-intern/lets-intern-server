@@ -125,8 +125,8 @@ public class MissionHelper {
         return missionRepository.getMissionDashboardList(programId, userId);
     }
 
-    public List<MissionMyDashboardListVo> getMissionMyDashboardList(Long programId, MissionDashboardListStatus status, Long userId) {
-        return missionRepository.getMissionMyDashboardList(programId, status, userId);
+    public List<MissionMyDashboardListVo> getMissionMyDashboardList(Long programId, Long userId) {
+        return missionRepository.getMissionMyDashboardList(programId, userId);
     }
 
     public Object getMissionMyDashboardDetail(Long missionId, MissionDashboardListStatus status, Long userId) {

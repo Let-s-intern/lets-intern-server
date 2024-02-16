@@ -54,9 +54,9 @@ public class MissionService {
     }
 
     @Transactional
-    public MissionMyDashboardListResponse getMissionMyDashboardList(Long programId, MissionDashboardListStatus status, PrincipalDetails principalDetails) {
+    public MissionMyDashboardListResponse getMissionMyDashboardList(Long programId, PrincipalDetails principalDetails) {
         final User user = principalDetails.getUser();
-        return missionMapper.toMissionMyDashboardListResponse(missionHelper.getMissionMyDashboardList(programId, status, user.getId()));
+        return missionMapper.toMissionMyDashboardListResponse(missionHelper.getMissionMyDashboardList(programId, user.getId()));
     }
 
     @Transactional(readOnly = true)

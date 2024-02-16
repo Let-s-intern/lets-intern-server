@@ -2,6 +2,7 @@ package com.letsintern.letsintern.domain.attendance.mapper;
 
 import com.letsintern.letsintern.domain.attendance.domain.Attendance;
 import com.letsintern.letsintern.domain.attendance.dto.request.AttendanceCreateDTO;
+import com.letsintern.letsintern.domain.attendance.dto.response.AccountListResponse;
 import com.letsintern.letsintern.domain.attendance.dto.response.AttendanceAdminListResponse;
 import com.letsintern.letsintern.domain.attendance.dto.response.AttendanceDashboardResponse;
 import com.letsintern.letsintern.domain.attendance.dto.response.AttendanceIdResponse;
@@ -9,6 +10,7 @@ import com.letsintern.letsintern.domain.attendance.vo.AttendanceAdminVo;
 import com.letsintern.letsintern.domain.attendance.vo.AttendanceDashboardVo;
 import com.letsintern.letsintern.domain.mission.domain.Mission;
 import com.letsintern.letsintern.domain.user.domain.User;
+import com.letsintern.letsintern.domain.user.vo.AccountVo;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
@@ -31,5 +33,9 @@ public class AttendanceMapper {
 
     public AttendanceDashboardResponse toAttendanceDashboardResponse(String name, String wishJob, String introduction, List<AttendanceDashboardVo> attendanceList) {
         return AttendanceDashboardResponse.of(name, wishJob, introduction, attendanceList);
+    }
+
+    public AccountListResponse toAccountListResponse(List<AccountVo> accountVoList) {
+        return AccountListResponse.from(accountVoList);
     }
 }

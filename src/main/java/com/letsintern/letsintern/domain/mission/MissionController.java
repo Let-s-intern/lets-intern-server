@@ -66,8 +66,8 @@ public class MissionController {
 
     @Operation(summary = "유저 챌린지 대시보드 - 나의 기록장 미션 리스트")
     @GetMapping("/{programId}/list")
-    public MissionMyDashboardListResponse getMissionMyDashboardList(@PathVariable Long programId, @RequestParam MissionDashboardListStatus status, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        return missionService.getMissionMyDashboardList(programId, status, principalDetails);
+    public MissionMyDashboardListResponse getMissionMyDashboardList(@PathVariable Long programId, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        return missionService.getMissionMyDashboardList(programId, principalDetails);
     }
 
     @GetMapping("/{missionId}/detail")

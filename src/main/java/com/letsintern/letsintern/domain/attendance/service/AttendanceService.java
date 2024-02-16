@@ -3,16 +3,16 @@ package com.letsintern.letsintern.domain.attendance.service;
 import com.letsintern.letsintern.domain.application.domain.Application;
 import com.letsintern.letsintern.domain.application.exception.ApplicationNotFound;
 import com.letsintern.letsintern.domain.application.repository.ApplicationRepository;
-import com.letsintern.letsintern.domain.attendance.domain.Attendance;
 import com.letsintern.letsintern.domain.attendance.dto.request.AttendanceAdminUpdateDTO;
 import com.letsintern.letsintern.domain.attendance.dto.request.AttendanceCreateDTO;
+import com.letsintern.letsintern.domain.attendance.dto.response.AccountListResponse;
 import com.letsintern.letsintern.domain.attendance.dto.response.AttendanceAdminListResponse;
 import com.letsintern.letsintern.domain.attendance.dto.response.AttendanceDashboardResponse;
 import com.letsintern.letsintern.domain.attendance.dto.response.AttendanceIdResponse;
-import com.letsintern.letsintern.domain.attendance.exception.AttendanceNotFound;
 import com.letsintern.letsintern.domain.attendance.helper.AttendanceHelper;
 import com.letsintern.letsintern.domain.attendance.mapper.AttendanceMapper;
 import com.letsintern.letsintern.domain.attendance.repository.AttendanceRepository;
+import com.letsintern.letsintern.domain.mission.repository.MissionRepository;
 import com.letsintern.letsintern.domain.user.domain.User;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class AttendanceService {
-
-    private final AttendanceRepository attendanceRepository;
     private final AttendanceHelper attendanceHelper;
     private final AttendanceMapper attendanceMapper;
     private final ApplicationRepository applicationRepository;
@@ -56,4 +54,7 @@ public class AttendanceService {
         );
     }
 
+    public AccountListResponse getAccountListResponse(Long missionId) {
+        return attendanceMapper.toAccountListResponse(attendanceHelper.getAccountListResponse(missionId));
+    }
 }

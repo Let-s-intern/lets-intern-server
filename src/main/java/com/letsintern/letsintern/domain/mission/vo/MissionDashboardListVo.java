@@ -7,6 +7,8 @@ import com.letsintern.letsintern.domain.mission.domain.MissionType;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 @Getter
 public class MissionDashboardListVo {
 
@@ -16,21 +18,27 @@ public class MissionDashboardListVo {
 
     private MissionType missionType;
 
-    private boolean isAttended;
+    private LocalDateTime missionStartDate;
 
     private AttendanceStatus attendanceStatus;
 
+    private String attendanceComments;
+
+    private Boolean attendanceIsRefunded;
+
     @Builder
-    public MissionDashboardListVo(Integer missionTh, MissionTopic missionTopic, MissionType missionType, Attendance attendance) {
+    public MissionDashboardListVo(Integer missionTh, MissionTopic missionTopic, MissionType missionType, LocalDateTime missionStartDate, Attendance attendance) {
         this.missionTh = missionTh;
         this.missionTopic = missionTopic.getValue();
         this.missionType = missionType;
+        this.missionStartDate = missionStartDate;
 
         if(attendance != null) {
-            this.isAttended = true;
             this.attendanceStatus = attendance.getStatus();
+            this.attendanceComments = attendance.getComments();
+            this.attendanceIsRefunded = attendance.getIsRefunded();
         } else {
-            this.isAttended = false;
+            this.attendanceStatus = AttendanceStatus.ABSENT;
         }
     }
 }
