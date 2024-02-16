@@ -185,67 +185,26 @@ public class MissionRepositoryImpl implements MissionRepositoryCustom {
     }
 
     @Override
-    public List<MissionMyDashboardListVo> getMissionMyDashboardList(Long programId, MissionDashboardListStatus status, Long userId) {
+    public List<MissionMyDashboardListVo> getMissionMyDashboardList(Long programId, Long userId) {
         QMission qMission = QMission.mission;
         QAttendance qAttendance = QAttendance.attendance;
-
-        switch (status) {
-            case DONE -> {
-                return jpaQueryFactory
-                        .select(Projections.constructor(MissionMyDashboardListVo.class,
-                                qMission.id,
-                                qMission.th,
-                                qMission.title))
-                        .from(qMission)
-                        .leftJoin(qAttendance)
-                        .on(
-                                qAttendance.mission.eq(qMission),
-                                qAttendance.user.id.eq(userId)
-                        )
-                        .where(qMission.program.id.eq(programId))
-                        .where(qAttendance.isNotNull())
-                        .orderBy(qMission.th.desc())
-                        .fetch();
-            }
-
-            case ABSENT -> {
-                return jpaQueryFactory
-                        .select(Projections.constructor(MissionMyDashboardListVo.class,
-                                qMission.id,
-                                qMission.th,
-                                qMission.title))
-                        .from(qMission)
-                        .leftJoin(qAttendance)
-                        .on(
-                                qAttendance.mission.eq(qMission),
-                                qAttendance.user.id.eq(userId)
-                        )
-                        .where(qMission.program.id.eq(programId).and(qMission.endDate.before(LocalDateTime.now())))
-                        .where(qAttendance.isNull())
-                        .orderBy(qMission.th.desc())
-                        .fetch();
-            }
-
-            case YET -> {
-                return jpaQueryFactory
-                        .select(Projections.constructor(MissionMyDashboardListVo.class,
-                                qMission.id,
-                                qMission.th,
-                                qMission.title))
-                        .from(qMission)
-                        .leftJoin(qAttendance)
-                        .on(
-                                qAttendance.mission.eq(qMission),
-                                qAttendance.user.id.eq(userId)
-                        )
-                        .where(qMission.program.id.eq(programId).and(qMission.endDate.after(LocalDateTime.now())))
-                        .where(qAttendance.isNull())
-                        .orderBy(qMission.th.desc())
-                        .fetch();
-            }
-        }
-
-        return null;
+        return jpaQueryFactory
+                .select(Projections.constructor(MissionMyDashboardListVo.class,
+                        qMission.id,
+                        qMission.th,
+                        qMission.title,
+                        qMission.status,
+                        qMission.type,
+                        qAttendance))
+                .from(qMission)
+                .leftJoin(qAttendance)
+                .on(
+                        qAttendance.mission.eq(qMission),
+                        qAttendance.user.id.eq(userId)
+                )
+                .where(qMission.program.id.eq(programId))
+                .orderBy(qMission.th.desc())
+                .fetch();
     }
 
     @Override
