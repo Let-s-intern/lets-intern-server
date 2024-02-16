@@ -2,6 +2,7 @@ package com.letsintern.letsintern.domain.attendance;
 
 import com.letsintern.letsintern.domain.attendance.dto.request.AttendanceAdminUpdateDTO;
 import com.letsintern.letsintern.domain.attendance.dto.request.AttendanceCreateDTO;
+import com.letsintern.letsintern.domain.attendance.dto.response.AccountListResponse;
 import com.letsintern.letsintern.domain.attendance.dto.response.AttendanceAdminListResponse;
 import com.letsintern.letsintern.domain.attendance.dto.response.AttendanceDashboardResponse;
 import com.letsintern.letsintern.domain.attendance.dto.response.AttendanceIdResponse;
@@ -43,11 +44,15 @@ public class AttendanceController {
         return attendanceService.updateAttendanceAdmin(attendanceId, attendanceAdminUpdateDTO);
     }
 
+    @GetMapping("/{missionId}/refund")
+    @Operation(summary = "어드민 미션 당 보증금 환급 계좌 정보")
+    public AccountListResponse getRefundAccountVos(@PathVariable Long missionId) {
+        return attendanceService.getAccountListResponse(missionId);
+    }
+
     @GetMapping("/{applicationId}")
     @Operation(summary = "유저 대시보드 - 우리의 기록장 1명 상세보기")
     public AttendanceDashboardResponse getAttendanceDashboardList(@PathVariable Long applicationId) {
         return attendanceService.getAttendanceDashboardList(applicationId);
     }
-
-    // [어드민] 보증금 미션 Attendance status PASSED로 변경 시 Application.refund에 환급 금액 더하기
 }

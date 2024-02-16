@@ -18,6 +18,7 @@ import com.letsintern.letsintern.domain.mission.domain.MissionType;
 import com.letsintern.letsintern.domain.mission.exception.MissionNotFound;
 import com.letsintern.letsintern.domain.mission.repository.MissionRepository;
 import com.letsintern.letsintern.domain.user.domain.User;
+import com.letsintern.letsintern.domain.user.vo.AccountVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -97,5 +98,10 @@ public class AttendanceHelper {
         if(attendanceAdminUpdateDTO.getIsRefunded() != null) attendance.setIsRefunded(attendanceAdminUpdateDTO.getIsRefunded());
 
         return attendance.getId();
+    }
+
+    public List<AccountVo> getAccountListResponse(Long missionId) {
+        final Mission mission = missionRepository.findById(missionId).orElseThrow(() -> MissionNotFound.EXCEPTION);
+        return attendanceRepository.getAccountVoList(mission.getId());
     }
 }

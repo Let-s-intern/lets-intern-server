@@ -1,8 +1,11 @@
 package com.letsintern.letsintern.domain.attendance.repository;
 
+import com.letsintern.letsintern.domain.attendance.domain.AttendanceStatus;
 import com.letsintern.letsintern.domain.attendance.domain.QAttendance;
 import com.letsintern.letsintern.domain.attendance.vo.AttendanceAdminVo;
 import com.letsintern.letsintern.domain.attendance.vo.AttendanceDashboardVo;
+import com.letsintern.letsintern.domain.user.domain.QUser;
+import com.letsintern.letsintern.domain.user.vo.AccountVo;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -79,6 +82,24 @@ public class AttendanceRepositoryImpl implements AttendanceRepositoryCustom {
                 .from(qAttendance)
                 .where(qAttendance.user.id.eq(userId).and(qAttendance.mission.program.id.eq(programId)))
                 .orderBy(qAttendance.mission.th.asc())
+                .fetch();
+    }
+
+    @Override
+    public List<AccountVo> getAccountVoList(Long missionId) {
+        QAttendance qAttendance = QAttendance.attendance;
+        QUser qUser = QUser.user;
+
+        return jpaQueryFactory
+                .select(Projections.constructor(AccountVo.class,
+                        qUser.accountType,
+                        qUser.accountNumber))
+                .from(qUser)
+                .innerJoin(qAttendance)
+                .on(qAttendance.mission.id.eq(missionId)
+                        .and(qAttendance.status.eq(AttendanceStatus.PASSED))
+                        .and(qAttendance.user.id.eq(qUser.id)))
+                .orderBy(qAttendance.id.asc())
                 .fetch();
     }
 }
