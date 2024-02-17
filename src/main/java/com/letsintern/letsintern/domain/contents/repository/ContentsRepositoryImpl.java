@@ -6,7 +6,6 @@ import com.letsintern.letsintern.domain.contents.vo.ContentsAdminVo;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,7 +20,6 @@ import java.util.Optional;
 public class ContentsRepositoryImpl implements ContentsRepositoryCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
-    private final EntityManager em;
 
 
     @Override
@@ -38,8 +36,7 @@ public class ContentsRepositoryImpl implements ContentsRepositoryCustom {
                             qContents.title,
                             qContents.createdAt,
                             qContents.topic,
-                            qContents.link,
-                            qContents.fileListStr))
+                            qContents.link))
                     .from(qContents)
                     .where(qContents.topic.eq(contentsTopic))
                     .orderBy(qContents.id.asc())
@@ -60,8 +57,7 @@ public class ContentsRepositoryImpl implements ContentsRepositoryCustom {
                             qContents.title,
                             qContents.createdAt,
                             qContents.topic,
-                            qContents.link,
-                            qContents.fileListStr))
+                            qContents.link))
                     .from(qContents)
                     .orderBy(qContents.id.asc())
                     .offset(pageable.getOffset())
@@ -86,8 +82,7 @@ public class ContentsRepositoryImpl implements ContentsRepositoryCustom {
                         qContents.title,
                         qContents.createdAt,
                         qContents.topic,
-                        qContents.link,
-                        qContents.fileListStr))
+                        qContents.link))
                 .from(qContents)
                 .where(qContents.id.eq(contentsId))
                 .fetchFirst());

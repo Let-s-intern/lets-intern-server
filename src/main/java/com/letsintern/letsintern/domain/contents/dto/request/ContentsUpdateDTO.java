@@ -17,8 +17,6 @@ public class ContentsUpdateDTO {
 
     private String link;
 
-    private List<Long> fileIdList;
-
     private Boolean isVisible;
 
 }

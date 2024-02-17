@@ -25,8 +25,8 @@ public class ContentsService {
     private final ContentsMapper contentsMapper;
 
     @Transactional
-    public ContentsIdResponse createContents(ContentsCreateDTO contentsCreateDTO, List<MultipartFile> files) throws IOException {
-        return contentsMapper.toContentsIdResponse(contentsHelper.createContents(contentsCreateDTO, files));
+    public ContentsIdResponse createContents(ContentsCreateDTO contentsCreateDTO) {
+        return contentsMapper.toContentsIdResponse(contentsHelper.createContents(contentsCreateDTO));
     }
 
     @Transactional(readOnly = true)
