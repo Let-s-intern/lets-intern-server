@@ -2,7 +2,6 @@ package com.letsintern.letsintern.domain.mission.repository;
 
 import com.letsintern.letsintern.domain.attendance.domain.QAttendance;
 import com.letsintern.letsintern.domain.contents.domain.QContents;
-import com.letsintern.letsintern.domain.mission.domain.MissionDashboardListStatus;
 import com.letsintern.letsintern.domain.mission.domain.QMission;
 import com.letsintern.letsintern.domain.mission.vo.*;
 import com.querydsl.core.types.Projections;
@@ -14,7 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,7 +39,6 @@ public class MissionRepositoryImpl implements MissionRepositoryCustom {
                         qMission.isRefunded,
                         qContents.topic,
                         qMission.attendanceCount,
-                        qMission.isVisible,
                         qMission.status))
                 .from(qMission)
                 .leftJoin(qContents)

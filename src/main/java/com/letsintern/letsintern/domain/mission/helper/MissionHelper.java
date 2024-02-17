@@ -96,8 +96,6 @@ public class MissionHelper {
             final Contents limitedContents = contentsRepository.findByTypeAndTopic(ContentsType.LIMITED, missionUpdateDTO.getLimitedContentsTopic()).orElseThrow(() -> LimitedContentsNotFound.EXCEPTION);
             mission.setLimitedContentsId(limitedContents.getId());
         }
-        if(missionUpdateDTO.getIsVisible() != null)
-            mission.setIsVisible(missionUpdateDTO.getIsVisible());
         if(missionUpdateDTO.getIsRefunded() != null)
             mission.setIsRefunded(missionUpdateDTO.getIsRefunded());
 

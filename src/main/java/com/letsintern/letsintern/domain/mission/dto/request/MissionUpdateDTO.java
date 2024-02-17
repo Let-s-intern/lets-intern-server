@@ -36,7 +36,5 @@ public class MissionUpdateDTO {
 
     private ContentsTopic limitedContentsTopic;
 
-    private Boolean isVisible;
-
     private Boolean isRefunded;
 }
