@@ -38,7 +38,8 @@ public class AttendanceRepositoryImpl implements AttendanceRepositoryCustom {
                             qAttendance.status,
                             qAttendance.result,
                             qAttendance.link,
-                            qAttendance.isRefunded))
+                            qAttendance.isRefunded,
+                            qAttendance.comments))
                     .from(qAttendance)
                     .where(qAttendance.mission.id.eq(missionId))
                     .orderBy(qAttendance.id.desc())

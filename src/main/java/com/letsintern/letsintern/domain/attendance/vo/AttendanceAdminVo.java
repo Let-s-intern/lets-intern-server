@@ -27,8 +27,10 @@ public class AttendanceAdminVo {
 
     private Boolean isRefund;
 
+    private String comments;
+
     @Builder
-    public AttendanceAdminVo(Long id, User user, AttendanceStatus status, AttendanceResult result, String link, Boolean isRefund) {
+    public AttendanceAdminVo(Long id, User user, AttendanceStatus status, AttendanceResult result, String link, Boolean isRefund, String comments) {
         this.id = id;
         this.userName = user.getName();
         this.userEmail = user.getEmail();
@@ -37,6 +39,7 @@ public class AttendanceAdminVo {
         this.status = status;
         this.result = result;
         this.link = link;
-        this.isRefund =isRefund;
+        this.isRefund = isRefund;
+        this.comments = comments;
     }
 }
