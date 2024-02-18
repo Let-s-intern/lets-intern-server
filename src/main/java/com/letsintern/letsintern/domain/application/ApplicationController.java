@@ -1,6 +1,7 @@
 package com.letsintern.letsintern.domain.application;
 
 import com.letsintern.letsintern.domain.application.dto.request.ApplicationCreateDTO;
+import com.letsintern.letsintern.domain.application.dto.request.ApplicationIntroductionUpdateDTO;
 import com.letsintern.letsintern.domain.application.dto.request.ApplicationUpdateDTO;
 import com.letsintern.letsintern.domain.application.dto.response.*;
 import com.letsintern.letsintern.domain.application.service.ApplicationService;
@@ -53,6 +54,12 @@ public class ApplicationController {
     public ResponseEntity<String> deleteApplication(@PathVariable Long applicationId) {
         applicationService.deleteApplication(applicationId);
         return ResponseEntity.ok("success");
+    }
+
+    @Operation(summary = "챌린지 한줄 소개 수정")
+    @PatchMapping("/{applicationId}/introduction")
+    public ApplicationIdResponse updateApplicationIntroduction(@PathVariable Long applicationId, @RequestBody ApplicationIntroductionUpdateDTO applicationIntroductionUpdateDTO, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        return applicationService.updateApplicationIntroduction(applicationId, applicationIntroductionUpdateDTO, principalDetails);
     }
 
     @Operation(summary = "어드민 프로그램별 지원서 전체 목록")

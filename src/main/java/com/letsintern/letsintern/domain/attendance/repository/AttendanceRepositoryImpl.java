@@ -8,6 +8,8 @@ import com.letsintern.letsintern.domain.attendance.vo.AttendanceDashboardVo;
 import com.letsintern.letsintern.domain.user.domain.QUser;
 import com.letsintern.letsintern.domain.user.vo.AccountVo;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +32,11 @@ public class AttendanceRepositoryImpl implements AttendanceRepositoryCustom {
         List<AttendanceAdminVo> attendanceAdminVos;
         JPAQuery<Long> count;
 
+        NumberExpression<Integer> resultOrder = new CaseBuilder()
+                .when(qAttendance.result.eq(AttendanceResult.WAITING)).then(0)
+                .when(qAttendance.result.eq(AttendanceResult.WRONG)).then(1)
+                .otherwise(2);
+
         if(missionId != null) {
             attendanceAdminVos = jpaQueryFactory
                     .select(Projections.constructor(AttendanceAdminVo.class,
@@ -38,10 +45,11 @@ public class AttendanceRepositoryImpl implements AttendanceRepositoryCustom {
                             qAttendance.status,
                             qAttendance.result,
                             qAttendance.link,
-                            qAttendance.isRefunded))
+                            qAttendance.isRefunded,
+                            qAttendance.comments))
                     .from(qAttendance)
                     .where(qAttendance.mission.id.eq(missionId))
-                    .orderBy(qAttendance.id.desc())
+                    .orderBy(resultOrder.asc(), qAttendance.id.desc())
                     .offset(pageable.getOffset())
                     .limit(pageable.getPageSize())
                     .fetch();
@@ -59,9 +67,10 @@ public class AttendanceRepositoryImpl implements AttendanceRepositoryCustom {
                             qAttendance.status,
                             qAttendance.result,
                             qAttendance.link,
-                            qAttendance.isRefunded))
+                            qAttendance.isRefunded,
+                            qAttendance.comments))
                     .from(qAttendance)
-                    .orderBy(qAttendance.id.desc())
+                    .orderBy(resultOrder.asc(), qAttendance.id.desc())
                     .offset(pageable.getOffset())
                     .limit(pageable.getPageSize())
                     .fetch();
@@ -83,7 +92,9 @@ public class AttendanceRepositoryImpl implements AttendanceRepositoryCustom {
                         qAttendance.mission.th,
                         qAttendance.mission.title))
                 .from(qAttendance)
-                .where(qAttendance.user.id.eq(userId).and(qAttendance.mission.program.id.eq(programId)))
+                .where(qAttendance.user.id.eq(userId)
+                        .and(qAttendance.mission.program.id.eq(programId))
+                        .and(qAttendance.result.ne(AttendanceResult.WRONG)))
                 .orderBy(qAttendance.mission.th.asc())
                 .fetch();
     }
@@ -95,6 +106,7 @@ public class AttendanceRepositoryImpl implements AttendanceRepositoryCustom {
 
         return jpaQueryFactory
                 .select(Projections.constructor(AccountVo.class,
+                        qUser.name,
                         qUser.accountType,
                         qUser.accountNumber))
                 .from(qUser)
@@ -105,5 +117,32 @@ public class AttendanceRepositoryImpl implements AttendanceRepositoryCustom {
                         .and(qAttendance.user.id.eq(qUser.id)))
                 .orderBy(qAttendance.id.asc())
                 .fetch();
+    }
+
+    @Override
+    public long countNotCheckedAttendances(Long missionId) {
+        QAttendance qAttendance = QAttendance.attendance;
+        JPAQuery<Long> count = jpaQueryFactory
+                    .select(qAttendance.count())
+                    .from(qAttendance)
+                    .where(qAttendance.mission.id.eq(missionId)
+                            .and(qAttendance.status.eq(AttendanceStatus.PRESENT)
+                            .and(qAttendance.result.eq(AttendanceResult.WAITING))));
+
+        return count.stream().count();
+    }
+
+    @Override
+    public long countNotRefundedAttendances(Long missionId) {
+        QAttendance qAttendance = QAttendance.attendance;
+        JPAQuery<Long> count = jpaQueryFactory
+                    .select(qAttendance.count())
+                    .from(qAttendance)
+                    .where(qAttendance.mission.id.eq(missionId)
+                            .and(qAttendance.status.eq(AttendanceStatus.PRESENT)
+                            .and(qAttendance.result.eq(AttendanceResult.PASS)))
+                            .and(qAttendance.isRefunded.eq(false)));
+
+        return count.stream().count();
     }
 }

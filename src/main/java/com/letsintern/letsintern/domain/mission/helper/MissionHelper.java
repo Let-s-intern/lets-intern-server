@@ -1,5 +1,8 @@
 package com.letsintern.letsintern.domain.mission.helper;
 
+import com.letsintern.letsintern.domain.attendance.domain.AttendanceResult;
+import com.letsintern.letsintern.domain.attendance.domain.AttendanceStatus;
+import com.letsintern.letsintern.domain.attendance.repository.AttendanceRepository;
 import com.letsintern.letsintern.domain.contents.domain.Contents;
 import com.letsintern.letsintern.domain.contents.domain.ContentsTopic;
 import com.letsintern.letsintern.domain.contents.domain.ContentsType;
@@ -9,8 +12,12 @@ import com.letsintern.letsintern.domain.contents.exception.LimitedContentsNotFou
 import com.letsintern.letsintern.domain.contents.repository.ContentsRepository;
 import com.letsintern.letsintern.domain.mission.domain.Mission;
 import com.letsintern.letsintern.domain.mission.domain.MissionDashboardListStatus;
+import com.letsintern.letsintern.domain.mission.domain.MissionType;
 import com.letsintern.letsintern.domain.mission.dto.request.MissionCreateDTO;
 import com.letsintern.letsintern.domain.mission.dto.request.MissionUpdateDTO;
+import com.letsintern.letsintern.domain.mission.exception.MissionCannotCheckDone;
+import com.letsintern.letsintern.domain.mission.exception.MissionCannotRefundDone;
+import com.letsintern.letsintern.domain.mission.exception.MissionCannotRefundDoneType;
 import com.letsintern.letsintern.domain.mission.exception.MissionNotFound;
 import com.letsintern.letsintern.domain.mission.mapper.MissionMapper;
 import com.letsintern.letsintern.domain.mission.repository.MissionRepository;
@@ -35,8 +42,8 @@ public class MissionHelper {
     private final MissionRepository missionRepository;
     private final MissionMapper missionMapper;
     private final ProgramRepository programRepository;
-
     private final ContentsRepository contentsRepository;
+    private final AttendanceRepository attendanceRepository;
 
     public Long createMission(Long programId, MissionCreateDTO missionCreateDTO) {
         final Program program = programRepository.findById(programId).orElseThrow(() -> ProgramNotFound.EXCEPTION);
@@ -67,8 +74,21 @@ public class MissionHelper {
             mission.setType(missionUpdateDTO.getType());
         if(missionUpdateDTO.getTopic() != null)
             mission.setTopic(missionUpdateDTO.getTopic());
-        if(missionUpdateDTO.getStatus() != null)
+        if(missionUpdateDTO.getStatus() != null) {
+            switch (missionUpdateDTO.getStatus()) {
+                case CHECK_DONE -> {
+                    long notCheckedCount = attendanceRepository.countNotCheckedAttendances(missionId);
+                    if(notCheckedCount > 0) throw MissionCannotCheckDone.EXCEPTION;
+                }
+                case REFUND_DONE -> {
+                    if(!mission.getType().equals(MissionType.REFUND)) throw MissionCannotRefundDoneType.EXCEPTION;
+
+                    long notRefundedCount = attendanceRepository.countNotRefundedAttendances(missionId);
+                    if(notRefundedCount > 0) throw MissionCannotRefundDone.EXCEPTION;
+                }
+            }
             mission.setStatus(missionUpdateDTO.getStatus());
+        }
         if(missionUpdateDTO.getRefund() != null)
             mission.setRefund(missionUpdateDTO.getRefund());
         if(missionUpdateDTO.getTitle() != null)

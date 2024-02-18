@@ -7,12 +7,14 @@ import lombok.Getter;
 @Getter
 public class AccountVo {
 
+    private String name;
     private AccountType accountType;
 
     private String accountNumber;
 
     @Builder
-    public AccountVo(AccountType accountType, String accountNumber) {
+    public AccountVo(String name, AccountType accountType, String accountNumber) {
+        this.name = name;
         this.accountType = accountType;
         this.accountNumber = accountNumber;
     }

@@ -121,7 +121,6 @@ public class MissionRepositoryImpl implements MissionRepositoryCustom {
                         qMission.th,
                         qMission.title,
                         qMission.contents,
-                        qMission.guide,
                         qMission.endDate))
                 .from(qMission)
                 .where(qMission.program.id.eq(programId).and(qMission.th.eq(th)))
@@ -171,6 +170,7 @@ public class MissionRepositoryImpl implements MissionRepositoryCustom {
                         qMission.topic,
                         qMission.type,
                         qMission.startDate,
+                        qMission.comments,
                         qAttendance))
                 .from(qMission)
                 .leftJoin(qAttendance)

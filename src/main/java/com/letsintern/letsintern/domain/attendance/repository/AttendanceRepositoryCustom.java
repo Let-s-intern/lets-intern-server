@@ -1,5 +1,7 @@
 package com.letsintern.letsintern.domain.attendance.repository;
 
+import com.letsintern.letsintern.domain.attendance.domain.AttendanceResult;
+import com.letsintern.letsintern.domain.attendance.domain.AttendanceStatus;
 import com.letsintern.letsintern.domain.attendance.vo.AttendanceAdminVo;
 import com.letsintern.letsintern.domain.attendance.vo.AttendanceDashboardVo;
 import com.letsintern.letsintern.domain.user.vo.AccountVo;
@@ -15,4 +17,9 @@ public interface AttendanceRepositoryCustom {
     List<AttendanceDashboardVo> getAttendanceDashboardVos(Long programId, Long userId);
 
     List<AccountVo> getAccountVoList(Long missionId);
+
+    long countNotCheckedAttendances(Long missionId);
+
+    long countNotRefundedAttendances(Long missionId);
+
 }
