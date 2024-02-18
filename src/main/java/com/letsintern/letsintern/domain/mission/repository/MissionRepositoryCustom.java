@@ -1,6 +1,5 @@
 package com.letsintern.letsintern.domain.mission.repository;
 
-import com.letsintern.letsintern.domain.mission.domain.MissionDashboardListStatus;
 import com.letsintern.letsintern.domain.mission.vo.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,7 +23,9 @@ public interface MissionRepositoryCustom {
 
     List<MissionMyDashboardListVo> getMissionMyDashboardList(Long programId, Long userId);
 
-    Optional<MissionMyDashboardCompletedVo> getMissionMyDashboardCompleted(Long missionId, Long userId);
+    Optional<MissionMyDashboardDoneVo> getMissionMyDashboardDoneVo(Long missionId, Long userId);
 
-    Optional<MissionMyDashboardUncompletedVo> getMissionMyDashboardUncompleted(Long missionId);
+    Optional<MissionMyDashboardYetVo> getMissionMyDashboardYetVo(Long missionId);
+
+    Optional<MissionMyDashboardAbsentVo> getMissionMyDashboardAbsentVo(Long missionId, Long userId);
 }

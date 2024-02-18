@@ -1,6 +1,7 @@
 package com.letsintern.letsintern.domain.mission.vo;
 
 import com.letsintern.letsintern.domain.attendance.domain.Attendance;
+import com.letsintern.letsintern.domain.attendance.domain.AttendanceResult;
 import com.letsintern.letsintern.domain.attendance.domain.AttendanceStatus;
 import com.letsintern.letsintern.domain.mission.domain.MissionTopic;
 import com.letsintern.letsintern.domain.mission.domain.MissionType;
@@ -22,7 +23,7 @@ public class MissionDashboardListVo {
 
     private AttendanceStatus attendanceStatus;
 
-    private String attendanceComments;
+    private AttendanceResult attendanceResult;
 
     private Boolean attendanceIsRefunded;
 
@@ -35,7 +36,7 @@ public class MissionDashboardListVo {
 
         if(attendance != null) {
             this.attendanceStatus = attendance.getStatus();
-            this.attendanceComments = attendance.getComments();
+            this.attendanceResult = attendance.getResult();
             this.attendanceIsRefunded = attendance.getIsRefunded();
         } else {
             this.attendanceStatus = AttendanceStatus.ABSENT;

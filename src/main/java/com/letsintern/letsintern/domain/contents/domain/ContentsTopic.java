@@ -9,7 +9,8 @@ public enum ContentsTopic {
     CONCEPT("컨셉잡기"),
     DOCUMENT("서류작성"),
     RECRUITMENT("공고분석"),
-    APPLY("지원하기");
+    APPLY("지원하기"),
+    NULL("없음");
 
     @Getter
     private final String value;

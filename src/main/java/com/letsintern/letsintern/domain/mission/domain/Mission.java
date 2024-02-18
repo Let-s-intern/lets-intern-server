@@ -33,7 +33,7 @@ public class Mission {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    private MissionStatus status = MissionStatus.CREATED;
+    private MissionStatus status = MissionStatus.WAITING;
 
     @Nullable
     private Integer refund;
@@ -77,9 +77,6 @@ public class Mission {
     @Nullable
     private Long limitedContentsId;
 
-    @NotNull
-    private Boolean isRefunded;
-
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "program_id", nullable = false)
     @JsonIgnore
@@ -114,8 +111,6 @@ public class Mission {
         if(essentialContents != null) this.essentialContentsId = essentialContents.getId();
         if(additionalContents != null) this.additionalContentsId = additionalContents.getId();
         if(limitedContents != null) this.limitedContentsId = limitedContents.getId();
-
-        this.isRefunded = false;
     }
 
     public static Mission of(Program program, MissionCreateDTO missionCreateDTO, Contents essentialContents, Contents additionalContents, Contents limitedContents) {

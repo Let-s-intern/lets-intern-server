@@ -10,6 +10,9 @@ import com.letsintern.letsintern.domain.mission.helper.MissionHelper;
 import com.letsintern.letsintern.domain.mission.mapper.MissionMapper;
 import com.letsintern.letsintern.domain.mission.dto.response.MissionMyDashboardListResponse;
 import com.letsintern.letsintern.domain.mission.vo.MissionAdminDetailVo;
+import com.letsintern.letsintern.domain.program.domain.Program;
+import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
+import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
 import com.letsintern.letsintern.domain.user.domain.User;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class MissionService {
 
+    private final ProgramRepository programRepository;
     private final MissionHelper missionHelper;
     private final MissionMapper missionMapper;
 
@@ -31,7 +35,8 @@ public class MissionService {
 
     @Transactional(readOnly = true)
     public MissionAdminSimpleListResponse getMissionAdminSimpleList(Long programId) {
-        return missionMapper.toMissionAdminSimpleListResponse(missionHelper.getMissionAdminSimpleList(programId));
+        final Program program = programRepository.findById(programId).orElseThrow(() -> ProgramNotFound.EXCEPTION);
+        return missionMapper.toMissionAdminSimpleListResponse(program.getFinalHeadCount(), missionHelper.getMissionAdminSimpleList(programId));
     }
 
     @Transactional(readOnly = true)

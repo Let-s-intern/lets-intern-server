@@ -4,10 +4,7 @@ import com.letsintern.letsintern.domain.contents.domain.ContentsTopic;
 import com.letsintern.letsintern.domain.mission.domain.MissionStatus;
 import com.letsintern.letsintern.domain.mission.domain.MissionTopic;
 import com.letsintern.letsintern.domain.mission.domain.MissionType;
-import jakarta.annotation.Nullable;
 import lombok.Getter;
-
-import java.util.List;
 
 @Getter
 public class MissionUpdateDTO {
@@ -30,11 +27,11 @@ public class MissionUpdateDTO {
 
     private String template;
 
+    private String comments;
+
     private ContentsTopic essentialContentsTopic;
 
     private ContentsTopic additionalContentsTopic;
 
     private ContentsTopic limitedContentsTopic;
-
-    private Boolean isRefunded;
 }

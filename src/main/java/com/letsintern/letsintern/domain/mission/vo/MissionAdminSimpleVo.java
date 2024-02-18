@@ -19,19 +19,16 @@ public class MissionAdminSimpleVo {
 
     private Integer lateAttendanceCount;
 
-    private Integer finalHeadCount;
-
     private String missionStatus;
 
     @Builder
     public MissionAdminSimpleVo(Long missionId, Integer missionTh, LocalDateTime missionStartDate,
-                                Integer attendanceCount, Integer lateAttendanceCount, Integer finalHeadCount, MissionStatus missionStatus) {
+                                Integer attendanceCount, Integer lateAttendanceCount, MissionStatus missionStatus) {
         this.missionId = missionId;
         this.missionTh = missionTh;
         this.missionStartDate = missionStartDate;
         this.attendanceCount = attendanceCount;
         this.lateAttendanceCount = lateAttendanceCount;
-        this.finalHeadCount = finalHeadCount;
         this.missionStatus = missionStatus.getValue();
     }
 }

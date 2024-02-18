@@ -9,15 +9,18 @@ import java.util.List;
 @Getter
 public class MissionAdminSimpleListResponse {
 
+    private Integer finalHeadCount;
     private List<MissionAdminSimpleVo> missionList;
 
     @Builder
-    private MissionAdminSimpleListResponse(List<MissionAdminSimpleVo> missionList) {
+    private MissionAdminSimpleListResponse(Integer finalHeadCount, List<MissionAdminSimpleVo> missionList) {
+        this.finalHeadCount = finalHeadCount;
         this.missionList = missionList;
     }
 
-    public static MissionAdminSimpleListResponse from(List<MissionAdminSimpleVo> missionList) {
+    public static MissionAdminSimpleListResponse of(Integer finalHeadCount, List<MissionAdminSimpleVo> missionList) {
         return MissionAdminSimpleListResponse.builder()
+                .finalHeadCount(finalHeadCount)
                 .missionList(missionList)
                 .build();
     }
