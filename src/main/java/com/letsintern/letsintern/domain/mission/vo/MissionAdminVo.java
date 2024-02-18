@@ -19,27 +19,25 @@ public class MissionAdminVo {
 
     private LocalDateTime endDate;
 
-    private Boolean isRefunded;
+    private MissionStatus status;
 
     private ContentsTopic essentialContentsTopic;
 
     private Integer attendanceCount;
 
-    private Boolean isVisible;
+    private Integer finalHeadCount;
 
-    private MissionStatus status;
 
     public MissionAdminVo(Long id, Integer th, String title, LocalDateTime startDate, LocalDateTime endDate,
-                          Boolean isRefunded, ContentsTopic essentialContentsTopic, Integer attendanceCount, Boolean isVisible, MissionStatus status) {
+                          MissionStatus status, ContentsTopic essentialContentsTopic, Integer attendanceCount, Integer finalHeadCount) {
         this.id = id;
         this.th = th;
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.isRefunded = isRefunded;
+        this.status = status;
         if(essentialContentsTopic != null) this.essentialContentsTopic = essentialContentsTopic;
         this.attendanceCount = attendanceCount;
-        this.isVisible = isVisible;
-        this.status = status;
+        this.finalHeadCount = finalHeadCount;
     }
 }

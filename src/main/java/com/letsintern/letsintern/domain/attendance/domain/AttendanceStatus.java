@@ -4,11 +4,9 @@ import lombok.Getter;
 
 public enum AttendanceStatus {
 
-    CREATED("확인중"),
-    PASSED("확인 완료"),
-    WRONG("반려"),
-    UPDATED("수정됨"),
-    LATE("지각"),
+    PRESENT("정상 제출"),
+    UPDATED("다시 제출"),
+    LATE("지각 제출"),
     ABSENT("미제출");
 
     @Getter

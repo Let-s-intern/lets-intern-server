@@ -18,9 +18,8 @@ public class ContentsMapper {
 
     private final StringUtils stringUtils;
 
-    public Contents toEntity(ContentsCreateDTO contentsCreateDTO, List<Long> fileIdList) {
-        String fileListStr = (fileIdList == null || fileIdList.isEmpty()) ? null : stringUtils.listToString(fileIdList);
-        return Contents.of(contentsCreateDTO, fileListStr);
+    public Contents toEntity(ContentsCreateDTO contentsCreateDTO) {
+        return Contents.from(contentsCreateDTO);
     }
 
     public ContentsIdResponse toContentsIdResponse(Long contentsId) {

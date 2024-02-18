@@ -1,5 +1,6 @@
 package com.letsintern.letsintern.domain.attendance.vo;
 
+import com.letsintern.letsintern.domain.attendance.domain.AttendanceResult;
 import com.letsintern.letsintern.domain.attendance.domain.AttendanceStatus;
 import com.letsintern.letsintern.domain.user.domain.User;
 import lombok.Builder;
@@ -20,18 +21,21 @@ public class AttendanceAdminVo {
 
     private AttendanceStatus status;
 
+    private AttendanceResult result;
+
     private String link;
 
     private Boolean isRefund;
 
     @Builder
-    public AttendanceAdminVo(Long id, User user, AttendanceStatus status, String link, Boolean isRefund) {
+    public AttendanceAdminVo(Long id, User user, AttendanceStatus status, AttendanceResult result, String link, Boolean isRefund) {
         this.id = id;
         this.userName = user.getName();
         this.userEmail = user.getEmail();
         this.userAccountType = user.getAccountType().getValue();
         this.userAccountNumber = user.getAccountNumber();
         this.status = status;
+        this.result = result;
         this.link = link;
         this.isRefund =isRefund;
     }

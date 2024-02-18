@@ -1,6 +1,7 @@
 package com.letsintern.letsintern.domain.mission.helper;
 
 import com.letsintern.letsintern.domain.contents.domain.Contents;
+import com.letsintern.letsintern.domain.contents.domain.ContentsTopic;
 import com.letsintern.letsintern.domain.contents.domain.ContentsType;
 import com.letsintern.letsintern.domain.contents.exception.AdditionalContentsNotFound;
 import com.letsintern.letsintern.domain.contents.exception.EssentialContentsNotFound;
@@ -84,22 +85,32 @@ public class MissionHelper {
         }
         if(missionUpdateDTO.getTemplate() != null)
             mission.setTemplate(missionUpdateDTO.getTemplate());
+        if(missionUpdateDTO.getComments() != null)
+            mission.setComments(missionUpdateDTO.getComments());
         if(missionUpdateDTO.getEssentialContentsTopic() != null) {
-            final Contents essentialContents = contentsRepository.findByTypeAndTopic(ContentsType.ESSENTIAL, missionUpdateDTO.getEssentialContentsTopic()).orElseThrow(() -> EssentialContentsNotFound.EXCEPTION);
-            mission.setEssentialContentsId(essentialContents.getId());
+            if(missionUpdateDTO.getEssentialContentsTopic().equals(ContentsTopic.NULL)) {
+                mission.setEssentialContentsId(null);
+            } else {
+                final Contents essentialContents = contentsRepository.findByTypeAndTopic(ContentsType.ESSENTIAL, missionUpdateDTO.getEssentialContentsTopic()).orElseThrow(() -> EssentialContentsNotFound.EXCEPTION);
+                mission.setEssentialContentsId(essentialContents.getId());
+            }
         }
         if(missionUpdateDTO.getAdditionalContentsTopic() != null) {
-            final Contents additionalContents = contentsRepository.findByTypeAndTopic(ContentsType.ADDITIONAL, missionUpdateDTO.getAdditionalContentsTopic()).orElseThrow(() -> AdditionalContentsNotFound.EXCEPTION);
-            mission.setAdditionalContentsId(additionalContents.getId());
+            if(missionUpdateDTO.getAdditionalContentsTopic().equals(ContentsTopic.NULL)) {
+                mission.setAdditionalContentsId(null);
+            } else {
+                final Contents additionalContents = contentsRepository.findByTypeAndTopic(ContentsType.ADDITIONAL, missionUpdateDTO.getAdditionalContentsTopic()).orElseThrow(() -> AdditionalContentsNotFound.EXCEPTION);
+                mission.setAdditionalContentsId(additionalContents.getId());
+            }
         }
         if(missionUpdateDTO.getLimitedContentsTopic() != null) {
-            final Contents limitedContents = contentsRepository.findByTypeAndTopic(ContentsType.LIMITED, missionUpdateDTO.getLimitedContentsTopic()).orElseThrow(() -> LimitedContentsNotFound.EXCEPTION);
-            mission.setLimitedContentsId(limitedContents.getId());
+            if(missionUpdateDTO.getLimitedContentsTopic().equals(ContentsTopic.NULL)) {
+                mission.setLimitedContentsId(null);
+            } else {
+                final Contents limitedContents = contentsRepository.findByTypeAndTopic(ContentsType.LIMITED, missionUpdateDTO.getLimitedContentsTopic()).orElseThrow(() -> LimitedContentsNotFound.EXCEPTION);
+                mission.setLimitedContentsId(limitedContents.getId());
+            }
         }
-        if(missionUpdateDTO.getIsVisible() != null)
-            mission.setIsVisible(missionUpdateDTO.getIsVisible());
-        if(missionUpdateDTO.getIsRefunded() != null)
-            mission.setIsRefunded(missionUpdateDTO.getIsRefunded());
 
         return mission.getId();
     }
@@ -132,13 +143,16 @@ public class MissionHelper {
     public Object getMissionMyDashboardDetail(Long missionId, MissionDashboardListStatus status, Long userId) {
         switch (status) {
             case DONE -> {
-                return missionRepository.getMissionMyDashboardCompleted(missionId, userId).orElseThrow(() -> MissionNotFound.EXCEPTION);
+                return missionRepository.getMissionMyDashboardDoneVo(missionId, userId).orElseThrow(() -> MissionNotFound.EXCEPTION);
             }
-            case YET, ABSENT -> {
-                return missionRepository.getMissionMyDashboardUncompleted(missionId).orElseThrow(() -> MissionNotFound.EXCEPTION);
+            case YET -> {
+                return missionRepository.getMissionMyDashboardYetVo(missionId).orElseThrow(() -> MissionNotFound.EXCEPTION);
+            }
+            case ABSENT -> {
+                return missionRepository.getMissionMyDashboardAbsentVo(missionId, userId).orElseThrow(() -> MissionNotFound.EXCEPTION);
             }
         }
-        return missionRepository.getMissionMyDashboardUncompleted(missionId).orElseThrow(() -> MissionNotFound.EXCEPTION);
+        return missionRepository.getMissionMyDashboardYetVo(missionId).orElseThrow(() -> MissionNotFound.EXCEPTION);
     }
 
 }

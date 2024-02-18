@@ -31,8 +31,8 @@ public class ContentsController {
 
     @PostMapping("")
     @Operation(summary = "어드민 컨텐츠 생성")
-    public ContentsIdResponse createContents(@RequestPart @Valid ContentsCreateDTO contentsCreateDTO, @RequestPart(value = "files", required = false) List<MultipartFile> files) throws IOException {
-        return contentsService.createContents(contentsCreateDTO, files);
+    public ContentsIdResponse createContents(@RequestBody @Valid ContentsCreateDTO contentsCreateDTO) {
+        return contentsService.createContents(contentsCreateDTO);
     }
 
     @GetMapping("")

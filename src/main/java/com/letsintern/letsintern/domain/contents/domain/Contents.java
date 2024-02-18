@@ -33,9 +33,6 @@ public class Contents {
     @NotNull
     private String link;
 
-    @Nullable
-    private String fileListStr;
-
     @NotNull
     private Boolean isVisible = false;
 
@@ -43,22 +40,20 @@ public class Contents {
     private LocalDate createdAt;
 
     @Builder
-    private Contents(String title, ContentsType type, ContentsTopic topic, String link, String fileListStr) {
+    private Contents(String title, ContentsType type, ContentsTopic topic, String link) {
         this.title = title;
         this.type = type;
         this.topic = topic;
         this.link = link;
-        if(fileListStr != null) this.fileListStr = fileListStr;
         this.createdAt = LocalDate.now();
     }
 
-    public static Contents of(ContentsCreateDTO contentsCreateDTO, String fileListStr) {
+    public static Contents from(ContentsCreateDTO contentsCreateDTO) {
         return Contents.builder()
                 .title(contentsCreateDTO.getTitle())
                 .type(contentsCreateDTO.getType())
                 .topic(contentsCreateDTO.getTopic())
                 .link(contentsCreateDTO.getLink())
-                .fileListStr(fileListStr)
                 .build();
     }
 }

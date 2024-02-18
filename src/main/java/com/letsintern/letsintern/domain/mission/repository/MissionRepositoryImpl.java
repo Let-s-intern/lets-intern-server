@@ -2,7 +2,6 @@ package com.letsintern.letsintern.domain.mission.repository;
 
 import com.letsintern.letsintern.domain.attendance.domain.QAttendance;
 import com.letsintern.letsintern.domain.contents.domain.QContents;
-import com.letsintern.letsintern.domain.mission.domain.MissionDashboardListStatus;
 import com.letsintern.letsintern.domain.mission.domain.QMission;
 import com.letsintern.letsintern.domain.mission.vo.*;
 import com.querydsl.core.types.Projections;
@@ -14,7 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,11 +36,10 @@ public class MissionRepositoryImpl implements MissionRepositoryCustom {
                         qMission.title,
                         qMission.startDate,
                         qMission.endDate,
-                        qMission.isRefunded,
+                        qMission.status,
                         qContents.topic,
                         qMission.attendanceCount,
-                        qMission.isVisible,
-                        qMission.status))
+                        qMission.program.finalHeadCount))
                 .from(qMission)
                 .leftJoin(qContents)
                 .on(
@@ -74,17 +71,19 @@ public class MissionRepositoryImpl implements MissionRepositoryCustom {
                         qMission.th,
                         qMission.type,
                         qMission.topic,
+                        qMission.status,
                         qMission.title,
                         qMission.contents,
                         qMission.guide,
                         qMission.template,
+                        qMission.comments,
                         qMission.startDate,
                         qMission.endDate,
+                        qMission.refund,
+                        qMission.program.refundTotal,
                         qEssentialContents.topic,
                         qAdditionalContents.topic,
-                        qLimitedContents.topic,
-                        qMission.refund,
-                        qMission.isRefunded))
+                        qLimitedContents.topic))
                 .from(qMission)
                         .leftJoin(qEssentialContents)
                         .on(qMission.essentialContentsId.eq(qEssentialContents.id))
@@ -106,7 +105,6 @@ public class MissionRepositoryImpl implements MissionRepositoryCustom {
                         qMission.startDate,
                         qMission.attendanceCount,
                         qMission.lateAttendanceCount,
-                        qMission.program.finalHeadCount,
                         qMission.status))
                 .from(qMission)
                 .where(qMission.program.id.eq(programId))
@@ -209,7 +207,7 @@ public class MissionRepositoryImpl implements MissionRepositoryCustom {
     }
 
     @Override
-    public Optional<MissionMyDashboardCompletedVo> getMissionMyDashboardCompleted(Long missionId, Long userId) {
+    public Optional<MissionMyDashboardDoneVo> getMissionMyDashboardDoneVo(Long missionId, Long userId) {
         QMission qMission = QMission.mission;
         QAttendance qAttendance = QAttendance.attendance;
         QContents qEssentialContents = new QContents("essential");
@@ -217,7 +215,7 @@ public class MissionRepositoryImpl implements MissionRepositoryCustom {
         QContents qLimitedContents = new QContents("limited");
 
         return Optional.ofNullable(jpaQueryFactory
-                .select(Projections.constructor(MissionMyDashboardCompletedVo.class,
+                .select(Projections.constructor(MissionMyDashboardDoneVo.class,
                         qMission.id,
                         qMission.th,
                         qMission.status,
@@ -226,6 +224,7 @@ public class MissionRepositoryImpl implements MissionRepositoryCustom {
                         qEssentialContents.link,
                         qAdditionalContents.link,
                         qLimitedContents.link,
+                        qMission.comments,
                         qAttendance))
                 .from(qMission)
                 .leftJoin(qAttendance)
@@ -244,17 +243,50 @@ public class MissionRepositoryImpl implements MissionRepositoryCustom {
     }
 
     @Override
-    public Optional<MissionMyDashboardUncompletedVo> getMissionMyDashboardUncompleted(Long missionId) {
+    public Optional<MissionMyDashboardYetVo> getMissionMyDashboardYetVo(Long missionId) {
         QMission qMission = QMission.mission;
 
         return Optional.ofNullable(jpaQueryFactory
-                .select(Projections.constructor(MissionMyDashboardUncompletedVo.class,
+                .select(Projections.constructor(MissionMyDashboardYetVo.class,
                         qMission.id,
+                        qMission.th,
                         qMission.title,
                         qMission.contents,
                         qMission.guide))
                 .from(qMission)
                 .where(qMission.id.eq(missionId))
+                .fetchFirst());
+    }
+
+    @Override
+    public Optional<MissionMyDashboardAbsentVo> getMissionMyDashboardAbsentVo(Long missionId, Long userId) {
+        QMission qMission = QMission.mission;
+        QAttendance qAttendance = QAttendance.attendance;
+        QContents qEssentialContents = new QContents("essential");
+        QContents qAdditionalContents = new QContents("additional");
+
+        return Optional.ofNullable(jpaQueryFactory
+                .select(Projections.constructor(MissionMyDashboardAbsentVo.class,
+                        qMission.id,
+                        qMission.th,
+                        qMission.title,
+                        qMission.contents,
+                        qMission.guide,
+                        qMission.template,
+                        qEssentialContents.link,
+                        qAdditionalContents.link,
+                        qAttendance))
+                .from(qMission)
+                .leftJoin(qAttendance)
+                .on(
+                        qAttendance.mission.eq(qMission),
+                        qAttendance.user.id.eq(userId)
+                )
+                .leftJoin(qEssentialContents)
+                .on(qMission.essentialContentsId.eq(qEssentialContents.id))
+                .leftJoin(qAdditionalContents)
+                .on(qMission.additionalContentsId.eq(qAdditionalContents.id))
+                .where(qMission.id.eq(missionId).and(qAttendance.isNull()))
                 .fetchFirst());
     }
 }

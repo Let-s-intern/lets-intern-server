@@ -1,5 +1,6 @@
 package com.letsintern.letsintern.domain.attendance.repository;
 
+import com.letsintern.letsintern.domain.attendance.domain.AttendanceResult;
 import com.letsintern.letsintern.domain.attendance.domain.AttendanceStatus;
 import com.letsintern.letsintern.domain.attendance.domain.QAttendance;
 import com.letsintern.letsintern.domain.attendance.vo.AttendanceAdminVo;
@@ -35,6 +36,7 @@ public class AttendanceRepositoryImpl implements AttendanceRepositoryCustom {
                             qAttendance.id,
                             qAttendance.user,
                             qAttendance.status,
+                            qAttendance.result,
                             qAttendance.link,
                             qAttendance.isRefunded))
                     .from(qAttendance)
@@ -55,6 +57,7 @@ public class AttendanceRepositoryImpl implements AttendanceRepositoryCustom {
                             qAttendance.id,
                             qAttendance.user,
                             qAttendance.status,
+                            qAttendance.result,
                             qAttendance.link,
                             qAttendance.isRefunded))
                     .from(qAttendance)
@@ -97,7 +100,8 @@ public class AttendanceRepositoryImpl implements AttendanceRepositoryCustom {
                 .from(qUser)
                 .innerJoin(qAttendance)
                 .on(qAttendance.mission.id.eq(missionId)
-                        .and(qAttendance.status.eq(AttendanceStatus.PASSED))
+                        .and(qAttendance.status.eq(AttendanceStatus.PRESENT))
+                        .and(qAttendance.result.eq(AttendanceResult.PASS))
                         .and(qAttendance.user.id.eq(qUser.id)))
                 .orderBy(qAttendance.id.asc())
                 .fetch();

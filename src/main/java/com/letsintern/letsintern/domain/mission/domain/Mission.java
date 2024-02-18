@@ -33,7 +33,7 @@ public class Mission {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    private MissionStatus status = MissionStatus.CREATED;
+    private MissionStatus status = MissionStatus.WAITING;
 
     @Nullable
     private Integer refund;
@@ -66,6 +66,9 @@ public class Mission {
     private String template;
 
     @Nullable
+    private String comments;
+
+    @Nullable
     private Long essentialContentsId;
 
     @Nullable
@@ -73,12 +76,6 @@ public class Mission {
 
     @Nullable
     private Long limitedContentsId;
-
-    @NotNull
-    private Boolean isVisible;
-
-    @NotNull
-    private Boolean isRefunded;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "program_id", nullable = false)
@@ -91,7 +88,7 @@ public class Mission {
 
     @Builder
     private Mission(Program program, MissionTopic topic, MissionType type, Integer refund, String title, String contents, String guide, Integer th, String template,
-                    Contents essentialContents, Contents additionalContents, Contents limitedContents) {
+                    String comments, Contents essentialContents, Contents additionalContents, Contents limitedContents) {
         this.program = program;
         this.type = type;
         this.topic = topic;
@@ -109,13 +106,11 @@ public class Mission {
         this.endDate = this.startDate.withHour(23).withMinute(59).withSecond(59);
 
         this.template = template;
+        this.comments = comments;
 
         if(essentialContents != null) this.essentialContentsId = essentialContents.getId();
         if(additionalContents != null) this.additionalContentsId = additionalContents.getId();
         if(limitedContents != null) this.limitedContentsId = limitedContents.getId();
-
-        this.isVisible = false;
-        this.isRefunded = false;
     }
 
     public static Mission of(Program program, MissionCreateDTO missionCreateDTO, Contents essentialContents, Contents additionalContents, Contents limitedContents) {
@@ -129,6 +124,7 @@ public class Mission {
                 .guide(missionCreateDTO.getGuide())
                 .th(missionCreateDTO.getTh())
                 .template(missionCreateDTO.getTemplate())
+                .comments(missionCreateDTO.getComments())
                 .essentialContents(essentialContents)
                 .additionalContents(additionalContents)
                 .limitedContents(limitedContents)

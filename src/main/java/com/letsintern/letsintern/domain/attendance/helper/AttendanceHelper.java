@@ -4,6 +4,7 @@ import com.letsintern.letsintern.domain.application.domain.Application;
 import com.letsintern.letsintern.domain.application.exception.ApplicationNotFound;
 import com.letsintern.letsintern.domain.application.repository.ApplicationRepository;
 import com.letsintern.letsintern.domain.attendance.domain.Attendance;
+import com.letsintern.letsintern.domain.attendance.domain.AttendanceResult;
 import com.letsintern.letsintern.domain.attendance.domain.AttendanceStatus;
 import com.letsintern.letsintern.domain.attendance.dto.request.AttendanceAdminUpdateDTO;
 import com.letsintern.letsintern.domain.attendance.dto.request.AttendanceCreateDTO;
@@ -73,26 +74,18 @@ public class AttendanceHelper {
         if(application == null) throw ApplicationNotFound.EXCEPTION;
 
         if(attendanceAdminUpdateDTO.getLink() != null) attendance.setLink(attendanceAdminUpdateDTO.getLink());
-        if(attendanceAdminUpdateDTO.getStatus() != null) {
-            if(attendance.getMission().getIsRefunded() == true) {
-
+        if(attendanceAdminUpdateDTO.getStatus() != null) attendance.setStatus(attendanceAdminUpdateDTO.getStatus());
+        if(attendanceAdminUpdateDTO.getResult() != null) {
+            if(attendance.getStatus().equals(AttendanceStatus.UPDATED) && attendanceAdminUpdateDTO.getResult().equals(AttendanceResult.WRONG)) {
+                attendance.setComments(null);
             }
-            if(attendance.getMission().getType().equals(MissionType.REFUND)) {
-                // 수정된 출석을 반려하는 경우 (수정 -> attendance.status = UPDATED, mission.attendanceCount++)
-                if(attendance.getStatus().equals(AttendanceStatus.UPDATED) && attendanceAdminUpdateDTO.getStatus().equals(AttendanceStatus.WRONG)) {
-                    application.setRefund(application.getRefund() - attendance.getMission().getRefund());           // 환급 금액에서 제외하기
-                    attendance.getMission().setAttendanceCount(attendance.getMission().getAttendanceCount() - 1);   // 출석 개수에서 제외하기
-                    attendance.setComments(null);                                                                   // 출석 코멘트 삭제하기
-                }
 
-                // 그 외 출석을 반려하는 경우
-                if(!attendance.getStatus().equals(AttendanceStatus.WRONG) && attendanceAdminUpdateDTO.getStatus().equals(AttendanceStatus.WRONG)) {
-                    application.setRefund(application.getRefund() - attendance.getMission().getRefund());           // 환급 금액에서 제외하기
-                    attendance.getMission().setAttendanceCount(attendance.getMission().getAttendanceCount() - 1);   // 출석 개수에서 제외하기
-                }
-
+            // 보증금 미션에서 반려된 경우
+            if(attendance.getMission().getType().equals(MissionType.REFUND)
+                    && attendance.getStatus().equals(AttendanceStatus.PRESENT) && attendanceAdminUpdateDTO.getResult().equals(AttendanceResult.WRONG)) {
+                application.setRefund(application.getRefund() - attendance.getMission().getRefund());
             }
-            attendance.setStatus(attendanceAdminUpdateDTO.getStatus());
+            attendance.setResult(attendanceAdminUpdateDTO.getResult());
         }
         if(attendanceAdminUpdateDTO.getComments() != null) attendance.setComments(attendanceAdminUpdateDTO.getComments());
         if(attendanceAdminUpdateDTO.getIsRefunded() != null) attendance.setIsRefunded(attendanceAdminUpdateDTO.getIsRefunded());
