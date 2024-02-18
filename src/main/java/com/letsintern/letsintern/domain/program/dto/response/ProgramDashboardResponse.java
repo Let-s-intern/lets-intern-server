@@ -38,7 +38,7 @@ public class ProgramDashboardResponse {
         this.currentRefund = currentRefund;
         this.totalRefund = totalRefund;
         this.finalHeadCount = finalHeadCount;
-        if(dailyMission.getTh() >= 2 && dailyMission.getTh() <= 14) this.yesterdayHeadCount = yesterdayHeadCount;
+        if(dailyMission != null && (dailyMission.getTh() >= 2 && dailyMission.getTh() <= 14)) this.yesterdayHeadCount = yesterdayHeadCount;
     }
 
     public static ProgramDashboardResponse of(String userName, MissionDashboardVo dailyMission, Page<Notice> noticeList, List<MissionDashboardListVo> missionList,

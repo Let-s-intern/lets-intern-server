@@ -21,6 +21,8 @@ public class MissionDashboardListVo {
 
     private LocalDateTime missionStartDate;
 
+    private String missionComments;
+
     private AttendanceStatus attendanceStatus;
 
     private AttendanceResult attendanceResult;
@@ -28,7 +30,7 @@ public class MissionDashboardListVo {
     private Boolean attendanceIsRefunded;
 
     @Builder
-    public MissionDashboardListVo(Integer missionTh, MissionTopic missionTopic, MissionType missionType, LocalDateTime missionStartDate, Attendance attendance) {
+    public MissionDashboardListVo(Integer missionTh, MissionTopic missionTopic, MissionType missionType, LocalDateTime missionStartDate, String missionComments, Attendance attendance) {
         this.missionTh = missionTh;
         this.missionTopic = missionTopic.getValue();
         this.missionType = missionType;
@@ -38,6 +40,9 @@ public class MissionDashboardListVo {
             this.attendanceStatus = attendance.getStatus();
             this.attendanceResult = attendance.getResult();
             this.attendanceIsRefunded = attendance.getIsRefunded();
+            if(attendance.getStatus().equals(AttendanceStatus.PRESENT) && attendance.getResult().equals(AttendanceResult.PASS)) {
+                this.missionComments = missionComments;
+            }
         } else {
             this.attendanceStatus = AttendanceStatus.ABSENT;
         }

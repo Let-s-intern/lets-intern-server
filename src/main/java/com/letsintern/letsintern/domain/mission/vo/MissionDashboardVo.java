@@ -16,17 +16,14 @@ public class MissionDashboardVo {
 
     private String contents;
 
-    private String guide;
-
     private LocalDateTime endDate;
 
     @Builder
-    public MissionDashboardVo(Long id, Integer th, String title, String contents, String guide, LocalDateTime endDate) {
+    public MissionDashboardVo(Long id, Integer th, String title, String contents, LocalDateTime endDate) {
         this.id = id;
         this.th = th;
         this.title = title;
         this.contents = contents;
-        this.guide = guide;
         this.endDate = endDate;
     }
 

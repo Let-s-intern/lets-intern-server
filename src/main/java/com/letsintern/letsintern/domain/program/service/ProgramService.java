@@ -106,8 +106,8 @@ public class ProgramService {
         final Application application = applicationRepository.findByProgramIdAndUserId(programId, user.getId());
         if(application == null) throw  ApplicationNotFound.EXCEPTION;
 
-        MissionDashboardVo dailyMission =  missionHelper.getDailyMission(program.getId(), program.getStartDate());
-        Integer yesterdayHeadCount = dailyMission == null ? null : attendanceRepository.countAllByMissionProgramIdAndMissionThAndStatusAndResult(programId, dailyMission.getTh() - 1, AttendanceStatus.PRESENT, AttendanceResult.PASS);
+        MissionDashboardVo dailyMission = missionHelper.getDailyMission(program.getId(), program.getStartDate());
+        Integer yesterdayHeadCount = (dailyMission == null) ? null : attendanceRepository.countAllByMissionProgramIdAndMissionThAndStatusAndResult(programId, dailyMission.getTh() - 1, AttendanceStatus.PRESENT, AttendanceResult.PASS);
 
         return programMapper.toProgramDashboardResponse(
                 user.getName(),
