@@ -29,19 +29,19 @@ public class MissionController {
     private final MissionService missionService;
 
     @PostMapping("/{programId}")
-    @Operation(summary = "미션 생성하기")
+    @Operation(summary = "어드민 미션 생성하기")
     public MissionIdResponse createMission(@PathVariable Long programId, @Valid @RequestBody MissionCreateDTO missionCreateDTO) {
         return missionService.createMission(programId, missionCreateDTO);
     }
 
     @GetMapping("/{programId}/simple")
-    @Operation(summary = "프로그램별 미션 전체 목록 - 미션 제출 현황")
+    @Operation(summary = "어드민 프로그램별 미션 전체 목록 - 미션 제출 현황")
     public MissionAdminSimpleListResponse getMissionAdminSimpleList(@PathVariable Long programId) {
         return missionService.getMissionAdminSimpleList(programId);
     }
 
     @GetMapping("/{programId}")
-    @Operation(summary = "프로그램별 미션 전체 목록")
+    @Operation(summary = "어드민 프로그램별 미션 전체 목록")
     public MissionAdminListResponse getMissionAdminList(@PathVariable Long programId, @PageableDefault(size = 20) Pageable pageable) {
         return missionService.getMissionAdminList(programId, pageable);
     }

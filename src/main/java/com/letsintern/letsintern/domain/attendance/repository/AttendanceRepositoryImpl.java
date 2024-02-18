@@ -106,4 +106,31 @@ public class AttendanceRepositoryImpl implements AttendanceRepositoryCustom {
                 .orderBy(qAttendance.id.asc())
                 .fetch();
     }
+
+    @Override
+    public long countNotCheckedAttendances(Long missionId) {
+        QAttendance qAttendance = QAttendance.attendance;
+        JPAQuery<Long> count = jpaQueryFactory
+                    .select(qAttendance.count())
+                    .from(qAttendance)
+                    .where(qAttendance.mission.id.eq(missionId)
+                            .and(qAttendance.status.eq(AttendanceStatus.PRESENT)
+                            .and(qAttendance.result.eq(AttendanceResult.WAITING))));
+
+        return count.stream().count();
+    }
+
+    @Override
+    public long countNotRefundedAttendances(Long missionId) {
+        QAttendance qAttendance = QAttendance.attendance;
+        JPAQuery<Long> count = jpaQueryFactory
+                    .select(qAttendance.count())
+                    .from(qAttendance)
+                    .where(qAttendance.mission.id.eq(missionId)
+                            .and(qAttendance.status.eq(AttendanceStatus.PRESENT)
+                            .and(qAttendance.result.eq(AttendanceResult.PASS)))
+                            .and(qAttendance.isRefunded.eq(false)));
+
+        return count.stream().count();
+    }
 }
