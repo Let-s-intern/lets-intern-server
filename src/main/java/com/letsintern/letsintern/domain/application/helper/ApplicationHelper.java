@@ -3,6 +3,7 @@ package com.letsintern.letsintern.domain.application.helper;
 import com.letsintern.letsintern.domain.application.domain.Application;
 import com.letsintern.letsintern.domain.application.domain.ApplicationStatus;
 import com.letsintern.letsintern.domain.application.dto.request.ApplicationCreateDTO;
+import com.letsintern.letsintern.domain.application.dto.request.ApplicationIntroductionUpdateDTO;
 import com.letsintern.letsintern.domain.application.dto.request.ApplicationUpdateDTO;
 import com.letsintern.letsintern.domain.application.dto.response.ApplicationCreateResponse;
 import com.letsintern.letsintern.domain.application.exception.*;
@@ -169,6 +170,17 @@ public class ApplicationHelper {
 
     }
 
+    /* 챌린지 모두의 기록장 - 한 줄 소개 수정 */
+    public Long updateApplicationIntroduction(Long applicationId, ApplicationIntroductionUpdateDTO applicationIntroductionUpdateDTO, Long userId) {
+        Application application = applicationRepository.findById(applicationId).orElseThrow(() -> ApplicationNotFound.EXCEPTION);
+        if(!application.getUser().getId().equals(userId)) throw ApplicationUnauthorized.EXCEPTION;
+
+        if(applicationIntroductionUpdateDTO.getIntroduction() != null)
+            application.setIntroduction(applicationIntroductionUpdateDTO.getIntroduction());
+
+        return application.getId();
+    }
+
     private PageRequest makePageRequest(Pageable pageable) {
         int pageNum = pageable.getPageNumber();
         int pageSize = pageable.getPageSize();
@@ -182,4 +194,5 @@ public class ApplicationHelper {
     public Page<ApplicationEntireDashboardVo> getDashboardList(Long programId, Long userId, Pageable pageable) {
         return applicationRepository.getEntireDashboardList(programId, userId, pageable);
     }
+
 }

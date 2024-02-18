@@ -1,6 +1,7 @@
 package com.letsintern.letsintern.domain.application.service;
 
 import com.letsintern.letsintern.domain.application.dto.request.ApplicationCreateDTO;
+import com.letsintern.letsintern.domain.application.dto.request.ApplicationIntroductionUpdateDTO;
 import com.letsintern.letsintern.domain.application.dto.request.ApplicationUpdateDTO;
 import com.letsintern.letsintern.domain.application.dto.response.*;
 import com.letsintern.letsintern.domain.application.exception.ApplicationUserBadRequest;
@@ -74,6 +75,11 @@ public class ApplicationService {
         applicationHelper.deleteApplication(applicationId);
     }
 
+    @Transactional
+    public ApplicationIdResponse updateApplicationIntroduction(Long applicationId, ApplicationIntroductionUpdateDTO applicationIntroductionUpdateDTO, PrincipalDetails principalDetails) {
+        final User user = principalDetails.getUser();
+        return applicationMapper.toApplicationIdResponse(applicationHelper.updateApplicationIntroduction(applicationId, applicationIntroductionUpdateDTO, user.getId()));
+    }
 
     public EmailListResponse getEmailList(Long programId) {
         return applicationMapper.toEmailListResponse(
