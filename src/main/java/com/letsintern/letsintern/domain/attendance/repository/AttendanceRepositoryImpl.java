@@ -84,7 +84,9 @@ public class AttendanceRepositoryImpl implements AttendanceRepositoryCustom {
                         qAttendance.mission.th,
                         qAttendance.mission.title))
                 .from(qAttendance)
-                .where(qAttendance.user.id.eq(userId).and(qAttendance.mission.program.id.eq(programId)))
+                .where(qAttendance.user.id.eq(userId)
+                        .and(qAttendance.mission.program.id.eq(programId))
+                        .and(qAttendance.result.ne(AttendanceResult.WRONG)))
                 .orderBy(qAttendance.mission.th.asc())
                 .fetch();
     }
@@ -96,6 +98,7 @@ public class AttendanceRepositoryImpl implements AttendanceRepositoryCustom {
 
         return jpaQueryFactory
                 .select(Projections.constructor(AccountVo.class,
+                        qUser.name,
                         qUser.accountType,
                         qUser.accountNumber))
                 .from(qUser)
