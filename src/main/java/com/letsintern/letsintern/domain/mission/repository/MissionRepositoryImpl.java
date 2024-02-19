@@ -289,4 +289,23 @@ public class MissionRepositoryImpl implements MissionRepositoryCustom {
                 .where(qMission.id.eq(missionId).and(qAttendance.isNull()))
                 .fetchFirst());
     }
+
+    @Override
+    public List<MissionAdminApplicationVo> getMissionAdminApplicationVos(Long programId, Long userId) {
+        QMission qMission = QMission.mission;
+        QAttendance qAttendance = QAttendance.attendance;
+
+        return jpaQueryFactory
+                .select(Projections.constructor(MissionAdminApplicationVo.class,
+                        qMission.id,
+                        qMission.th,
+                        qAttendance))
+                .from(qMission)
+                .where(qMission.program.id.eq(programId))
+                .leftJoin(qAttendance)
+                .on(
+                        qAttendance.mission.eq(qMission),
+                        qAttendance.user.id.eq(userId))
+                .fetch();
+    }
 }

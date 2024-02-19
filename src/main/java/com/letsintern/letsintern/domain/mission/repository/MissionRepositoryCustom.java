@@ -28,4 +28,6 @@ public interface MissionRepositoryCustom {
     Optional<MissionMyDashboardYetVo> getMissionMyDashboardYetVo(Long missionId);
 
     Optional<MissionMyDashboardAbsentVo> getMissionMyDashboardAbsentVo(Long missionId, Long userId);
+
+    List<MissionAdminApplicationVo> getMissionAdminApplicationVos(Long programId, Long userId);
 }
