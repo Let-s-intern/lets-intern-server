@@ -94,4 +94,16 @@ public class ApplicationController {
     public EmailListResponse getEmailList(@PathVariable Long programId) {
         return applicationService.getEmailList(programId);
     }
+
+    @Operation(summary = "어드민 챌린지 대시보드 참여자 목록")
+    @GetMapping("/admin/challenge/{programId}")
+    public ApplicationChallengeAdminVosResponse getApplicationChallengeAdminList(@PathVariable Long programId, @PageableDefault(size = 10) Pageable pageable) {
+        return applicationService.getApplicationChallengeAdminList(programId, pageable);
+    }
+
+    @Operation(summary = "어드민 챌린지 대시보드 참여자 목록 1건 상세")
+    @GetMapping("/admin/challenge/detail/{applicationId}")
+    public ApplicationChallengeAdminVoDetail getApplicationChallengeAdminDetail(@PathVariable Long applicationId) {
+        return applicationService.getApplicationChallengeAdminDetail(applicationId);
+    }
 }

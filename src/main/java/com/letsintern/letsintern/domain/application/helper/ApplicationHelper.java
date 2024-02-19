@@ -5,11 +5,13 @@ import com.letsintern.letsintern.domain.application.domain.ApplicationStatus;
 import com.letsintern.letsintern.domain.application.dto.request.ApplicationCreateDTO;
 import com.letsintern.letsintern.domain.application.dto.request.ApplicationIntroductionUpdateDTO;
 import com.letsintern.letsintern.domain.application.dto.request.ApplicationUpdateDTO;
+import com.letsintern.letsintern.domain.application.dto.response.ApplicationChallengeAdminVoDetail;
 import com.letsintern.letsintern.domain.application.dto.response.ApplicationCreateResponse;
 import com.letsintern.letsintern.domain.application.exception.*;
 import com.letsintern.letsintern.domain.application.mapper.ApplicationMapper;
 import com.letsintern.letsintern.domain.application.repository.ApplicationRepository;
 import com.letsintern.letsintern.domain.application.vo.ApplicationAdminVo;
+import com.letsintern.letsintern.domain.application.vo.ApplicationChallengeAdminVo;
 import com.letsintern.letsintern.domain.application.vo.ApplicationEntireDashboardVo;
 import com.letsintern.letsintern.domain.application.vo.ApplicationVo;
 import com.letsintern.letsintern.domain.program.domain.Program;
@@ -195,4 +197,7 @@ public class ApplicationHelper {
         return applicationRepository.getEntireDashboardList(programId, userId, pageable);
     }
 
+    public Page<ApplicationChallengeAdminVo> getApplicationChallengeAdminList(Long programId, Pageable pageable) {
+        return applicationRepository.getApplicationChallengeAdminList(programId, pageable);
+    }
 }

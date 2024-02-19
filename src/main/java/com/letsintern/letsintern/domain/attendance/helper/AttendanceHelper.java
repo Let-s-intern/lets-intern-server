@@ -48,9 +48,9 @@ public class AttendanceHelper {
         final Attendance attendance = attendanceRepository.findByMissionIdAndUserId(missionId, user.getId());
         if(attendance != null) throw AttendanceAlreadyExists.EXCEPTION;
 
-        // Mission.attendanceCount++, Mission.lateAttendance++
-        mission.setAttendanceCount(mission.getAttendanceCount() + 1);
+        // Mission.attendanceCount++ or lateAttendanceCount++
         if(isLateAttendance) mission.setLateAttendanceCount(mission.getLateAttendanceCount() + 1);
+        else mission.setAttendanceCount(mission.getAttendanceCount() + 1);
 
         // 보증금 미션인 경우, Application.refund 적립
         if(mission.getType().equals(MissionType.REFUND) && !isLateAttendance) {

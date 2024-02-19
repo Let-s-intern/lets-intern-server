@@ -1,7 +1,9 @@
 package com.letsintern.letsintern.domain.application.repository;
 
 import com.letsintern.letsintern.domain.application.domain.*;
+import com.letsintern.letsintern.domain.application.dto.response.ApplicationChallengeAdminVoDetail;
 import com.letsintern.letsintern.domain.application.vo.ApplicationAdminVo;
+import com.letsintern.letsintern.domain.application.vo.ApplicationChallengeAdminVo;
 import com.letsintern.letsintern.domain.application.vo.ApplicationEntireDashboardVo;
 import com.letsintern.letsintern.domain.application.vo.ApplicationVo;
 import com.letsintern.letsintern.domain.program.domain.ProgramStatus;
@@ -279,5 +281,45 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
                         qApplication.status.in(ApplicationStatus.IN_PROGRESS, ApplicationStatus.DONE));
 
         return PageableExecutionUtils.getPage(applicationEntireDashboardVos, pageable, count::fetchOne);
+    }
+
+    @Override
+    public Page<ApplicationChallengeAdminVo> getApplicationChallengeAdminList(Long programId, Pageable pageable) {
+        QApplication qApplication = QApplication.application;
+        List<ApplicationChallengeAdminVo> applicationVos;
+        JPAQuery<Long> count;
+
+        applicationVos = jpaQueryFactory
+                .select(Projections.constructor(ApplicationChallengeAdminVo.class,
+                        qApplication.id,
+                        qApplication.user.name,
+                        qApplication.type,
+                        qApplication.user.university,
+                        qApplication.user.major,
+                        qApplication.grade,
+                        qApplication.user.email,
+                        qApplication.user.phoneNum,
+                        qApplication.inflowPath,
+                        qApplication.user.accountType,
+                        qApplication.user.accountNumber))
+                .from(qApplication)
+                .where(
+                        qApplication.program.id.eq(programId),
+                        qApplication.isApproved.eq(true),
+                        qApplication.status.in(ApplicationStatus.IN_PROGRESS, ApplicationStatus.DONE))
+                .orderBy(qApplication.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        count = jpaQueryFactory
+                .select(qApplication.count())
+                .from(qApplication)
+                .where(
+                        qApplication.program.id.eq(programId),
+                        qApplication.isApproved.eq(true),
+                        qApplication.status.in(ApplicationStatus.IN_PROGRESS, ApplicationStatus.DONE));
+
+        return PageableExecutionUtils.getPage(applicationVos, pageable, count::fetchOne);
     }
 }

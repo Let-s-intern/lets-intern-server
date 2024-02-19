@@ -4,6 +4,7 @@ import com.letsintern.letsintern.domain.application.domain.Application;
 import com.letsintern.letsintern.domain.application.dto.request.ApplicationCreateDTO;
 import com.letsintern.letsintern.domain.application.dto.response.*;
 import com.letsintern.letsintern.domain.application.vo.ApplicationAdminVo;
+import com.letsintern.letsintern.domain.application.vo.ApplicationChallengeAdminVo;
 import com.letsintern.letsintern.domain.application.vo.ApplicationVo;
 import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
@@ -61,4 +62,7 @@ public class ApplicationMapper {
                 });
     }
 
+    public ApplicationChallengeAdminVosResponse toApplicationChallengeAdminVosResponse(Page<ApplicationChallengeAdminVo> applicationList) {
+        return ApplicationChallengeAdminVosResponse.from(applicationList);
+    }
 }
