@@ -50,7 +50,11 @@ public class QProgram extends EntityPathBase<Program> {
 
     public final EnumPath<MailStatus> mailStatus = createEnum("mailStatus", MailStatus.class);
 
+    public final ListPath<com.letsintern.letsintern.domain.mission.domain.Mission, com.letsintern.letsintern.domain.mission.domain.QMission> missionList = this.<com.letsintern.letsintern.domain.mission.domain.Mission, com.letsintern.letsintern.domain.mission.domain.QMission>createList("missionList", com.letsintern.letsintern.domain.mission.domain.Mission.class, com.letsintern.letsintern.domain.mission.domain.QMission.class, PathInits.DIRECT2);
+
     public final StringPath notice = createString("notice");
+
+    public final ListPath<com.letsintern.letsintern.domain.notice.domain.Notice, com.letsintern.letsintern.domain.notice.domain.QNotice> noticeList = this.<com.letsintern.letsintern.domain.notice.domain.Notice, com.letsintern.letsintern.domain.notice.domain.QNotice>createList("noticeList", com.letsintern.letsintern.domain.notice.domain.Notice.class, com.letsintern.letsintern.domain.notice.domain.QNotice.class, PathInits.DIRECT2);
 
     public final NumberPath<Integer> refundTotal = createNumber("refundTotal", Integer.class);
 

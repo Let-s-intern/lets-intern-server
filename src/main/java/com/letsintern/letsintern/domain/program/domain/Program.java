@@ -2,6 +2,8 @@ package com.letsintern.letsintern.domain.program.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.letsintern.letsintern.domain.application.domain.Application;
+import com.letsintern.letsintern.domain.mission.domain.Mission;
+import com.letsintern.letsintern.domain.notice.domain.Notice;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.response.ZoomMeetingCreateResponse;
 import com.letsintern.letsintern.global.common.util.StringUtils;
@@ -98,7 +100,15 @@ public class Program {
 
     @JsonIgnore
     @OneToMany(mappedBy = "program", orphanRemoval = true)
-    List<Application> applicationList;
+    private List<Application> applicationList;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "program", orphanRemoval = true)
+    private List<Mission> missionList;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "program", orphanRemoval = true)
+    private List<Notice> noticeList;
 
     @Builder
     private Program(ProgramType type, Integer th, String title, Integer headcount,

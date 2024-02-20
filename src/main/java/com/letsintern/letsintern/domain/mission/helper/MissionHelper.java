@@ -1,7 +1,5 @@
 package com.letsintern.letsintern.domain.mission.helper;
 
-import com.letsintern.letsintern.domain.attendance.domain.AttendanceResult;
-import com.letsintern.letsintern.domain.attendance.domain.AttendanceStatus;
 import com.letsintern.letsintern.domain.attendance.repository.AttendanceRepository;
 import com.letsintern.letsintern.domain.contents.domain.Contents;
 import com.letsintern.letsintern.domain.contents.domain.ContentsTopic;
