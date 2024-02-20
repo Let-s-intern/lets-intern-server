@@ -34,8 +34,8 @@ public class AttendanceAdminVo {
         this.id = id;
         this.userName = user.getName();
         this.userEmail = user.getEmail();
-        this.userAccountType = user.getAccountType().getValue();
-        this.userAccountNumber = user.getAccountNumber();
+        if(user.getAccountType() != null) this.userAccountType = user.getAccountType().getValue();
+        if(user.getAccountNumber() != null) this.userAccountNumber = user.getAccountNumber();
         this.status = status;
         this.result = result;
         this.link = link;
