@@ -44,7 +44,8 @@ public class MissionMyDashboardDoneVo {
         this.essentialContentsLink = essentialContentsLink;
         this.additionalContentsLink = additionalContentsLink;
         if((status.equals(MissionStatus.CHECK_DONE) || status.equals(MissionStatus.REFUND_DONE))
-                && (attendance != null && attendance.getStatus().equals(AttendanceStatus.PRESENT) && attendance.getResult().equals(AttendanceResult.PASS))) {
+                && (attendance != null && (attendance.getStatus().equals(AttendanceStatus.PRESENT) || attendance.getStatus().equals(AttendanceStatus.LATE))
+                && attendance.getResult().equals(AttendanceResult.PASS))) {
             this.limitedContentsLink = limitedContentsLink;
             this.missionComments = missionComments;
         }

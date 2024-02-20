@@ -15,20 +15,24 @@ public class AttendanceDashboardResponse {
 
     private String introduction;
 
+    private boolean isMine;
+
     private List<AttendanceDashboardVo> attendanceList;
 
     @Builder
-    private AttendanceDashboardResponse(String name, String wishJob, String introduction, List<AttendanceDashboardVo> attendanceList) {
+    private AttendanceDashboardResponse(String name, String wishJob, boolean isMine, String introduction, List<AttendanceDashboardVo> attendanceList) {
         this.name = name;
         this.wishJob = wishJob;
+        this.isMine = isMine;
         this.introduction = introduction;
         this.attendanceList = attendanceList;
     }
 
-    public static AttendanceDashboardResponse of(String name, String wishJob, String introduction, List<AttendanceDashboardVo> attendanceList) {
+    public static AttendanceDashboardResponse of(String name, String wishJob, boolean isMine, String introduction, List<AttendanceDashboardVo> attendanceList) {
         return AttendanceDashboardResponse.builder()
                 .name(name)
                 .wishJob(wishJob)
+                .isMine(isMine)
                 .introduction(introduction)
                 .attendanceList(attendanceList)
                 .build();

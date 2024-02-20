@@ -52,7 +52,7 @@ public class AttendanceController {
 
     @GetMapping("/{applicationId}")
     @Operation(summary = "유저 대시보드 - 우리의 기록장 1명 상세보기")
-    public AttendanceDashboardResponse getAttendanceDashboardList(@PathVariable Long applicationId) {
-        return attendanceService.getAttendanceDashboardList(applicationId);
+    public AttendanceDashboardResponse getAttendanceDashboardList(@PathVariable Long applicationId, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        return attendanceService.getAttendanceDashboardList(applicationId, principalDetails);
     }
 }

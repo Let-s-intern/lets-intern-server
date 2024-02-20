@@ -31,8 +31,8 @@ public class AttendanceMapper {
         return AttendanceAdminListResponse.from(attendanceAdminList);
     }
 
-    public AttendanceDashboardResponse toAttendanceDashboardResponse(String name, String wishJob, String introduction, List<AttendanceDashboardVo> attendanceList) {
-        return AttendanceDashboardResponse.of(name, wishJob, introduction, attendanceList);
+    public AttendanceDashboardResponse toAttendanceDashboardResponse(String name, String wishJob, boolean isMine, String introduction, List<AttendanceDashboardVo> attendanceList) {
+        return AttendanceDashboardResponse.of(name, wishJob, isMine, introduction, attendanceList);
     }
 
     public AccountListResponse toAccountListResponse(List<AccountVo> accountVoList) {

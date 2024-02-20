@@ -1,5 +1,6 @@
 package com.letsintern.letsintern.domain.attendance.repository;
 
+import com.letsintern.letsintern.domain.attendance.domain.Attendance;
 import com.letsintern.letsintern.domain.attendance.domain.AttendanceResult;
 import com.letsintern.letsintern.domain.attendance.domain.AttendanceStatus;
 import com.letsintern.letsintern.domain.attendance.domain.QAttendance;
@@ -122,27 +123,25 @@ public class AttendanceRepositoryImpl implements AttendanceRepositoryCustom {
     @Override
     public long countNotCheckedAttendances(Long missionId) {
         QAttendance qAttendance = QAttendance.attendance;
-        JPAQuery<Long> count = jpaQueryFactory
+        return jpaQueryFactory
                     .select(qAttendance.count())
                     .from(qAttendance)
                     .where(qAttendance.mission.id.eq(missionId)
                             .and(qAttendance.status.eq(AttendanceStatus.PRESENT)
-                            .and(qAttendance.result.eq(AttendanceResult.WAITING))));
-
-        return count.stream().count();
+                            .and(qAttendance.result.eq(AttendanceResult.WAITING))))
+                .fetchFirst();
     }
 
     @Override
     public long countNotRefundedAttendances(Long missionId) {
         QAttendance qAttendance = QAttendance.attendance;
-        JPAQuery<Long> count = jpaQueryFactory
+        return jpaQueryFactory
                     .select(qAttendance.count())
                     .from(qAttendance)
                     .where(qAttendance.mission.id.eq(missionId)
                             .and(qAttendance.status.eq(AttendanceStatus.PRESENT)
                             .and(qAttendance.result.eq(AttendanceResult.PASS)))
-                            .and(qAttendance.isRefunded.eq(false)));
-
-        return count.stream().count();
+                            .and(qAttendance.isRefunded.eq(false)))
+                .fetchFirst();
     }
 }
