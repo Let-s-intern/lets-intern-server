@@ -20,6 +20,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
+
 @Service
 @RequiredArgsConstructor
 public class AttendanceService {
@@ -44,11 +46,14 @@ public class AttendanceService {
     }
 
     @Transactional(readOnly = true)
-    public AttendanceDashboardResponse getAttendanceDashboardList(Long applicationId) {
+    public AttendanceDashboardResponse getAttendanceDashboardList(Long applicationId, PrincipalDetails principalDetails) {
         final Application application = applicationRepository.findById(applicationId).orElseThrow(() -> ApplicationNotFound.EXCEPTION);
+        final User user = principalDetails.getUser();
+        boolean isMine = Objects.equals(application.getUser().getId(), user.getId());
         return attendanceMapper.toAttendanceDashboardResponse(
                 application.getUser().getName(),
                 application.getWishJob(),
+                isMine,
                 application.getIntroduction(),
                 attendanceHelper.getAttendanceDashboardList(application)
         );
