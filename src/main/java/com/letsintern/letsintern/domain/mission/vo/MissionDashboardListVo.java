@@ -1,5 +1,6 @@
 package com.letsintern.letsintern.domain.mission.vo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.letsintern.letsintern.domain.attendance.domain.Attendance;
 import com.letsintern.letsintern.domain.attendance.domain.AttendanceResult;
 import com.letsintern.letsintern.domain.attendance.domain.AttendanceStatus;
@@ -23,6 +24,9 @@ public class MissionDashboardListVo {
 
     private String missionComments;
 
+    @JsonIgnore
+    private Integer missionRefund;
+
     private AttendanceStatus attendanceStatus;
 
     private AttendanceResult attendanceResult;
@@ -30,11 +34,12 @@ public class MissionDashboardListVo {
     private Boolean attendanceIsRefunded;
 
     @Builder
-    public MissionDashboardListVo(Integer missionTh, MissionTopic missionTopic, MissionType missionType, LocalDateTime missionStartDate, String missionComments, Attendance attendance) {
+    public MissionDashboardListVo(Integer missionTh, MissionTopic missionTopic, MissionType missionType, LocalDateTime missionStartDate, String missionComments, Integer missionRefund, Attendance attendance) {
         this.missionTh = missionTh;
         this.missionTopic = missionTopic.getValue();
         this.missionType = missionType;
         this.missionStartDate = missionStartDate;
+        this.missionRefund = missionRefund;
 
         if(attendance != null) {
             this.attendanceStatus = attendance.getStatus();

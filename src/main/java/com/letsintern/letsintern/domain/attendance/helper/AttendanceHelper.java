@@ -54,11 +54,6 @@ public class AttendanceHelper {
         if(isLateAttendance) mission.setLateAttendanceCount(mission.getLateAttendanceCount() + 1);
         else mission.setAttendanceCount(mission.getAttendanceCount() + 1);
 
-        // 보증금 미션인 경우, Application.refund 적립
-        if(mission.getType().equals(MissionType.REFUND) && !isLateAttendance) {
-            application.setRefund(application.getRefund() + mission.getRefund());
-        }
-
         return attendanceRepository.save(attendanceMapper.toEntity(mission, attendanceCreateDTO, user)).getId();
     }
 
@@ -91,12 +86,6 @@ public class AttendanceHelper {
         if(attendanceAdminUpdateDTO.getResult() != null) {
             if(attendance.getStatus().equals(AttendanceStatus.UPDATED) && attendanceAdminUpdateDTO.getResult().equals(AttendanceResult.WRONG)) {
                 attendance.setComments(null);
-            }
-
-            // 보증금 미션에서 반려된 경우
-            if(attendance.getMission().getType().equals(MissionType.REFUND)
-                    && attendance.getStatus().equals(AttendanceStatus.PRESENT) && attendanceAdminUpdateDTO.getResult().equals(AttendanceResult.WRONG)) {
-                application.setRefund(application.getRefund() - attendance.getMission().getRefund());
             }
             attendance.setResult(attendanceAdminUpdateDTO.getResult());
         }

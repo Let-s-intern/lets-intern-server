@@ -1,5 +1,8 @@
 package com.letsintern.letsintern.domain.program.dto.response;
 
+import com.letsintern.letsintern.domain.attendance.domain.AttendanceResult;
+import com.letsintern.letsintern.domain.attendance.domain.AttendanceStatus;
+import com.letsintern.letsintern.domain.mission.domain.MissionType;
 import com.letsintern.letsintern.domain.mission.vo.MissionDashboardListVo;
 import com.letsintern.letsintern.domain.mission.vo.MissionDashboardVo;
 import com.letsintern.letsintern.domain.notice.domain.Notice;
@@ -30,7 +33,14 @@ public class ProgramDashboardResponse {
 
     @Builder
     private ProgramDashboardResponse(String userName, MissionDashboardVo dailyMission, Page<Notice> noticeList, List<MissionDashboardListVo> missionList,
-                                     Integer currentRefund, Integer totalRefund, Integer finalHeadCount, Integer yesterdayHeadCount) {
+                                     Integer totalRefund, Integer finalHeadCount, Integer yesterdayHeadCount) {
+        int currentRefund = 0;
+        for(MissionDashboardListVo mission : missionList) {
+            if(mission.getMissionType().equals(MissionType.REFUND) && mission.getAttendanceStatus().equals(AttendanceStatus.PRESENT) && !mission.getAttendanceResult().equals(AttendanceResult.WRONG)) {
+                currentRefund += mission.getMissionRefund();
+            }
+        }
+
         this.userName = userName;
         this.dailyMission = dailyMission;
         this.noticeList = (noticeList.hasContent()) ? noticeList.getContent() : new ArrayList<>();
@@ -42,13 +52,12 @@ public class ProgramDashboardResponse {
     }
 
     public static ProgramDashboardResponse of(String userName, MissionDashboardVo dailyMission, Page<Notice> noticeList, List<MissionDashboardListVo> missionList,
-                                              Integer currentRefund, Integer totalRefund, Integer finalHeadCount, Integer yesterdayHeadCount) {
+                                              Integer totalRefund, Integer finalHeadCount, Integer yesterdayHeadCount) {
         return ProgramDashboardResponse.builder()
                 .userName(userName)
                 .dailyMission(dailyMission)
                 .noticeList(noticeList)
                 .missionList(missionList)
-                .currentRefund(currentRefund)
                 .totalRefund(totalRefund)
                 .finalHeadCount(finalHeadCount)
                 .yesterdayHeadCount(yesterdayHeadCount)
