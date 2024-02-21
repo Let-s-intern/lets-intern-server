@@ -2,6 +2,7 @@ package com.letsintern.letsintern.domain.attendance.helper;
 
 import com.letsintern.letsintern.domain.application.domain.Application;
 import com.letsintern.letsintern.domain.application.exception.ApplicationNotFound;
+import com.letsintern.letsintern.domain.application.exception.ApplicationUnauthorized;
 import com.letsintern.letsintern.domain.application.repository.ApplicationRepository;
 import com.letsintern.letsintern.domain.attendance.domain.Attendance;
 import com.letsintern.letsintern.domain.attendance.domain.AttendanceResult;
@@ -27,6 +28,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
@@ -58,6 +60,17 @@ public class AttendanceHelper {
         }
 
         return attendanceRepository.save(attendanceMapper.toEntity(mission, attendanceCreateDTO, user)).getId();
+    }
+
+    public Long updateAttendance(Long attendanceId, AttendanceCreateDTO attendanceUpdateDTO, Long userId) {
+        Attendance attendance = attendanceRepository.findById(attendanceId).orElseThrow(() -> AttendanceNotFound.EXCEPTION);
+        if(!Objects.equals(attendance.getUser().getId(), userId)) throw ApplicationUnauthorized.EXCEPTION;
+        else if(attendanceUpdateDTO.getLink() != null) {
+            attendance.setLink(attendanceUpdateDTO.getLink());
+            attendance.setStatus(AttendanceStatus.UPDATED);
+            attendance.setResult(AttendanceResult.WAITING);
+        }
+        return attendance.getId();
     }
 
     public Page<AttendanceAdminVo> getAttendanceAdminList(Long missionId, Pageable pageable) {
