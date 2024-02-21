@@ -48,8 +48,6 @@ public class QApplication extends EntityPathBase<Application> {
 
     public final com.letsintern.letsintern.domain.program.domain.QProgram program;
 
-    public final NumberPath<Integer> refund = createNumber("refund", Integer.class);
-
     public final NumberPath<Long> reviewId = createNumber("reviewId", Long.class);
 
     public final EnumPath<ApplicationStatus> status = createEnum("status", ApplicationStatus.class);

@@ -45,9 +45,9 @@ public class MissionHelper {
 
     public Long createMission(Long programId, MissionCreateDTO missionCreateDTO) {
         final Program program = programRepository.findById(programId).orElseThrow(() -> ProgramNotFound.EXCEPTION);
-        final Contents essentialContents = (missionCreateDTO.getEssentialContentsTopic() != null) ? contentsRepository.findByTypeAndTopic(ContentsType.ESSENTIAL, missionCreateDTO.getEssentialContentsTopic()).orElseThrow(() -> EssentialContentsNotFound.EXCEPTION) : null;
-        final Contents additionalContents = (missionCreateDTO.getAdditionalContentsTopic() != null) ? contentsRepository.findByTypeAndTopic(ContentsType.ADDITIONAL, missionCreateDTO.getAdditionalContentsTopic()).orElseThrow(() -> AdditionalContentsNotFound.EXCEPTION) : null;
-        final Contents limitedContents = (missionCreateDTO.getLimitedContentsTopic() != null) ? contentsRepository.findByTypeAndTopic(ContentsType.LIMITED, missionCreateDTO.getLimitedContentsTopic()).orElseThrow(() -> LimitedContentsNotFound.EXCEPTION) : null;
+        final Contents essentialContents = (missionCreateDTO.getEssentialContentsTopic() != null) ? contentsRepository.findOneByTypeAndTopicOrderByIdDesc(ContentsType.ESSENTIAL, missionCreateDTO.getEssentialContentsTopic()).orElseThrow(() -> EssentialContentsNotFound.EXCEPTION) : null;
+        final Contents additionalContents = (missionCreateDTO.getAdditionalContentsTopic() != null) ? contentsRepository.findOneByTypeAndTopicOrderByIdDesc(ContentsType.ADDITIONAL, missionCreateDTO.getAdditionalContentsTopic()).orElseThrow(() -> AdditionalContentsNotFound.EXCEPTION) : null;
+        final Contents limitedContents = (missionCreateDTO.getLimitedContentsTopic() != null) ? contentsRepository.findOneByTypeAndTopicOrderByIdDesc(ContentsType.LIMITED, missionCreateDTO.getLimitedContentsTopic()).orElseThrow(() -> LimitedContentsNotFound.EXCEPTION) : null;
 
         return missionRepository.save(missionMapper.toEntity(program, missionCreateDTO, essentialContents, additionalContents, limitedContents)).getId();
     }
@@ -109,7 +109,7 @@ public class MissionHelper {
             if(missionUpdateDTO.getEssentialContentsTopic().equals(ContentsTopic.NULL)) {
                 mission.setEssentialContentsId(null);
             } else {
-                final Contents essentialContents = contentsRepository.findByTypeAndTopic(ContentsType.ESSENTIAL, missionUpdateDTO.getEssentialContentsTopic()).orElseThrow(() -> EssentialContentsNotFound.EXCEPTION);
+                final Contents essentialContents = contentsRepository.findOneByTypeAndTopicOrderByIdDesc(ContentsType.ESSENTIAL, missionUpdateDTO.getEssentialContentsTopic()).orElseThrow(() -> EssentialContentsNotFound.EXCEPTION);
                 mission.setEssentialContentsId(essentialContents.getId());
             }
         }
@@ -117,7 +117,7 @@ public class MissionHelper {
             if(missionUpdateDTO.getAdditionalContentsTopic().equals(ContentsTopic.NULL)) {
                 mission.setAdditionalContentsId(null);
             } else {
-                final Contents additionalContents = contentsRepository.findByTypeAndTopic(ContentsType.ADDITIONAL, missionUpdateDTO.getAdditionalContentsTopic()).orElseThrow(() -> AdditionalContentsNotFound.EXCEPTION);
+                final Contents additionalContents = contentsRepository.findOneByTypeAndTopicOrderByIdDesc(ContentsType.ADDITIONAL, missionUpdateDTO.getAdditionalContentsTopic()).orElseThrow(() -> AdditionalContentsNotFound.EXCEPTION);
                 mission.setAdditionalContentsId(additionalContents.getId());
             }
         }
@@ -125,7 +125,7 @@ public class MissionHelper {
             if(missionUpdateDTO.getLimitedContentsTopic().equals(ContentsTopic.NULL)) {
                 mission.setLimitedContentsId(null);
             } else {
-                final Contents limitedContents = contentsRepository.findByTypeAndTopic(ContentsType.LIMITED, missionUpdateDTO.getLimitedContentsTopic()).orElseThrow(() -> LimitedContentsNotFound.EXCEPTION);
+                final Contents limitedContents = contentsRepository.findOneByTypeAndTopicOrderByIdDesc(ContentsType.LIMITED, missionUpdateDTO.getLimitedContentsTopic()).orElseThrow(() -> LimitedContentsNotFound.EXCEPTION);
                 mission.setLimitedContentsId(limitedContents.getId());
             }
         }

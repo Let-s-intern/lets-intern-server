@@ -99,9 +99,6 @@ public class Application {
     @NotNull
     private String createdAt = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 
-    @NotNull
-    private Integer refund = 0;
-
     @Nullable
     private String introduction;
 

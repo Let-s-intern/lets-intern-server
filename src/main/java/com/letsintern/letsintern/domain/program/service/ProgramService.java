@@ -114,7 +114,6 @@ public class ProgramService {
                 dailyMission,
                 noticeHelper.getNoticeList(programId, pageable),
                 missionHelper.getMissionDashboardList(programId, user.getId()),
-                application.getRefund(),
                 program.getRefundTotal(),
                 program.getFinalHeadCount(),
                 yesterdayHeadCount

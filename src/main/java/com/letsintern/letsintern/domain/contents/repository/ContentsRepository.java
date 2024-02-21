@@ -9,6 +9,4 @@ import java.util.Optional;
 
 public interface ContentsRepository extends JpaRepository<Contents, Long>, ContentsRepositoryCustom {
 
-    Optional<Contents> findByTypeAndTopic(ContentsType type, ContentsTopic topic);
-
 }

@@ -1,6 +1,8 @@
 package com.letsintern.letsintern.domain.contents.repository;
 
+import com.letsintern.letsintern.domain.contents.domain.Contents;
 import com.letsintern.letsintern.domain.contents.domain.ContentsTopic;
+import com.letsintern.letsintern.domain.contents.domain.ContentsType;
 import com.letsintern.letsintern.domain.contents.domain.QContents;
 import com.letsintern.letsintern.domain.contents.vo.ContentsAdminVo;
 import com.querydsl.core.types.Projections;
@@ -21,6 +23,18 @@ public class ContentsRepositoryImpl implements ContentsRepositoryCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
 
+
+    @Override
+    public Optional<Contents> findOneByTypeAndTopicOrderByIdDesc(ContentsType type, ContentsTopic topic) {
+        QContents qContents = QContents.contents;
+        return Optional.ofNullable(jpaQueryFactory
+                .select(qContents)
+                .from(qContents)
+                .where(qContents.type.eq(type),
+                        qContents.topic.eq(topic))
+                .orderBy(qContents.id.desc())
+                .fetchFirst());
+    }
 
     @Override
     public Page<ContentsAdminVo> getContentsAdminVoList(ContentsTopic contentsTopic, Pageable pageable) {
