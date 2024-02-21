@@ -1,6 +1,7 @@
 package com.letsintern.letsintern.domain.application.repository;
 
 import com.letsintern.letsintern.domain.application.domain.Application;
+import com.letsintern.letsintern.domain.application.domain.ApplicationWishJob;
 import com.letsintern.letsintern.domain.application.dto.response.ApplicationChallengeAdminVoDetail;
 import com.letsintern.letsintern.domain.application.vo.ApplicationAdminVo;
 import com.letsintern.letsintern.domain.application.vo.ApplicationChallengeAdminVo;
@@ -38,7 +39,7 @@ public interface ApplicationRepositoryCustom {
 
     Optional<ApplicationEntireDashboardVo> getEntireDashboardMyVo(Long programId, Long userId);
 
-    Page<ApplicationEntireDashboardVo> getEntireDashboardList(Long programId, Long userId, Pageable pageable);
+    Page<ApplicationEntireDashboardVo> getEntireDashboardList(Long programId, ApplicationWishJob applicationWishJob, Long userId, Pageable pageable);
 
     Page<ApplicationChallengeAdminVo> getApplicationChallengeAdminList(Long programId, Pageable pageable);
 

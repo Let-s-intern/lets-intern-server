@@ -1,6 +1,7 @@
 package com.letsintern.letsintern.domain.program.service;
 
 import com.letsintern.letsintern.domain.application.domain.Application;
+import com.letsintern.letsintern.domain.application.domain.ApplicationWishJob;
 import com.letsintern.letsintern.domain.application.exception.ApplicationNotFound;
 import com.letsintern.letsintern.domain.application.helper.ApplicationHelper;
 import com.letsintern.letsintern.domain.application.repository.ApplicationRepository;
@@ -133,13 +134,13 @@ public class ProgramService {
         );
     }
 
-    public ProgramEntireDashboardResponse getProgramEntireDashboard(Long programId, PrincipalDetails principalDetails, Pageable pageable) {
+    public ProgramEntireDashboardResponse getProgramEntireDashboard(Long programId, ApplicationWishJob applicationWishJob, PrincipalDetails principalDetails, Pageable pageable) {
         final Program program = programRepository.findById(programId).orElseThrow(() -> ProgramNotFound.EXCEPTION);
         final User user = principalDetails.getUser();
 
         return programMapper.toProgramEntireDashboardResponse(
                 applicationHelper.getMyDashboard(program.getId(), user.getId()),
-                applicationHelper.getDashboardList(program.getId(), user.getId(), pageable)
+                applicationHelper.getDashboardList(program.getId(), applicationWishJob, user.getId(), pageable)
         );
     }
 }

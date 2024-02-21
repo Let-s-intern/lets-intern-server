@@ -2,6 +2,7 @@ package com.letsintern.letsintern.domain.application.helper;
 
 import com.letsintern.letsintern.domain.application.domain.Application;
 import com.letsintern.letsintern.domain.application.domain.ApplicationStatus;
+import com.letsintern.letsintern.domain.application.domain.ApplicationWishJob;
 import com.letsintern.letsintern.domain.application.dto.request.ApplicationCreateDTO;
 import com.letsintern.letsintern.domain.application.dto.request.ApplicationIntroductionUpdateDTO;
 import com.letsintern.letsintern.domain.application.dto.request.ApplicationUpdateDTO;
@@ -193,8 +194,8 @@ public class ApplicationHelper {
         return applicationRepository.getEntireDashboardMyVo(programId, userId).orElseThrow(() -> ApplicationNotFound.EXCEPTION);
     }
 
-    public Page<ApplicationEntireDashboardVo> getDashboardList(Long programId, Long userId, Pageable pageable) {
-        return applicationRepository.getEntireDashboardList(programId, userId, pageable);
+    public Page<ApplicationEntireDashboardVo> getDashboardList(Long programId, ApplicationWishJob applicationWishJob, Long userId, Pageable pageable) {
+        return applicationRepository.getEntireDashboardList(programId, applicationWishJob, userId, pageable);
     }
 
     public Page<ApplicationChallengeAdminVo> getApplicationChallengeAdminList(Long programId, Pageable pageable) {

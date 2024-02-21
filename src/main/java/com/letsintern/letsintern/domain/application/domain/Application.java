@@ -33,8 +33,8 @@ public class Application {
     private String wishCompany;
 
     @NotNull
-    @Column(length = 100)
-    private String wishJob;
+    @Enumerated(EnumType.STRING)
+    private ApplicationWishJob wishJob;
 
     @NotNull
     @Size(max = 700)
@@ -104,7 +104,7 @@ public class Application {
 
 
     @Builder
-    private Application(Program program, User user, Integer grade, String wishCompany, String wishJob,
+    private Application(Program program, User user, Integer grade, String wishCompany, ApplicationWishJob wishJob,
                              String applyMotive, String preQuestions, InflowPath inflowPath,
                              String name, String phoneNum, String email, ApplicationWay way) {
         this.program = program;

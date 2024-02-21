@@ -1,5 +1,6 @@
 package com.letsintern.letsintern.domain.program;
 
+import com.letsintern.letsintern.domain.application.domain.ApplicationWishJob;
 import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramUpdateRequestDTO;
@@ -116,7 +117,7 @@ public class ProgramController {
 
     @Operation(summary = "유저 챌린지 대시보드 - 모두의 기록장")
     @GetMapping("/{programId}/dashboard/entire")
-    public ProgramEntireDashboardResponse getProgramEntireDashboard(@PathVariable Long programId, @AuthenticationPrincipal PrincipalDetails principalDetails, @PageableDefault(size = 9) Pageable pageable) {
-        return programService.getProgramEntireDashboard(programId, principalDetails, pageable);
+    public ProgramEntireDashboardResponse getProgramEntireDashboard(@PathVariable Long programId, @RequestParam(required = false) ApplicationWishJob applicationWishJob, @AuthenticationPrincipal PrincipalDetails principalDetails, @PageableDefault(size = 9) Pageable pageable) {
+        return programService.getProgramEntireDashboard(programId, applicationWishJob, principalDetails, pageable);
     }
 }

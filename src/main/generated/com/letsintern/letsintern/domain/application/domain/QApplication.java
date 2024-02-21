@@ -60,7 +60,7 @@ public class QApplication extends EntityPathBase<Application> {
 
     public final StringPath wishCompany = createString("wishCompany");
 
-    public final StringPath wishJob = createString("wishJob");
+    public final EnumPath<ApplicationWishJob> wishJob = createEnum("wishJob", ApplicationWishJob.class);
 
     public QApplication(String variable) {
         this(Application.class, forVariable(variable), INITS);

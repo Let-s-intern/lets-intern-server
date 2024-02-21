@@ -1,5 +1,6 @@
 package com.letsintern.letsintern.domain.application.vo;
 
+import com.letsintern.letsintern.domain.application.domain.ApplicationWishJob;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -15,10 +16,10 @@ public class ApplicationEntireDashboardVo {
     private String introduction;
 
     @Builder
-    public ApplicationEntireDashboardVo(Long applicationId, String name, String wishJob, String introduction) {
+    public ApplicationEntireDashboardVo(Long applicationId, String name, ApplicationWishJob wishJob, String introduction) {
         this.applicationId = applicationId;
         this.name = name;
-        this.wishJob = wishJob;
+        this.wishJob = wishJob.getValue();
         this.introduction = introduction;
     }
 }

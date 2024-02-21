@@ -66,6 +66,8 @@ public class QProgram extends EntityPathBase<Program> {
 
     public final StringPath title = createString("title");
 
+    public final EnumPath<ProgramTopic> topic = createEnum("topic", ProgramTopic.class);
+
     public final EnumPath<ProgramType> type = createEnum("type", ProgramType.class);
 
     public final EnumPath<ProgramWay> way = createEnum("way", ProgramWay.class);
