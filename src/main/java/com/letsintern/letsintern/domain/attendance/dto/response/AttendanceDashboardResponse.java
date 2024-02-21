@@ -1,5 +1,6 @@
 package com.letsintern.letsintern.domain.attendance.dto.response;
 
+import com.letsintern.letsintern.domain.application.domain.ApplicationWishJob;
 import com.letsintern.letsintern.domain.attendance.vo.AttendanceDashboardVo;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,15 +21,15 @@ public class AttendanceDashboardResponse {
     private List<AttendanceDashboardVo> attendanceList;
 
     @Builder
-    private AttendanceDashboardResponse(String name, String wishJob, boolean isMine, String introduction, List<AttendanceDashboardVo> attendanceList) {
+    private AttendanceDashboardResponse(String name, ApplicationWishJob wishJob, boolean isMine, String introduction, List<AttendanceDashboardVo> attendanceList) {
         this.name = name;
-        this.wishJob = wishJob;
+        this.wishJob = wishJob.getValue();
         this.isMine = isMine;
         this.introduction = introduction;
         this.attendanceList = attendanceList;
     }
 
-    public static AttendanceDashboardResponse of(String name, String wishJob, boolean isMine, String introduction, List<AttendanceDashboardVo> attendanceList) {
+    public static AttendanceDashboardResponse of(String name, ApplicationWishJob wishJob, boolean isMine, String introduction, List<AttendanceDashboardVo> attendanceList) {
         return AttendanceDashboardResponse.builder()
                 .name(name)
                 .wishJob(wishJob)

@@ -1,5 +1,6 @@
 package com.letsintern.letsintern.domain.attendance.mapper;
 
+import com.letsintern.letsintern.domain.application.domain.ApplicationWishJob;
 import com.letsintern.letsintern.domain.attendance.domain.Attendance;
 import com.letsintern.letsintern.domain.attendance.dto.request.AttendanceCreateDTO;
 import com.letsintern.letsintern.domain.attendance.dto.response.AccountListResponse;
@@ -31,7 +32,7 @@ public class AttendanceMapper {
         return AttendanceAdminListResponse.from(attendanceAdminList);
     }
 
-    public AttendanceDashboardResponse toAttendanceDashboardResponse(String name, String wishJob, boolean isMine, String introduction, List<AttendanceDashboardVo> attendanceList) {
+    public AttendanceDashboardResponse toAttendanceDashboardResponse(String name, ApplicationWishJob wishJob, boolean isMine, String introduction, List<AttendanceDashboardVo> attendanceList) {
         return AttendanceDashboardResponse.of(name, wishJob, isMine, introduction, attendanceList);
     }
 

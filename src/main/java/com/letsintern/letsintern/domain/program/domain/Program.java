@@ -98,6 +98,13 @@ public class Program {
     @NotNull
     private Boolean isVisible = false;
 
+
+    /* Challenge */
+    @Nullable
+    @Enumerated(EnumType.STRING)
+    private ProgramTopic topic;
+
+
     @JsonIgnore
     @OneToMany(mappedBy = "program", orphanRemoval = true)
     private List<Application> applicationList;
