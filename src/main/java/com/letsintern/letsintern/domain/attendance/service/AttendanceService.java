@@ -35,6 +35,12 @@ public class AttendanceService {
         return attendanceMapper.toAttendanceIdResponse(attendanceHelper.createAttendance(missionId, attendanceCreateDTO, user));
     }
 
+    @Transactional
+    public AttendanceIdResponse updateAttendance(Long attendanceId, AttendanceCreateDTO attendanceUpdateDTO, PrincipalDetails principalDetails) {
+        final User user = principalDetails.getUser();
+        return attendanceMapper.toAttendanceIdResponse(attendanceHelper.updateAttendance(attendanceId, attendanceUpdateDTO, user.getId()));
+    }
+
     @Transactional(readOnly = true)
     public AttendanceAdminListResponse getAttendanceAdminList(Long missionId, Pageable pageable) {
         return attendanceMapper.toAttendanceAdminListResponse(attendanceHelper.getAttendanceAdminList(missionId, pageable));

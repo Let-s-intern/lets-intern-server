@@ -14,6 +14,7 @@ import com.letsintern.letsintern.domain.program.domain.Program;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
@@ -27,8 +28,8 @@ public class MissionMapper {
         return MissionIdResponse.from(missionId);
     }
 
-    public MissionAdminSimpleListResponse toMissionAdminSimpleListResponse(Integer finalHeadCount, List<MissionAdminSimpleVo> missionAdminSimpleList) {
-        return MissionAdminSimpleListResponse.of(finalHeadCount, missionAdminSimpleList);
+    public MissionAdminSimpleListResponse toMissionAdminSimpleListResponse(Integer finalHeadCount, LocalDateTime startDate, List<MissionAdminSimpleVo> missionAdminSimpleList) {
+        return MissionAdminSimpleListResponse.of(finalHeadCount, startDate, missionAdminSimpleList);
     }
 
     public MissionAdminListResponse toMissionAdminListResponse(Page<MissionAdminVo> missionAdminList) {

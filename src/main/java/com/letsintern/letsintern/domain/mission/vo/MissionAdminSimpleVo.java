@@ -19,7 +19,7 @@ public class MissionAdminSimpleVo {
 
     private Integer lateAttendanceCount;
 
-    private String missionStatus;
+    private MissionStatus missionStatus;
 
     @Builder
     public MissionAdminSimpleVo(Long missionId, Integer missionTh, LocalDateTime missionStartDate,
@@ -29,6 +29,6 @@ public class MissionAdminSimpleVo {
         this.missionStartDate = missionStartDate;
         this.attendanceCount = attendanceCount;
         this.lateAttendanceCount = lateAttendanceCount;
-        this.missionStatus = missionStatus.getValue();
+        this.missionStatus = missionStatus;
     }
 }
