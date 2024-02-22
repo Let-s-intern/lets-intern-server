@@ -26,6 +26,8 @@ public class MissionMyDashboardDoneVo {
 
     private String missionComments;
 
+    private Long attendanceId;
+
     private AttendanceStatus attendanceStatus;
 
     private AttendanceResult attendanceResult;
@@ -50,6 +52,7 @@ public class MissionMyDashboardDoneVo {
             this.missionComments = missionComments;
         }
         if(attendance != null) {
+            this.attendanceId = attendance.getId();
             this.attendanceStatus = attendance.getStatus();
             this.attendanceResult = attendance.getResult();
             this.attendanceLink = attendance.getLink();

@@ -20,6 +20,10 @@ public class QProgram extends EntityPathBase<Program> {
 
     public static final QProgram program = new QProgram("program");
 
+    public final StringPath accountNumber = createString("accountNumber");
+
+    public final EnumPath<com.letsintern.letsintern.domain.user.domain.AccountType> accountType = createEnum("accountType", com.letsintern.letsintern.domain.user.domain.AccountType.class);
+
     public final DateTimePath<java.time.LocalDateTime> announcementDate = createDateTime("announcementDate", java.time.LocalDateTime.class);
 
     public final NumberPath<Integer> applicationCount = createNumber("applicationCount", Integer.class);
@@ -27,6 +31,8 @@ public class QProgram extends EntityPathBase<Program> {
     public final ListPath<com.letsintern.letsintern.domain.application.domain.Application, com.letsintern.letsintern.domain.application.domain.QApplication> applicationList = this.<com.letsintern.letsintern.domain.application.domain.Application, com.letsintern.letsintern.domain.application.domain.QApplication>createList("applicationList", com.letsintern.letsintern.domain.application.domain.Application.class, com.letsintern.letsintern.domain.application.domain.QApplication.class, PathInits.DIRECT2);
 
     public final StringPath contents = createString("contents");
+
+    public final DateTimePath<java.time.LocalDateTime> depositDueDate = createDateTime("depositDueDate", java.time.LocalDateTime.class);
 
     public final DateTimePath<java.time.LocalDateTime> dueDate = createDateTime("dueDate", java.time.LocalDateTime.class);
 
@@ -57,6 +63,8 @@ public class QProgram extends EntityPathBase<Program> {
     public final StringPath notice = createString("notice");
 
     public final ListPath<com.letsintern.letsintern.domain.notice.domain.Notice, com.letsintern.letsintern.domain.notice.domain.QNotice> noticeList = this.<com.letsintern.letsintern.domain.notice.domain.Notice, com.letsintern.letsintern.domain.notice.domain.QNotice>createList("noticeList", com.letsintern.letsintern.domain.notice.domain.Notice.class, com.letsintern.letsintern.domain.notice.domain.QNotice.class, PathInits.DIRECT2);
+
+    public final StringPath openKakaoLink = createString("openKakaoLink");
 
     public final NumberPath<Integer> refundTotal = createNumber("refundTotal", Integer.class);
 

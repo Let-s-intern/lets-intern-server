@@ -12,7 +12,9 @@ import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramUpdateRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.response.*;
+import com.letsintern.letsintern.domain.program.exception.ChallengeProgramCreateBadRequest;
 import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
+import com.letsintern.letsintern.domain.program.exception.RefundProgramCreateBadRequest;
 import com.letsintern.letsintern.domain.program.mapper.ProgramMapper;
 import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
 import com.letsintern.letsintern.domain.program.vo.ProgramDetailVo;
@@ -47,8 +49,22 @@ public class ProgramHelper {
     public Long createProgram(ProgramCreateRequestDTO programCreateRequestDTO) throws Exception {
         ZoomMeetingCreateResponse zoomMeetingCreateResponse = null;
 
-        // [렛츠챗] Zoom Meeting 생성
-        if(programCreateRequestDTO.getType().equals(ProgramType.LETS_CHAT)) {
+        // 보증금 프로그램 정보 입력 확인
+        if(programCreateRequestDTO.getIsRefundProgram()) {
+            if(programCreateRequestDTO.getRefundTotal() == null || programCreateRequestDTO.getAccountType() == null || programCreateRequestDTO.getAccountNumber() == null || programCreateRequestDTO.getDepositDueDate() == null) {
+                throw RefundProgramCreateBadRequest.EXCEPTION;
+            }
+        }
+
+        // 챌린지 프로그램 정보 입력 확인
+        if(programCreateRequestDTO.getType().equals(ProgramType.CHALLENGE_HALF) || programCreateRequestDTO.getType().equals(ProgramType.CHALLENGE_FULL)) {
+            if(programCreateRequestDTO.getTopic() == null || programCreateRequestDTO.getOpenKakaoLink() == null) {
+                throw ChallengeProgramCreateBadRequest.EXCEPTION;
+            }
+        }
+
+        // [렛츠챗/챌린지] Zoom Meeting 생성
+        if(programCreateRequestDTO.getType().equals(ProgramType.LETS_CHAT) || programCreateRequestDTO.getType().equals(ProgramType.CHALLENGE_HALF) || programCreateRequestDTO.getType().equals(ProgramType.CHALLENGE_FULL)) {
             zoomMeetingCreateResponse = zoomMeetingApiHelper.createMeeting(
                     programCreateRequestDTO.getType(),
                     programCreateRequestDTO.getTitle(),

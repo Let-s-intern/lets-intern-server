@@ -6,6 +6,8 @@ import com.letsintern.letsintern.domain.mission.domain.Mission;
 import com.letsintern.letsintern.domain.notice.domain.Notice;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.response.ZoomMeetingCreateResponse;
+import com.letsintern.letsintern.domain.program.exception.RefundProgramCreateBadRequest;
+import com.letsintern.letsintern.domain.user.domain.AccountType;
 import com.letsintern.letsintern.global.common.util.StringUtils;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
@@ -45,9 +47,6 @@ public class Program {
 
     @NotNull
     private Integer finalHeadCount = 0;
-
-    @NotNull
-    private Integer refundTotal = 0;
 
     @NotNull
     private LocalDateTime dueDate;
@@ -101,11 +100,27 @@ public class Program {
     @NotNull
     private Boolean isRefundProgram = false;
 
+    @NotNull
+    private Integer refundTotal = 0;
+
 
     /* Challenge */
     @Nullable
     @Enumerated(EnumType.STRING)
     private ProgramTopic topic;
+
+    @Nullable
+    @Enumerated(EnumType.STRING)
+    private AccountType accountType;
+
+    @Nullable
+    private String accountNumber;
+
+    @Nullable
+    private LocalDateTime depositDueDate;
+
+    @Nullable
+    private String openKakaoLink;
 
 
     @JsonIgnore
@@ -123,8 +138,9 @@ public class Program {
     @Builder
     private Program(ProgramType type, Integer th, String title, Integer headcount,
                     LocalDateTime dueDate, LocalDateTime announcementDate, LocalDateTime startDate, LocalDateTime endDate,
-                    String contents, ProgramWay way, String location, String notice,
-                    List<Long> faqIdList, Boolean isRefundProgram, ZoomMeetingCreateResponse zoomMeetingCreateResponse) {
+                    String contents, ProgramWay way, String location, String notice, List<Long> faqIdList, Boolean isRefundProgram,
+                    Integer refundTotal, ProgramTopic topic, AccountType accountType, String accountNumber,
+                    LocalDateTime depositDueDate, String openKakaoLink, ZoomMeetingCreateResponse zoomMeetingCreateResponse) {
         this.type = type;
         this.th = th;
         this.title = title;
@@ -138,15 +154,31 @@ public class Program {
         this.location = location;
         this.notice = notice;
         this.faqListStr = StringUtils.listToString(faqIdList);
-        if(isRefundProgram) this.isRefundProgram = true;
 
-        if(type.equals(ProgramType.LETS_CHAT)) {
-            this.mailStatus = MailStatus.YET;
+        // 보증금 환급 프로그램
+        if(isRefundProgram) {
+            this.isRefundProgram = true;
+            this.refundTotal = refundTotal;
+            this.accountType = accountType;
+            this.accountNumber = accountNumber;
+            this.depositDueDate = depositDueDate;
         }
 
+        // Zoom Link
         if((way.equals(ProgramWay.ONLINE) || way.equals(ProgramWay.ALL)) && zoomMeetingCreateResponse != null) {
             this.link = zoomMeetingCreateResponse.getJoin_url();
             this.linkPassword = zoomMeetingCreateResponse.getPassword();
+        }
+
+        // CHALLENGE
+        if(type.equals(ProgramType.CHALLENGE_HALF) || type.equals(ProgramType.CHALLENGE_FULL)) {
+            this.topic = topic;
+            this.openKakaoLink = openKakaoLink;
+        }
+
+        // LETS_CHAT
+        if(type.equals(ProgramType.LETS_CHAT)) {
+            this.mailStatus = MailStatus.YET;
         }
     }
 
@@ -166,6 +198,12 @@ public class Program {
                 .notice(programCreateRequestDTO.getNotice())
                 .faqIdList(programCreateRequestDTO.getFaqIdList())
                 .isRefundProgram(programCreateRequestDTO.getIsRefundProgram())
+                .refundTotal(programCreateRequestDTO.getRefundTotal())
+                .accountType(programCreateRequestDTO.getAccountType())
+                .accountNumber(programCreateRequestDTO.getAccountNumber())
+                .depositDueDate(programCreateRequestDTO.getDepositDueDate())
+                .topic(programCreateRequestDTO.getTopic())
+                .openKakaoLink(programCreateRequestDTO.getOpenKakaoLink())
                 .zoomMeetingCreateResponse(zoomMeetingCreateResponse)
                 .build();
     }
