@@ -3,8 +3,11 @@ package com.letsintern.letsintern.domain.application.dto.request;
 import com.letsintern.letsintern.domain.application.domain.ApplicationWay;
 import com.letsintern.letsintern.domain.application.domain.ApplicationWishJob;
 import com.letsintern.letsintern.domain.application.domain.InflowPath;
+import com.letsintern.letsintern.domain.user.domain.AccountType;
 import jakarta.annotation.Nullable;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -40,6 +43,12 @@ public class ApplicationCreateDTO {
 
     @Nullable
     private String major;
+
+    @Nullable
+    private AccountType accountType;
+
+    @Nullable
+    private String accountNumber;
 
 
     /* 비회원 추가 정보 */
