@@ -42,14 +42,6 @@ public class ApplicationService {
             else userService.addUserDetailInfo(user, applicationCreateDTO.getUniversity(), applicationCreateDTO.getMajor());
         }
 
-        /* 계좌 추가 정보 없는 사용자 */
-        if(!userService.checkDetailAccountInfoExist(principalDetails)) {
-            if(applicationCreateDTO.getAccountType() == null || applicationCreateDTO.getAccountNumber() == null) {
-                throw ApplicationUserBadRequestAccount.EXCEPTION;
-            } else
-                userService.addUserDetailAccountInfo(user, applicationCreateDTO.getAccountType(), applicationCreateDTO.getAccountNumber());
-        }
-
         return applicationHelper.createUserApplication(programId, applicationCreateDTO, user);
     }
 

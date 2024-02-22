@@ -117,8 +117,7 @@ public class UserService {
         return userHelper.checkDetailInfoExist(user);
     }
 
-    public Boolean checkDetailAccountInfoExist(PrincipalDetails principalDetails) {
-        final User user = principalDetails.getUser();
+    public Boolean checkDetailAccountInfoExist(User user) {
         return userHelper.checkDetailAccountInfoExist(user);
     }
 

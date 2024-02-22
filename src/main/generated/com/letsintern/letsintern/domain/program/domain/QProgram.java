@@ -40,6 +40,8 @@ public class QProgram extends EntityPathBase<Program> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final BooleanPath isRefundProgram = createBoolean("isRefundProgram");
+
     public final BooleanPath isVisible = createBoolean("isVisible");
 
     public final StringPath link = createString("link");
