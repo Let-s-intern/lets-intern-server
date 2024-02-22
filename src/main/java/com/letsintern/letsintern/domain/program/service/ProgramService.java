@@ -140,7 +140,8 @@ public class ProgramService {
 
         return programMapper.toProgramEntireDashboardResponse(
                 applicationHelper.getMyDashboard(program.getId(), user.getId()),
-                applicationHelper.getDashboardList(program.getId(), applicationWishJob, user.getId(), pageable)
+                applicationHelper.getDashboardList(program.getId(), applicationWishJob, user.getId(), pageable),
+                ApplicationWishJob.getApplicationWishJobListByProgramTopic(program.getTopic())
         );
     }
 }

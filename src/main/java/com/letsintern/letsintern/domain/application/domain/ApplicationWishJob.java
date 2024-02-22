@@ -38,6 +38,10 @@ public enum ApplicationWishJob {
     }
 
     public static List<ApplicationWishJob> getApplicationWishJobListByProgramTopic(ProgramTopic programTopic) {
+        if(programTopic == null || programTopic.equals(ProgramTopic.ALL)) {
+            return Stream.of(ApplicationWishJob.values()).toList();
+        }
+
         return Stream.of(ApplicationWishJob.values())
                 .filter(wishJob -> wishJob.getProgramTopic().equals(programTopic))
                 .toList();

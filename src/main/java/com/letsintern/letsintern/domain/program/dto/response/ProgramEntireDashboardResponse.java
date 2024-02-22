@@ -1,5 +1,6 @@
 package com.letsintern.letsintern.domain.program.dto.response;
 
+import com.letsintern.letsintern.domain.application.domain.ApplicationWishJob;
 import com.letsintern.letsintern.domain.application.vo.ApplicationEntireDashboardVo;
 import com.letsintern.letsintern.global.common.dto.PageInfo;
 import lombok.Builder;
@@ -14,19 +15,23 @@ public class ProgramEntireDashboardResponse {
 
     private ApplicationEntireDashboardVo myDashboard;
     private List<ApplicationEntireDashboardVo> dashboardList;
+
+    private List<ApplicationWishJob> wishJobList;
     private PageInfo pageInfo;
 
     @Builder
-    private ProgramEntireDashboardResponse(ApplicationEntireDashboardVo myDashboard, Page<ApplicationEntireDashboardVo> dashboardList) {
+    private ProgramEntireDashboardResponse(ApplicationEntireDashboardVo myDashboard, Page<ApplicationEntireDashboardVo> dashboardList, List<ApplicationWishJob> wishJobList) {
         this.myDashboard = myDashboard;
         this.dashboardList = (dashboardList.hasContent()) ? dashboardList.getContent() : new ArrayList<>();
+        this.wishJobList = wishJobList;
         this.pageInfo = PageInfo.of(dashboardList);
     }
 
-    public static ProgramEntireDashboardResponse of(ApplicationEntireDashboardVo myDashboard, Page<ApplicationEntireDashboardVo> dashboardList) {
+    public static ProgramEntireDashboardResponse of(ApplicationEntireDashboardVo myDashboard, Page<ApplicationEntireDashboardVo> dashboardList, List<ApplicationWishJob> wishJobList) {
         return ProgramEntireDashboardResponse.builder()
                 .myDashboard(myDashboard)
                 .dashboardList(dashboardList)
+                .wishJobList(wishJobList)
                 .build();
     }
 }

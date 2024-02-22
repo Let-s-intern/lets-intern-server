@@ -2,6 +2,7 @@ package com.letsintern.letsintern.domain.program.vo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.letsintern.letsintern.domain.program.domain.ProgramStatus;
+import com.letsintern.letsintern.domain.program.domain.ProgramTopic;
 import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import com.letsintern.letsintern.domain.program.domain.ProgramWay;
 import lombok.Builder;
@@ -22,6 +23,8 @@ public class ProgramDetailVo {
     private ProgramWay way;
     private String location;
 
+    private ProgramTopic topic;
+
     private LocalDateTime dueDate;
     private LocalDateTime announcementDate;
     private LocalDateTime startDate;
@@ -32,7 +35,7 @@ public class ProgramDetailVo {
 
     @Builder
     public ProgramDetailVo(ProgramStatus status, String title, String contents, String notice,
-                           ProgramType type, ProgramWay way, String location, String faqListStr,
+                           ProgramType type, ProgramWay way, String location, ProgramTopic topic, String faqListStr,
                            LocalDateTime dueDate, LocalDateTime announcementDate, LocalDateTime startDate, LocalDateTime endDate) {
         this.status = status;
         this.title = title;
@@ -41,6 +44,7 @@ public class ProgramDetailVo {
         this.type = type;
         this.way = way;
         this.location = location;
+        this.topic = topic;
         this.faqListStr = faqListStr;
         this.dueDate = dueDate;
         this.announcementDate = announcementDate;

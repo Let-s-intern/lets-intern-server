@@ -1,6 +1,7 @@
 package com.letsintern.letsintern.domain.program.helper;
 
 import com.letsintern.letsintern.domain.application.domain.ApplicationStatus;
+import com.letsintern.letsintern.domain.application.domain.ApplicationWishJob;
 import com.letsintern.letsintern.domain.application.helper.ApplicationHelper;
 import com.letsintern.letsintern.domain.application.repository.ApplicationRepository;
 import com.letsintern.letsintern.domain.faq.repository.FaqRepository;
@@ -140,12 +141,14 @@ public class ProgramHelper {
       
         List<ReviewVo> reviewList = reviewRepository.findAllVosByProgramType(programDetailVo.getType());
 
+        List<ApplicationWishJob> wishJobList = ApplicationWishJob.getApplicationWishJobListByProgramTopic(programDetailVo.getTopic());
+
         /* 회원 - 기존 신청 내역 존재 확인 */
         if(userId != null && applicationHelper.checkUserApplicationExist(programId, userId)) {
-            return ProgramDetailDTO.of(programDetailVo, true, faqList, reviewList);
+            return ProgramDetailDTO.of(programDetailVo, true, faqList, reviewList, wishJobList);
         }
 
-        return ProgramDetailDTO.of(programDetailVo, false, faqList, reviewList);
+        return ProgramDetailDTO.of(programDetailVo, false, faqList, reviewList, wishJobList);
     }
 
     public AdminProgramListDTO getAdminProgramList(String type, Integer th, Pageable pageable) {
