@@ -45,8 +45,8 @@ public class ApplicationChallengeAdminVo {
         this.email = email;
         this.phoneNum = phoneNum;
         this.inflowPath = inflowPath;
-        this.accountType = accountType.getValue();
-        this.accountNumber = accountNumber;
+        if(accountType != null) this.accountType = accountType.getValue();
+        if(accountNumber != null) this.accountNumber = accountNumber;
     }
 
 }

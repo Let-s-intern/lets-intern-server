@@ -1,7 +1,10 @@
 package com.letsintern.letsintern.domain.program.dto.request;
 
+import com.letsintern.letsintern.domain.program.domain.ProgramTopic;
 import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import com.letsintern.letsintern.domain.program.domain.ProgramWay;
+import com.letsintern.letsintern.domain.user.domain.AccountType;
+import jakarta.annotation.Nullable;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -36,8 +39,30 @@ public class ProgramCreateRequestDTO {
 
     private String notice;
 
+    private List<Long> faqIdList;
+
+
+    // 보증금 프로그램
     private Boolean isRefundProgram;
 
-    private List<Long> faqIdList;
+    @Nullable
+    private Integer refundTotal;
+
+    @Nullable
+    private AccountType accountType;
+
+    @Nullable
+    private String accountNumber;
+
+    @Nullable
+    private LocalDateTime depositDueDate;
+
+
+    // Challenge
+    @Nullable
+    private ProgramTopic topic;
+
+    @Nullable
+    private String openKakaoLink;
 
 }
