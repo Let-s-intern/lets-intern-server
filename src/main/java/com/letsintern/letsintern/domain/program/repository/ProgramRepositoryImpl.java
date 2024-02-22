@@ -125,6 +125,7 @@ public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
                         qProgram.type,
                         qProgram.way,
                         qProgram.location,
+                        qProgram.topic,
                         qProgram.faqListStr,
                         qProgram.dueDate,
                         qProgram.announcementDate,

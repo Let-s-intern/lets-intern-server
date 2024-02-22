@@ -3,6 +3,10 @@ package com.letsintern.letsintern.domain.application.domain;
 import com.letsintern.letsintern.domain.program.domain.ProgramTopic;
 import lombok.Getter;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Stream;
+
 public enum ApplicationWishJob {
 
     ALL("전체", ProgramTopic.ALL),
@@ -13,7 +17,7 @@ public enum ApplicationWishJob {
     MARKETING_CRM("CRM 마케팅", ProgramTopic.MARKETING),
     MARKETING_CONTENTS("콘텐츠 마케팅", ProgramTopic.MARKETING),
     MARKETING_PR("홍보 PR", ProgramTopic.MARKETING),
-    MARKETING_AE("광고대행사(AE)", ProgramTopic.MARKETING),
+    MARKETING_AE("광고대행사 (AE)", ProgramTopic.MARKETING),
 
     DEVELOPMENT_ALL("개발 전반", ProgramTopic.DEVELOPMENT),
     DEVELOPMENT_FRONTEND("프론트엔드", ProgramTopic.DEVELOPMENT),
@@ -31,5 +35,15 @@ public enum ApplicationWishJob {
     ApplicationWishJob(String value, ProgramTopic programTopic) {
         this.value = value;
         this.programTopic = programTopic;
+    }
+
+    public static List<ApplicationWishJob> getApplicationWishJobListByProgramTopic(ProgramTopic programTopic) {
+        if(programTopic == null || programTopic.equals(ProgramTopic.ALL)) {
+            return Stream.of(ApplicationWishJob.values()).toList();
+        }
+
+        return Stream.of(ApplicationWishJob.values())
+                .filter(wishJob -> wishJob.getProgramTopic().equals(programTopic))
+                .toList();
     }
 }

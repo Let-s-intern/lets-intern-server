@@ -22,6 +22,7 @@ import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
 import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
 import com.letsintern.letsintern.domain.program.vo.ProgramEmailVo;
 import com.letsintern.letsintern.domain.user.domain.User;
+import com.letsintern.letsintern.domain.user.service.UserService;
 import com.letsintern.letsintern.global.common.util.EmailUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -40,6 +41,7 @@ public class ApplicationHelper {
     private final ApplicationMapper applicationMapper;
     private final ProgramRepository programRepository;
     private final EmailUtils emailUtils;
+    private final UserService userService;
 
 
     /* 회원 - 기존 신청 내역 확인 */
@@ -57,14 +59,19 @@ public class ApplicationHelper {
     /* 회원 - 지원서 생성 */
     public ApplicationCreateResponse createUserApplication(Long programId, ApplicationCreateDTO applicationCreateDTO, User user) {
         if(checkUserApplicationExist(programId, user.getId())) throw DuplicateApplication.EXCEPTION;
+        Program program = programRepository.findById(programId).orElseThrow(() -> ProgramNotFound.EXCEPTION);
+
+        /* 보증금 프로그램인데 계좌 추가 정보 없는 사용자 */
+        if(program.getIsRefundProgram() && !userService.checkDetailAccountInfoExist(user)) {
+            if(applicationCreateDTO.getAccountType() == null || applicationCreateDTO.getAccountNumber() == null) {
+                throw ApplicationUserBadRequestAccount.EXCEPTION;
+            } else
+                userService.addUserDetailAccountInfo(user, applicationCreateDTO.getAccountType(), applicationCreateDTO.getAccountNumber());
+        }
 
         Application newUserApplication = applicationMapper.toEntity(programId, applicationCreateDTO, user);
         Application savedApplication = applicationRepository.save(newUserApplication);
 
-        Program program = programRepository.findById(programId)
-                .orElseThrow(() -> {
-                    throw ProgramNotFound.EXCEPTION;
-                });
         program.setApplicationCount(program.getApplicationCount() + 1);
 
         if(program.getType().equals(ProgramType.LETS_CHAT)) {

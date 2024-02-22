@@ -93,6 +93,12 @@ public class UserHelper {
         return true;
     }
 
+    /* 사용자 상세 정보 존재 여부 확인 (계좌 유형, 계좌 번호) */
+    public boolean checkDetailAccountInfoExist(User user) {
+        if(user.getAccountType() == null || user.getAccountNumber() == null) return false;
+        return true;
+    }
+
     public Long updateUserInfo(Long userId, UserUpdateRequestDTO userUpdateRequestDTO) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> UserNotFound.EXCEPTION);

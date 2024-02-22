@@ -256,7 +256,7 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
         List<ApplicationEntireDashboardVo> applicationEntireDashboardVos;
         JPAQuery<Long> count;
 
-        if(applicationWishJob == null) {
+        if(applicationWishJob == null || applicationWishJob.equals(ApplicationWishJob.ALL)) {
             applicationEntireDashboardVos = jpaQueryFactory
                     .select(Projections.constructor(ApplicationEntireDashboardVo.class,
                             qApplication.id,
@@ -278,6 +278,34 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
                     .from(qApplication)
                     .where(
                             qApplication.program.id.eq(programId),
+                            qApplication.user.id.ne(userId),
+                            qApplication.status.in(ApplicationStatus.IN_PROGRESS, ApplicationStatus.DONE));
+        }
+
+        else if(applicationWishJob.equals(ApplicationWishJob.MARKETING_ALL) || applicationWishJob.equals(ApplicationWishJob.DEVELOPMENT_ALL)) {
+            applicationEntireDashboardVos = jpaQueryFactory
+                    .select(Projections.constructor(ApplicationEntireDashboardVo.class,
+                            qApplication.id,
+                            qApplication.user.name,
+                            qApplication.wishJob,
+                            qApplication.introduction))
+                    .from(qApplication)
+                    .where(
+                            qApplication.program.id.eq(programId),
+                            qApplication.user.id.ne(userId),
+                            qApplication.wishJob.in(ApplicationWishJob.getApplicationWishJobListByProgramTopic(applicationWishJob.getProgramTopic())),
+                            qApplication.status.in(ApplicationStatus.IN_PROGRESS, ApplicationStatus.DONE))
+                    .orderBy(qApplication.id.desc())
+                    .offset(pageable.getOffset())
+                    .limit(pageable.getPageSize())
+                    .fetch();
+
+            count = jpaQueryFactory
+                    .select(qApplication.count())
+                    .from(qApplication)
+                    .where(
+                            qApplication.program.id.eq(programId),
+                            qApplication.program.topic.eq(applicationWishJob.getProgramTopic()),
                             qApplication.user.id.ne(userId),
                             qApplication.status.in(ApplicationStatus.IN_PROGRESS, ApplicationStatus.DONE));
         }

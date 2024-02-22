@@ -98,6 +98,9 @@ public class Program {
     @NotNull
     private Boolean isVisible = false;
 
+    @NotNull
+    private Boolean isRefundProgram = false;
+
 
     /* Challenge */
     @Nullable
@@ -121,7 +124,7 @@ public class Program {
     private Program(ProgramType type, Integer th, String title, Integer headcount,
                     LocalDateTime dueDate, LocalDateTime announcementDate, LocalDateTime startDate, LocalDateTime endDate,
                     String contents, ProgramWay way, String location, String notice,
-                    List<Long> faqIdList, ZoomMeetingCreateResponse zoomMeetingCreateResponse) {
+                    List<Long> faqIdList, Boolean isRefundProgram, ZoomMeetingCreateResponse zoomMeetingCreateResponse) {
         this.type = type;
         this.th = th;
         this.title = title;
@@ -135,6 +138,7 @@ public class Program {
         this.location = location;
         this.notice = notice;
         this.faqListStr = StringUtils.listToString(faqIdList);
+        if(isRefundProgram) this.isRefundProgram = true;
 
         if(type.equals(ProgramType.LETS_CHAT)) {
             this.mailStatus = MailStatus.YET;
@@ -161,6 +165,7 @@ public class Program {
                 .location(programCreateRequestDTO.getLocation())
                 .notice(programCreateRequestDTO.getNotice())
                 .faqIdList(programCreateRequestDTO.getFaqIdList())
+                .isRefundProgram(programCreateRequestDTO.getIsRefundProgram())
                 .zoomMeetingCreateResponse(zoomMeetingCreateResponse)
                 .build();
     }

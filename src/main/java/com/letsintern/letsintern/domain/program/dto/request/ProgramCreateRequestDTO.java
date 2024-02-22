@@ -36,6 +36,8 @@ public class ProgramCreateRequestDTO {
 
     private String notice;
 
+    private Boolean isRefundProgram;
+
     private List<Long> faqIdList;
 
 }

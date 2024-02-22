@@ -7,6 +7,7 @@ import com.letsintern.letsintern.domain.application.dto.request.ApplicationUpdat
 import com.letsintern.letsintern.domain.application.dto.response.*;
 import com.letsintern.letsintern.domain.application.exception.ApplicationNotFound;
 import com.letsintern.letsintern.domain.application.exception.ApplicationUserBadRequest;
+import com.letsintern.letsintern.domain.application.exception.ApplicationUserBadRequestAccount;
 import com.letsintern.letsintern.domain.application.helper.ApplicationHelper;
 import com.letsintern.letsintern.domain.application.mapper.ApplicationMapper;
 import com.letsintern.letsintern.domain.application.repository.ApplicationRepository;
@@ -33,7 +34,7 @@ public class ApplicationService {
     public ApplicationCreateResponse createUserApplication(Long programId, ApplicationCreateDTO applicationCreateDTO, PrincipalDetails principalDetails) {
         User user = principalDetails.getUser();
 
-        /* 추가 정보 없는 사용자 */
+        /* 대학 & 전공 추가 정보 없는 사용자 */
         if(!userService.checkDetailInfoExist(principalDetails)) {
             if(applicationCreateDTO.getUniversity() == null || applicationCreateDTO.getMajor() == null) {
                 throw ApplicationUserBadRequest.EXCEPTION;  // 추가 정보 미입력

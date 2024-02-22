@@ -1,6 +1,7 @@
 package com.letsintern.letsintern.domain.user.service;
 
 import com.letsintern.letsintern.domain.program.domain.ProgramType;
+import com.letsintern.letsintern.domain.user.domain.AccountType;
 import com.letsintern.letsintern.domain.user.domain.User;
 import com.letsintern.letsintern.domain.user.domain.UserRole;
 import com.letsintern.letsintern.domain.user.dto.request.*;
@@ -58,6 +59,13 @@ public class UserService {
     }
 
     @Transactional
+    public void addUserDetailAccountInfo(User user, AccountType accountType, String accountNumber) {
+        user.setAccountType(accountType);
+        user.setAccountNumber(accountNumber);
+        userRepository.save(user);
+    }
+
+    @Transactional
     public void signOut(PrincipalDetails principalDetails) {
         final User user = principalDetails.getUser();
         tokenProvider.deleteRefreshToken(user.getId());
@@ -107,6 +115,10 @@ public class UserService {
     public Boolean checkDetailInfoExist(PrincipalDetails principalDetails) {
         final User user = principalDetails.getUser();
         return userHelper.checkDetailInfoExist(user);
+    }
+
+    public Boolean checkDetailAccountInfoExist(User user) {
+        return userHelper.checkDetailAccountInfoExist(user);
     }
 
     public UserInfoResponseDTO getUserInfo(PrincipalDetails principalDetails) {
