@@ -1,5 +1,6 @@
 package com.letsintern.letsintern.domain.program.dto.request;
 
+import com.letsintern.letsintern.domain.program.domain.ProgramFeeType;
 import com.letsintern.letsintern.domain.program.domain.ProgramTopic;
 import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import com.letsintern.letsintern.domain.program.domain.ProgramWay;
@@ -42,11 +43,11 @@ public class ProgramCreateRequestDTO {
     private List<Long> faqIdList;
 
 
-    // 보증금 프로그램
-    private Boolean isRefundProgram;
+    // 이용료 or 보증금 프로그램
+    private ProgramFeeType feeType;
 
     @Nullable
-    private Integer refundTotal;
+    private Integer feeTotal;
 
     @Nullable
     private AccountType accountType;
