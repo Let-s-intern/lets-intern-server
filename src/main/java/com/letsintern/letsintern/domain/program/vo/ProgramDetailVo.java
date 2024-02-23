@@ -22,9 +22,8 @@ public class ProgramDetailVo {
     private ProgramType type;
     private ProgramWay way;
     private String location;
-
     private ProgramTopic topic;
-
+    private Boolean isRefundProgram;
     private LocalDateTime dueDate;
     private LocalDateTime announcementDate;
     private LocalDateTime startDate;
@@ -35,7 +34,7 @@ public class ProgramDetailVo {
 
     @Builder
     public ProgramDetailVo(ProgramStatus status, String title, String contents, String notice,
-                           ProgramType type, ProgramWay way, String location, ProgramTopic topic, String faqListStr,
+                           ProgramType type, ProgramWay way, String location, ProgramTopic topic, Boolean isRefundProgram, String faqListStr,
                            LocalDateTime dueDate, LocalDateTime announcementDate, LocalDateTime startDate, LocalDateTime endDate) {
         this.status = status;
         this.title = title;
@@ -45,6 +44,7 @@ public class ProgramDetailVo {
         this.way = way;
         this.location = location;
         this.topic = topic;
+        this.isRefundProgram = isRefundProgram;
         this.faqListStr = faqListStr;
         this.dueDate = dueDate;
         this.announcementDate = announcementDate;
