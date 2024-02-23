@@ -2,12 +2,11 @@ package com.letsintern.letsintern.domain.application.service;
 
 import com.letsintern.letsintern.domain.application.domain.Application;
 import com.letsintern.letsintern.domain.application.dto.request.ApplicationCreateDTO;
-import com.letsintern.letsintern.domain.application.dto.request.ApplicationIntroductionUpdateDTO;
+import com.letsintern.letsintern.domain.application.dto.request.ApplicationChallengeUpdateDTO;
 import com.letsintern.letsintern.domain.application.dto.request.ApplicationUpdateDTO;
 import com.letsintern.letsintern.domain.application.dto.response.*;
 import com.letsintern.letsintern.domain.application.exception.ApplicationNotFound;
 import com.letsintern.letsintern.domain.application.exception.ApplicationUserBadRequest;
-import com.letsintern.letsintern.domain.application.exception.ApplicationUserBadRequestAccount;
 import com.letsintern.letsintern.domain.application.helper.ApplicationHelper;
 import com.letsintern.letsintern.domain.application.mapper.ApplicationMapper;
 import com.letsintern.letsintern.domain.application.repository.ApplicationRepository;
@@ -81,9 +80,9 @@ public class ApplicationService {
     }
 
     @Transactional
-    public ApplicationIdResponse updateApplicationIntroduction(Long applicationId, ApplicationIntroductionUpdateDTO applicationIntroductionUpdateDTO, PrincipalDetails principalDetails) {
+    public ApplicationIdResponse updateChallengeApplication(Long applicationId, ApplicationChallengeUpdateDTO applicationChallengeUpdateDTO, PrincipalDetails principalDetails) {
         final User user = principalDetails.getUser();
-        return applicationMapper.toApplicationIdResponse(applicationHelper.updateApplicationIntroduction(applicationId, applicationIntroductionUpdateDTO, user.getId()));
+        return applicationMapper.toApplicationIdResponse(applicationHelper.updateChallengeApplication(applicationId, applicationChallengeUpdateDTO, user.getId()));
     }
 
     public EmailListResponse getEmailList(Long programId) {
