@@ -12,7 +12,7 @@ public class AttendanceDashboardResponse {
 
     private String name;
 
-    private String wishJob;
+    private ApplicationWishJob wishJob;
 
     private String introduction;
 
@@ -23,7 +23,7 @@ public class AttendanceDashboardResponse {
     @Builder
     private AttendanceDashboardResponse(String name, ApplicationWishJob wishJob, boolean isMine, String introduction, List<AttendanceDashboardVo> attendanceList) {
         this.name = name;
-        this.wishJob = wishJob.getValue();
+        this.wishJob = wishJob;
         this.isMine = isMine;
         this.introduction = introduction;
         this.attendanceList = attendanceList;

@@ -4,9 +4,8 @@ import com.letsintern.letsintern.domain.application.domain.Application;
 import com.letsintern.letsintern.domain.application.domain.ApplicationStatus;
 import com.letsintern.letsintern.domain.application.domain.ApplicationWishJob;
 import com.letsintern.letsintern.domain.application.dto.request.ApplicationCreateDTO;
-import com.letsintern.letsintern.domain.application.dto.request.ApplicationIntroductionUpdateDTO;
+import com.letsintern.letsintern.domain.application.dto.request.ApplicationChallengeUpdateDTO;
 import com.letsintern.letsintern.domain.application.dto.request.ApplicationUpdateDTO;
-import com.letsintern.letsintern.domain.application.dto.response.ApplicationChallengeAdminVoDetail;
 import com.letsintern.letsintern.domain.application.dto.response.ApplicationCreateResponse;
 import com.letsintern.letsintern.domain.application.exception.*;
 import com.letsintern.letsintern.domain.application.mapper.ApplicationMapper;
@@ -30,8 +29,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -180,13 +177,16 @@ public class ApplicationHelper {
 
     }
 
-    /* 챌린지 모두의 기록장 - 한 줄 소개 수정 */
-    public Long updateApplicationIntroduction(Long applicationId, ApplicationIntroductionUpdateDTO applicationIntroductionUpdateDTO, Long userId) {
+    /* 챌린지 모두의 기록장 - 한 줄 소개, 직무 수정 */
+    public Long updateChallengeApplication(Long applicationId, ApplicationChallengeUpdateDTO applicationChallengeUpdateDTO, Long userId) {
         Application application = applicationRepository.findById(applicationId).orElseThrow(() -> ApplicationNotFound.EXCEPTION);
         if(!application.getUser().getId().equals(userId)) throw ApplicationUnauthorized.EXCEPTION;
 
-        if(applicationIntroductionUpdateDTO.getIntroduction() != null)
-            application.setIntroduction(applicationIntroductionUpdateDTO.getIntroduction());
+        if(applicationChallengeUpdateDTO.getIntroduction() != null)
+            application.setIntroduction(applicationChallengeUpdateDTO.getIntroduction());
+
+        if(applicationChallengeUpdateDTO.getWishJob() != null)
+            application.setWishJob(applicationChallengeUpdateDTO.getWishJob());
 
         return application.getId();
     }

@@ -2,6 +2,7 @@ package com.letsintern.letsintern.domain.mission.vo;
 
 import com.letsintern.letsintern.domain.contents.domain.ContentsTopic;
 import com.letsintern.letsintern.domain.mission.domain.MissionStatus;
+import com.letsintern.letsintern.domain.mission.domain.MissionType;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -12,6 +13,8 @@ public class MissionAdminVo {
     private Long id;
 
     private Integer th;
+
+    private MissionType type;
 
     private String title;
 
@@ -28,10 +31,11 @@ public class MissionAdminVo {
     private Integer finalHeadCount;
 
 
-    public MissionAdminVo(Long id, Integer th, String title, LocalDateTime startDate, LocalDateTime endDate,
+    public MissionAdminVo(Long id, Integer th, MissionType type, String title, LocalDateTime startDate, LocalDateTime endDate,
                           MissionStatus status, ContentsTopic essentialContentsTopic, Integer attendanceCount, Integer finalHeadCount) {
         this.id = id;
         this.th = th;
+        this.type = type;
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;
