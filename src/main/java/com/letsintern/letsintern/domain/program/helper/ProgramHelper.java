@@ -7,6 +7,7 @@ import com.letsintern.letsintern.domain.application.repository.ApplicationReposi
 import com.letsintern.letsintern.domain.faq.repository.FaqRepository;
 import com.letsintern.letsintern.domain.faq.vo.FaqVo;
 import com.letsintern.letsintern.domain.program.domain.Program;
+import com.letsintern.letsintern.domain.program.domain.ProgramFeeType;
 import com.letsintern.letsintern.domain.program.domain.ProgramStatus;
 import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequestDTO;
@@ -50,8 +51,8 @@ public class ProgramHelper {
         ZoomMeetingCreateResponse zoomMeetingCreateResponse = null;
 
         // 보증금 프로그램 정보 입력 확인
-        if(programCreateRequestDTO.getIsRefundProgram()) {
-            if(programCreateRequestDTO.getRefundTotal() == null || programCreateRequestDTO.getAccountType() == null || programCreateRequestDTO.getAccountNumber() == null || programCreateRequestDTO.getDepositDueDate() == null) {
+        if(programCreateRequestDTO.getFeeType().equals(ProgramFeeType.CHARGE) || programCreateRequestDTO.getFeeType().equals(ProgramFeeType.DEPOSIT)) {
+            if(programCreateRequestDTO.getFeeTotal() == null || programCreateRequestDTO.getAccountType() == null || programCreateRequestDTO.getAccountNumber() == null || programCreateRequestDTO.getDepositDueDate() == null) {
                 throw RefundProgramCreateBadRequest.EXCEPTION;
             }
         }

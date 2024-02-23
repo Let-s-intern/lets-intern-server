@@ -15,6 +15,7 @@ import com.letsintern.letsintern.domain.application.vo.ApplicationChallengeAdmin
 import com.letsintern.letsintern.domain.application.vo.ApplicationEntireDashboardVo;
 import com.letsintern.letsintern.domain.application.vo.ApplicationVo;
 import com.letsintern.letsintern.domain.program.domain.Program;
+import com.letsintern.letsintern.domain.program.domain.ProgramFeeType;
 import com.letsintern.letsintern.domain.program.domain.ProgramStatus;
 import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
@@ -59,7 +60,7 @@ public class ApplicationHelper {
         Program program = programRepository.findById(programId).orElseThrow(() -> ProgramNotFound.EXCEPTION);
 
         /* 보증금 프로그램인데 계좌 추가 정보 없는 사용자 */
-        if(program.getIsRefundProgram() && !userService.checkDetailAccountInfoExist(user)) {
+        if(program.getFeeType().equals(ProgramFeeType.DEPOSIT) && !userService.checkDetailAccountInfoExist(user)) {
             if(applicationCreateDTO.getAccountType() == null || applicationCreateDTO.getAccountNumber() == null) {
                 throw ApplicationUserBadRequestAccount.EXCEPTION;
             } else

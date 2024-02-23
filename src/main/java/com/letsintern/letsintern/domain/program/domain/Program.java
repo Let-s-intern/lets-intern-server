@@ -98,10 +98,11 @@ public class Program {
     private Boolean isVisible = false;
 
     @NotNull
-    private Boolean isRefundProgram = false;
+    @Enumerated(EnumType.STRING)
+    private ProgramFeeType feeType;
 
     @NotNull
-    private Integer refundTotal = 0;
+    private Integer feeTotal = 0;
 
 
     /* Challenge */
@@ -138,9 +139,9 @@ public class Program {
     @Builder
     private Program(ProgramType type, Integer th, String title, Integer headcount,
                     LocalDateTime dueDate, LocalDateTime announcementDate, LocalDateTime startDate, LocalDateTime endDate,
-                    String contents, ProgramWay way, String location, String notice, List<Long> faqIdList, Boolean isRefundProgram,
-                    Integer refundTotal, ProgramTopic topic, AccountType accountType, String accountNumber,
-                    LocalDateTime depositDueDate, String openKakaoLink, ZoomMeetingCreateResponse zoomMeetingCreateResponse) {
+                    String contents, ProgramWay way, String location, String notice, List<Long> faqIdList,
+                    ProgramFeeType feeType, Integer feeTotal, AccountType accountType, String accountNumber, LocalDateTime depositDueDate,
+                    ProgramTopic topic, String openKakaoLink, ZoomMeetingCreateResponse zoomMeetingCreateResponse) {
         this.type = type;
         this.th = th;
         this.title = title;
@@ -154,11 +155,11 @@ public class Program {
         this.location = location;
         this.notice = notice;
         this.faqListStr = StringUtils.listToString(faqIdList);
+        this.feeType = feeType;
 
-        // 보증금 환급 프로그램
-        if(isRefundProgram) {
-            this.isRefundProgram = true;
-            this.refundTotal = refundTotal;
+        // 이용료 or 보증금 프로그램
+        if(feeType.equals(ProgramFeeType.CHARGE) || feeType.equals(ProgramFeeType.DEPOSIT)) {
+            this.feeTotal = feeTotal;
             this.accountType = accountType;
             this.accountNumber = accountNumber;
             this.depositDueDate = depositDueDate;
@@ -197,8 +198,8 @@ public class Program {
                 .location(programCreateRequestDTO.getLocation())
                 .notice(programCreateRequestDTO.getNotice())
                 .faqIdList(programCreateRequestDTO.getFaqIdList())
-                .isRefundProgram(programCreateRequestDTO.getIsRefundProgram())
-                .refundTotal(programCreateRequestDTO.getRefundTotal())
+                .feeType(programCreateRequestDTO.getFeeType())
+                .feeTotal(programCreateRequestDTO.getFeeTotal())
                 .accountType(programCreateRequestDTO.getAccountType())
                 .accountNumber(programCreateRequestDTO.getAccountNumber())
                 .depositDueDate(programCreateRequestDTO.getDepositDueDate())
