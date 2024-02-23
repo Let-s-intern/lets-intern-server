@@ -11,7 +11,7 @@ public class ApplicationEntireDashboardVo {
 
     private String name;
 
-    private String wishJob;
+    private ApplicationWishJob wishJob;
 
     private String introduction;
 
@@ -19,7 +19,7 @@ public class ApplicationEntireDashboardVo {
     public ApplicationEntireDashboardVo(Long applicationId, String name, ApplicationWishJob wishJob, String introduction) {
         this.applicationId = applicationId;
         this.name = name;
-        this.wishJob = wishJob.getValue();
+        this.wishJob = wishJob;
         this.introduction = introduction;
     }
 }
