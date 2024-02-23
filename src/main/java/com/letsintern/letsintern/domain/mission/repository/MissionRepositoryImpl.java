@@ -33,6 +33,7 @@ public class MissionRepositoryImpl implements MissionRepositoryCustom {
                 .select(Projections.constructor(MissionAdminVo.class,
                         qMission.id,
                         qMission.th,
+                        qMission.type,
                         qMission.title,
                         qMission.startDate,
                         qMission.endDate,
