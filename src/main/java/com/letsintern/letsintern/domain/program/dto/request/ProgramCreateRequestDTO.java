@@ -50,13 +50,13 @@ public class ProgramCreateRequestDTO {
     private Integer feeTotal;
 
     @Nullable
+    private LocalDateTime feeDueDate;
+
+    @Nullable
     private AccountType accountType;
 
     @Nullable
     private String accountNumber;
-
-    @Nullable
-    private LocalDateTime depositDueDate;
 
 
     // Challenge

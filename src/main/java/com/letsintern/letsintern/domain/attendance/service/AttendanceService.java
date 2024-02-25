@@ -1,6 +1,7 @@
 package com.letsintern.letsintern.domain.attendance.service;
 
 import com.letsintern.letsintern.domain.application.domain.Application;
+import com.letsintern.letsintern.domain.application.domain.ApplicationWishJob;
 import com.letsintern.letsintern.domain.application.exception.ApplicationNotFound;
 import com.letsintern.letsintern.domain.application.repository.ApplicationRepository;
 import com.letsintern.letsintern.domain.attendance.dto.request.AttendanceAdminUpdateDTO;
@@ -20,6 +21,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -56,11 +59,13 @@ public class AttendanceService {
         final Application application = applicationRepository.findById(applicationId).orElseThrow(() -> ApplicationNotFound.EXCEPTION);
         final User user = principalDetails.getUser();
         boolean isMine = Objects.equals(application.getUser().getId(), user.getId());
+        List<ApplicationWishJob> wishJobList = isMine ? ApplicationWishJob.getApplicationWishJobListByProgramTopic(application.getProgram().getTopic()) : new ArrayList<>();
         return attendanceMapper.toAttendanceDashboardResponse(
                 application.getUser().getName(),
                 application.getWishJob(),
-                isMine,
                 application.getIntroduction(),
+                isMine,
+                wishJobList,
                 attendanceHelper.getAttendanceDashboardList(application)
         );
     }

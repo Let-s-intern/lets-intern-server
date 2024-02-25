@@ -15,6 +15,9 @@ public class ApplicationUpdateDTO {
     private Boolean isApproved;
 
     @Nullable
+    private Boolean feeIsConfirmed;
+
+    @Nullable
     private Integer grade;
 
     @Nullable

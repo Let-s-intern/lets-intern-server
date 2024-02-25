@@ -4,7 +4,7 @@ public enum ProgramFeeType {
 
     FREE("무료"),
     CHARGE("이용료"),
-    DEPOSIT("보증금");
+    REFUND("보증금");
 
     ProgramFeeType(String value) {
 

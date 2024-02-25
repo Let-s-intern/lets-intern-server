@@ -1,8 +1,7 @@
 package com.letsintern.letsintern.domain.program.dto.request;
 
-import com.letsintern.letsintern.domain.program.domain.ProgramStatus;
-import com.letsintern.letsintern.domain.program.domain.ProgramType;
-import com.letsintern.letsintern.domain.program.domain.ProgramWay;
+import com.letsintern.letsintern.domain.program.domain.*;
+import com.letsintern.letsintern.domain.user.domain.AccountType;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -40,4 +39,24 @@ public class ProgramUpdateRequestDTO {
     private Boolean isVisible;
 
     private List<Long> faqIdList;
+
+
+    private String link;
+
+    private String linkPassword;
+
+    private ProgramFeeType feeType;
+
+    private Integer feeTotal;
+
+    private LocalDateTime feeDueDate;
+
+    private AccountType accountType;
+
+    private String accountNumber;
+
+
+    private ProgramTopic topic;
+
+    private String openKakaoLink;
 }
