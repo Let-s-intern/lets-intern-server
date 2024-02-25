@@ -47,7 +47,10 @@ public class ProgramCreateRequestDTO {
     private ProgramFeeType feeType;
 
     @Nullable
-    private Integer feeTotal;
+    private Integer feeRefund;
+
+    @Nullable
+    private Integer feeCharge;
 
     @Nullable
     private LocalDateTime feeDueDate;
@@ -65,5 +68,8 @@ public class ProgramCreateRequestDTO {
 
     @Nullable
     private String openKakaoLink;
+
+    @Nullable
+    private String openKakaoPassword;
 
 }
