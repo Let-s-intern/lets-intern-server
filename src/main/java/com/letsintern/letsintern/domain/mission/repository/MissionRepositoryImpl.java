@@ -167,6 +167,7 @@ public class MissionRepositoryImpl implements MissionRepositoryCustom {
 
         return jpaQueryFactory
                 .select(Projections.constructor(MissionDashboardListVo.class,
+                        qMission.id,
                         qMission.th,
                         qMission.topic,
                         qMission.type,

@@ -10,7 +10,9 @@ import com.letsintern.letsintern.domain.program.domain.ProgramStatus;
 import com.letsintern.letsintern.domain.program.vo.UserProgramVo;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -91,6 +93,7 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
                 .select(Projections.constructor(ApplicationVo.class,
                         qApplication.id,
                         qApplication.status,
+                        qApplication.feeIsConfirmed,
                         qApplication.program.id,
                         qApplication.program.title,
                         qApplication.program.type,
@@ -235,29 +238,14 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
     }
 
     @Override
-    public Optional<ApplicationEntireDashboardVo> getEntireDashboardMyVo(Long programId, Long userId) {
-        QApplication qApplication = QApplication.application;
-
-        return Optional.ofNullable(jpaQueryFactory
-                .select(Projections.constructor(ApplicationEntireDashboardVo.class,
-                        qApplication.id,
-                        qApplication.user.name,
-                        qApplication.wishJob,
-                        qApplication.introduction,
-                        Expressions.asBoolean(true)))
-                .from(qApplication)
-                .where(
-                        qApplication.program.id.eq(programId),
-                        qApplication.user.id.eq(userId),
-                        qApplication.status.in(ApplicationStatus.IN_PROGRESS, ApplicationStatus.DONE))
-                .fetchFirst());
-    }
-
-    @Override
     public Page<ApplicationEntireDashboardVo> getEntireDashboardList(Long programId, ApplicationWishJob applicationWishJob, Long userId, Pageable pageable) {
         QApplication qApplication = QApplication.application;
         List<ApplicationEntireDashboardVo> applicationEntireDashboardVos;
         JPAQuery<Long> count;
+
+        NumberExpression<Integer> isMineOrder = new CaseBuilder()
+                .when(qApplication.user.id.eq(Expressions.asNumber(userId))).then(0)
+                .otherwise(1);
 
         if(applicationWishJob == null || applicationWishJob.equals(ApplicationWishJob.ALL)) {
             applicationEntireDashboardVos = jpaQueryFactory
@@ -266,13 +254,13 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
                             qApplication.user.name,
                             qApplication.wishJob,
                             qApplication.introduction,
-                            Expressions.asBoolean(false)))
+                            Expressions.asNumber(userId),
+                            qApplication.user.id))
                     .from(qApplication)
                     .where(
                             qApplication.program.id.eq(programId),
-                            qApplication.user.id.ne(userId),
                             qApplication.status.in(ApplicationStatus.IN_PROGRESS, ApplicationStatus.DONE))
-                    .orderBy(qApplication.id.desc())
+                    .orderBy(isMineOrder.asc(), qApplication.id.desc())
                     .offset(pageable.getOffset())
                     .limit(pageable.getPageSize())
                     .fetch();
@@ -282,7 +270,6 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
                     .from(qApplication)
                     .where(
                             qApplication.program.id.eq(programId),
-                            qApplication.user.id.ne(userId),
                             qApplication.status.in(ApplicationStatus.IN_PROGRESS, ApplicationStatus.DONE));
         }
 
@@ -293,14 +280,14 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
                             qApplication.user.name,
                             qApplication.wishJob,
                             qApplication.introduction,
-                            Expressions.asBoolean(false)))
+                            Expressions.asNumber(userId),
+                            qApplication.user.id))
                     .from(qApplication)
                     .where(
                             qApplication.program.id.eq(programId),
-                            qApplication.user.id.ne(userId),
                             qApplication.wishJob.in(ApplicationWishJob.getApplicationWishJobListByProgramTopic(applicationWishJob.getProgramTopic())),
                             qApplication.status.in(ApplicationStatus.IN_PROGRESS, ApplicationStatus.DONE))
-                    .orderBy(qApplication.id.desc())
+                    .orderBy(isMineOrder.asc(), qApplication.id.desc())
                     .offset(pageable.getOffset())
                     .limit(pageable.getPageSize())
                     .fetch();
@@ -311,7 +298,6 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
                     .where(
                             qApplication.program.id.eq(programId),
                             qApplication.program.topic.eq(applicationWishJob.getProgramTopic()),
-                            qApplication.user.id.ne(userId),
                             qApplication.status.in(ApplicationStatus.IN_PROGRESS, ApplicationStatus.DONE));
         }
 
@@ -322,14 +308,14 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
                             qApplication.user.name,
                             qApplication.wishJob,
                             qApplication.introduction,
-                            Expressions.asBoolean(false)))
+                            Expressions.asNumber(userId),
+                            qApplication.user.id))
                     .from(qApplication)
                     .where(
                             qApplication.program.id.eq(programId),
-                            qApplication.user.id.ne(userId),
                             qApplication.wishJob.eq(applicationWishJob),
                             qApplication.status.in(ApplicationStatus.IN_PROGRESS, ApplicationStatus.DONE))
-                    .orderBy(qApplication.id.desc())
+                    .orderBy(isMineOrder.asc(), qApplication.id.desc())
                     .offset(pageable.getOffset())
                     .limit(pageable.getPageSize())
                     .fetch();
@@ -339,7 +325,6 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
                     .from(qApplication)
                     .where(
                             qApplication.program.id.eq(programId),
-                            qApplication.user.id.ne(userId),
                             qApplication.wishJob.eq(applicationWishJob),
                             qApplication.status.in(ApplicationStatus.IN_PROGRESS, ApplicationStatus.DONE));
         }

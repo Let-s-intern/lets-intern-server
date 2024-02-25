@@ -4,6 +4,8 @@ import com.letsintern.letsintern.domain.application.domain.ApplicationWishJob;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.Objects;
+
 @Getter
 public class ApplicationEntireDashboardVo {
 
@@ -18,11 +20,11 @@ public class ApplicationEntireDashboardVo {
     private boolean isMine;
 
     @Builder
-    public ApplicationEntireDashboardVo(Long applicationId, String name, ApplicationWishJob wishJob, String introduction, boolean isMine) {
+    public ApplicationEntireDashboardVo(Long applicationId, String name, ApplicationWishJob wishJob, String introduction, Long userId, Long applicationUserId) {
         this.applicationId = applicationId;
         this.name = name;
         this.wishJob = wishJob;
         this.introduction = introduction;
-        this.isMine = isMine;
+        this.isMine = Objects.equals(userId, applicationUserId);
     }
 }
