@@ -8,21 +8,22 @@ import lombok.Getter;
 import org.springframework.data.domain.Page;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Getter
 public class ProgramEntireDashboardResponse {
-
-    private ApplicationEntireDashboardVo myDashboard;
-    private List<ApplicationEntireDashboardVo> dashboardList;
+    private List<ApplicationEntireDashboardVo> dashboardList = new ArrayList<>();
 
     private List<ApplicationWishJob> wishJobList;
     private PageInfo pageInfo;
 
     @Builder
     private ProgramEntireDashboardResponse(ApplicationEntireDashboardVo myDashboard, Page<ApplicationEntireDashboardVo> dashboardList, List<ApplicationWishJob> wishJobList) {
-        this.myDashboard = myDashboard;
-        this.dashboardList = (dashboardList.hasContent()) ? dashboardList.getContent() : new ArrayList<>();
+        this.dashboardList.add(0, myDashboard);
+        if(dashboardList.hasContent()) {
+            this.dashboardList.addAll(dashboardList.getContent());
+        }
         this.wishJobList = wishJobList;
         this.pageInfo = PageInfo.of(dashboardList);
     }

@@ -8,7 +8,9 @@ import com.letsintern.letsintern.domain.application.vo.ApplicationEntireDashboar
 import com.letsintern.letsintern.domain.application.vo.ApplicationVo;
 import com.letsintern.letsintern.domain.program.domain.ProgramStatus;
 import com.letsintern.letsintern.domain.program.vo.UserProgramVo;
+import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -241,7 +243,8 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
                         qApplication.id,
                         qApplication.user.name,
                         qApplication.wishJob,
-                        qApplication.introduction))
+                        qApplication.introduction,
+                        Expressions.asBoolean(true)))
                 .from(qApplication)
                 .where(
                         qApplication.program.id.eq(programId),
@@ -262,7 +265,8 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
                             qApplication.id,
                             qApplication.user.name,
                             qApplication.wishJob,
-                            qApplication.introduction))
+                            qApplication.introduction,
+                            Expressions.asBoolean(false)))
                     .from(qApplication)
                     .where(
                             qApplication.program.id.eq(programId),
@@ -288,7 +292,8 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
                             qApplication.id,
                             qApplication.user.name,
                             qApplication.wishJob,
-                            qApplication.introduction))
+                            qApplication.introduction,
+                            Expressions.asBoolean(false)))
                     .from(qApplication)
                     .where(
                             qApplication.program.id.eq(programId),
@@ -316,7 +321,8 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
                             qApplication.id,
                             qApplication.user.name,
                             qApplication.wishJob,
-                            qApplication.introduction))
+                            qApplication.introduction,
+                            Expressions.asBoolean(false)))
                     .from(qApplication)
                     .where(
                             qApplication.program.id.eq(programId),

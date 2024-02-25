@@ -15,11 +15,14 @@ public class ApplicationEntireDashboardVo {
 
     private String introduction;
 
+    private boolean isMine;
+
     @Builder
-    public ApplicationEntireDashboardVo(Long applicationId, String name, ApplicationWishJob wishJob, String introduction) {
+    public ApplicationEntireDashboardVo(Long applicationId, String name, ApplicationWishJob wishJob, String introduction, boolean isMine) {
         this.applicationId = applicationId;
         this.name = name;
         this.wishJob = wishJob;
         this.introduction = introduction;
+        this.isMine = isMine;
     }
 }
