@@ -221,7 +221,6 @@ public class MissionRepositoryImpl implements MissionRepositoryCustom {
                 .select(Projections.constructor(MissionMyDashboardDoneVo.class,
                         qMission.id,
                         qMission.th,
-                        qMission.status,
                         qMission.title,
                         qMission.contents,
                         qEssentialContents.link,
