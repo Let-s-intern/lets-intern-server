@@ -203,10 +203,6 @@ public class ApplicationHelper {
         return PageRequest.of(pageNum, pageSize, Sort.by("id").descending());
     }
 
-    public ApplicationEntireDashboardVo getMyDashboard(Long programId, Long userId) {
-        return applicationRepository.getEntireDashboardMyVo(programId, userId).orElseThrow(() -> ApplicationNotFound.EXCEPTION);
-    }
-
     public Page<ApplicationEntireDashboardVo> getDashboardList(Long programId, ApplicationWishJob applicationWishJob, Long userId, Pageable pageable) {
         return applicationRepository.getEntireDashboardList(programId, applicationWishJob, userId, pageable);
     }

@@ -46,7 +46,7 @@ public class ProgramMapper {
         return ProgramMyDashboardResponse.of(dailyMission, missionList);
     }
 
-    public ProgramEntireDashboardResponse toProgramEntireDashboardResponse(ApplicationEntireDashboardVo myDashboard, Page<ApplicationEntireDashboardVo> dashboardList, List<ApplicationWishJob> wishJobList) {
-        return ProgramEntireDashboardResponse.of(myDashboard, dashboardList, wishJobList);
+    public ProgramEntireDashboardResponse toProgramEntireDashboardResponse(Page<ApplicationEntireDashboardVo> dashboardList, List<ApplicationWishJob> wishJobList) {
+        return ProgramEntireDashboardResponse.of(dashboardList, wishJobList);
     }
 }

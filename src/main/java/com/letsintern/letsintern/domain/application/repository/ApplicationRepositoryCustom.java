@@ -37,8 +37,6 @@ public interface ApplicationRepositoryCustom {
 
     List<String> findAllEmailByIsApproved(Long programId, Boolean isApproved);
 
-    Optional<ApplicationEntireDashboardVo> getEntireDashboardMyVo(Long programId, Long userId);
-
     Page<ApplicationEntireDashboardVo> getEntireDashboardList(Long programId, ApplicationWishJob applicationWishJob, Long userId, Pageable pageable);
 
     Page<ApplicationChallengeAdminVo> getApplicationChallengeAdminList(Long programId, Pageable pageable);
