@@ -64,6 +64,7 @@ public class AttendanceHelper {
             attendance.setLink(attendanceUpdateDTO.getLink());
             attendance.setStatus(AttendanceStatus.UPDATED);
             attendance.setResult(AttendanceResult.WAITING);
+            attendance.setComments(null);
         }
         return attendance.getId();
     }
@@ -83,12 +84,7 @@ public class AttendanceHelper {
 
         if(attendanceAdminUpdateDTO.getLink() != null) attendance.setLink(attendanceAdminUpdateDTO.getLink());
         if(attendanceAdminUpdateDTO.getStatus() != null) attendance.setStatus(attendanceAdminUpdateDTO.getStatus());
-        if(attendanceAdminUpdateDTO.getResult() != null) {
-            if(attendance.getStatus().equals(AttendanceStatus.UPDATED) && attendanceAdminUpdateDTO.getResult().equals(AttendanceResult.WRONG)) {
-                attendance.setComments(null);
-            }
-            attendance.setResult(attendanceAdminUpdateDTO.getResult());
-        }
+        if(attendanceAdminUpdateDTO.getResult() != null) attendance.setResult(attendanceAdminUpdateDTO.getResult());
         if(attendanceAdminUpdateDTO.getComments() != null) attendance.setComments(attendanceAdminUpdateDTO.getComments());
         if(attendanceAdminUpdateDTO.getIsRefunded() != null) attendance.setIsRefunded(attendanceAdminUpdateDTO.getIsRefunded());
 
