@@ -60,7 +60,7 @@ public class ApplicationHelper {
         Program program = programRepository.findById(programId).orElseThrow(() -> ProgramNotFound.EXCEPTION);
 
         /* 보증금 프로그램인데 계좌 추가 정보 없는 사용자 */
-        if(program.getFeeType().equals(ProgramFeeType.DEPOSIT) && !userService.checkDetailAccountInfoExist(user)) {
+        if(program.getFeeType().equals(ProgramFeeType.REFUND) && !userService.checkDetailAccountInfoExist(user)) {
             if(applicationCreateDTO.getAccountType() == null || applicationCreateDTO.getAccountNumber() == null) {
                 throw ApplicationUserBadRequestAccount.EXCEPTION;
             } else

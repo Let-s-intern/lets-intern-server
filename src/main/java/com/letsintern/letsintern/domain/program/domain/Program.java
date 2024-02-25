@@ -157,7 +157,7 @@ public class Program {
         this.feeType = feeType;
 
         // 이용료 or 보증금 프로그램
-        if(feeType.equals(ProgramFeeType.CHARGE) || feeType.equals(ProgramFeeType.DEPOSIT)) {
+        if(feeType.equals(ProgramFeeType.CHARGE) || feeType.equals(ProgramFeeType.REFUND)) {
             this.feeTotal = feeTotal;
             this.feeDueDate = feeDueDate;
             this.accountType = accountType;

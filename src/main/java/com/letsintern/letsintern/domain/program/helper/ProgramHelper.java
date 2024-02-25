@@ -50,8 +50,8 @@ public class ProgramHelper {
     public Long createProgram(ProgramCreateRequestDTO programCreateRequestDTO) throws Exception {
         ZoomMeetingCreateResponse zoomMeetingCreateResponse = null;
 
-        // 보증금 프로그램 정보 입력 확인
-        if(programCreateRequestDTO.getFeeType().equals(ProgramFeeType.CHARGE) || programCreateRequestDTO.getFeeType().equals(ProgramFeeType.DEPOSIT)) {
+        // 이용료 or 보증금 프로그램 정보 입력 확인
+        if(programCreateRequestDTO.getFeeType().equals(ProgramFeeType.CHARGE) || programCreateRequestDTO.getFeeType().equals(ProgramFeeType.REFUND)) {
             if(programCreateRequestDTO.getFeeTotal() == null || programCreateRequestDTO.getAccountType() == null || programCreateRequestDTO.getAccountNumber() == null || programCreateRequestDTO.getFeeDueDate() == null) {
                 throw RefundProgramCreateBadRequest.EXCEPTION;
             }
