@@ -93,6 +93,7 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
                 .select(Projections.constructor(ApplicationVo.class,
                         qApplication.id,
                         qApplication.status,
+                        qApplication.feeIsConfirmed,
                         qApplication.program.id,
                         qApplication.program.title,
                         qApplication.program.type,

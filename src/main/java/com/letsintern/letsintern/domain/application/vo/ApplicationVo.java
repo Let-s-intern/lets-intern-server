@@ -14,6 +14,8 @@ public class ApplicationVo {
 
     private ApplicationStatus status;
 
+    private Boolean feeIsConfirmed;
+
     private Long programId;
 
     private String programTitle;
@@ -29,10 +31,11 @@ public class ApplicationVo {
     private LocalDateTime endDate;
 
     @Builder
-    public ApplicationVo(Long id, ApplicationStatus status, Long programId, String programTitle, ProgramType programType,
+    public ApplicationVo(Long id, ApplicationStatus status, Boolean feeIsConfirmed, Long programId, String programTitle, ProgramType programType,
                          Long reviewId, LocalDateTime announcementDate, LocalDateTime startDate, LocalDateTime endDate) {
         this.id = id;
         this.status = status;
+        this.feeIsConfirmed = feeIsConfirmed;
         this.programId = programId;
         this.programTitle = programTitle;
         this.programType = programType;
