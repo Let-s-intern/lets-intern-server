@@ -6,7 +6,6 @@ import com.letsintern.letsintern.domain.mission.domain.Mission;
 import com.letsintern.letsintern.domain.notice.domain.Notice;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.response.ZoomMeetingCreateResponse;
-import com.letsintern.letsintern.domain.program.exception.RefundProgramCreateBadRequest;
 import com.letsintern.letsintern.domain.user.domain.AccountType;
 import com.letsintern.letsintern.global.common.util.StringUtils;
 import jakarta.annotation.Nullable;
@@ -104,11 +103,8 @@ public class Program {
     @NotNull
     private Integer feeTotal = 0;
 
-
-    /* Challenge */
     @Nullable
-    @Enumerated(EnumType.STRING)
-    private ProgramTopic topic;
+    private LocalDateTime feeDueDate;
 
     @Nullable
     @Enumerated(EnumType.STRING)
@@ -117,8 +113,11 @@ public class Program {
     @Nullable
     private String accountNumber;
 
+
+    /* Challenge */
     @Nullable
-    private LocalDateTime depositDueDate;
+    @Enumerated(EnumType.STRING)
+    private ProgramTopic topic;
 
     @Nullable
     private String openKakaoLink;
@@ -140,7 +139,7 @@ public class Program {
     private Program(ProgramType type, Integer th, String title, Integer headcount,
                     LocalDateTime dueDate, LocalDateTime announcementDate, LocalDateTime startDate, LocalDateTime endDate,
                     String contents, ProgramWay way, String location, String notice, List<Long> faqIdList,
-                    ProgramFeeType feeType, Integer feeTotal, AccountType accountType, String accountNumber, LocalDateTime depositDueDate,
+                    ProgramFeeType feeType, Integer feeTotal, LocalDateTime feeDueDate, AccountType accountType, String accountNumber,
                     ProgramTopic topic, String openKakaoLink, ZoomMeetingCreateResponse zoomMeetingCreateResponse) {
         this.type = type;
         this.th = th;
@@ -160,9 +159,9 @@ public class Program {
         // 이용료 or 보증금 프로그램
         if(feeType.equals(ProgramFeeType.CHARGE) || feeType.equals(ProgramFeeType.DEPOSIT)) {
             this.feeTotal = feeTotal;
+            this.feeDueDate = feeDueDate;
             this.accountType = accountType;
             this.accountNumber = accountNumber;
-            this.depositDueDate = depositDueDate;
         }
 
         // Zoom Link
@@ -200,9 +199,9 @@ public class Program {
                 .faqIdList(programCreateRequestDTO.getFaqIdList())
                 .feeType(programCreateRequestDTO.getFeeType())
                 .feeTotal(programCreateRequestDTO.getFeeTotal())
+                .feeDueDate(programCreateRequestDTO.getFeeDueDate())
                 .accountType(programCreateRequestDTO.getAccountType())
                 .accountNumber(programCreateRequestDTO.getAccountNumber())
-                .depositDueDate(programCreateRequestDTO.getDepositDueDate())
                 .topic(programCreateRequestDTO.getTopic())
                 .openKakaoLink(programCreateRequestDTO.getOpenKakaoLink())
                 .zoomMeetingCreateResponse(zoomMeetingCreateResponse)

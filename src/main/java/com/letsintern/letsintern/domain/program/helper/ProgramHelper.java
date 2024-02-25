@@ -52,7 +52,7 @@ public class ProgramHelper {
 
         // 보증금 프로그램 정보 입력 확인
         if(programCreateRequestDTO.getFeeType().equals(ProgramFeeType.CHARGE) || programCreateRequestDTO.getFeeType().equals(ProgramFeeType.DEPOSIT)) {
-            if(programCreateRequestDTO.getFeeTotal() == null || programCreateRequestDTO.getAccountType() == null || programCreateRequestDTO.getAccountNumber() == null || programCreateRequestDTO.getDepositDueDate() == null) {
+            if(programCreateRequestDTO.getFeeTotal() == null || programCreateRequestDTO.getAccountType() == null || programCreateRequestDTO.getAccountNumber() == null || programCreateRequestDTO.getFeeDueDate() == null) {
                 throw RefundProgramCreateBadRequest.EXCEPTION;
             }
         }
@@ -96,11 +96,11 @@ public class ProgramHelper {
             program.setHeadcount(programUpdateRequestDTO.getHeadcount());
         }
         if(programUpdateRequestDTO.getDueDate() != null) {
-            if(programUpdateRequestDTO.getDueDate().isAfter(LocalDateTime.now()))
+            program.setDueDate(programUpdateRequestDTO.getDueDate());
+            if(program.getDueDate().isAfter(LocalDateTime.now()))
                 program.setStatus(ProgramStatus.OPEN);
             else
                 program.setStatus(ProgramStatus.CLOSED);
-            program.setDueDate(programUpdateRequestDTO.getDueDate());
         }
         if(programUpdateRequestDTO.getAnnouncementDate() != null) {
             program.setAnnouncementDate(programUpdateRequestDTO.getAnnouncementDate());
@@ -131,6 +131,35 @@ public class ProgramHelper {
         }
         if(programUpdateRequestDTO.getFaqIdList() != null) {
             program.setFaqListStr(StringUtils.listToString(programUpdateRequestDTO.getFaqIdList()));
+        }
+
+        if(programUpdateRequestDTO.getLink() != null) {
+            program.setLink(programUpdateRequestDTO.getLink());
+        }
+        if(programUpdateRequestDTO.getLinkPassword() != null) {
+            program.setLinkPassword(programUpdateRequestDTO.getLinkPassword());
+        }
+        if(programUpdateRequestDTO.getFeeType() != null) {
+            program.setFeeType(programUpdateRequestDTO.getFeeType());
+        }
+        if(programUpdateRequestDTO.getFeeTotal() != null) {
+            program.setFeeTotal(programUpdateRequestDTO.getFeeTotal());
+        }
+        if(programUpdateRequestDTO.getFeeDueDate() != null) {
+            program.setFeeDueDate(programUpdateRequestDTO.getFeeDueDate());
+        }
+        if(programUpdateRequestDTO.getAccountType() != null) {
+            program.setAccountType(programUpdateRequestDTO.getAccountType());
+        }
+        if(programUpdateRequestDTO.getAccountNumber() != null) {
+            program.setAccountNumber(programUpdateRequestDTO.getAccountNumber());
+        }
+
+        if(programUpdateRequestDTO.getTopic() != null) {
+            program.setTopic(programUpdateRequestDTO.getTopic());
+        }
+        if(programUpdateRequestDTO.getOpenKakaoLink() != null) {
+            program.setOpenKakaoLink(programUpdateRequestDTO.getOpenKakaoLink());
         }
 
         return program.getId();

@@ -32,13 +32,13 @@ public class QProgram extends EntityPathBase<Program> {
 
     public final StringPath contents = createString("contents");
 
-    public final DateTimePath<java.time.LocalDateTime> depositDueDate = createDateTime("depositDueDate", java.time.LocalDateTime.class);
-
     public final DateTimePath<java.time.LocalDateTime> dueDate = createDateTime("dueDate", java.time.LocalDateTime.class);
 
     public final DateTimePath<java.time.LocalDateTime> endDate = createDateTime("endDate", java.time.LocalDateTime.class);
 
     public final StringPath faqListStr = createString("faqListStr");
+
+    public final DateTimePath<java.time.LocalDateTime> feeDueDate = createDateTime("feeDueDate", java.time.LocalDateTime.class);
 
     public final NumberPath<Integer> feeTotal = createNumber("feeTotal", Integer.class);
 
