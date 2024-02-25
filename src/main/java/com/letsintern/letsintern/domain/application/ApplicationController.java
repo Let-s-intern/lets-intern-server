@@ -56,6 +56,12 @@ public class ApplicationController {
         return ResponseEntity.ok("success");
     }
 
+    @Operation(summary = "해당 유저가 유효한 참여자인지 여부 확인")
+    @GetMapping("/{programId}")
+    public ApplicationValidityResponse checkApplicationValidity(@PathVariable Long programId, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        return applicationService.checkApplicationValidity(programId, principalDetails);
+    }
+
     @Operation(summary = "챌린지 한줄 소개, 희망 직무 수정")
     @PatchMapping("/{applicationId}/challenge")
     public ApplicationIdResponse updateChallengeApplication(@PathVariable Long applicationId, @RequestBody ApplicationChallengeUpdateDTO applicationChallengeUpdateDTO, @AuthenticationPrincipal PrincipalDetails principalDetails) {

@@ -101,7 +101,10 @@ public class Program {
     private ProgramFeeType feeType;
 
     @NotNull
-    private Integer feeTotal = 0;
+    private Integer feeRefund = 0;
+
+    @NotNull
+    private Integer feeCharge = 0;
 
     @Nullable
     private LocalDateTime feeDueDate;
@@ -122,6 +125,10 @@ public class Program {
     @Nullable
     private String openKakaoLink;
 
+    @Nullable
+    @Column(length = 10)
+    private String openKakaoPassword;
+
 
     @JsonIgnore
     @OneToMany(mappedBy = "program", orphanRemoval = true)
@@ -139,8 +146,8 @@ public class Program {
     private Program(ProgramType type, Integer th, String title, Integer headcount,
                     LocalDateTime dueDate, LocalDateTime announcementDate, LocalDateTime startDate, LocalDateTime endDate,
                     String contents, ProgramWay way, String location, String notice, List<Long> faqIdList,
-                    ProgramFeeType feeType, Integer feeTotal, LocalDateTime feeDueDate, AccountType accountType, String accountNumber,
-                    ProgramTopic topic, String openKakaoLink, ZoomMeetingCreateResponse zoomMeetingCreateResponse) {
+                    ProgramFeeType feeType, Integer feeRefund, Integer feeCharge, LocalDateTime feeDueDate, AccountType accountType, String accountNumber,
+                    ProgramTopic topic, String openKakaoLink, String openKakaoPassword, ZoomMeetingCreateResponse zoomMeetingCreateResponse) {
         this.type = type;
         this.th = th;
         this.title = title;
@@ -158,7 +165,8 @@ public class Program {
 
         // 이용료 or 보증금 프로그램
         if(feeType.equals(ProgramFeeType.CHARGE) || feeType.equals(ProgramFeeType.REFUND)) {
-            this.feeTotal = feeTotal;
+            if(feeType.equals(ProgramFeeType.REFUND)) this.feeRefund = feeRefund;
+            this.feeCharge = feeCharge;
             this.feeDueDate = feeDueDate;
             this.accountType = accountType;
             this.accountNumber = accountNumber;
@@ -174,6 +182,7 @@ public class Program {
         if(type.equals(ProgramType.CHALLENGE_HALF) || type.equals(ProgramType.CHALLENGE_FULL)) {
             this.topic = topic;
             this.openKakaoLink = openKakaoLink;
+            this.openKakaoPassword = openKakaoPassword;
         }
 
         // LETS_CHAT
@@ -198,12 +207,14 @@ public class Program {
                 .notice(programCreateRequestDTO.getNotice())
                 .faqIdList(programCreateRequestDTO.getFaqIdList())
                 .feeType(programCreateRequestDTO.getFeeType())
-                .feeTotal(programCreateRequestDTO.getFeeTotal())
+                .feeRefund(programCreateRequestDTO.getFeeRefund())
+                .feeCharge(programCreateRequestDTO.getFeeCharge())
                 .feeDueDate(programCreateRequestDTO.getFeeDueDate())
                 .accountType(programCreateRequestDTO.getAccountType())
                 .accountNumber(programCreateRequestDTO.getAccountNumber())
                 .topic(programCreateRequestDTO.getTopic())
                 .openKakaoLink(programCreateRequestDTO.getOpenKakaoLink())
+                .openKakaoPassword(programCreateRequestDTO.getOpenKakaoPassword())
                 .zoomMeetingCreateResponse(zoomMeetingCreateResponse)
                 .build();
     }

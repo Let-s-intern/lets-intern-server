@@ -38,9 +38,11 @@ public class QProgram extends EntityPathBase<Program> {
 
     public final StringPath faqListStr = createString("faqListStr");
 
+    public final NumberPath<Integer> feeCharge = createNumber("feeCharge", Integer.class);
+
     public final DateTimePath<java.time.LocalDateTime> feeDueDate = createDateTime("feeDueDate", java.time.LocalDateTime.class);
 
-    public final NumberPath<Integer> feeTotal = createNumber("feeTotal", Integer.class);
+    public final NumberPath<Integer> feeRefund = createNumber("feeRefund", Integer.class);
 
     public final EnumPath<ProgramFeeType> feeType = createEnum("feeType", ProgramFeeType.class);
 
@@ -67,6 +69,8 @@ public class QProgram extends EntityPathBase<Program> {
     public final ListPath<com.letsintern.letsintern.domain.notice.domain.Notice, com.letsintern.letsintern.domain.notice.domain.QNotice> noticeList = this.<com.letsintern.letsintern.domain.notice.domain.Notice, com.letsintern.letsintern.domain.notice.domain.QNotice>createList("noticeList", com.letsintern.letsintern.domain.notice.domain.Notice.class, com.letsintern.letsintern.domain.notice.domain.QNotice.class, PathInits.DIRECT2);
 
     public final StringPath openKakaoLink = createString("openKakaoLink");
+
+    public final StringPath openKakaoPassword = createString("openKakaoPassword");
 
     public final DateTimePath<java.time.LocalDateTime> startDate = createDateTime("startDate", java.time.LocalDateTime.class);
 

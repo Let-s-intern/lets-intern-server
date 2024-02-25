@@ -2,6 +2,7 @@ package com.letsintern.letsintern.domain.program.dto.request;
 
 import com.letsintern.letsintern.domain.program.domain.*;
 import com.letsintern.letsintern.domain.user.domain.AccountType;
+import jakarta.annotation.Nullable;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -47,7 +48,9 @@ public class ProgramUpdateRequestDTO {
 
     private ProgramFeeType feeType;
 
-    private Integer feeTotal;
+    private Integer feeRefund;
+
+    private Integer feeCharge;
 
     private LocalDateTime feeDueDate;
 
@@ -59,4 +62,6 @@ public class ProgramUpdateRequestDTO {
     private ProgramTopic topic;
 
     private String openKakaoLink;
+
+    private String openKakaoPassword;
 }

@@ -97,6 +97,7 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
                         qApplication.program.id,
                         qApplication.program.title,
                         qApplication.program.type,
+                        qApplication.program.feeType,
                         qApplication.reviewId,
                         qApplication.program.announcementDate,
                         qApplication.program.startDate,

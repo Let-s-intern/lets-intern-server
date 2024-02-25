@@ -14,6 +14,7 @@ import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequest
 import com.letsintern.letsintern.domain.program.dto.request.ProgramUpdateRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.response.*;
 import com.letsintern.letsintern.domain.program.exception.ChallengeProgramCreateBadRequest;
+import com.letsintern.letsintern.domain.program.exception.ChargeProgramCreateBadRequest;
 import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
 import com.letsintern.letsintern.domain.program.exception.RefundProgramCreateBadRequest;
 import com.letsintern.letsintern.domain.program.mapper.ProgramMapper;
@@ -50,16 +51,23 @@ public class ProgramHelper {
     public Long createProgram(ProgramCreateRequestDTO programCreateRequestDTO) throws Exception {
         ZoomMeetingCreateResponse zoomMeetingCreateResponse = null;
 
-        // 이용료 or 보증금 프로그램 정보 입력 확인
-        if(programCreateRequestDTO.getFeeType().equals(ProgramFeeType.CHARGE) || programCreateRequestDTO.getFeeType().equals(ProgramFeeType.REFUND)) {
-            if(programCreateRequestDTO.getFeeTotal() == null || programCreateRequestDTO.getAccountType() == null || programCreateRequestDTO.getAccountNumber() == null || programCreateRequestDTO.getFeeDueDate() == null) {
+        // 이용료 프로그램 정보 입력 확인
+        if(programCreateRequestDTO.getFeeType().equals(ProgramFeeType.CHARGE)) {
+            if(programCreateRequestDTO.getFeeCharge() == null || programCreateRequestDTO.getAccountType() == null || programCreateRequestDTO.getAccountNumber() == null || programCreateRequestDTO.getFeeDueDate() == null) {
+                throw ChargeProgramCreateBadRequest.EXCEPTION;
+            }
+        }
+
+        // 보증금 프로그램 정보 입력 확인
+        else if(programCreateRequestDTO.getFeeType().equals(ProgramFeeType.REFUND)) {
+            if(programCreateRequestDTO.getFeeRefund() == null || programCreateRequestDTO.getFeeCharge() == null || programCreateRequestDTO.getAccountType() == null || programCreateRequestDTO.getAccountNumber() == null || programCreateRequestDTO.getFeeDueDate() == null) {
                 throw RefundProgramCreateBadRequest.EXCEPTION;
             }
         }
 
         // 챌린지 프로그램 정보 입력 확인
         if(programCreateRequestDTO.getType().equals(ProgramType.CHALLENGE_HALF) || programCreateRequestDTO.getType().equals(ProgramType.CHALLENGE_FULL)) {
-            if(programCreateRequestDTO.getTopic() == null || programCreateRequestDTO.getOpenKakaoLink() == null) {
+            if(programCreateRequestDTO.getTopic() == null || programCreateRequestDTO.getOpenKakaoLink() == null || programCreateRequestDTO.getOpenKakaoPassword() == null) {
                 throw ChallengeProgramCreateBadRequest.EXCEPTION;
             }
         }
@@ -142,8 +150,11 @@ public class ProgramHelper {
         if(programUpdateRequestDTO.getFeeType() != null) {
             program.setFeeType(programUpdateRequestDTO.getFeeType());
         }
-        if(programUpdateRequestDTO.getFeeTotal() != null) {
-            program.setFeeTotal(programUpdateRequestDTO.getFeeTotal());
+        if(programUpdateRequestDTO.getFeeRefund() != null) {
+            program.setFeeRefund(programUpdateRequestDTO.getFeeRefund());
+        }
+        if(programUpdateRequestDTO.getFeeCharge() != null) {
+            program.setFeeCharge(programUpdateRequestDTO.getFeeCharge());
         }
         if(programUpdateRequestDTO.getFeeDueDate() != null) {
             program.setFeeDueDate(programUpdateRequestDTO.getFeeDueDate());
@@ -160,6 +171,9 @@ public class ProgramHelper {
         }
         if(programUpdateRequestDTO.getOpenKakaoLink() != null) {
             program.setOpenKakaoLink(programUpdateRequestDTO.getOpenKakaoLink());
+        }
+        if(programUpdateRequestDTO.getOpenKakaoPassword() != null) {
+            program.setOpenKakaoPassword(programUpdateRequestDTO.getOpenKakaoPassword());
         }
 
         return program.getId();

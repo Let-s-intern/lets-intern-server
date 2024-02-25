@@ -81,7 +81,7 @@ public class MissionRepositoryImpl implements MissionRepositoryCustom {
                         qMission.startDate,
                         qMission.endDate,
                         qMission.refund,
-                        qMission.program.feeTotal,
+                        qMission.program.feeRefund,
                         qEssentialContents.topic,
                         qAdditionalContents.topic,
                         qLimitedContents.topic))
@@ -221,7 +221,6 @@ public class MissionRepositoryImpl implements MissionRepositoryCustom {
                 .select(Projections.constructor(MissionMyDashboardDoneVo.class,
                         qMission.id,
                         qMission.th,
-                        qMission.status,
                         qMission.title,
                         qMission.contents,
                         qEssentialContents.link,

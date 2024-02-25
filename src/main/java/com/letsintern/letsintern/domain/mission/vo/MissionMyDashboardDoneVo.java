@@ -37,21 +37,19 @@ public class MissionMyDashboardDoneVo {
     private String attendanceComments;
 
     @Builder
-    public MissionMyDashboardDoneVo(Long id, Integer th, MissionStatus status, String title, String contents,
-                                    String essentialContentsLink, String additionalContentsLink, String limitedContentsLink, String missionComments, Attendance attendance) {
+    public MissionMyDashboardDoneVo(Long id, Integer th, String title, String contents, String essentialContentsLink, String additionalContentsLink,
+                                    String limitedContentsLink, String missionComments, Attendance attendance) {
         this.id = id;
         this.th = th;
         this.title = title;
         this.contents = contents;
         this.essentialContentsLink = essentialContentsLink;
         this.additionalContentsLink = additionalContentsLink;
-        if((status.equals(MissionStatus.CHECK_DONE) || status.equals(MissionStatus.REFUND_DONE))
-                && (attendance != null && (attendance.getStatus().equals(AttendanceStatus.PRESENT) || attendance.getStatus().equals(AttendanceStatus.LATE))
-                && attendance.getResult().equals(AttendanceResult.PASS))) {
-            this.limitedContentsLink = limitedContentsLink;
-            this.missionComments = missionComments;
-        }
         if(attendance != null) {
+            if(attendance.getResult().equals(AttendanceResult.PASS)) {
+                this.limitedContentsLink = limitedContentsLink;
+                this.missionComments = missionComments;
+            }
             this.attendanceId = attendance.getId();
             this.attendanceStatus = attendance.getStatus();
             this.attendanceResult = attendance.getResult();
