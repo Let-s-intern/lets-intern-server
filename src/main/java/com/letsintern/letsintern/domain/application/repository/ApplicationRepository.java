@@ -12,6 +12,8 @@ public interface ApplicationRepository extends JpaRepository<Application, Long>,
 
     Optional<Application> findById(Long id);
 
+    Optional<Application> findByProgramIdAndUserIdAndIsApproved(Long programId, Long userId, Boolean isApproved);
+
     List<Application> findAllByProgramIdAndIsApproved(Long programId, Boolean isApproved);
 
     Integer countAllByProgramIdAndStatus(Long programId, ApplicationStatus status);

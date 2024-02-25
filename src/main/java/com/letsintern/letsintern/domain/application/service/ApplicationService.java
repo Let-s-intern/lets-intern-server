@@ -11,6 +11,7 @@ import com.letsintern.letsintern.domain.application.helper.ApplicationHelper;
 import com.letsintern.letsintern.domain.application.mapper.ApplicationMapper;
 import com.letsintern.letsintern.domain.application.repository.ApplicationRepository;
 import com.letsintern.letsintern.domain.mission.repository.MissionRepository;
+import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.user.domain.User;
 import com.letsintern.letsintern.domain.user.service.UserService;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
@@ -77,6 +78,12 @@ public class ApplicationService {
     @Transactional
     public void deleteApplication(Long applicationId) {
         applicationHelper.deleteApplication(applicationId);
+    }
+
+
+    public ApplicationValidityResponse checkApplicationValidity(Long programId, PrincipalDetails principalDetails) {
+        final User user = principalDetails.getUser();
+        return ApplicationValidityResponse.from(applicationRepository.findByProgramIdAndUserIdAndIsApproved(programId, user.getId(), true).orElse(null) != null);
     }
 
     @Transactional
