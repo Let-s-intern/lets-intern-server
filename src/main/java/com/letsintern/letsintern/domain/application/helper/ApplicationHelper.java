@@ -143,10 +143,15 @@ public class ApplicationHelper {
             if (application.getStatus().equals(ApplicationStatus.APPLIED) && application.getIsApproved().equals(false)) {
                 application.setStatus(ApplicationStatus.APPLIED_NOT_APPROVED);
             }
+            // 이용료/보증금 입금 안내 이메일 전송
         }
 
         if (applicationUpdateDTO.getStatus() != null)
             application.setStatus(applicationUpdateDTO.getStatus());
+        if(applicationUpdateDTO.getFeeIsConfirmed() != null) {
+            application.setFeeIsConfirmed(applicationUpdateDTO.getFeeIsConfirmed());
+            // 참여 확정 이메일 전송
+        }
         if (applicationUpdateDTO.getGrade() != null)
             application.setGrade(applicationUpdateDTO.getGrade());
         if (applicationUpdateDTO.getWishCompany() != null)

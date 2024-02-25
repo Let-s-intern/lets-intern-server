@@ -30,6 +30,8 @@ public class QApplication extends EntityPathBase<Application> {
 
     public final StringPath email = createString("email");
 
+    public final BooleanPath feeIsConfirmed = createBoolean("feeIsConfirmed");
+
     public final NumberPath<Integer> grade = createNumber("grade", Integer.class);
 
     public final NumberPath<Long> id = createNumber("id", Long.class);

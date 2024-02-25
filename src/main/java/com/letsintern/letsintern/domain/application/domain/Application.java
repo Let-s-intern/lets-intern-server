@@ -91,6 +91,9 @@ public class Application {
     private Boolean isApproved = false;
 
     @NotNull
+    private Boolean feeIsConfirmed = false;
+
+    @NotNull
     private ApplicationStatus status = ApplicationStatus.APPLIED;
 
     @NotNull
