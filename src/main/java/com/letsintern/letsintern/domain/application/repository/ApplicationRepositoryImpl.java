@@ -378,7 +378,7 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
                         qApplication.program.id.eq(programId),
                         qApplication.isApproved.eq(true),
                         qApplication.status.in(ApplicationStatus.IN_PROGRESS, ApplicationStatus.DONE))
-                .orderBy(qApplication.id.desc())
+                .orderBy(qApplication.user.name.asc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
