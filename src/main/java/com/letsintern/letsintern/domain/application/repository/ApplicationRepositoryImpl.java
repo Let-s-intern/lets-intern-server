@@ -2,6 +2,7 @@ package com.letsintern.letsintern.domain.application.repository;
 
 import com.letsintern.letsintern.domain.application.domain.*;
 import com.letsintern.letsintern.domain.application.dto.response.ApplicationChallengeAdminVoDetail;
+import com.letsintern.letsintern.domain.application.filter.ApplicationFilter;
 import com.letsintern.letsintern.domain.application.vo.ApplicationAdminVo;
 import com.letsintern.letsintern.domain.application.vo.ApplicationChallengeAdminVo;
 import com.letsintern.letsintern.domain.application.vo.ApplicationEntireDashboardVo;
@@ -378,6 +379,49 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
                         qApplication.program.id.eq(programId),
                         qApplication.isApproved.eq(true),
                         qApplication.status.in(ApplicationStatus.IN_PROGRESS, ApplicationStatus.DONE))
+                .orderBy(qApplication.user.name.asc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        count = jpaQueryFactory
+                .select(qApplication.count())
+                .from(qApplication)
+                .where(
+                        qApplication.program.id.eq(programId),
+                        qApplication.isApproved.eq(true),
+                        qApplication.status.in(ApplicationStatus.IN_PROGRESS, ApplicationStatus.DONE));
+
+        return PageableExecutionUtils.getPage(applicationVos, pageable, count::fetchOne);
+    }
+
+    @Override
+    public Page<ApplicationChallengeAdminVo> getApplicationChallengeAdminListFiltered(Long programId, Pageable pageable, String name, String email, String phoneNum) {
+        QApplication qApplication = QApplication.application;
+        List<ApplicationChallengeAdminVo> applicationVos;
+        JPAQuery<Long> count;
+
+        ApplicationFilter applicationFilter = ApplicationFilter.of(qApplication, name, email, phoneNum);
+
+        applicationVos = jpaQueryFactory
+                .select(Projections.constructor(ApplicationChallengeAdminVo.class,
+                        qApplication.id,
+                        qApplication.user.name,
+                        qApplication.type,
+                        qApplication.user.university,
+                        qApplication.user.major,
+                        qApplication.grade,
+                        qApplication.user.email,
+                        qApplication.user.phoneNum,
+                        qApplication.inflowPath,
+                        qApplication.user.accountType,
+                        qApplication.user.accountNumber))
+                .from(qApplication)
+                .where(
+                        qApplication.program.id.eq(programId),
+                        qApplication.isApproved.eq(true),
+                        qApplication.status.in(ApplicationStatus.IN_PROGRESS, ApplicationStatus.DONE),
+                        applicationFilter.eqName(), applicationFilter.eqEmail(), applicationFilter.eqPhoneNum())
                 .orderBy(qApplication.user.name.asc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())

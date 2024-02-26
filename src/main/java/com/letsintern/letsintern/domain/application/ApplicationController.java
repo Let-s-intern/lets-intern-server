@@ -103,8 +103,9 @@ public class ApplicationController {
 
     @Operation(summary = "어드민 챌린지 대시보드 참여자 목록")
     @GetMapping("/admin/challenge/{programId}")
-    public ApplicationChallengeAdminVosResponse getApplicationChallengeAdminList(@PathVariable Long programId, @PageableDefault(size = 10) Pageable pageable) {
-        return applicationService.getApplicationChallengeAdminList(programId, pageable);
+    public ApplicationChallengeAdminVosResponse getApplicationChallengeAdminList(@PathVariable Long programId, @PageableDefault(size = 10) Pageable pageable,
+                                                                                 @RequestParam(required = false) String name, @RequestParam(required = false) String email, @RequestParam(required = false) String phoneNum) {
+        return applicationService.getApplicationChallengeAdminList(programId, pageable, name, email, phoneNum);
     }
 
     @Operation(summary = "어드민 챌린지 대시보드 참여자 목록 1건 상세")

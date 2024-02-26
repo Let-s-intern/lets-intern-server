@@ -99,8 +99,8 @@ public class ApplicationService {
         );
     }
 
-    public ApplicationChallengeAdminVosResponse getApplicationChallengeAdminList(Long programId, Pageable pageable) {
-        return applicationMapper.toApplicationChallengeAdminVosResponse(applicationHelper.getApplicationChallengeAdminList(programId, pageable));
+    public ApplicationChallengeAdminVosResponse getApplicationChallengeAdminList(Long programId, Pageable pageable, String name, String email, String phoneNum) {
+        return applicationMapper.toApplicationChallengeAdminVosResponse(applicationHelper.getApplicationChallengeAdminList(programId, pageable, name, email, phoneNum));
     }
 
     public ApplicationChallengeAdminVoDetail getApplicationChallengeAdminDetail(Long applicationId) {

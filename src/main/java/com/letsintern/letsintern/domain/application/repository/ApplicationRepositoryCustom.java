@@ -43,4 +43,5 @@ public interface ApplicationRepositoryCustom {
 
     Page<ApplicationChallengeAdminVo> getApplicationChallengeAdminList(Long programId, Pageable pageable);
 
+    Page<ApplicationChallengeAdminVo> getApplicationChallengeAdminListFiltered(Long programId, Pageable pageable, String name, String email, String phoneNum);
 }

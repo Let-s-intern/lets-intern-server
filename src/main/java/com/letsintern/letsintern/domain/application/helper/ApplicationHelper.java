@@ -222,7 +222,10 @@ public class ApplicationHelper {
         return applicationRepository.getEntireDashboardList(programId, applicationWishJob, userId, pageable);
     }
 
-    public Page<ApplicationChallengeAdminVo> getApplicationChallengeAdminList(Long programId, Pageable pageable) {
+    public Page<ApplicationChallengeAdminVo> getApplicationChallengeAdminList(Long programId, Pageable pageable, String name, String email, String phoneNum) {
+        if(name != null || email != null || phoneNum != null) {
+            return applicationRepository.getApplicationChallengeAdminListFiltered(programId, pageable, name, email, phoneNum);
+        }
         return applicationRepository.getApplicationChallengeAdminList(programId, pageable);
     }
 }
