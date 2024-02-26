@@ -6,10 +6,7 @@ import com.letsintern.letsintern.domain.application.helper.ApplicationHelper;
 import com.letsintern.letsintern.domain.application.repository.ApplicationRepository;
 import com.letsintern.letsintern.domain.faq.repository.FaqRepository;
 import com.letsintern.letsintern.domain.faq.vo.FaqVo;
-import com.letsintern.letsintern.domain.program.domain.Program;
-import com.letsintern.letsintern.domain.program.domain.ProgramFeeType;
-import com.letsintern.letsintern.domain.program.domain.ProgramStatus;
-import com.letsintern.letsintern.domain.program.domain.ProgramType;
+import com.letsintern.letsintern.domain.program.domain.*;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramUpdateRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.response.*;
@@ -24,6 +21,7 @@ import com.letsintern.letsintern.domain.program.vo.ProgramThumbnailVo;
 import com.letsintern.letsintern.domain.program.vo.UserProgramVo;
 import com.letsintern.letsintern.domain.review.repository.ReviewRepository;
 import com.letsintern.letsintern.domain.review.vo.ReviewVo;
+import com.letsintern.letsintern.global.common.util.EmailUtils;
 import com.letsintern.letsintern.global.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -238,5 +236,19 @@ public class ProgramHelper {
     public void saveFinalHeadCount(Long programId) {
         Program program = programRepository.findById(programId).orElseThrow(() -> ProgramNotFound.EXCEPTION);
         program.setFinalHeadCount(applicationRepository.countAllByProgramIdAndStatus(programId, ApplicationStatus.IN_PROGRESS));
+    }
+
+    public String createProgramEmailByMailType(Program program, MailType mailType) {
+        switch (mailType) {
+            case APPROVED -> {
+                return EmailUtils.getChallengeApprovedEmailText(program);
+            }
+            case FEE_CONFIRMED -> {
+                return EmailUtils.getChallengeFeeConfirmedEmailText(program);
+            }
+            default -> {
+                return null;
+            }
+        }
     }
 }

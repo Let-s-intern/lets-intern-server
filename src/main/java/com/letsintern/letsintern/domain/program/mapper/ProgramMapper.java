@@ -25,6 +25,10 @@ public class ProgramMapper {
         return Program.of(programCreateRequestDTO, zoomMeetingCreateResponse);
     }
 
+    public ProgramAdminEmailResponse toProgramAdminEmailResponse(List<String> emailAddressList, String emailContents) {
+        return ProgramAdminEmailResponse.of(emailAddressList, emailContents);
+    }
+
     public ProgramIdResponseDTO toProgramIdResponseDTO(Long programId) {
         return ProgramIdResponseDTO.from(programId);
     }

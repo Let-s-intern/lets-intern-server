@@ -29,7 +29,19 @@ public class StringUtils {
 
     public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH:mm");
 
+    public static final DateTimeFormatter DATE_TIME_FORMATTER_MM_dd_E_a_HH_mm = DateTimeFormatter.ofPattern("MM월 dd일(E) a HH시 mm분");
+
+    public static final DateTimeFormatter DATE_TIME_FORMATTER_MM_dd = DateTimeFormatter.ofPattern("MM월 dd일");
+
     public static String dateToString(LocalDateTime date) {
         return date.format(DATE_TIME_FORMATTER);
+    }
+
+    public static String dateToStringMMddEaHHmm(LocalDateTime date) {
+        return date.format(DATE_TIME_FORMATTER_MM_dd_E_a_HH_mm);
+    }
+
+    public static String dateToStringMMdd(LocalDateTime date) {
+        return date.format(DATE_TIME_FORMATTER_MM_dd);
     }
 }

@@ -14,10 +14,7 @@ import com.letsintern.letsintern.domain.application.vo.ApplicationAdminVo;
 import com.letsintern.letsintern.domain.application.vo.ApplicationChallengeAdminVo;
 import com.letsintern.letsintern.domain.application.vo.ApplicationEntireDashboardVo;
 import com.letsintern.letsintern.domain.application.vo.ApplicationVo;
-import com.letsintern.letsintern.domain.program.domain.Program;
-import com.letsintern.letsintern.domain.program.domain.ProgramFeeType;
-import com.letsintern.letsintern.domain.program.domain.ProgramStatus;
-import com.letsintern.letsintern.domain.program.domain.ProgramType;
+import com.letsintern.letsintern.domain.program.domain.*;
 import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
 import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
 import com.letsintern.letsintern.domain.program.vo.ProgramEmailVo;
@@ -30,6 +27,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -114,6 +114,21 @@ public class ApplicationHelper {
     /* 프로그램 1개의 승인된 지원서 목록 */
     public Page<ApplicationAdminVo> getApplicationListOfProgramIdAndApproved(Long programId, Boolean isApproved, Pageable pageable) {
         return applicationRepository.findAllByProgramIdAndIsApproved(programId, isApproved, pageable);
+    }
+
+    /* 프로그램 1개의 안내 메일 전송 대상자 메일 주소 목록 */
+    public List<String> getApplicationEmailListOfProgramIdAndMailType(Long programId, MailType mailType) {
+        switch (mailType) {
+            case APPROVED -> {
+                return applicationRepository.findAllEmailByIsApproved(programId, true);
+            }
+            case FEE_CONFIRMED -> {
+                return applicationRepository.findAllEmailByIsApprovedAndFeeIsConfirmed(programId, true, true);
+            }
+            default -> {
+                return new ArrayList<>();
+            }
+        }
     }
 
     /* 마이페이지 - 사용자 1명의 지원서 목록 */

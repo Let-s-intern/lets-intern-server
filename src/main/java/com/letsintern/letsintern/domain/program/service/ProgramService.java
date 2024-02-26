@@ -12,6 +12,7 @@ import com.letsintern.letsintern.domain.mission.domain.MissionStatus;
 import com.letsintern.letsintern.domain.mission.helper.MissionHelper;
 import com.letsintern.letsintern.domain.mission.vo.MissionDashboardVo;
 import com.letsintern.letsintern.domain.notice.helper.NoticeHelper;
+import com.letsintern.letsintern.domain.program.domain.MailType;
 import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.program.domain.ProgramStatus;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequestDTO;
@@ -98,6 +99,15 @@ public class ProgramService {
     @Transactional
     public void saveFinalHeadCount(Long programId) {
         programHelper.saveFinalHeadCount(programId);
+    }
+
+
+    public ProgramAdminEmailResponse getEmailTemplate(Long programId, MailType mailType) {
+        final Program program = programRepository.findById(programId).orElseThrow(() -> ProgramNotFound.EXCEPTION);
+        return programMapper.toProgramAdminEmailResponse(
+                applicationHelper.getApplicationEmailListOfProgramIdAndMailType(program.getId(), mailType),
+                programHelper.createProgramEmailByMailType(program, mailType)
+        );
     }
 
     @Transactional(readOnly = true)

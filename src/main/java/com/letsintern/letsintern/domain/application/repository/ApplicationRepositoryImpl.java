@@ -239,6 +239,27 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
     }
 
     @Override
+    public List<String> findAllEmailByIsApprovedAndFeeIsConfirmed(Long programId, Boolean isApproved, Boolean feeIsConfirmed) {
+        QApplication qApplication = QApplication.application;
+
+        List<String> emailList = jpaQueryFactory
+                .select(qApplication.user.email)
+                .from(qApplication)
+                .where(qApplication.program.id.eq(programId), qApplication.user.isNotNull(),
+                        qApplication.isApproved.eq(isApproved), qApplication.feeIsConfirmed.eq(feeIsConfirmed))
+                .fetch();
+
+        emailList.addAll(jpaQueryFactory
+                .select(qApplication.email)
+                .from(qApplication)
+                .where(qApplication.program.id.eq(programId), qApplication.user.isNull(),
+                        qApplication.isApproved.eq(isApproved), qApplication.feeIsConfirmed.eq(feeIsConfirmed))
+                .fetch());
+
+        return emailList;
+    }
+
+    @Override
     public Page<ApplicationEntireDashboardVo> getEntireDashboardList(Long programId, ApplicationWishJob applicationWishJob, Long userId, Pageable pageable) {
         QApplication qApplication = QApplication.application;
         List<ApplicationEntireDashboardVo> applicationEntireDashboardVos;

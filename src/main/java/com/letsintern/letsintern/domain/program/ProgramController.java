@@ -1,6 +1,7 @@
 package com.letsintern.letsintern.domain.program;
 
 import com.letsintern.letsintern.domain.application.domain.ApplicationWishJob;
+import com.letsintern.letsintern.domain.program.domain.MailType;
 import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramUpdateRequestDTO;
@@ -101,6 +102,12 @@ public class ProgramController {
     @GetMapping("/{programId}/headcount")
     public void saveFinalHeadCount(@PathVariable Long programId) {
         programService.saveFinalHeadCount(programId);
+    }
+
+    @Operation(summary = "어드민 프로그램 선발 및 입금 안내, 참여 확정 안내 메일 템플릿")
+    @GetMapping("/{programId}/email")
+    public ProgramAdminEmailResponse getEmailTemplate(@PathVariable Long programId, @RequestParam MailType mailType) {
+        return programService.getEmailTemplate(programId, mailType);
     }
 
     @Operation(summary = "유저 챌린지 대시보드 - 대시보드")
