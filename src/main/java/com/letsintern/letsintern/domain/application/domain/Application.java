@@ -94,6 +94,7 @@ public class Application {
     private Boolean feeIsConfirmed = false;
 
     @NotNull
+    @Enumerated(EnumType.STRING)
     private ApplicationStatus status = ApplicationStatus.APPLIED;
 
     @NotNull

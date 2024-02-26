@@ -56,8 +56,7 @@ public class ApplicationService {
 
     public AdminApplicationListResponse getApplicationListOfProgramAndApproved(Long programId, Boolean approved, Pageable pageable) {
         return applicationMapper.toAdminApplicationListResponse(
-                //applicationHelper.getApplicationListOfProgramIdAndApproved(programId, approved, pageable)
-                null
+                applicationHelper.getApplicationListOfProgramIdAndApproved(programId, approved, pageable)
         );
     }
 

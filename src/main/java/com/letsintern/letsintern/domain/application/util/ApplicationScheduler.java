@@ -19,4 +19,10 @@ public class ApplicationScheduler {
     public void updateApplicationStatusToNotApproved() {
         applicationRepository.updateAllApplicationByAnnouncementDate(LocalDateTime.now());
     }
+
+    @Transactional
+    @Scheduled(cron = "0 1 0,15,18 * * ?")
+    public void updateApplicationStatusToFeeNotApproved() {
+        applicationRepository.updateAllApplicationByFeeDueDate(LocalDateTime.now());
+    }
 }

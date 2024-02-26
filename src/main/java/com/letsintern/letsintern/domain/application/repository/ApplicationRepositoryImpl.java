@@ -7,6 +7,7 @@ import com.letsintern.letsintern.domain.application.vo.ApplicationAdminVo;
 import com.letsintern.letsintern.domain.application.vo.ApplicationChallengeAdminVo;
 import com.letsintern.letsintern.domain.application.vo.ApplicationEntireDashboardVo;
 import com.letsintern.letsintern.domain.application.vo.ApplicationVo;
+import com.letsintern.letsintern.domain.program.domain.ProgramFeeType;
 import com.letsintern.letsintern.domain.program.domain.ProgramStatus;
 import com.letsintern.letsintern.domain.program.vo.UserProgramVo;
 import com.querydsl.core.types.Expression;
@@ -198,6 +199,26 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
                         qApplication.program.announcementDate.before(now),
                         qApplication.status.eq(ApplicationStatus.APPLIED),
                         qApplication.isApproved.eq(false))
+                .execute();
+
+        em.flush();
+        em.clear();
+    }
+
+    @Override
+    public void updateAllApplicationByFeeDueDate(LocalDateTime now) {
+        QApplication qApplication = QApplication.application;
+
+        jpaQueryFactory
+                .update(qApplication)
+                .set(qApplication.status, ApplicationStatus.FEE_NOT_APPROVED)
+                .where(
+                        qApplication.program.feeType.ne(ProgramFeeType.FREE),
+                        qApplication.program.status.eq(ProgramStatus.CLOSED),
+                        qApplication.program.feeDueDate.isNotNull(),
+                        qApplication.program.feeDueDate.before(now),
+                        qApplication.isApproved.eq(true),
+                        qApplication.feeIsConfirmed.eq(false))
                 .execute();
 
         em.flush();

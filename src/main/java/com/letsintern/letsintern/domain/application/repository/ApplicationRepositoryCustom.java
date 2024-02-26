@@ -32,7 +32,7 @@ public interface ApplicationRepositoryCustom {
     Application findByProgramIdAndGuestEmail(Long programId, String email);
 
     void updateAllApplicationByAnnouncementDate(LocalDateTime now);
-
+    void updateAllApplicationByFeeDueDate(LocalDateTime now);
     void updateAllApplicationStatusDone(Long programId);
 
     List<String> findAllEmailByIsApproved(Long programId, Boolean isApproved);
@@ -44,4 +44,6 @@ public interface ApplicationRepositoryCustom {
     Page<ApplicationChallengeAdminVo> getApplicationChallengeAdminList(Long programId, Pageable pageable);
 
     Page<ApplicationChallengeAdminVo> getApplicationChallengeAdminListFiltered(Long programId, Pageable pageable, String name, String email, String phoneNum);
+
+
 }
