@@ -4,6 +4,7 @@ import com.letsintern.letsintern.domain.attendance.domain.Attendance;
 import com.letsintern.letsintern.domain.attendance.domain.AttendanceResult;
 import com.letsintern.letsintern.domain.attendance.domain.AttendanceStatus;
 import com.letsintern.letsintern.domain.mission.domain.MissionStatus;
+import com.letsintern.letsintern.domain.mission.domain.MissionType;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -13,6 +14,8 @@ public class MissionMyDashboardDoneVo {
     private Long id;
 
     private Integer th;
+
+    private MissionType type;
 
     private String title;
 
@@ -37,10 +40,11 @@ public class MissionMyDashboardDoneVo {
     private String attendanceComments;
 
     @Builder
-    public MissionMyDashboardDoneVo(Long id, Integer th, String title, String contents, String essentialContentsLink, String additionalContentsLink,
+    public MissionMyDashboardDoneVo(Long id, Integer th, MissionType type, String title, String contents, String essentialContentsLink, String additionalContentsLink,
                                     String limitedContentsLink, String missionComments, Attendance attendance) {
         this.id = id;
         this.th = th;
+        this.type = type;
         this.title = title;
         this.contents = contents;
         this.essentialContentsLink = essentialContentsLink;
