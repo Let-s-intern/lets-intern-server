@@ -105,7 +105,7 @@ public class ProgramService {
     public ProgramAdminEmailResponse getEmailTemplate(Long programId, MailType mailType) {
         final Program program = programRepository.findById(programId).orElseThrow(() -> ProgramNotFound.EXCEPTION);
         return programMapper.toProgramAdminEmailResponse(
-                applicationHelper.getApplicationEmailListOfProgramIdAndMailType(program.getId(), mailType),
+                applicationHelper.getApplicationEmailListOfProgramIdAndMailType(program, mailType),
                 programHelper.createProgramEmailByMailType(program, mailType)
         );
     }

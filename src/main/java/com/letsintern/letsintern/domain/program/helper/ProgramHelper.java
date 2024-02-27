@@ -241,10 +241,17 @@ public class ProgramHelper {
     public String createProgramEmailByMailType(Program program, MailType mailType) {
         switch (mailType) {
             case APPROVED -> {
-                return EmailUtils.getChallengeApprovedEmailText(program);
+                switch (program.getType()) {
+                    case CHALLENGE_FULL, CHALLENGE_HALF -> {return EmailUtils.getChallengeApprovedEmailText(program);}
+                    default -> {return null;}
+                }
             }
             case FEE_CONFIRMED -> {
-                return EmailUtils.getChallengeFeeConfirmedEmailText(program);
+                switch (program.getType()) {
+                    case CHALLENGE_FULL, CHALLENGE_HALF -> {return EmailUtils.getChallengeFeeConfirmedEmailText(program);}
+                    case LETS_CHAT -> {return EmailUtils.getLetsChatApprovedEmailText(program);}
+                    default -> {return null;}
+                }
             }
             default -> {
                 return null;

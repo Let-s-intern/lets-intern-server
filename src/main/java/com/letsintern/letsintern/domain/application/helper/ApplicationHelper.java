@@ -72,10 +72,6 @@ public class ApplicationHelper {
 
         program.setApplicationCount(program.getApplicationCount() + 1);
 
-        if(program.getType().equals(ProgramType.LETS_CHAT)) {
-            emailUtils.sendApplicationApprovedEmail(user.getEmail(), user.getName(), ProgramEmailVo.from(program));
-        }
-
         return applicationMapper.toApplicationCreateResponse(savedApplication);
     }
 
@@ -98,10 +94,6 @@ public class ApplicationHelper {
                 });
         program.setApplicationCount(program.getApplicationCount() + 1);
 
-        if(program.getType().equals(ProgramType.LETS_CHAT)) {
-            emailUtils.sendApplicationApprovedEmail(applicationCreateDTO.getGuestEmail(), applicationCreateDTO.getGuestName(), ProgramEmailVo.from(program));
-        }
-
         return applicationMapper.toApplicationCreateResponse(savedApplication);
     }
 
@@ -117,13 +109,16 @@ public class ApplicationHelper {
     }
 
     /* 프로그램 1개의 안내 메일 전송 대상자 메일 주소 목록 */
-    public List<String> getApplicationEmailListOfProgramIdAndMailType(Long programId, MailType mailType) {
+    public List<String> getApplicationEmailListOfProgramIdAndMailType(Program program, MailType mailType) {
         switch (mailType) {
             case APPROVED -> {
-                return applicationRepository.findAllEmailByIsApproved(programId, true);
+                switch (program.getType()) {
+                    case CHALLENGE_FULL, CHALLENGE_HALF -> {return applicationRepository.findAllEmailByIsApproved(program.getId(), true);}
+                    default -> {return new ArrayList<>();}
+                }
             }
             case FEE_CONFIRMED -> {
-                return applicationRepository.findAllEmailByIsApprovedAndFeeIsConfirmed(programId, true, true);
+                return applicationRepository.findAllEmailByIsApprovedAndFeeIsConfirmed(program.getId(), true, true);
             }
             default -> {
                 return new ArrayList<>();
