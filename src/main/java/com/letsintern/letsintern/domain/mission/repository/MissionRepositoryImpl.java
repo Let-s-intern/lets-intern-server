@@ -34,6 +34,7 @@ public class MissionRepositoryImpl implements MissionRepositoryCustom {
                         qMission.id,
                         qMission.th,
                         qMission.type,
+                        qMission.refund,
                         qMission.title,
                         qMission.startDate,
                         qMission.endDate,
