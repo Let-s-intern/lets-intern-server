@@ -41,6 +41,7 @@ public class MissionRepositoryImpl implements MissionRepositoryCustom {
                         qMission.status,
                         qContents.topic,
                         qMission.attendanceCount,
+                        qMission.lateAttendanceCount,
                         qMission.program.finalHeadCount))
                 .from(qMission)
                 .leftJoin(qContents)

@@ -30,11 +30,13 @@ public class MissionAdminVo {
 
     private Integer attendanceCount;
 
+    private Integer lateAttendanceCount;
+
     private Integer finalHeadCount;
 
 
     public MissionAdminVo(Long id, Integer th, MissionType type, Integer refund, String title, LocalDateTime startDate, LocalDateTime endDate,
-                          MissionStatus status, ContentsTopic essentialContentsTopic, Integer attendanceCount, Integer finalHeadCount) {
+                          MissionStatus status, ContentsTopic essentialContentsTopic, Integer attendanceCount, Integer lateAttendanceCount, Integer finalHeadCount) {
         this.id = id;
         this.th = th;
         this.type = type;
@@ -45,6 +47,7 @@ public class MissionAdminVo {
         this.status = status;
         if(essentialContentsTopic != null) this.essentialContentsTopic = essentialContentsTopic;
         this.attendanceCount = attendanceCount;
+        this.lateAttendanceCount = lateAttendanceCount;
         this.finalHeadCount = finalHeadCount;
     }
 }
