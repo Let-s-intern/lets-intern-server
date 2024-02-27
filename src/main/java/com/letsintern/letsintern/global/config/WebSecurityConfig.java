@@ -58,23 +58,25 @@ public class WebSecurityConfig {
     };
 
     private final String[] AdminGetPatterns = {
-            "/user/admin/**", "/memo/**", "/program/admin/**", "/faq/**", "/application/admin/**", "/review/admin/**"
+            "/user/admin/**", "/memo/**", "/program/admin/**", "/faq/**", "/application/admin/**", "/review/admin/**",
+            "/attendance/admin/**", "/contents/**", "/mission/admin/**"
     };
 
     private final String[] AdminPostPatterns = {
-            "/memo/**", "/program", "/faq/**"
+            "/memo/**", "/program", "/faq/**", "/contents/**", "/mission/**", "/notice/**"
     };
 
     private final String[] AdminPatchPatterns = {
-            "/user/admin/**", "/memo/**", "/program/**", "/faq/**", "/application/**", "/review/**"
+            "/user/admin/**", "/memo/**", "/program/**", "/faq/**", "/application/admin/**", "/review/**",
+            "/attendance/admin/**", "/contents/**", "/mission/**", "/notice/**"
     };
 
     private final String[] AdminDeletePatterns = {
-            "/memo/**", "/program/**", "/faq/**", "/user/admin/**"
+            "/memo/**", "/program/**", "/faq/**", "/user/admin/**", "/contents/**", "/mission/**", "/notice/**"
     };
 
     private final String[] UserGetPatterns = {
-            "/user", "/user/withdraw", "/user/detail-info", "/application", "/review/**"
+            "/user", "/user/withdraw", "/user/detail-info", "/review/**"
     };
 
     private final String[] UserPostPatterns = {

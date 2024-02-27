@@ -16,6 +16,8 @@ public class MissionAdminVo {
 
     private MissionType type;
 
+    private Integer refund;
+
     private String title;
 
     private LocalDateTime startDate;
@@ -31,11 +33,12 @@ public class MissionAdminVo {
     private Integer finalHeadCount;
 
 
-    public MissionAdminVo(Long id, Integer th, MissionType type, String title, LocalDateTime startDate, LocalDateTime endDate,
+    public MissionAdminVo(Long id, Integer th, MissionType type, Integer refund, String title, LocalDateTime startDate, LocalDateTime endDate,
                           MissionStatus status, ContentsTopic essentialContentsTopic, Integer attendanceCount, Integer finalHeadCount) {
         this.id = id;
         this.th = th;
         this.type = type;
+        this.refund = refund;
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;

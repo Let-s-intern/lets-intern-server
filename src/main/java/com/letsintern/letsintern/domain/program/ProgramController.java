@@ -98,14 +98,14 @@ public class ProgramController {
         return ResponseEntity.ok(null);
     }
 
-    @Operation(summary = "어드민 프로그램 최종 참여자수 저장")
-    @GetMapping("/{programId}/headcount")
+    @Operation(summary = "어드민 프로그램 최종 참여자 수 저장")
+    @GetMapping("/admin/{programId}/headcount")
     public void saveFinalHeadCount(@PathVariable Long programId) {
         programService.saveFinalHeadCount(programId);
     }
 
     @Operation(summary = "어드민 프로그램 선발 및 입금 안내, 참여 확정 안내 메일 템플릿")
-    @GetMapping("/{programId}/email")
+    @GetMapping("/admin/{programId}/email")
     public ProgramAdminEmailResponse getEmailTemplate(@PathVariable Long programId, @RequestParam MailType mailType) {
         return programService.getEmailTemplate(programId, mailType);
     }
