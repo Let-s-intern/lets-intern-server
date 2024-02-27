@@ -4,6 +4,7 @@ import com.letsintern.letsintern.domain.application.domain.Application;
 import com.letsintern.letsintern.domain.application.repository.ApplicationRepository;
 import com.letsintern.letsintern.domain.program.domain.MailStatus;
 import com.letsintern.letsintern.domain.program.domain.Program;
+import com.letsintern.letsintern.domain.program.domain.ProgramFeeType;
 import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
 import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
 import com.letsintern.letsintern.global.common.util.EmailUtils;
@@ -56,8 +57,14 @@ public class ReviewMailJobConfig {
     @StepScope
     public Tasklet sendReviewMailTasklet(@Value("#{jobParameters[programId]}") Long programId) {
         return ((contribution, chunkContext) -> {
-            List<Application> applicationList = applicationRepository.findAllByProgramIdAndIsApproved(programId, true);
             Program program = programRepository.findById(programId).orElseThrow(() -> ProgramNotFound.EXCEPTION);
+            List<Application> applicationList;
+            if(program.getFeeType().equals(ProgramFeeType.FREE)) {
+                applicationList = applicationRepository.findAllByProgramIdAndIsApproved(programId, true);
+            } else {
+                applicationList = applicationRepository.findAllByProgramIdAndIsApprovedAndFeeIsConfirmed(programId, true, true);
+            }
+
             if(!applicationList.isEmpty()) emailUtils.sendReviewMail(applicationList, program);
 
             return RepeatStatus.FINISHED;

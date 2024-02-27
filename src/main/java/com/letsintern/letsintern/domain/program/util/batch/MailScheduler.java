@@ -26,19 +26,19 @@ public class MailScheduler {
     private final RemindMailJobConfig remindMailJobConfig;
     private final ReviewMailJobConfig reviewMailJobConfig;
 
-    @Scheduled(cron = "0 10 0,15,18 * * ?")
-    public void sendRemindMail() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
-        List<Program> mailStatusYetPrograms = programRepository.findAllLetsChatByMailStatusAndAnnouncementDate(MailStatus.YET, LocalDateTime.now());
-        for(Program program : mailStatusYetPrograms) {
-            jobLauncher.run(
-                    remindMailJobConfig.remindMailJob(),
-                    new JobParametersBuilder()
-                            .addLong("programId", program.getId())
-                            .addLong("time", new Date().getTime())
-                            .toJobParameters()
-            );
-        }
-    }
+//    @Scheduled(cron = "0 10 0,15,18 * * ?")
+//    public void sendRemindMail() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
+//        List<Program> mailStatusYetPrograms = programRepository.findAllLetsChatByMailStatusAndAnnouncementDate(MailStatus.YET, LocalDateTime.now());
+//        for(Program program : mailStatusYetPrograms) {
+//            jobLauncher.run(
+//                    remindMailJobConfig.remindMailJob(),
+//                    new JobParametersBuilder()
+//                            .addLong("programId", program.getId())
+//                            .addLong("time", new Date().getTime())
+//                            .toJobParameters()
+//            );
+//        }
+//    }
 
     @Scheduled(cron = "0 10 10 * * ?")
     public void sendReviewMail() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
