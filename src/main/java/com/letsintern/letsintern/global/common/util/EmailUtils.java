@@ -96,6 +96,17 @@ public class EmailUtils {
         return simpleMailMessage;
     }
 
+    public static String getLetsChatApprovedEmailText(Program program) {
+        return "[렛츠인턴] " + program.getType().getValue() + " #" + program.getTh() + ". " + program.getTitle() + " 세션 확정 안내\n\n" +
+                MAIL_HEADER_LONG +
+                createTitleInfo(program.getType(), program.getTh(), program.getTitle()) + "에 신청해주셔서 감사합니다!\n" +
+                program.getType().getValue() + " #" + program.getTh() + " 참여 확정되어 안내드립니다.\n\n" +
+                createStartDateInfo(program.getStartDate(), program.getEndDate()) +
+                createProgramWayInfo(program.getWay(), program.getLink(), program.getLinkPassword(), program.getLocation()) + "\n\n" +
+                "세션 당일에 뵈어요 :)\n" + MAIL_NOTICE + "\n\n" +
+                MAIL_FROM + MAIL_FOOTER;
+    }
+
     public static String getChallengeApprovedEmailText(Program program) {
         return "[렛츠인턴] " + program.getTitle() + " 선발 및 입금 안내\n\n" +
 
@@ -173,11 +184,11 @@ public class EmailUtils {
         return emailAddresses;
     }
 
-    private String createTitleInfo(ProgramType type, Integer th, String title) {
+    private static String createTitleInfo(ProgramType type, Integer th, String title) {
         return type.getValue() + " #" + th + " [" + title + "]";
     }
 
-    private String createProgramWayInfo(ProgramWay way, String link, String linkPassword, String location) {
+    private static String createProgramWayInfo(ProgramWay way, String link, String linkPassword, String location) {
         String wayInfo;
 
         if(way.equals(ProgramWay.ONLINE)) {
@@ -187,15 +198,15 @@ public class EmailUtils {
             wayInfo = "- 장소: " + location;
         }
         else {
-            wayInfo = "- Zoom 링크: " + link + "\n-Zoom 회의실 암호: " + linkPassword
+            wayInfo = "- Zoom 링크: " + link + "\n- Zoom 회의실 암호: " + linkPassword
                     + "\n- 장소: " + location;
         }
 
         return wayInfo;
     }
 
-    private String createStartDateInfo(LocalDateTime startDate, LocalDateTime endDate) {
-        return "- 일시 : " + stringUtils.dateToString(startDate) + " ~ " + stringUtils.dateToString(endDate).substring(14) + "\n";
+    private static String createStartDateInfo(LocalDateTime startDate, LocalDateTime endDate) {
+        return "- 일시 : " + StringUtils.dateToString(startDate) + " ~ " + StringUtils.dateToString(endDate).substring(14) + "\n";
     }
 
     private SimpleMailMessage createPasswordResetMessage(String emailAddress, String tempPassword) {
