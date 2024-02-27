@@ -34,19 +34,19 @@ public class MissionController {
         return missionService.createMission(programId, missionCreateDTO);
     }
 
-    @GetMapping("/{programId}/simple")
+    @GetMapping("/admin/{programId}/simple")
     @Operation(summary = "어드민 프로그램별 미션 전체 목록 - 미션 제출 현황")
     public MissionAdminSimpleListResponse getMissionAdminSimpleList(@PathVariable Long programId) {
         return missionService.getMissionAdminSimpleList(programId);
     }
 
-    @GetMapping("/{programId}")
+    @GetMapping("/admin/{programId}")
     @Operation(summary = "어드민 프로그램별 미션 전체 목록")
     public MissionAdminListResponse getMissionAdminList(@PathVariable Long programId, @PageableDefault(size = 20) Pageable pageable) {
         return missionService.getMissionAdminList(programId, pageable);
     }
 
-    @GetMapping("/detail/{missionId}")
+    @GetMapping("/admin/detail/{missionId}")
     @Operation(summary = "어드민 미션 1개 상세보기")
     public MissionAdminDetailVo getMissionAdmin(@PathVariable Long missionId) {
         return missionService.getMissionAdmin(missionId);

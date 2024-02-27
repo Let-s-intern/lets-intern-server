@@ -38,7 +38,7 @@ public class AttendanceController {
         return attendanceService.updateAttendance(attendanceId, attendanceUpdateDTO, principalDetails);
     }
 
-    @GetMapping("")
+    @GetMapping("/admin")
     @Operation(summary = "어드민 출석 목록 보기")
     public AttendanceAdminListResponse getAttendanceAdminList(@RequestParam(required = false) Long missionId, @PageableDefault(size = 20) Pageable pageable) {
         return attendanceService.getAttendanceAdminList(missionId, pageable);
@@ -50,7 +50,7 @@ public class AttendanceController {
         return attendanceService.updateAttendanceAdmin(attendanceId, attendanceAdminUpdateDTO);
     }
 
-    @GetMapping("/{missionId}/refund")
+    @GetMapping("/admin/{missionId}/refund")
     @Operation(summary = "어드민 미션 당 보증금 환급 계좌 정보")
     public AccountListResponse getRefundAccountVos(@PathVariable Long missionId) {
         return attendanceService.getAccountListResponse(missionId);

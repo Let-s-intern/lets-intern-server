@@ -88,7 +88,7 @@ public class ApplicationController {
     }
 
     @Operation(summary = "어드민 지원서 상태 변경")
-    @PatchMapping("/{applicationId}")
+    @PatchMapping("/admin/{applicationId}")
     public ApplicationIdResponse updateApplicationStatus(
             @PathVariable Long applicationId,
             @RequestBody ApplicationUpdateDTO applicationUpdateDTO) {
