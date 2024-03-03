@@ -82,16 +82,20 @@ public class ApplicationHelper {
             throw ApplicationGuestBadRequest.EXCEPTION;
         }
 
+        Program program = programRepository.findById(programId).orElseThrow(() -> ProgramNotFound.EXCEPTION);
+        /* 보증금 프로그램인데 계좌 추가 정보 없는 경우 */
+        if(program.getFeeType().equals(ProgramFeeType.REFUND)) {
+            if(applicationCreateDTO.getAccountType() == null || applicationCreateDTO.getAccountNumber() == null) {
+                throw ApplicationUserBadRequestAccount.EXCEPTION;
+            }
+        }
+
         /* 기존 신청 내역 확인 */
         if(checkGuestApplicationExist(programId, applicationCreateDTO.getGuestEmail())) throw DuplicateApplication.EXCEPTION;
 
         Application newGuestApplication = applicationMapper.toEntity(programId, applicationCreateDTO, null);
         Application savedApplication = applicationRepository.save(newGuestApplication);
 
-        Program program = programRepository.findById(programId)
-                .orElseThrow(() -> {
-                    throw ProgramNotFound.EXCEPTION;
-                });
         program.setApplicationCount(program.getApplicationCount() + 1);
 
         return applicationMapper.toApplicationCreateResponse(savedApplication);

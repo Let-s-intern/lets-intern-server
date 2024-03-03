@@ -81,6 +81,7 @@ public class User {
     private AccountType accountType;
 
     @Nullable
+    @Column(length = 20)
     private String accountNumber;
 
     @JsonIgnore

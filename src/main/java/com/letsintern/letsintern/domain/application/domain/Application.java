@@ -3,7 +3,9 @@ package com.letsintern.letsintern.domain.application.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.letsintern.letsintern.domain.application.dto.request.ApplicationCreateDTO;
 import com.letsintern.letsintern.domain.program.domain.Program;
+import com.letsintern.letsintern.domain.program.domain.ProgramFeeType;
 import com.letsintern.letsintern.domain.program.domain.ProgramType;
+import com.letsintern.letsintern.domain.user.domain.AccountType;
 import com.letsintern.letsintern.domain.user.domain.User;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
@@ -61,6 +63,14 @@ public class Application {
     @Size(max = 30)
     private String email;
 
+    @Nullable
+    @Enumerated(EnumType.STRING)
+    private AccountType accountType;
+
+    @Nullable
+    @Column(length = 20)
+    private String accountNumber;
+
     @NotNull
     @Column(length = 10)
     private ApplicationType type;
@@ -110,7 +120,7 @@ public class Application {
     @Builder
     private Application(Program program, User user, Integer grade, String wishCompany, ApplicationWishJob wishJob,
                              String applyMotive, String preQuestions, InflowPath inflowPath,
-                             String name, String phoneNum, String email, ApplicationWay way) {
+                             String name, String phoneNum, String email, AccountType accountType, String accountNumber, ApplicationWay way) {
         this.program = program;
         this.user = user;
         this.grade = grade;
@@ -127,6 +137,11 @@ public class Application {
             this.name = name;
             this.phoneNum = phoneNum;
             this.email = email;
+
+            if(program.getFeeType().equals(ProgramFeeType.REFUND)) {
+                this.accountType = accountType;
+                this.accountNumber = accountNumber;
+            }
         }
 
         /* 회원 */
@@ -152,6 +167,8 @@ public class Application {
                 .name(applicationCreateDTO.getGuestName())
                 .phoneNum(applicationCreateDTO.getGuestPhoneNum())
                 .email(applicationCreateDTO.getGuestEmail())
+                .accountType(applicationCreateDTO.getAccountType())
+                .accountNumber(applicationCreateDTO.getAccountNumber())
                 .way(applicationCreateDTO.getWay())
                 .build();
     }

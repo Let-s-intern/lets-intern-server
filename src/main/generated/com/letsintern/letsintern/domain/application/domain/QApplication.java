@@ -22,6 +22,10 @@ public class QApplication extends EntityPathBase<Application> {
 
     public static final QApplication application = new QApplication("application");
 
+    public final StringPath accountNumber = createString("accountNumber");
+
+    public final EnumPath<com.letsintern.letsintern.domain.user.domain.AccountType> accountType = createEnum("accountType", com.letsintern.letsintern.domain.user.domain.AccountType.class);
+
     public final StringPath applyMotive = createString("applyMotive");
 
     public final EnumPath<ApplicationAttendance> attendance = createEnum("attendance", ApplicationAttendance.class);
