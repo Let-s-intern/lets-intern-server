@@ -23,6 +23,7 @@ import com.letsintern.letsintern.domain.program.helper.ProgramHelper;
 import com.letsintern.letsintern.domain.program.mapper.ProgramMapper;
 import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
 import com.letsintern.letsintern.domain.user.domain.User;
+import com.letsintern.letsintern.domain.user.domain.UserRole;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -114,8 +115,10 @@ public class ProgramService {
     public ProgramDashboardResponse getProgramDashboard(Long programId, PrincipalDetails principalDetails, Pageable pageable) {
         final Program program = programRepository.findById(programId).orElseThrow(() -> ProgramNotFound.EXCEPTION);
         final User user = principalDetails.getUser();
-        final Application application = applicationRepository.findByProgramIdAndUserId(programId, user.getId());
-        if(application == null) throw  ApplicationNotFound.EXCEPTION;
+        if(!user.getRole().equals(UserRole.ROLE_ADMIN)) {
+            final Application application = applicationRepository.findByProgramIdAndUserId(programId, user.getId());
+            if(application == null) throw  ApplicationNotFound.EXCEPTION;
+        }
 
         MissionDashboardVo dailyMission = missionHelper.getDailyMission(program.getId(), program.getStartDate());
         Integer yesterdayHeadCount = (dailyMission == null) ? null : attendanceRepository.countAllByMissionProgramIdAndMissionThAndStatusAndResult(programId, dailyMission.getTh() - 1, AttendanceStatus.PRESENT, AttendanceResult.PASS);
@@ -135,8 +138,10 @@ public class ProgramService {
     public ProgramMyDashboardResponse getProgramMyDashboard(Long programId, PrincipalDetails principalDetails) {
         final Program program = programRepository.findById(programId).orElseThrow(() -> ProgramNotFound.EXCEPTION);
         final User user = principalDetails.getUser();
-        final Application application = applicationRepository.findByProgramIdAndUserId(programId, user.getId());
-        if(application == null) throw  ApplicationNotFound.EXCEPTION;
+        if(!user.getRole().equals(UserRole.ROLE_ADMIN)) {
+            final Application application = applicationRepository.findByProgramIdAndUserId(programId, user.getId());
+            if(application == null) throw  ApplicationNotFound.EXCEPTION;
+        }
 
         return programMapper.toProgramMyDashboardResponse(
                 missionHelper.getDailyMissionDetail(program.getId(), program.getStartDate(), user.getId()),
