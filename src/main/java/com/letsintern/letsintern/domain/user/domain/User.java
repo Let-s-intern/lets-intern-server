@@ -126,6 +126,7 @@ public class User {
         this.password = oAuth2UserInfo.getOAuth2Id();
         this.name = oAuth2UserInfo.getName();
         this.email = oAuth2UserInfo.getEmail();
+        this.phoneNum = oAuth2UserInfo.getPhoneNum();
         return this;
     }
 }
