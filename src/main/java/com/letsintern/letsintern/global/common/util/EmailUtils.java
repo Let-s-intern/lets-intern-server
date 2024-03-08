@@ -17,8 +17,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EmailUtils {
     private final JavaMailSender javaMailSender;
-    private static final SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-    private final StringUtils stringUtils;
 
     private static final String MAIL_HEADER = "안녕하세요, 렛츠인턴입니다.\n";
     private static final String MAIL_HEADER_LONG = "안녕하세요,\n커리어의 시작을 함께 하는 렛츠인턴입니다.\n\n";
@@ -43,6 +41,7 @@ public class EmailUtils {
     }
 
     private SimpleMailMessage createApplicationApprovedMessage(String emailAddress, String name, ProgramEmailVo programEmailVo) {
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setTo(emailAddress);
         simpleMailMessage.setSubject("[렛츠인턴] " + programEmailVo.getType().getValue() + " #" + programEmailVo.getTh() + ". " + programEmailVo.getTitle() + " 세션 확정 안내");
 
@@ -60,6 +59,7 @@ public class EmailUtils {
     }
 
     private SimpleMailMessage createRemindMessage(List<Application> applicationList, Program program) {
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         String[] emailAddressList = getEmailAddressList(applicationList);
         simpleMailMessage.setBcc(emailAddressList);
         simpleMailMessage.setSubject("[렛츠인턴] D-1 리마인드 안내: " + program.getTitle());
@@ -78,6 +78,7 @@ public class EmailUtils {
 
 
     private SimpleMailMessage createReviewMessage(List<Application> applicationList, Program program) {
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         String[] emailAddressList = getEmailAddressList(applicationList);
         simpleMailMessage.setBcc(emailAddressList);
         simpleMailMessage.setSubject("[렛츠인턴] " + program.getType().getValue() + " #" + program.getTh() + ". " + program.getTitle() + " 후기 작성 안내");
@@ -210,6 +211,7 @@ public class EmailUtils {
     }
 
     private SimpleMailMessage createPasswordResetMessage(String emailAddress, String tempPassword) {
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setTo(emailAddress);
         simpleMailMessage.setSubject("[렛츠인턴] 비밀번호 재설정 메일입니다.");
         simpleMailMessage.setText("안녕하세요, 렛츠인턴입니다.\n\n" +
