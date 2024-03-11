@@ -141,12 +141,18 @@ public class MissionHelper {
     public MissionDashboardVo getDailyMission(Long programId, LocalDateTime startDate) {
         LocalDate today = LocalDate.now();
         Period period = Period.between(LocalDate.from(startDate), today);
+
+        int currentHour = LocalDateTime.now().getHour();
+        if(currentHour < 6) return missionRepository.getMissionDashboardVo(programId, period.getDays()).orElse(null);
         return missionRepository.getMissionDashboardVo(programId, period.getDays() + 1).orElse(null);
     }
 
     public MissionMyDashboardVo getDailyMissionDetail(Long programId, LocalDateTime startDate, Long userId) {
         LocalDate today = LocalDate.now();
         Period period = Period.between(LocalDate.from(startDate), today);
+
+        int currentHour = LocalDateTime.now().getHour();
+        if(currentHour < 6) return missionRepository.getMissionMyDashboardVo(programId, period.getDays(), userId).orElse(null);
         return missionRepository.getMissionMyDashboardVo(programId, period.getDays() + 1, userId).orElse(null);
     }
 
