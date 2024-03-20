@@ -23,6 +23,8 @@ public enum ApplicationWishJob {
     MARKETING_PERFORMANCE("퍼포먼스 마케팅", ProgramTopic.MARKETING),
     MARKETING_CRM("CRM 마케팅", ProgramTopic.MARKETING),
     MARKETING_CONTENTS("콘텐츠 마케팅", ProgramTopic.MARKETING),
+    MARKETING_PR("홍보 PR", ProgramTopic.MARKETING),
+    MARKETING_AE("광고대행사(AE)", ProgramTopic.MARKETING),
 
     AD_ALL("광고 전반", ProgramTopic.AD),
     AD_PR("홍보 PR", ProgramTopic.AD),
@@ -32,7 +34,10 @@ public enum ApplicationWishJob {
     DESIGN_GRAPHIC("그래픽 디자인", ProgramTopic.DESIGN),
     DESIGN_UIUX("UI/UX 디자인", ProgramTopic.DESIGN),
 
-
+    BROADCASTING_ALL("방송 전반", ProgramTopic.BROADCASTING),
+    BROADCASTING_PD("PD", ProgramTopic.BROADCASTING),
+    BROADCASTING_WRITER("작가", ProgramTopic.BROADCASTING),
+    BROADCASTING_PRESS("언론(아나운서, 기자)", ProgramTopic.BROADCASTING),
 
     DEVELOPMENT_ALL("개발 전반", ProgramTopic.DEVELOPMENT),
     DEVELOPMENT_FRONTEND("프론트엔드 개발", ProgramTopic.DEVELOPMENT),
