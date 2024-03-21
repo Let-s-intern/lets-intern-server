@@ -23,8 +23,6 @@ public enum ApplicationWishJob {
     MARKETING_PERFORMANCE("퍼포먼스 마케팅", ProgramTopic.MARKETING),
     MARKETING_CRM("CRM 마케팅", ProgramTopic.MARKETING),
     MARKETING_CONTENTS("콘텐츠 마케팅", ProgramTopic.MARKETING),
-    MARKETING_PR("홍보 PR", ProgramTopic.MARKETING),
-    MARKETING_AE("광고대행사(AE)", ProgramTopic.MARKETING),
 
     AD_ALL("광고 전반", ProgramTopic.AD),
     AD_PR("홍보 PR", ProgramTopic.AD),
