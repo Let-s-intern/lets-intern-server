@@ -63,6 +63,10 @@ public class ProgramService {
         return programMapper.toProgramIdResponseDTO(programHelper.updateProgram(programId, programUpdateRequestDTO));
     }
 
+    public ProgramMentorPasswordResponse getProgramMentorPassword(Long programId) {
+        return programMapper.toProgramMentorPasswordResponse(programHelper.getProgramMentorPassword(programId));
+    }
+
     @Transactional
     public ProgramListDTO getProgramThumbnailList(String type, Pageable pageable) {
         return programHelper.getProgramThumbnailList(type, pageable);

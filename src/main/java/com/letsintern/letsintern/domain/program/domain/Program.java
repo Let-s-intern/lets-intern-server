@@ -116,6 +116,9 @@ public class Program {
     @Nullable
     private String accountNumber;
 
+    /* Lets Chat */
+    @Nullable
+    private String mentorPassword;
 
     /* Challenge */
     @Nullable
@@ -146,7 +149,7 @@ public class Program {
     private Program(ProgramType type, Integer th, String title, Integer headcount,
                     LocalDateTime dueDate, LocalDateTime announcementDate, LocalDateTime startDate, LocalDateTime endDate,
                     String contents, ProgramWay way, String location, String notice, List<Long> faqIdList,
-                    ProgramFeeType feeType, Integer feeRefund, Integer feeCharge, LocalDateTime feeDueDate, AccountType accountType, String accountNumber,
+                    ProgramFeeType feeType, Integer feeRefund, Integer feeCharge, LocalDateTime feeDueDate, AccountType accountType, String accountNumber, String mentorPassword,
                     ProgramTopic topic, String openKakaoLink, String openKakaoPassword, ZoomMeetingCreateResponse zoomMeetingCreateResponse) {
         this.type = type;
         this.th = th;
@@ -187,11 +190,12 @@ public class Program {
 
         // LETS_CHAT
         if(type.equals(ProgramType.LETS_CHAT)) {
+            this.mentorPassword = mentorPassword;
             this.mailStatus = MailStatus.YET;
         }
     }
 
-    public static Program of(ProgramCreateRequestDTO programCreateRequestDTO, ZoomMeetingCreateResponse zoomMeetingCreateResponse) {
+    public static Program of(ProgramCreateRequestDTO programCreateRequestDTO, String mentorPassword, ZoomMeetingCreateResponse zoomMeetingCreateResponse) {
         return Program.builder()
                 .type(programCreateRequestDTO.getType())
                 .th(programCreateRequestDTO.getTh())
@@ -212,6 +216,7 @@ public class Program {
                 .feeDueDate(programCreateRequestDTO.getFeeDueDate())
                 .accountType(programCreateRequestDTO.getAccountType())
                 .accountNumber(programCreateRequestDTO.getAccountNumber())
+                .mentorPassword(mentorPassword)
                 .topic(programCreateRequestDTO.getTopic())
                 .openKakaoLink(programCreateRequestDTO.getOpenKakaoLink())
                 .openKakaoPassword(programCreateRequestDTO.getOpenKakaoPassword())

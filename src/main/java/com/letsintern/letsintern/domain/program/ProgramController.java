@@ -78,6 +78,12 @@ public class ProgramController {
         return programService.getProgram(programId);
     }
 
+    @Operation(summary = "어드민 렛츠챗 프로그램 1개의 멘토 비밀번호 보기")
+    @GetMapping("/admin/{programId}/mentor")
+    public ProgramMentorPasswordResponse getProgramMentorPassword(@PathVariable Long programId) {
+        return programService.getProgramMentorPassword(programId);
+    }
+
     @Operation(summary = "어드민 프로그램 신규 개설")
     @PostMapping("")
     public ProgramIdResponseDTO createProgram(

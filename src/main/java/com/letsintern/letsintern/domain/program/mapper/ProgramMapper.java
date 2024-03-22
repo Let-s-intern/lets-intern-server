@@ -21,8 +21,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProgramMapper {
 
-    public Program toEntity(ProgramCreateRequestDTO programCreateRequestDTO, ZoomMeetingCreateResponse zoomMeetingCreateResponse) {
-        return Program.of(programCreateRequestDTO, zoomMeetingCreateResponse);
+    public Program toEntity(ProgramCreateRequestDTO programCreateRequestDTO, String mentorPassword, ZoomMeetingCreateResponse zoomMeetingCreateResponse) {
+        return Program.of(programCreateRequestDTO, mentorPassword, zoomMeetingCreateResponse);
     }
 
     public ProgramAdminEmailResponse toProgramAdminEmailResponse(List<String> emailAddressList, String emailContents) {
@@ -31,6 +31,10 @@ public class ProgramMapper {
 
     public ProgramIdResponseDTO toProgramIdResponseDTO(Long programId) {
         return ProgramIdResponseDTO.from(programId);
+    }
+
+    public ProgramMentorPasswordResponse toProgramMentorPasswordResponse(String mentorPassword) {
+        return ProgramMentorPasswordResponse.from(mentorPassword);
     }
 
     public ProgramListDTO toProgramListDTO(Page<ProgramThumbnailVo> programList) {
@@ -53,4 +57,6 @@ public class ProgramMapper {
     public ProgramEntireDashboardResponse toProgramEntireDashboardResponse(Page<ApplicationEntireDashboardVo> dashboardList, List<ApplicationWishJob> wishJobList) {
         return ProgramEntireDashboardResponse.of(dashboardList, wishJobList);
     }
+
+
 }
