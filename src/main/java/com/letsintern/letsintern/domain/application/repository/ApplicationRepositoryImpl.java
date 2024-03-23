@@ -461,4 +461,26 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
 
         return PageableExecutionUtils.getPage(applicationVos, pageable, count::fetchOne);
     }
+
+    @Override
+    public List<String> findAllApplyMotiveByProgramId(Long programId) {
+        QApplication qApplication = QApplication.application;
+
+        return jpaQueryFactory
+                .select(qApplication.applyMotive)
+                .from(qApplication)
+                .where(qApplication.program.id.eq(programId))
+                .fetch();
+    }
+
+    @Override
+    public List<String> findAllPreQuestionsByProgramId(Long programId) {
+        QApplication qApplication = QApplication.application;
+
+        return jpaQueryFactory
+                .select(qApplication.preQuestions)
+                .from(qApplication)
+                .where(qApplication.program.id.eq(programId).and(qApplication.preQuestions.isNotNull()))
+                .fetch();
+    }
 }

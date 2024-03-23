@@ -107,4 +107,15 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
                 .where(qReview.id.eq(reviewId))
                 .fetchFirst());
     }
+
+    @Override
+    public List<String> findAllReviewContentsByProgramId(Long programId) {
+        QReview qReview = QReview.review;
+
+        return jpaQueryFactory
+                .select(qReview.reviewContents)
+                .from(qReview)
+                .where(qReview.programId.eq(programId))
+                .fetch();
+    }
 }

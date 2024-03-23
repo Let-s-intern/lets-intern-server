@@ -7,13 +7,11 @@ import com.letsintern.letsintern.domain.application.repository.ApplicationReposi
 import com.letsintern.letsintern.domain.faq.repository.FaqRepository;
 import com.letsintern.letsintern.domain.faq.vo.FaqVo;
 import com.letsintern.letsintern.domain.program.domain.*;
+import com.letsintern.letsintern.domain.program.dto.request.LetsChatMentorPasswordRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramUpdateRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.response.*;
-import com.letsintern.letsintern.domain.program.exception.ChallengeProgramCreateBadRequest;
-import com.letsintern.letsintern.domain.program.exception.ChargeProgramCreateBadRequest;
-import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
-import com.letsintern.letsintern.domain.program.exception.RefundProgramCreateBadRequest;
+import com.letsintern.letsintern.domain.program.exception.*;
 import com.letsintern.letsintern.domain.program.mapper.ProgramMapper;
 import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
 import com.letsintern.letsintern.domain.program.vo.ProgramDetailVo;
@@ -28,9 +26,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @Component
@@ -46,9 +47,13 @@ public class ProgramHelper {
 
     private final ZoomMeetingApiHelper zoomMeetingApiHelper;
 
-    public Long createProgram(ProgramCreateRequestDTO programCreateRequestDTO) throws Exception {
-        ZoomMeetingCreateResponse zoomMeetingCreateResponse = null;
+    private int generateRandomNumberOfLength(int length) {
+        SecureRandom secureRandom = new SecureRandom();
+        int upperLimit = (int) Math.pow(10, length);
+        return secureRandom.nextInt(upperLimit);
+    }
 
+    public Long createProgram(ProgramCreateRequestDTO programCreateRequestDTO) throws Exception {
         // 이용료 프로그램 정보 입력 확인
         if(programCreateRequestDTO.getFeeType().equals(ProgramFeeType.CHARGE)) {
             if(programCreateRequestDTO.getFeeCharge() == null || programCreateRequestDTO.getAccountType() == null || programCreateRequestDTO.getAccountNumber() == null || programCreateRequestDTO.getFeeDueDate() == null) {
@@ -71,6 +76,7 @@ public class ProgramHelper {
         }
 
         // [렛츠챗/챌린지] Zoom Meeting 생성
+        ZoomMeetingCreateResponse zoomMeetingCreateResponse = null;
         if(programCreateRequestDTO.getType().equals(ProgramType.LETS_CHAT) || programCreateRequestDTO.getType().equals(ProgramType.CHALLENGE_HALF) || programCreateRequestDTO.getType().equals(ProgramType.CHALLENGE_FULL)) {
             zoomMeetingCreateResponse = zoomMeetingApiHelper.createMeeting(
                     programCreateRequestDTO.getType(),
@@ -79,7 +85,13 @@ public class ProgramHelper {
                     programCreateRequestDTO.getStartDate());
         }
 
-        Program savedProgram = programRepository.save(programMapper.toEntity(programCreateRequestDTO, zoomMeetingCreateResponse));
+        // [렛츠챗] 멘토 세션 안내 페이지용 비밀번호 생성
+        String mentorPassword = null;
+        if(programCreateRequestDTO.getType().equals(ProgramType.LETS_CHAT)) {
+            mentorPassword = String.valueOf(generateRandomNumberOfLength(4));
+        }
+
+        Program savedProgram = programRepository.save(programMapper.toEntity(programCreateRequestDTO, mentorPassword, zoomMeetingCreateResponse));
         return savedProgram.getId();
     }
 
@@ -177,6 +189,22 @@ public class ProgramHelper {
         return program.getId();
     }
 
+    public String getProgramMentorPassword(Long programId) {
+        final Program program = programRepository.findById(programId).orElseThrow(() -> ProgramNotFound.EXCEPTION);
+        return program.getMentorPassword();
+    }
+
+    public LetsChatPriorSessionNoticeResponse getLetsChatPriorSessionNotice(Program program) {
+        List<String> applyMotiveList = applicationRepository.findAllApplyMotiveByProgramId(program.getId());
+        List<String> preQuestionsList = applicationRepository.findAllPreQuestionsByProgramId(program.getId());
+        return programMapper.toLetsChatPriorSessionNoticeResponse(program, applyMotiveList, preQuestionsList);
+    }
+
+    public LetsChatAfterSessionNoticeResponse getLetsChatAfterSessionNotice(Long programId) {
+        List<String> reviewList = reviewRepository.findAllReviewContentsByProgramId(programId);
+        return programMapper.toLetsChatAfterSessionNoticeResponse(reviewList);
+    }
+
     public ProgramListDTO getProgramThumbnailList(String type, Pageable pageable) {
         Page<ProgramThumbnailVo> programList;
         if(type != null) programList = programRepository.findProgramThumbnailsByType(type, pageable);
@@ -198,7 +226,6 @@ public class ProgramHelper {
         }
       
         List<ReviewVo> reviewList = reviewRepository.findAllVosByProgramType(programDetailVo.getType());
-
         List<ApplicationWishJob> wishJobList = ApplicationWishJob.getApplicationWishJobListByProgramTopic(programDetailVo.getTopic());
 
         /* 회원 - 기존 신청 내역 존재 확인 */

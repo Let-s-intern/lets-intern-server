@@ -12,7 +12,10 @@ import java.util.Optional;
 public interface ReviewRepositoryCustom {
 
     Page<Review> findAllByProgramId(Long programId, Pageable pageable);
+
     List<ReviewVo> findAllVosByProgramType(ProgramType programType);
 
     Optional<ReviewVo> findVoReviewId(Long reviewId);
+
+    List<String> findAllReviewContentsByProgramId(Long programId);
 }
