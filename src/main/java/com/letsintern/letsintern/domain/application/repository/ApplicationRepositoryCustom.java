@@ -45,5 +45,8 @@ public interface ApplicationRepositoryCustom {
 
     Page<ApplicationChallengeAdminVo> getApplicationChallengeAdminListFiltered(Long programId, Pageable pageable, String name, String email, String phoneNum);
 
+    List<String> findAllApplyMotiveByProgramId(Long programId);
+
+    List<String> findAllPreQuestionsByProgramId(Long programId);
 
 }

@@ -3,6 +3,7 @@ package com.letsintern.letsintern.domain.program;
 import com.letsintern.letsintern.domain.application.domain.ApplicationWishJob;
 import com.letsintern.letsintern.domain.program.domain.MailType;
 import com.letsintern.letsintern.domain.program.domain.Program;
+import com.letsintern.letsintern.domain.program.dto.request.LetsChatMentorPasswordRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramUpdateRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.response.*;
@@ -10,6 +11,7 @@ import com.letsintern.letsintern.domain.program.service.ProgramService;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -82,6 +84,22 @@ public class ProgramController {
     @GetMapping("/admin/{programId}/mentor")
     public ProgramMentorPasswordResponse getProgramMentorPassword(@PathVariable Long programId) {
         return programService.getProgramMentorPassword(programId);
+    }
+
+    @Operation(summary = "렛츠챗 프로그램 멘토 세션 안내 페이지 - prior")
+    @PostMapping("/{programId}/mentor/prior")
+    public LetsChatPriorSessionNoticeResponse getLetsChatPriorSessionNotice(
+            @PathVariable Long programId,
+            @RequestBody @Valid LetsChatMentorPasswordRequestDTO letsChatMentorPasswordRequestDTO) {
+        return programService.getLetsChatPriorSessionNotice(programId, letsChatMentorPasswordRequestDTO);
+    }
+
+    @Operation(summary = "렛츠챗 프로그램 멘토 세션 마무리 페이지 - after")
+    @PostMapping("/{programId}/mentor/after")
+    public LetsChatAfterSessionNoticeResponse getLetsChatAfterSessionNotice(
+            @PathVariable Long programId,
+            @RequestBody @Valid LetsChatMentorPasswordRequestDTO letsChatMentorPasswordRequestDTO) {
+        return programService.getLetsChatAfterSessionNotice(programId, letsChatMentorPasswordRequestDTO);
     }
 
     @Operation(summary = "어드민 프로그램 신규 개설")

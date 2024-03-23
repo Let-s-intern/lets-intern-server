@@ -37,6 +37,14 @@ public class ProgramMapper {
         return ProgramMentorPasswordResponse.from(mentorPassword);
     }
 
+    public LetsChatPriorSessionNoticeResponse toLetsChatPriorSessionNoticeResponse(Program program, List<String> applyMotiveList, List<String> preQuestionList) {
+        return LetsChatPriorSessionNoticeResponse.of(program, applyMotiveList, preQuestionList);
+    }
+
+    public LetsChatAfterSessionNoticeResponse toLetsChatAfterSessionNoticeResponse(List<String> reviewList) {
+        return LetsChatAfterSessionNoticeResponse.from(reviewList);
+    }
+
     public ProgramListDTO toProgramListDTO(Page<ProgramThumbnailVo> programList) {
         return ProgramListDTO.from(programList);
     }

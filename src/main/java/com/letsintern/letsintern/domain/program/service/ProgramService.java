@@ -8,16 +8,17 @@ import com.letsintern.letsintern.domain.application.repository.ApplicationReposi
 import com.letsintern.letsintern.domain.attendance.domain.AttendanceResult;
 import com.letsintern.letsintern.domain.attendance.domain.AttendanceStatus;
 import com.letsintern.letsintern.domain.attendance.repository.AttendanceRepository;
-import com.letsintern.letsintern.domain.mission.domain.MissionStatus;
 import com.letsintern.letsintern.domain.mission.helper.MissionHelper;
 import com.letsintern.letsintern.domain.mission.vo.MissionDashboardVo;
 import com.letsintern.letsintern.domain.notice.helper.NoticeHelper;
 import com.letsintern.letsintern.domain.program.domain.MailType;
 import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.program.domain.ProgramStatus;
+import com.letsintern.letsintern.domain.program.dto.request.LetsChatMentorPasswordRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramUpdateRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.response.*;
+import com.letsintern.letsintern.domain.program.exception.ProgramMentorPasswordMismatch;
 import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
 import com.letsintern.letsintern.domain.program.helper.ProgramHelper;
 import com.letsintern.letsintern.domain.program.mapper.ProgramMapper;
@@ -31,7 +32,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
-import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -52,6 +53,11 @@ public class ProgramService {
         return programRepository.countByStatusEquals(ProgramStatus.DONE);
     }
 
+    private void checkMentorPasswordMatches(String programMentorPassword, String requestMentorPassword) {
+        if(!Objects.equals(programMentorPassword, requestMentorPassword)) {
+            throw ProgramMentorPasswordMismatch.EXCEPTION;
+        }
+    }
 
     @Transactional
     public ProgramIdResponseDTO createProgram(ProgramCreateRequestDTO programCreateRequestDTO) throws Exception {
@@ -161,5 +167,19 @@ public class ProgramService {
                 applicationHelper.getDashboardList(program.getId(), applicationWishJob, user.getId(), pageable),
                 ApplicationWishJob.getApplicationWishJobListByProgramTopic(program.getTopic())
         );
+    }
+
+    public LetsChatPriorSessionNoticeResponse getLetsChatPriorSessionNotice(Long programId, LetsChatMentorPasswordRequestDTO letsChatMentorPasswordRequestDTO) {
+        final Program program = programRepository.findById(programId).orElseThrow(() -> ProgramNotFound.EXCEPTION);
+        checkMentorPasswordMatches(program.getMentorPassword(), letsChatMentorPasswordRequestDTO.getMentorPassword());
+
+        return programHelper.getLetsChatPriorSessionNotice(program);
+    }
+
+    public LetsChatAfterSessionNoticeResponse getLetsChatAfterSessionNotice(Long programId, LetsChatMentorPasswordRequestDTO letsChatMentorPasswordRequestDTO) {
+        final Program program = programRepository.findById(programId).orElseThrow(() -> ProgramNotFound.EXCEPTION);
+        checkMentorPasswordMatches(program.getMentorPassword(), letsChatMentorPasswordRequestDTO.getMentorPassword());
+
+        return programHelper.getLetsChatAfterSessionNotice(program.getId());
     }
 }

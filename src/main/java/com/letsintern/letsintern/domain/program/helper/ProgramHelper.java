@@ -7,13 +7,11 @@ import com.letsintern.letsintern.domain.application.repository.ApplicationReposi
 import com.letsintern.letsintern.domain.faq.repository.FaqRepository;
 import com.letsintern.letsintern.domain.faq.vo.FaqVo;
 import com.letsintern.letsintern.domain.program.domain.*;
+import com.letsintern.letsintern.domain.program.dto.request.LetsChatMentorPasswordRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramUpdateRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.response.*;
-import com.letsintern.letsintern.domain.program.exception.ChallengeProgramCreateBadRequest;
-import com.letsintern.letsintern.domain.program.exception.ChargeProgramCreateBadRequest;
-import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
-import com.letsintern.letsintern.domain.program.exception.RefundProgramCreateBadRequest;
+import com.letsintern.letsintern.domain.program.exception.*;
 import com.letsintern.letsintern.domain.program.mapper.ProgramMapper;
 import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
 import com.letsintern.letsintern.domain.program.vo.ProgramDetailVo;
@@ -32,6 +30,7 @@ import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -195,6 +194,17 @@ public class ProgramHelper {
         return program.getMentorPassword();
     }
 
+    public LetsChatPriorSessionNoticeResponse getLetsChatPriorSessionNotice(Program program) {
+        List<String> applyMotiveList = applicationRepository.findAllApplyMotiveByProgramId(program.getId());
+        List<String> preQuestionsList = applicationRepository.findAllPreQuestionsByProgramId(program.getId());
+        return programMapper.toLetsChatPriorSessionNoticeResponse(program, applyMotiveList, preQuestionsList);
+    }
+
+    public LetsChatAfterSessionNoticeResponse getLetsChatAfterSessionNotice(Long programId) {
+        List<String> reviewList = reviewRepository.findAllReviewContentsByProgramId(programId);
+        return programMapper.toLetsChatAfterSessionNoticeResponse(reviewList);
+    }
+
     public ProgramListDTO getProgramThumbnailList(String type, Pageable pageable) {
         Page<ProgramThumbnailVo> programList;
         if(type != null) programList = programRepository.findProgramThumbnailsByType(type, pageable);
@@ -216,7 +226,6 @@ public class ProgramHelper {
         }
       
         List<ReviewVo> reviewList = reviewRepository.findAllVosByProgramType(programDetailVo.getType());
-
         List<ApplicationWishJob> wishJobList = ApplicationWishJob.getApplicationWishJobListByProgramTopic(programDetailVo.getTopic());
 
         /* 회원 - 기존 신청 내역 존재 확인 */
