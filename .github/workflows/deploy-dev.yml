@@ -102,5 +102,5 @@ jobs:
           key: ${{ secrets.EC2_KEY_DEV }}
           script: |
             sudo docker rm -f $(docker ps -qa)
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/letsintern-server-dev
+            sudo docker run ${{ secrets.DOCKER_USERNAME }}/letsintern-server-dev
             docker image prune -f
