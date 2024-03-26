@@ -77,7 +77,7 @@ public class EmailUtils {
         final String NOTICE_CANCEL = messageSource.getMessage("mail.lets-chat.notice.cancel", null, null);
 
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-        simpleMailMessage.setBcc(applicationEmailList.toString());
+        simpleMailMessage.setBcc(applicationEmailList.toArray(String[]::new));
         simpleMailMessage.setSubject("[렛츠인턴] D-day 안내: " + program.getTitle());
 
         simpleMailMessage.setText(
@@ -100,7 +100,7 @@ public class EmailUtils {
         final String NOTICE_MORE = messageSource.getMessage("mail.lets-chat.notice.more", null, null);
 
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-        simpleMailMessage.setBcc(applicationEmailList.toString());
+        simpleMailMessage.setBcc(applicationEmailList.toArray(String[]::new));
         simpleMailMessage.setSubject("[렛츠인턴] " + program.getType().getValue() + " #" + program.getTh() + ". " + program.getTitle() + " 후기 작성 안내");
 
         simpleMailMessage.setText(

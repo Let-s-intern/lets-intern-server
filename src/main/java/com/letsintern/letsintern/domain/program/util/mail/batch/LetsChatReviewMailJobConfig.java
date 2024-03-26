@@ -1,4 +1,4 @@
-package com.letsintern.letsintern.domain.program.util.batch;
+package com.letsintern.letsintern.domain.program.util.mail.batch;
 
 import com.letsintern.letsintern.domain.application.repository.ApplicationRepository;
 import com.letsintern.letsintern.domain.program.domain.MailStatus;

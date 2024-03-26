@@ -1,6 +1,5 @@
-package com.letsintern.letsintern.domain.program.util.batch;
+package com.letsintern.letsintern.domain.program.util.mail.batch;
 
-import com.letsintern.letsintern.domain.application.domain.Application;
 import com.letsintern.letsintern.domain.application.repository.ApplicationRepository;
 import com.letsintern.letsintern.domain.program.domain.MailStatus;
 import com.letsintern.letsintern.domain.program.domain.Program;
@@ -23,7 +22,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
@@ -67,7 +65,9 @@ public class LetsChatRemindMailJobConfig {
                 applicationEmailList = applicationRepository.findAllEmailByIsApprovedAndFeeIsConfirmed(programId, true, true);
             }
 
-            if(!applicationEmailList.isEmpty()) emailUtils.sendLetsChatRemindMail(applicationEmailList, program);
+            if(!applicationEmailList.isEmpty()) {
+                emailUtils.sendLetsChatRemindMail(applicationEmailList, program);
+            }
 
             return RepeatStatus.FINISHED;
         });
