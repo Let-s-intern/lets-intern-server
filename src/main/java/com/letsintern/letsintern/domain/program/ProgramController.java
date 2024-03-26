@@ -128,7 +128,7 @@ public class ProgramController {
         programService.saveFinalHeadCount(programId);
     }
 
-    @Operation(summary = "어드민 프로그램 선발 및 입금 안내, 참여 확정 안내 메일 템플릿")
+    @Operation(summary = "어드민 챌린지 프로그램 선발 및 입금 안내, 참여 확정 안내 메일 템플릿")
     @GetMapping("/admin/{programId}/email")
     public ProgramAdminEmailResponse getEmailTemplate(@PathVariable Long programId, @RequestParam MailType mailType) {
         return programService.getEmailTemplate(programId, mailType);

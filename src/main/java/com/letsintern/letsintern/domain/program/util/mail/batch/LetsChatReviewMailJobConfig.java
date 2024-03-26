@@ -1,9 +1,9 @@
-package com.letsintern.letsintern.domain.program.util.batch;
+package com.letsintern.letsintern.domain.program.util.mail.batch;
 
-import com.letsintern.letsintern.domain.application.domain.Application;
 import com.letsintern.letsintern.domain.application.repository.ApplicationRepository;
 import com.letsintern.letsintern.domain.program.domain.MailStatus;
 import com.letsintern.letsintern.domain.program.domain.Program;
+import com.letsintern.letsintern.domain.program.domain.ProgramFeeType;
 import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
 import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
 import com.letsintern.letsintern.global.common.util.EmailUtils;
@@ -27,7 +27,7 @@ import java.util.List;
 @Configuration
 @RequiredArgsConstructor
 @EnableBatchProcessing
-public class RemindMailJobConfig {
+public class LetsChatReviewMailJobConfig {
 
     private final JobRepository jobRepository;
     private final PlatformTransactionManager transactionManager;
@@ -37,46 +37,53 @@ public class RemindMailJobConfig {
     private final ProgramRepository programRepository;
 
     @Bean
-    public Job remindMailJob() {
-        return new JobBuilder("remindMailJob", jobRepository)
-                .start(remindMailStep())
-                .next(updateMailStatusRemindStep())
+    public Job reviewMailJob() {
+        return new JobBuilder("reviewMailJob", jobRepository)
+                .start(reviewMailStep())
+                .next(updateMailStatusReviewStep())
                 .preventRestart()
                 .build();
     }
 
     @Bean
-    public Step remindMailStep() {
-        return new StepBuilder("remindMailStep", jobRepository)
-                .tasklet(sendRemindMailTasklet(null), transactionManager)
+    public Step reviewMailStep() {
+        return new StepBuilder("reviewMailStep", jobRepository)
+                .tasklet(sendReviewMailTasklet(null), transactionManager)
                 .build();
     }
 
     @Bean
     @StepScope
-    public Tasklet sendRemindMailTasklet(@Value("#{jobParameters[programId]}") Long programId) {
+    public Tasklet sendReviewMailTasklet(@Value("#{jobParameters[programId]}") Long programId) {
         return ((contribution, chunkContext) -> {
-            List<Application> applicationList = applicationRepository.findAllByProgramIdAndIsApproved(programId, true);
             Program program = programRepository.findById(programId).orElseThrow(() -> ProgramNotFound.EXCEPTION);
-            if(!applicationList.isEmpty()) emailUtils.sendRemindMail(applicationList, program);
+            List<String> applicationEmailList;
+
+            if(program.getFeeType().equals(ProgramFeeType.FREE)) {
+                applicationEmailList = applicationRepository.findAllEmailByIsApproved(programId, true);
+            } else {
+                applicationEmailList = applicationRepository.findAllEmailByIsApprovedAndFeeIsConfirmed(programId, true, true);
+            }
+
+            if(!applicationEmailList.isEmpty()) emailUtils.sendLetsChatReviewMail(applicationEmailList, program);
 
             return RepeatStatus.FINISHED;
         });
     }
 
     @Bean
-    public Step updateMailStatusRemindStep() {
-        return new StepBuilder("updateMailStatusRemindStep", jobRepository)
-                .tasklet(updateMailStatusRemindTasklet(null), transactionManager)
+    public Step updateMailStatusReviewStep() {
+        return new StepBuilder("updateMailStatusReviewStep", jobRepository)
+                .tasklet(updateMailStatusReviewTasklet(null), transactionManager)
                 .build();
     }
 
     @Bean
     @StepScope
-    public Tasklet updateMailStatusRemindTasklet(@Value("#{jobParameters[programId]}") Long programId) {
+    public Tasklet updateMailStatusReviewTasklet(@Value("#{jobParameters[programId]}") Long programId) {
         return ((contribution, chunkContext) -> {
             Program program = programRepository.findById(programId).orElseThrow(() -> ProgramNotFound.EXCEPTION);
-            program.setMailStatus(MailStatus.REMIND);
+            program.setMailStatus(MailStatus.REVIEW);
             programRepository.save(program);
 
             return RepeatStatus.FINISHED;

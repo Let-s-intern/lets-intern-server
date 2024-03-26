@@ -3,7 +3,9 @@ package com.letsintern.letsintern.domain.program.repository;
 import com.letsintern.letsintern.domain.program.domain.*;
 import com.letsintern.letsintern.domain.program.vo.ProgramDetailVo;
 import com.letsintern.letsintern.domain.program.vo.ProgramThumbnailVo;
+import com.querydsl.core.types.ConstantImpl;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -13,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -199,16 +202,22 @@ public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
         QProgram qProgram = QProgram.program;
         return jpaQueryFactory
                 .selectFrom(qProgram)
-                .where(qProgram.type.eq(ProgramType.LETS_CHAT), qProgram.mailStatus.eq(mailStatus), qProgram.endDate.before(now))
+                .where(
+                        qProgram.type.eq(ProgramType.LETS_CHAT),
+                        qProgram.mailStatus.eq(mailStatus),
+                        qProgram.endDate.before(now))
                 .fetch();
     }
 
     @Override
-    public List<Program> findAllLetsChatByMailStatusAndAnnouncementDate(MailStatus mailStatus, LocalDateTime now) {
+    public List<Program> findAllLetsChatByMailStatusAndStartDate(MailStatus mailStatus, LocalDate now) {
         QProgram qProgram = QProgram.program;
         return jpaQueryFactory
                 .selectFrom(qProgram)
-                .where(qProgram.type.eq(ProgramType.LETS_CHAT), qProgram.mailStatus.eq(mailStatus), qProgram.announcementDate.before(now))
+                .where(
+                        qProgram.type.eq(ProgramType.LETS_CHAT),
+                        qProgram.mailStatus.eq(mailStatus),
+                        Expressions.stringTemplate("FUNCTION('DATE_FORMAT', {0}, '%Y-%m-%d')", qProgram.startDate).eq(String.valueOf(now)))
                 .fetch();
     }
 

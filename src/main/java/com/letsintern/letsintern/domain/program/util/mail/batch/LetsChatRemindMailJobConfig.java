@@ -1,6 +1,5 @@
-package com.letsintern.letsintern.domain.program.util.batch;
+package com.letsintern.letsintern.domain.program.util.mail.batch;
 
-import com.letsintern.letsintern.domain.application.domain.Application;
 import com.letsintern.letsintern.domain.application.repository.ApplicationRepository;
 import com.letsintern.letsintern.domain.program.domain.MailStatus;
 import com.letsintern.letsintern.domain.program.domain.Program;
@@ -28,7 +27,7 @@ import java.util.List;
 @Configuration
 @RequiredArgsConstructor
 @EnableBatchProcessing
-public class ReviewMailJobConfig {
+public class LetsChatRemindMailJobConfig {
 
     private final JobRepository jobRepository;
     private final PlatformTransactionManager transactionManager;
@@ -38,52 +37,55 @@ public class ReviewMailJobConfig {
     private final ProgramRepository programRepository;
 
     @Bean
-    public Job reviewMailJob() {
-        return new JobBuilder("reviewMailJob", jobRepository)
-                .start(reviewMailStep())
-                .next(updateMailStatusReviewStep())
+    public Job remindMailJob() {
+        return new JobBuilder("remindMailJob", jobRepository)
+                .start(remindMailStep())
+                .next(updateMailStatusRemindStep())
                 .preventRestart()
                 .build();
     }
 
     @Bean
-    public Step reviewMailStep() {
-        return new StepBuilder("reviewMailStep", jobRepository)
-                .tasklet(sendReviewMailTasklet(null), transactionManager)
+    public Step remindMailStep() {
+        return new StepBuilder("remindMailStep", jobRepository)
+                .tasklet(sendRemindMailTasklet(null), transactionManager)
                 .build();
     }
 
     @Bean
     @StepScope
-    public Tasklet sendReviewMailTasklet(@Value("#{jobParameters[programId]}") Long programId) {
+    public Tasklet sendRemindMailTasklet(@Value("#{jobParameters[programId]}") Long programId) {
         return ((contribution, chunkContext) -> {
             Program program = programRepository.findById(programId).orElseThrow(() -> ProgramNotFound.EXCEPTION);
-            List<Application> applicationList;
+            List<String> applicationEmailList;
+
             if(program.getFeeType().equals(ProgramFeeType.FREE)) {
-                applicationList = applicationRepository.findAllByProgramIdAndIsApproved(programId, true);
+                applicationEmailList = applicationRepository.findAllEmailByIsApproved(programId, true);
             } else {
-                applicationList = applicationRepository.findAllByProgramIdAndIsApprovedAndFeeIsConfirmed(programId, true, true);
+                applicationEmailList = applicationRepository.findAllEmailByIsApprovedAndFeeIsConfirmed(programId, true, true);
             }
 
-            if(!applicationList.isEmpty()) emailUtils.sendReviewMail(applicationList, program);
+            if(!applicationEmailList.isEmpty()) {
+                emailUtils.sendLetsChatRemindMail(applicationEmailList, program);
+            }
 
             return RepeatStatus.FINISHED;
         });
     }
 
     @Bean
-    public Step updateMailStatusReviewStep() {
-        return new StepBuilder("updateMailStatusReviewStep", jobRepository)
-                .tasklet(updateMailStatusReviewTasklet(null), transactionManager)
+    public Step updateMailStatusRemindStep() {
+        return new StepBuilder("updateMailStatusRemindStep", jobRepository)
+                .tasklet(updateMailStatusRemindTasklet(null), transactionManager)
                 .build();
     }
 
     @Bean
     @StepScope
-    public Tasklet updateMailStatusReviewTasklet(@Value("#{jobParameters[programId]}") Long programId) {
+    public Tasklet updateMailStatusRemindTasklet(@Value("#{jobParameters[programId]}") Long programId) {
         return ((contribution, chunkContext) -> {
             Program program = programRepository.findById(programId).orElseThrow(() -> ProgramNotFound.EXCEPTION);
-            program.setMailStatus(MailStatus.REVIEW);
+            program.setMailStatus(MailStatus.REMIND);
             programRepository.save(program);
 
             return RepeatStatus.FINISHED;
