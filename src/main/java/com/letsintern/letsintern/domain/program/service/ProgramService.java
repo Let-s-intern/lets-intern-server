@@ -117,7 +117,7 @@ public class ProgramService {
         final Program program = programRepository.findById(programId).orElseThrow(() -> ProgramNotFound.EXCEPTION);
         return programMapper.toProgramAdminEmailResponse(
                 applicationHelper.getApplicationEmailListOfProgramIdAndMailType(program, mailType),
-                programHelper.createProgramEmailByMailType(program, mailType)
+                programHelper.createChallengeProgramEmailByMailType(program, mailType)
         );
     }
 

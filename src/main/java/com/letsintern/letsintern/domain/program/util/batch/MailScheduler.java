@@ -23,31 +23,31 @@ public class MailScheduler {
 
     private final ProgramRepository programRepository;
     private final JobLauncher jobLauncher;
-    private final RemindMailJobConfig remindMailJobConfig;
-    private final ReviewMailJobConfig reviewMailJobConfig;
+    private final LetsChatRemindMailJobConfig letsChatRemindMailJobConfig;
+    private final LetsChatReviewMailJobConfig letsChatReviewMailJobConfig;
 
-//    @Scheduled(cron = "0 10 0,15,18 * * ?")
-//    public void sendRemindMail() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
-//        List<Program> mailStatusYetPrograms = programRepository.findAllLetsChatByMailStatusAndAnnouncementDate(MailStatus.YET, LocalDateTime.now());
-//        for(Program program : mailStatusYetPrograms) {
-//            jobLauncher.run(
-//                    remindMailJobConfig.remindMailJob(),
-//                    new JobParametersBuilder()
-//                            .addLong("programId", program.getId())
-//                            .addLong("time", new Date().getTime())
-//                            .toJobParameters()
-//            );
-//        }
-//    }
-
-    @Scheduled(cron = "0 10 10 * * ?")
-    public void sendReviewMail() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
-        List<Program> mailStatusRemindPrograms = programRepository.findAllLetsChatByMailStatusAndEndDate(MailStatus.YET, LocalDateTime.now());
-        for(Program program : mailStatusRemindPrograms) {
+    @Scheduled(cron = "0 2 9 * * ?")
+    public void sendLetsChatRemindMail() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
+        List<Program> mailStatusYetLetsChats = programRepository.findAllLetsChatByMailStatusAndAnnouncementDate(MailStatus.YET, LocalDateTime.now());
+        for(Program letsChat : mailStatusYetLetsChats) {
             jobLauncher.run(
-                    reviewMailJobConfig.reviewMailJob(),
+                    letsChatRemindMailJobConfig.remindMailJob(),
                     new JobParametersBuilder()
-                            .addLong("programId", program.getId())
+                            .addLong("programId", letsChat.getId())
+                            .addLong("time", new Date().getTime())
+                            .toJobParameters()
+            );
+        }
+    }
+
+    @Scheduled(cron = "0 2 23 * * ?")
+    public void sendLetsChatReviewMail() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
+        List<Program> mailStatusRemindLetsChats = programRepository.findAllLetsChatByMailStatusAndEndDate(MailStatus.REMIND, LocalDateTime.now());
+        for(Program letsChat : mailStatusRemindLetsChats) {
+            jobLauncher.run(
+                    letsChatReviewMailJobConfig.reviewMailJob(),
+                    new JobParametersBuilder()
+                            .addLong("programId", letsChat.getId())
                             .addLong("time", new Date().getTime())
                             .toJobParameters()
             );

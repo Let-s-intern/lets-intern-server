@@ -18,9 +18,7 @@ public class ProgramEmailVo {
     private LocalDateTime endDate;
     private ProgramWay way;
     private String location;
-
     private String link;
-
     private String linkPassword;
 
     @Builder
