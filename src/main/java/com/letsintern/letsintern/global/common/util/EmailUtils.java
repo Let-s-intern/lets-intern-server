@@ -60,7 +60,6 @@ public class EmailUtils {
 
         simpleMailMessage.setText(
                 HEADER +
-                "커리어의 첫 시작, 렛츠인턴 입니다.\n\n" +
                 createTitleInfo(programEmailVo.getType(), programEmailVo.getTh(), programEmailVo.getTitle()) + "에 신청해주셔서 감사합니다!\n" +
                 programEmailVo.getType().getValue() + " #" + programEmailVo.getTh() + " 참여 확정되어 안내드립니다.\n\n" +
                 createStartDateInfo(programEmailVo.getStartDate(), programEmailVo.getEndDate()) +

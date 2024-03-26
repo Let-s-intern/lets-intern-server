@@ -3,7 +3,8 @@ spring:
     active:
       - dev
     include:
-      - secret
+#      - secret
+      - dev
 
   jpa:
     hibernate:
@@ -15,7 +16,8 @@ spring:
         default_batch_fetch_size: 1000
 
   datasource:
-    - secret
+#    - secret
+    - dev
 
   data:
     web:
