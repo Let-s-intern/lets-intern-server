@@ -38,7 +38,7 @@ out/
 
 ### application-secret ###
 application-secret.yml
-application-secret-dev.yml
+application-dev.yml
 
 ### generated ###
 generated
