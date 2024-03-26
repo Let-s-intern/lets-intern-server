@@ -32,6 +32,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Service
@@ -140,7 +141,8 @@ public class ProgramService {
                 missionHelper.getMissionDashboardList(programId, user.getId()),
                 program.getFeeRefund(),
                 program.getFinalHeadCount(),
-                yesterdayHeadCount
+                yesterdayHeadCount,
+                program.getEndDate().isBefore(LocalDateTime.now())
         );
     }
 
@@ -155,7 +157,8 @@ public class ProgramService {
 
         return programMapper.toProgramMyDashboardResponse(
                 missionHelper.getDailyMissionDetail(program.getId(), program.getStartDate(), user.getId()),
-                missionHelper.getMissionDashboardList(program.getId(), user.getId())
+                missionHelper.getMissionDashboardList(program.getId(), user.getId()),
+                program.getEndDate().isBefore(LocalDateTime.now())
         );
     }
 

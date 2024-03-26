@@ -54,12 +54,12 @@ public class ProgramMapper {
     }
 
     public ProgramDashboardResponse toProgramDashboardResponse(String userName, MissionDashboardVo dailyMission, Page<Notice> noticeList, List<MissionDashboardListVo> missionList,
-                                                               Integer totalRefund, Integer finalHeadCount, Integer yesterdayHeadCount) {
-        return ProgramDashboardResponse.of(userName, dailyMission, noticeList, missionList, totalRefund, finalHeadCount, yesterdayHeadCount);
+                                                               Integer totalRefund, Integer finalHeadCount, Integer yesterdayHeadCount, Boolean isDone) {
+        return ProgramDashboardResponse.of(userName, dailyMission, noticeList, missionList, totalRefund, finalHeadCount, yesterdayHeadCount, isDone);
     }
 
-    public ProgramMyDashboardResponse toProgramMyDashboardResponse(MissionMyDashboardVo dailyMission, List<MissionDashboardListVo> missionList) {
-        return ProgramMyDashboardResponse.of(dailyMission, missionList);
+    public ProgramMyDashboardResponse toProgramMyDashboardResponse(MissionMyDashboardVo dailyMission, List<MissionDashboardListVo> missionList, Boolean isDone) {
+        return ProgramMyDashboardResponse.of(dailyMission, missionList, isDone);
     }
 
     public ProgramEntireDashboardResponse toProgramEntireDashboardResponse(Page<ApplicationEntireDashboardVo> dashboardList, List<ApplicationWishJob> wishJobList) {

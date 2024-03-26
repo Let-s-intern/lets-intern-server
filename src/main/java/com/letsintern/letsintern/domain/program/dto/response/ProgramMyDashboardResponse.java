@@ -15,16 +15,20 @@ public class ProgramMyDashboardResponse {
 
     private List<MissionDashboardListVo> missionList;
 
+    private Boolean isDone;
+
     @Builder
-    private ProgramMyDashboardResponse(MissionMyDashboardVo dailyMission, List<MissionDashboardListVo> missionList) {
+    private ProgramMyDashboardResponse(MissionMyDashboardVo dailyMission, List<MissionDashboardListVo> missionList, Boolean isDone) {
         this.dailyMission = dailyMission;
         this.missionList = missionList;
+        this.isDone = isDone;
     }
 
-    public static ProgramMyDashboardResponse of(MissionMyDashboardVo dailyMission, List<MissionDashboardListVo> missionList) {
+    public static ProgramMyDashboardResponse of(MissionMyDashboardVo dailyMission, List<MissionDashboardListVo> missionList, Boolean isDone) {
         return ProgramMyDashboardResponse.builder()
                 .dailyMission(dailyMission)
                 .missionList(missionList)
+                .isDone(isDone)
                 .build();
     }
 

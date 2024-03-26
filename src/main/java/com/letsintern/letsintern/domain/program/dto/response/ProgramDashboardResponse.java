@@ -31,9 +31,11 @@ public class ProgramDashboardResponse {
 
     private Integer yesterdayHeadCount;
 
+    private Boolean isDone;
+
     @Builder
     private ProgramDashboardResponse(String userName, MissionDashboardVo dailyMission, Page<Notice> noticeList, List<MissionDashboardListVo> missionList,
-                                     Integer totalRefund, Integer finalHeadCount, Integer yesterdayHeadCount) {
+                                     Integer totalRefund, Integer finalHeadCount, Integer yesterdayHeadCount, Boolean isDone) {
         int currentRefund = 0;
         for(MissionDashboardListVo mission : missionList) {
             if(mission.getMissionType().equals(MissionType.REFUND) && mission.getAttendanceStatus().equals(AttendanceStatus.PRESENT) && !mission.getAttendanceResult().equals(AttendanceResult.WRONG)) {
@@ -49,10 +51,11 @@ public class ProgramDashboardResponse {
         this.totalRefund = totalRefund;
         this.finalHeadCount = finalHeadCount;
         if(dailyMission != null && (dailyMission.getTh() >= 2 && dailyMission.getTh() <= 14)) this.yesterdayHeadCount = yesterdayHeadCount;
+        this.isDone = isDone;
     }
 
     public static ProgramDashboardResponse of(String userName, MissionDashboardVo dailyMission, Page<Notice> noticeList, List<MissionDashboardListVo> missionList,
-                                              Integer totalRefund, Integer finalHeadCount, Integer yesterdayHeadCount) {
+                                              Integer totalRefund, Integer finalHeadCount, Integer yesterdayHeadCount, Boolean isDone) {
         return ProgramDashboardResponse.builder()
                 .userName(userName)
                 .dailyMission(dailyMission)
@@ -61,6 +64,7 @@ public class ProgramDashboardResponse {
                 .totalRefund(totalRefund)
                 .finalHeadCount(finalHeadCount)
                 .yesterdayHeadCount(yesterdayHeadCount)
+                .isDone(isDone)
                 .build();
     }
 }
