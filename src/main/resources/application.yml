@@ -4,6 +4,7 @@ spring:
       - dev
     include:
       - secret
+      - dev
 
   jpa:
     hibernate:
@@ -16,6 +17,7 @@ spring:
 
   datasource:
     - secret
+    - dev
 
   data:
     web:

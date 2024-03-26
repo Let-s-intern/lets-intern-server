@@ -3,7 +3,7 @@ name: Deploy to EC2
 on:
   push:
     branches:
-      - dev
+      - main
 
 permissions:
   contents: read
@@ -72,7 +72,7 @@ jobs:
           file: ./Dockerfile
           platforms: linux/amd64
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/letsintern-server-dev
+          tags: ${{ secrets.DOCKER_USERNAME }}/letsintern-server-main
 
       - name: create remote directory
         uses: appleboy/ssh-action@master
@@ -80,7 +80,7 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
           key: ${{ secrets.EC2_KEY }}
-          script: mkdir -p ~/srv/ubuntu/letsintern-server-dev
+          script: mkdir -p ~/srv/ubuntu/letsintern-server-main
 
       - name: copy source via ssh key
         uses: burnett01/rsync-deployments@4.1
