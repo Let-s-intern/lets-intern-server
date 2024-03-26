@@ -8,15 +8,19 @@ import java.util.List;
 @Getter
 public class LetsChatAfterSessionNoticeResponse {
 
+    private String title;
+
     private List<String> reviewList;
 
     @Builder
-    private LetsChatAfterSessionNoticeResponse(List<String> reviewList) {
+    private LetsChatAfterSessionNoticeResponse(String title, List<String> reviewList) {
+        this.title = title;
         this.reviewList = reviewList;
     }
 
-    public static LetsChatAfterSessionNoticeResponse from(List<String> reviewList) {
+    public static LetsChatAfterSessionNoticeResponse of(String title, List<String> reviewList) {
         return LetsChatAfterSessionNoticeResponse.builder()
+                .title(title)
                 .reviewList(reviewList)
                 .build();
     }

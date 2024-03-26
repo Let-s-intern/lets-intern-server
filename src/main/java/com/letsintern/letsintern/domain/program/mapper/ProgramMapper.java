@@ -41,8 +41,8 @@ public class ProgramMapper {
         return LetsChatPriorSessionNoticeResponse.of(program, applyMotiveList, preQuestionList);
     }
 
-    public LetsChatAfterSessionNoticeResponse toLetsChatAfterSessionNoticeResponse(List<String> reviewList) {
-        return LetsChatAfterSessionNoticeResponse.from(reviewList);
+    public LetsChatAfterSessionNoticeResponse toLetsChatAfterSessionNoticeResponse(String title, List<String> reviewList) {
+        return LetsChatAfterSessionNoticeResponse.of(title, reviewList);
     }
 
     public ProgramListDTO toProgramListDTO(Page<ProgramThumbnailVo> programList) {

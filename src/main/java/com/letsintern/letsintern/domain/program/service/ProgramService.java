@@ -183,6 +183,6 @@ public class ProgramService {
         final Program program = programRepository.findById(programId).orElseThrow(() -> ProgramNotFound.EXCEPTION);
         checkMentorPasswordMatches(program.getMentorPassword(), letsChatMentorPasswordRequestDTO.getMentorPassword());
 
-        return programHelper.getLetsChatAfterSessionNotice(program.getId());
+        return programHelper.getLetsChatAfterSessionNotice(program.getTitle(), program.getId());
     }
 }
