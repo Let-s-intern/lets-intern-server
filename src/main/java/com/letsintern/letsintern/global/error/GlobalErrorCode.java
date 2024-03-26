@@ -25,6 +25,9 @@ public enum GlobalErrorCode implements BaseErrorCode {
     FORBIDDEN_USER(FORBIDDEN, "AUTH_403_1", "권한이 부여되지 않은 사용자입니다"),
     UNSUPPORTED_TOKEN(UNAUTHORIZED, "AUTH_401_7", "지원하지 않는 토큰입니다"),
     INVALID_SIGNATURE(UNAUTHORIZED, "AUTH_401_8", "잘못된 JWT 서명입니다"),
+
+    /*Enum error*/
+    INVALID_ENUM_CODE(BAD_REQUEST, "ENUM_400_1", "잘못된 Enum class code 입니다.")
     ;
 
     private HttpStatus status;
