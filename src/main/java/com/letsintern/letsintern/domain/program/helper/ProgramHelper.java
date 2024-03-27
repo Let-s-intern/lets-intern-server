@@ -200,9 +200,9 @@ public class ProgramHelper {
         return programMapper.toLetsChatPriorSessionNoticeResponse(program, applyMotiveList, preQuestionsList);
     }
 
-    public LetsChatAfterSessionNoticeResponse getLetsChatAfterSessionNotice(Long programId) {
+    public LetsChatAfterSessionNoticeResponse getLetsChatAfterSessionNotice(String title, Long programId) {
         List<String> reviewList = reviewRepository.findAllReviewContentsByProgramId(programId);
-        return programMapper.toLetsChatAfterSessionNoticeResponse(reviewList);
+        return programMapper.toLetsChatAfterSessionNoticeResponse(title, reviewList);
     }
 
     public ProgramListDTO getProgramThumbnailList(String type, Pageable pageable) {
