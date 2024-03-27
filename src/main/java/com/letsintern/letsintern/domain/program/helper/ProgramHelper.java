@@ -44,8 +44,8 @@ public class ProgramHelper {
     private final ReviewRepository reviewRepository;
     private final ApplicationRepository applicationRepository;
     private final ApplicationHelper applicationHelper;
-
     private final ZoomMeetingApiHelper zoomMeetingApiHelper;
+    private final EmailUtils emailUtils;
 
     private int generateRandomNumberOfLength(int length) {
         SecureRandom secureRandom = new SecureRandom();
@@ -265,24 +265,13 @@ public class ProgramHelper {
         program.setFinalHeadCount(applicationRepository.countAllByProgramIdAndStatus(programId, ApplicationStatus.IN_PROGRESS));
     }
 
-    public String createProgramEmailByMailType(Program program, MailType mailType) {
+    public String createChallengeProgramEmailByMailType(Program program, MailType mailType) {
         switch (mailType) {
-            case APPROVED -> {
-                switch (program.getType()) {
-                    case CHALLENGE_FULL, CHALLENGE_HALF -> {return EmailUtils.getChallengeApprovedEmailText(program);}
-                    default -> {return null;}
-                }
-            }
-            case FEE_CONFIRMED -> {
-                switch (program.getType()) {
-                    case CHALLENGE_FULL, CHALLENGE_HALF -> {return EmailUtils.getChallengeFeeConfirmedEmailText(program);}
-                    case LETS_CHAT -> {return EmailUtils.getLetsChatApprovedEmailText(program);}
-                    default -> {return null;}
-                }
-            }
-            default -> {
-                return null;
-            }
+            case APPROVED:
+                return emailUtils.getChallengeApprovedEmailText(program);
+            case FEE_CONFIRMED:
+                return emailUtils.getChallengeFeeConfirmedEmailText(program);
         }
+        return null;
     }
 }

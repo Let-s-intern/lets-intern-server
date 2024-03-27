@@ -147,25 +147,29 @@ public class ApplicationHelper {
                     throw ApplicationNotFound.EXCEPTION;
                 });
 
+        if(applicationUpdateDTO.getFeeIsConfirmed() != null)
+            application.setFeeIsConfirmed(applicationUpdateDTO.getFeeIsConfirmed());
+
         if (applicationUpdateDTO.getIsApproved() != null) {
             application.setIsApproved(applicationUpdateDTO.getIsApproved());
 
             if (application.getStatus().equals(ApplicationStatus.APPLIED) && application.getIsApproved().equals(true)) {
                 application.setStatus(ApplicationStatus.IN_PROGRESS);
+
+                // 렛츠챗 참여 확정 메일 전송
+                if(application.getProgram().getType().equals(ProgramType.LETS_CHAT) && application.getIsApproved() && application.getFeeIsConfirmed()) {
+                    String emailAddress = (application.getUser() == null) ? application.getEmail() : application.getUser().getEmail();
+                    emailUtils.sendApplicationApprovedEmail(emailAddress, ProgramEmailVo.from(application.getProgram()));
+                }
             }
 
             if (application.getStatus().equals(ApplicationStatus.APPLIED) && application.getIsApproved().equals(false)) {
                 application.setStatus(ApplicationStatus.APPLIED_NOT_APPROVED);
             }
-            // 이용료/보증금 입금 안내 이메일 전송
         }
 
         if (applicationUpdateDTO.getStatus() != null)
             application.setStatus(applicationUpdateDTO.getStatus());
-        if(applicationUpdateDTO.getFeeIsConfirmed() != null) {
-            application.setFeeIsConfirmed(applicationUpdateDTO.getFeeIsConfirmed());
-            // 참여 확정 이메일 전송
-        }
         if (applicationUpdateDTO.getGrade() != null)
             application.setGrade(applicationUpdateDTO.getGrade());
         if (applicationUpdateDTO.getWishCompany() != null)
