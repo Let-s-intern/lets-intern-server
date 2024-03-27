@@ -12,6 +12,9 @@ import java.time.LocalDateTime;
 public class ProgramMentorInfoVo {
 
     @NotNull
+    private String title;
+
+    @NotNull
     private ProgramWay way;
 
     private String location;
@@ -30,8 +33,9 @@ public class ProgramMentorInfoVo {
     private Integer applicationCount;
 
     @Builder
-    private ProgramMentorInfoVo(ProgramWay way, String location, String link, String linkPassword,
+    private ProgramMentorInfoVo(String title, ProgramWay way, String location, String link, String linkPassword,
                                LocalDateTime startDate, LocalDateTime endDate, Integer applicationCount) {
+        this.title = title;
         this.way = way;
         this.location = location;
         this.link = link;
@@ -43,6 +47,7 @@ public class ProgramMentorInfoVo {
 
     public static ProgramMentorInfoVo from(Program program) {
         return ProgramMentorInfoVo.builder()
+                .title(program.getTitle())
                 .way(program.getWay())
                 .location(program.getLocation())
                 .link(program.getLink())
