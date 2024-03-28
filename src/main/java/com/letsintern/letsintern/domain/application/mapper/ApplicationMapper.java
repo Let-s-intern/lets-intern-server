@@ -22,8 +22,8 @@ import java.util.List;
 public class ApplicationMapper {
     private final ProgramRepository programRepository;
 
-    public Application toEntity(Long programId, ApplicationCreateDTO applicationCreateDTO, User user) {
-        return Application.of(validateProgram(programId), user, applicationCreateDTO);
+    public Application toEntity(Long programId, ApplicationCreateDTO applicationCreateDTO, User user, Integer totalFee) {
+        return Application.of(validateProgram(programId), user, applicationCreateDTO, totalFee);
     }
 
     public ApplicationIdResponse toApplicationIdResponse(Long applicationId) {
