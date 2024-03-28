@@ -1,12 +1,15 @@
 package com.letsintern.letsintern.domain.coupon.helper;
 
 import com.letsintern.letsintern.domain.coupon.domain.Coupon;
+import com.letsintern.letsintern.domain.coupon.domain.CouponUser;
 import com.letsintern.letsintern.domain.coupon.exception.CouponExpiredException;
 import com.letsintern.letsintern.domain.coupon.exception.CouponHistoryNotFound;
 import com.letsintern.letsintern.domain.coupon.exception.CouponNotFound;
 import com.letsintern.letsintern.domain.coupon.exception.CouponUsageLimitExceededException;
 import com.letsintern.letsintern.domain.coupon.repository.CouponRepository;
+import com.letsintern.letsintern.domain.coupon.repository.CouponUserRepository;
 import com.letsintern.letsintern.domain.coupon.vo.CouponUserHistoryVo;
+import com.letsintern.letsintern.domain.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +19,7 @@ import java.time.LocalDateTime;
 @Component
 public class CouponHelper {
     private final CouponRepository couponRepository;
+    private final CouponUserRepository couponUserRepository;
 
     public void validateApplyTimeForCoupon(LocalDateTime endTime) {
         LocalDateTime now = LocalDateTime.now();
@@ -28,9 +32,22 @@ public class CouponHelper {
             throw CouponUsageLimitExceededException.EXCEPTION;
     }
 
-    public CouponUserHistoryVo findCouponUserHistoryVoOrThrow(Long userId, String code) {
-        return couponRepository.findCouponUserHistoryByCodeAndUserId(code,userId)
+    public CouponUserHistoryVo findCouponUserHistoryVoOrCreate(User user, String code) {
+        return couponUserRepository.findCouponUserHistoryByCodeAndUserId(code, user.getId())
+                .orElseGet(() -> {
+                    Coupon coupon = findCouponByCodeOrThrow(code);
+                    return CouponUserHistoryVo.of(coupon, coupon.getTime());
+                });
+    }
+
+    public CouponUser findCouponUserOrByCouponIdAndUserIdThrow(Long couponId, Long userId) {
+        return couponUserRepository.findByCouponIdAndUserId(couponId, userId)
                 .orElseThrow(() -> CouponHistoryNotFound.EXCEPTION);
+    }
+
+    public Coupon findCouponByCodeOrThrow(String code) {
+        return couponRepository.findByCode(code)
+                .orElseThrow(() -> CouponNotFound.EXCEPTION);
     }
 
     public Coupon findCouponOrThrow(Long couponId) {
@@ -40,5 +57,9 @@ public class CouponHelper {
 
     public void saveCoupon(Coupon coupon) {
         couponRepository.save(coupon);
+    }
+
+    public CouponUser saveCouponUser(CouponUser couponUser) {
+        return couponUserRepository.save(couponUser);
     }
 }
