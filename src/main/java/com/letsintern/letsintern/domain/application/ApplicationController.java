@@ -61,7 +61,8 @@ public class ApplicationController {
     @Operation(summary = "챌린지 한줄 소개, 희망 직무 수정")
     @PatchMapping("/{applicationId}/challenge")
     public ApplicationIdResponse updateChallengeApplication(@PathVariable Long applicationId,
-                                                            @RequestBody ApplicationChallengeUpdateDTO applicationChallengeUpdateDTO, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+                                                            @RequestBody ApplicationChallengeUpdateDTO applicationChallengeUpdateDTO,
+                                                            @AuthenticationPrincipal PrincipalDetails principalDetails) {
         return applicationService.updateChallengeApplication(applicationId, applicationChallengeUpdateDTO, principalDetails);
     }
 
