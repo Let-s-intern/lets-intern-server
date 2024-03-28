@@ -6,6 +6,7 @@ import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import com.letsintern.letsintern.domain.program.domain.ProgramWay;
 import com.letsintern.letsintern.domain.user.domain.AccountType;
 import jakarta.annotation.Nullable;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ProgramCreateRequestDTO {
 
     private ProgramType type;
@@ -72,4 +73,6 @@ public class ProgramCreateRequestDTO {
     @Nullable
     private String openKakaoPassword;
 
+    // 할인 금액
+    private Integer discountValue;
 }
