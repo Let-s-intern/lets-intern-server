@@ -21,4 +21,20 @@ public class CouponUser {
     @JoinColumn(name = "user_id")
     private User user;
     private Integer remainTime;
+
+    public static CouponUser createCouponUser(Coupon coupon, User user) {
+        CouponUser couponUser = CouponUser.builder()
+                .coupon(coupon)
+                .user(user)
+                .remainTime(coupon.getTime())
+                .build();
+        coupon.addCouponUserList(couponUser);
+        user.addCouponUserList(couponUser);
+        return couponUser;
+    }
+
+    public void decreaseRemainTime() {
+        if (this.remainTime != -1)
+            this.remainTime--;
+    }
 }
