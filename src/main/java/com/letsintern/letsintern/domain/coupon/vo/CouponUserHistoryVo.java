@@ -1,22 +1,21 @@
 package com.letsintern.letsintern.domain.coupon.vo;
 
-import java.time.LocalDateTime;
+import com.letsintern.letsintern.domain.coupon.domain.Coupon;
+import com.letsintern.letsintern.domain.user.domain.User;
+import lombok.AccessLevel;
+import lombok.Builder;
 
+@Builder(access = AccessLevel.PRIVATE)
 public record CouponUserHistoryVo(
-        Long couponId,
-        Long userId,
-        Integer discount,
-        Integer remainTime,
-        LocalDateTime startDate,
-        LocalDateTime endDate
+        Coupon coupon,
+        User user,
+        Integer remainTime
 ) {
-    public CouponUserHistoryVo(Long couponId, Long userId, Integer discount, Integer remainTime,
-                               LocalDateTime startDate, LocalDateTime endDate) {
-        this.couponId = couponId;
-        this.userId = userId;
-        this.discount = discount;
-        this.remainTime = remainTime;
-        this.startDate = startDate;
-        this.endDate = endDate;
+    public static CouponUserHistoryVo of(Coupon coupon, Integer remainTime) {
+        return CouponUserHistoryVo.builder()
+                .coupon(coupon)
+                .user(null)
+                .remainTime(remainTime)
+                .build();
     }
 }
