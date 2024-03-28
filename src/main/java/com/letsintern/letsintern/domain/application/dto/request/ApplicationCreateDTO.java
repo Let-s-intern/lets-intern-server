@@ -5,14 +5,13 @@ import com.letsintern.letsintern.domain.application.domain.ApplicationWishJob;
 import com.letsintern.letsintern.domain.application.domain.InflowPath;
 import com.letsintern.letsintern.domain.user.domain.AccountType;
 import jakarta.annotation.Nullable;
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ApplicationCreateDTO {
 
     @NotNull
@@ -62,4 +61,7 @@ public class ApplicationCreateDTO {
     @Nullable
     private String guestEmail;
 
+    /* 쿠폰 추가 내용 */
+    @Nullable
+    private String code;
 }
