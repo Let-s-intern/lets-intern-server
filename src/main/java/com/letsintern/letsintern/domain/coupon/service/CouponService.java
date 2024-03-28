@@ -23,9 +23,10 @@ public class CouponService {
     public CouponApplyResponseDto getAvailableCoupon(PrincipalDetails principalDetails,
                                                      String code) {
         User user = principalDetails.getUser();
-        CouponUserHistoryVo couponUserHistoryVo = couponHelper.findCouponUserHistoryVoOrThrow(user.getId(), code);
-        validateApplyCoupon(couponUserHistoryVo);
-        return CouponApplyResponseDto.of(couponUserHistoryVo.discount());
+        CouponUserHistoryVo couponUserHistoryVo = couponHelper.findCouponUserHistoryVoOrCreate(user, code);
+        couponHelper.validateApplyTimeForCoupon(couponUserHistoryVo.coupon().getEndDate());
+        couponHelper.validateRemainTimeForUser(couponUserHistoryVo.coupon().getTime());
+        return CouponApplyResponseDto.of(couponUserHistoryVo.coupon().getDiscount());
     }
 
     public void createNewCoupon(BaseCouponRequestDto baseCouponRequestDto) {
@@ -37,16 +38,11 @@ public class CouponService {
         Coupon coupon = couponHelper.findCouponOrThrow(couponId);
         BaseCouponEnumVo baseCouponEnumVo = couponMapper.toCouponEnumVo(baseCouponRequestDto);
         coupon.updateCoupon(baseCouponEnumVo);
+        couponHelper.saveCoupon(coupon);
     }
 
     private void createCouponAndSave(BaseCouponEnumVo baseCouponEnumVo) {
         Coupon newCoupon = couponMapper.toEntity(baseCouponEnumVo);
         couponHelper.saveCoupon(newCoupon);
     }
-
-    private void validateApplyCoupon(CouponUserHistoryVo couponUserHistoryVo) {
-        couponHelper.validateApplyTimeForCoupon(couponUserHistoryVo.endDate());
-        couponHelper.validateRemainTimeForUser(couponUserHistoryVo.remainTime());
-    }
-
 }
