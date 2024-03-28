@@ -38,7 +38,6 @@ public class CouponService {
         Coupon coupon = couponHelper.findCouponOrThrow(couponId);
         BaseCouponEnumVo baseCouponEnumVo = couponMapper.toCouponEnumVo(baseCouponRequestDto);
         coupon.updateCoupon(baseCouponEnumVo);
-        couponHelper.saveCoupon(coupon);
     }
 
     private void createCouponAndSave(BaseCouponEnumVo baseCouponEnumVo) {
