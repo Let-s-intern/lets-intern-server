@@ -57,4 +57,8 @@ public class Coupon {
         this.endDate = baseCouponEnumVo.endDate();
         this.time = baseCouponEnumVo.time();
     }
+
+    public void addCouponUserList(CouponUser couponUser) {
+        this.couponUserList.add(couponUser);
+    }
 }
