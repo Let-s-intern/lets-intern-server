@@ -28,6 +28,8 @@ public class CouponHelper {
     }
 
     public void validateRemainTimeForUser(Integer remainTime) {
+        if (remainTime == -1)
+            return;
         if (remainTime <= 0)
             throw CouponUsageLimitExceededException.EXCEPTION;
     }
