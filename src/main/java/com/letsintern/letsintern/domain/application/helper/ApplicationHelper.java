@@ -71,7 +71,8 @@ public class ApplicationHelper {
         if (checkGuestApplicationExist(programId, applicationCreateDTO.getGuestEmail()))
             throw DuplicateApplication.EXCEPTION;
 
-        Application newGuestApplication = applicationMapper.toEntity(programId, applicationCreateDTO, null);
+        Integer totalFee = calculateTotalFee(program, 0);
+        Application newGuestApplication = applicationMapper.toEntity(programId, applicationCreateDTO, null, totalFee);
         Application savedApplication = applicationRepository.save(newGuestApplication);
 
         program.setApplicationCount(program.getApplicationCount() + 1);
@@ -180,7 +181,6 @@ public class ApplicationHelper {
         } else {
             throw ApplicationCannotDeleted.EXCEPTION;
         }
-
     }
 
     /* 챌린지 모두의 기록장 - 한 줄 소개, 직무 수정 */
@@ -212,6 +212,10 @@ public class ApplicationHelper {
             return applicationRepository.getApplicationChallengeAdminListFiltered(programId, pageable, name, email, phoneNum);
         }
         return applicationRepository.getApplicationChallengeAdminList(programId, pageable);
+    }
+
+    public Integer calculateTotalFee(Program program, Integer couponValue) {
+        return (program.getFeeCharge() + program.getFeeCharge()) - program.getDiscountValue() - couponValue;
     }
 
     public void validateDuplicateApplication(Long programId, User user) {
