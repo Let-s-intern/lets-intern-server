@@ -36,7 +36,7 @@ public class ApplicationMapper {
     }
 
     public ApplicationCreateResponse toApplicationCreateResponse(Application application) {
-        return ApplicationCreateResponse.from(application.getId(), application.getProgram().getAnnouncementDate());
+        return ApplicationCreateResponse.from(application);
     }
 
     public AdminApplicationListResponse toAdminApplicationListResponse(Page<ApplicationAdminVo> applicationList) {
