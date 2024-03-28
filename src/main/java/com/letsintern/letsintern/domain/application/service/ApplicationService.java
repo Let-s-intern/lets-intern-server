@@ -49,8 +49,9 @@ public class ApplicationService {
         /* program application count 증가 및 저장 */
         updateProgramApplicationCountAndSave(program);
         /* 프로그램 등록시 쿠폰 사용여부 확인 및 적용 */
-        checkCouponAppliedAndApply(user, applicationCreateDTO);
-        Application newUserApplication = createApplicationAndSave(user, programId, applicationCreateDTO);
+        Integer discountValue = checkCouponAppliedAndGetDiscountValue(user, applicationCreateDTO);
+        Integer totalFee = applicationHelper.calculateTotalFee(program, discountValue);
+        Application newUserApplication = createApplicationAndSave(user, programId, applicationCreateDTO, totalFee);
         return applicationMapper.toApplicationCreateResponse(newUserApplication);
     }
 
@@ -130,13 +131,15 @@ public class ApplicationService {
 
 
     /* 프로그램 등록시 쿠폰 사용여부 판단 */
-    private void checkCouponAppliedAndApply(User user, ApplicationCreateDTO applicationCreateDTO) {
-        if (!isCouponApplied(applicationCreateDTO.getCode())) return;
+    private Integer checkCouponAppliedAndGetDiscountValue(User user, ApplicationCreateDTO applicationCreateDTO) {
+        if (!isCouponApplied(applicationCreateDTO.getCode()))
+            return 0;
         CouponUserHistoryVo couponUserHistoryVo = couponHelper.findCouponUserHistoryVoOrCreate(user, applicationCreateDTO.getCode());
         couponHelper.validateApplyTimeForCoupon(couponUserHistoryVo.coupon().getEndDate());
         couponHelper.validateRemainTimeForUser(couponUserHistoryVo.remainTime());
         CouponUser couponUser = getCouponHistoryOrCreateCouponUser(couponUserHistoryVo);
         couponUser.decreaseRemainTime();
+        return couponUserHistoryVo.coupon().getDiscount();
     }
 
     private CouponUser getCouponHistoryOrCreateCouponUser(CouponUserHistoryVo couponUserHistoryVo) {
@@ -151,8 +154,8 @@ public class ApplicationService {
         return couponHelper.saveCouponUser(couponUser);
     }
 
-    private Application createApplicationAndSave(User user, Long programId, ApplicationCreateDTO applicationCreateDTO) {
-        Application newUserApplication = applicationMapper.toEntity(programId, applicationCreateDTO, user);
+    private Application createApplicationAndSave(User user, Long programId, ApplicationCreateDTO applicationCreateDTO, Integer totalFee) {
+        Application newUserApplication = applicationMapper.toEntity(programId, applicationCreateDTO, user, totalFee);
         return applicationRepository.save(newUserApplication);
     }
 
