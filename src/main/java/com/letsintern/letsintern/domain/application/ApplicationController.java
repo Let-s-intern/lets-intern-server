@@ -1,7 +1,7 @@
 package com.letsintern.letsintern.domain.application;
 
-import com.letsintern.letsintern.domain.application.dto.request.ApplicationCreateDTO;
 import com.letsintern.letsintern.domain.application.dto.request.ApplicationChallengeUpdateDTO;
+import com.letsintern.letsintern.domain.application.dto.request.ApplicationCreateDTO;
 import com.letsintern.letsintern.domain.application.dto.request.ApplicationUpdateDTO;
 import com.letsintern.letsintern.domain.application.dto.response.*;
 import com.letsintern.letsintern.domain.application.service.ApplicationService;
@@ -16,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/application")
@@ -26,18 +28,13 @@ public class ApplicationController {
 
     @Operation(summary = "지원서 생성")
     @PostMapping("/{programId}")
-    public ApplicationCreateResponse createUserApplication(
-            @PathVariable Long programId,
-            @RequestBody ApplicationCreateDTO applicationCreateDTO,
-            @AuthenticationPrincipal PrincipalDetails principalDetails) {
-
-        // 비회원 지원서 생성
-        if(principalDetails == null) {
+    public ApplicationCreateResponse createUserApplication(@PathVariable Long programId,
+                                                           @RequestBody ApplicationCreateDTO applicationCreateDTO,
+                                                           @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        if (Objects.isNull(principalDetails))
             return applicationService.createGuestApplication(programId, applicationCreateDTO);
-        }
-
-        // 회원 지원서 생성
-        return applicationService.createUserApplication(programId, applicationCreateDTO, principalDetails);
+        else
+            return applicationService.createUserApplication(programId, applicationCreateDTO, principalDetails);
     }
 
     @Operation(summary = "마이페이지 나의 지원서 목록")
@@ -75,7 +72,8 @@ public class ApplicationController {
             @RequestParam(required = false) Boolean isApproved,
             @PageableDefault(size = 1000) Pageable pageable) {
 
-        if(isApproved != null) return applicationService.getApplicationListOfProgramAndApproved(programId, isApproved, pageable);
+        if (isApproved != null)
+            return applicationService.getApplicationListOfProgramAndApproved(programId, isApproved, pageable);
         return applicationService.getApplicationListOfProgram(programId, pageable);
     }
 
