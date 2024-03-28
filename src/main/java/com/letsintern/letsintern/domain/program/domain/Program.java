@@ -101,10 +101,16 @@ public class Program {
     private ProgramFeeType feeType;
 
     @NotNull
+    @Builder.Default
     private Integer feeRefund = 0;
 
     @NotNull
+    @Builder.Default
     private Integer feeCharge = 0;
+
+    @NotNull
+    @Builder.Default
+    private Integer discountValue = 0;
 
     @Nullable
     private LocalDateTime feeDueDate;
@@ -149,7 +155,7 @@ public class Program {
     private Program(ProgramType type, Integer th, String title, Integer headcount,
                     LocalDateTime dueDate, LocalDateTime announcementDate, LocalDateTime startDate, LocalDateTime endDate,
                     String contents, ProgramWay way, String location, String notice, List<Long> faqIdList,
-                    ProgramFeeType feeType, Integer feeRefund, Integer feeCharge, LocalDateTime feeDueDate, AccountType accountType, String accountNumber, String mentorPassword,
+                    ProgramFeeType feeType, Integer feeRefund, Integer feeCharge, Integer discountValue, LocalDateTime feeDueDate, AccountType accountType, String accountNumber, String mentorPassword,
                     ProgramTopic topic, String openKakaoLink, String openKakaoPassword, ZoomMeetingCreateResponse zoomMeetingCreateResponse) {
         this.type = type;
         this.th = th;
@@ -165,6 +171,7 @@ public class Program {
         this.notice = notice;
         this.faqListStr = StringUtils.listToString(faqIdList);
         this.feeType = feeType;
+        this.discountValue = discountValue;
 
         // 이용료 or 보증금 프로그램
         if(feeType.equals(ProgramFeeType.CHARGE) || feeType.equals(ProgramFeeType.REFUND)) {
@@ -213,6 +220,7 @@ public class Program {
                 .feeType(programCreateRequestDTO.getFeeType())
                 .feeRefund(programCreateRequestDTO.getFeeRefund())
                 .feeCharge(programCreateRequestDTO.getFeeCharge())
+                .discountValue(programCreateRequestDTO.getDiscountValue())
                 .feeDueDate(programCreateRequestDTO.getFeeDueDate())
                 .accountType(programCreateRequestDTO.getAccountType())
                 .accountNumber(programCreateRequestDTO.getAccountNumber())
@@ -222,5 +230,9 @@ public class Program {
                 .openKakaoPassword(programCreateRequestDTO.getOpenKakaoPassword())
                 .zoomMeetingCreateResponse(zoomMeetingCreateResponse)
                 .build();
+    }
+
+    public void increaseProgramApplicationCount() {
+        this.applicationCount++;
     }
 }
