@@ -71,9 +71,11 @@ public class ApplicationController {
     public AdminApplicationListResponse getApplicationListOfProgram(@PathVariable Long programId,
                                                                     @RequestParam(required = false) Boolean isApproved,
                                                                     @PageableDefault(size = 1000) Pageable pageable) {
-        if (isApproved != null)
+        if (isApproved != null) {
             return applicationService.getApplicationListOfProgramAndApproved(programId, isApproved, pageable);
-        return applicationService.getApplicationListOfProgram(programId, pageable);
+        } else {
+            return applicationService.getApplicationListOfProgram(programId, pageable);
+        }
     }
 
     @Operation(summary = "어드민 사용자 1명의 지원서 전체 목록")
@@ -85,7 +87,8 @@ public class ApplicationController {
 
     @Operation(summary = "어드민 지원서 상태 변경")
     @PatchMapping("/admin/{applicationId}")
-    public ApplicationIdResponse updateApplicationStatus(@PathVariable Long applicationId, @RequestBody ApplicationUpdateDTO applicationUpdateDTO) {
+    public ApplicationIdResponse updateApplicationStatus(@PathVariable Long applicationId,
+                                                         @RequestBody ApplicationUpdateDTO applicationUpdateDTO) {
         return applicationService.updateApplication(applicationId, applicationUpdateDTO);
     }
 
