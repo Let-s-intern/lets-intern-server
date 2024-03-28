@@ -104,14 +104,14 @@ public class ProgramController {
 
     @Operation(summary = "어드민 프로그램 신규 개설")
     @PostMapping("")
-    public ProgramIdResponseDTO createProgram(
-            @RequestBody ProgramCreateRequestDTO programCreateRequestDTO) throws Exception {
+    public ProgramIdResponseDTO createProgram(@RequestBody ProgramCreateRequestDTO programCreateRequestDTO) {
         return programService.createProgram(programCreateRequestDTO);
     }
 
     @Operation(summary = "어드민 프로그램 수정")
     @PatchMapping("/{programId}")
-    public ProgramIdResponseDTO updateProgram(@PathVariable Long programId, @RequestBody ProgramUpdateRequestDTO programUpdateRequestDTO) throws ParseException {
+    public ProgramIdResponseDTO updateProgram(@PathVariable Long programId,
+                                              @RequestBody ProgramUpdateRequestDTO programUpdateRequestDTO) throws ParseException {
         return programService.updateProgram(programId, programUpdateRequestDTO);
     }
 
