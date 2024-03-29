@@ -8,9 +8,12 @@ import com.letsintern.letsintern.domain.coupon.exception.CouponNotFound;
 import com.letsintern.letsintern.domain.coupon.exception.CouponUsageLimitExceededException;
 import com.letsintern.letsintern.domain.coupon.repository.CouponRepository;
 import com.letsintern.letsintern.domain.coupon.repository.CouponUserRepository;
+import com.letsintern.letsintern.domain.coupon.vo.CouponAdminVo;
 import com.letsintern.letsintern.domain.coupon.vo.CouponUserHistoryVo;
 import com.letsintern.letsintern.domain.user.domain.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -32,6 +35,10 @@ public class CouponHelper {
             return;
         if (remainTime <= 0)
             throw CouponUsageLimitExceededException.EXCEPTION;
+    }
+
+    public Page<CouponAdminVo> findCouponAdminInfo(Pageable pageable) {
+        return couponRepository.findCouponAdminInfo(pageable);
     }
 
     public CouponUserHistoryVo findCouponUserHistoryVoOrCreate(User user, String code) {
@@ -63,5 +70,9 @@ public class CouponHelper {
 
     public CouponUser saveCouponUser(CouponUser couponUser) {
         return couponUserRepository.save(couponUser);
+    }
+
+    public void deleteCoupon(Coupon coupon) {
+        couponRepository.delete(coupon);
     }
 }
