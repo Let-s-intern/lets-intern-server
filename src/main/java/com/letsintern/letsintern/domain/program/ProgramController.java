@@ -19,14 +19,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.ParseException;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/program")
 @Tag(name = "Program")
 public class ProgramController {
-
     private final ProgramService programService;
 
     @Operation(summary = "AWS Target Group 상태 확인용")
@@ -51,18 +48,16 @@ public class ProgramController {
 
     @Operation(summary = "프로그램 1개 상세 보기")
     @GetMapping("/{programId}")
-    public ProgramDetailDTO getProgramDetailVo(
-            @PathVariable Long programId,
-            @AuthenticationPrincipal PrincipalDetails principalDetails) {
+    public ProgramDetailDTO getProgramDetailVo(@PathVariable Long programId,
+                                               @AuthenticationPrincipal PrincipalDetails principalDetails) {
         return programService.getProgramDetailDTO(programId, principalDetails);
     }
 
     @Operation(summary = "어드민 프로그램 목록 (전체, 타입, 타입&기수)")
     @GetMapping("/admin")
-    public AdminProgramListDTO getAdminProgramList(
-            @RequestParam(required = false) String type,
-            @RequestParam(required = false) Integer th,
-            @PageableDefault(size = 20) Pageable pageable) {
+    public AdminProgramListDTO getAdminProgramList(@RequestParam(required = false) String type,
+                                                   @RequestParam(required = false) Integer th,
+                                                   @PageableDefault(size = 20) Pageable pageable) {
         return programService.getProgramAdminList(type, th, pageable);
     }
 
@@ -88,9 +83,8 @@ public class ProgramController {
 
     @Operation(summary = "렛츠챗 프로그램 멘토 세션 안내 페이지 - prior")
     @PostMapping("/{programId}/mentor/prior")
-    public LetsChatPriorSessionNoticeResponse getLetsChatPriorSessionNotice(
-            @PathVariable Long programId,
-            @RequestBody @Valid LetsChatMentorPasswordRequestDTO letsChatMentorPasswordRequestDTO) {
+    public LetsChatPriorSessionNoticeResponse getLetsChatPriorSessionNotice(@PathVariable Long programId,
+                                                                            @RequestBody @Valid LetsChatMentorPasswordRequestDTO letsChatMentorPasswordRequestDTO) {
         return programService.getLetsChatPriorSessionNotice(programId, letsChatMentorPasswordRequestDTO);
     }
 
@@ -103,7 +97,7 @@ public class ProgramController {
     }
 
     @Operation(summary = "어드민 프로그램 신규 개설")
-    @PostMapping("")
+    @PostMapping
     public ProgramIdResponseDTO createProgram(@RequestBody ProgramCreateRequestDTO programCreateRequestDTO) {
         return programService.createProgram(programCreateRequestDTO);
     }
@@ -111,7 +105,7 @@ public class ProgramController {
     @Operation(summary = "어드민 프로그램 수정")
     @PatchMapping("/{programId}")
     public ProgramIdResponseDTO updateProgram(@PathVariable Long programId,
-                                              @RequestBody ProgramUpdateRequestDTO programUpdateRequestDTO) throws ParseException {
+                                              @RequestBody ProgramUpdateRequestDTO programUpdateRequestDTO) {
         return programService.updateProgram(programId, programUpdateRequestDTO);
     }
 
@@ -130,25 +124,32 @@ public class ProgramController {
 
     @Operation(summary = "어드민 챌린지 프로그램 선발 및 입금 안내, 참여 확정 안내 메일 템플릿")
     @GetMapping("/admin/{programId}/email")
-    public ProgramAdminEmailResponse getEmailTemplate(@PathVariable Long programId, @RequestParam MailType mailType) {
+    public ProgramAdminEmailResponse getEmailTemplate(@PathVariable Long programId,
+                                                      @RequestParam MailType mailType) {
         return programService.getEmailTemplate(programId, mailType);
     }
 
     @Operation(summary = "유저 챌린지 대시보드 - 대시보드")
     @GetMapping("/{programId}/dashboard")
-    public ProgramDashboardResponse getProgramDashboard(@PathVariable Long programId, @AuthenticationPrincipal PrincipalDetails principalDetails, @PageableDefault(size = 6) Pageable pageable) {
+    public ProgramDashboardResponse getProgramDashboard(@PathVariable Long programId,
+                                                        @AuthenticationPrincipal PrincipalDetails principalDetails,
+                                                        @PageableDefault(size = 6) Pageable pageable) {
         return programService.getProgramDashboard(programId, principalDetails, pageable);
     }
 
     @Operation(summary = "유저 챌린지 대시보드 - 나의 기록장")
     @GetMapping("/{programId}/dashboard/my")
-    public ProgramMyDashboardResponse getProgramMyDashboard(@PathVariable Long programId, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+    public ProgramMyDashboardResponse getProgramMyDashboard(@PathVariable Long programId,
+                                                            @AuthenticationPrincipal PrincipalDetails principalDetails) {
         return programService.getProgramMyDashboard(programId, principalDetails);
     }
 
     @Operation(summary = "유저 챌린지 대시보드 - 모두의 기록장")
     @GetMapping("/{programId}/dashboard/entire")
-    public ProgramEntireDashboardResponse getProgramEntireDashboard(@PathVariable Long programId, @RequestParam(required = false) ApplicationWishJob applicationWishJob, @AuthenticationPrincipal PrincipalDetails principalDetails, @PageableDefault(size = 9) Pageable pageable) {
+    public ProgramEntireDashboardResponse getProgramEntireDashboard(@PathVariable Long programId,
+                                                                    @RequestParam(required = false) ApplicationWishJob applicationWishJob,
+                                                                    @AuthenticationPrincipal PrincipalDetails principalDetails,
+                                                                    @PageableDefault(size = 9) Pageable pageable) {
         return programService.getProgramEntireDashboard(programId, applicationWishJob, principalDetails, pageable);
     }
 }
