@@ -54,100 +54,6 @@ public class ProgramHelper {
         return secureRandom.nextInt(upperLimit);
     }
 
-    public Long updateProgram(Long programId, ProgramUpdateRequestDTO programUpdateRequestDTO) {
-        Program program = programRepository.findById(programId)
-                .orElseThrow(() -> {
-                    throw ProgramNotFound.EXCEPTION;
-                });
-
-        if (programUpdateRequestDTO.getType() != null) {
-            program.setType(programUpdateRequestDTO.getType());
-        }
-        if (programUpdateRequestDTO.getTh() != null) {
-            program.setTh(programUpdateRequestDTO.getTh());
-        }
-        if (programUpdateRequestDTO.getTitle() != null) {
-            program.setTitle(programUpdateRequestDTO.getTitle());
-        }
-        if (programUpdateRequestDTO.getHeadcount() != null) {
-            program.setHeadcount(programUpdateRequestDTO.getHeadcount());
-        }
-        if (programUpdateRequestDTO.getDueDate() != null) {
-            program.setDueDate(programUpdateRequestDTO.getDueDate());
-            if (program.getDueDate().isAfter(LocalDateTime.now()))
-                program.setStatus(ProgramStatus.OPEN);
-            else
-                program.setStatus(ProgramStatus.CLOSED);
-        }
-        if (programUpdateRequestDTO.getAnnouncementDate() != null) {
-            program.setAnnouncementDate(programUpdateRequestDTO.getAnnouncementDate());
-        }
-        if (programUpdateRequestDTO.getStartDate() != null) {
-            program.setStartDate(programUpdateRequestDTO.getStartDate());
-        }
-        if (programUpdateRequestDTO.getEndDate() != null) {
-            program.setEndDate(programUpdateRequestDTO.getEndDate());
-        }
-        if (programUpdateRequestDTO.getContents() != null) {
-            program.setContents(programUpdateRequestDTO.getContents());
-        }
-        if (programUpdateRequestDTO.getWay() != null) {
-            program.setWay(programUpdateRequestDTO.getWay());
-        }
-        if (programUpdateRequestDTO.getLocation() != null) {
-            program.setLocation(programUpdateRequestDTO.getLocation());
-        }
-        if (programUpdateRequestDTO.getNotice() != null) {
-            program.setNotice(programUpdateRequestDTO.getNotice());
-        }
-        if (programUpdateRequestDTO.getStatus() != null) {
-            program.setStatus(programUpdateRequestDTO.getStatus());
-        }
-        if (programUpdateRequestDTO.getIsVisible() != null) {
-            program.setIsVisible(programUpdateRequestDTO.getIsVisible());
-        }
-        if (programUpdateRequestDTO.getFaqIdList() != null) {
-            program.setFaqListStr(StringUtils.listToString(programUpdateRequestDTO.getFaqIdList()));
-        }
-
-        if (programUpdateRequestDTO.getLink() != null) {
-            program.setLink(programUpdateRequestDTO.getLink());
-        }
-        if (programUpdateRequestDTO.getLinkPassword() != null) {
-            program.setLinkPassword(programUpdateRequestDTO.getLinkPassword());
-        }
-        if (programUpdateRequestDTO.getFeeType() != null) {
-            program.setFeeType(programUpdateRequestDTO.getFeeType());
-        }
-        if (programUpdateRequestDTO.getFeeRefund() != null) {
-            program.setFeeRefund(programUpdateRequestDTO.getFeeRefund());
-        }
-        if (programUpdateRequestDTO.getFeeCharge() != null) {
-            program.setFeeCharge(programUpdateRequestDTO.getFeeCharge());
-        }
-        if (programUpdateRequestDTO.getFeeDueDate() != null) {
-            program.setFeeDueDate(programUpdateRequestDTO.getFeeDueDate());
-        }
-        if (programUpdateRequestDTO.getAccountType() != null) {
-            program.setAccountType(programUpdateRequestDTO.getAccountType());
-        }
-        if (programUpdateRequestDTO.getAccountNumber() != null) {
-            program.setAccountNumber(programUpdateRequestDTO.getAccountNumber());
-        }
-
-        if (programUpdateRequestDTO.getTopic() != null) {
-            program.setTopic(programUpdateRequestDTO.getTopic());
-        }
-        if (programUpdateRequestDTO.getOpenKakaoLink() != null) {
-            program.setOpenKakaoLink(programUpdateRequestDTO.getOpenKakaoLink());
-        }
-        if (programUpdateRequestDTO.getOpenKakaoPassword() != null) {
-            program.setOpenKakaoPassword(programUpdateRequestDTO.getOpenKakaoPassword());
-        }
-
-        return program.getId();
-    }
-
     public String getProgramMentorPassword(Long programId) {
         final Program program = programRepository.findById(programId).orElseThrow(() -> ProgramNotFound.EXCEPTION);
         return program.getMentorPassword();
@@ -173,10 +79,7 @@ public class ProgramHelper {
     }
 
     public ProgramDetailDTO getProgramDetailVo(Long programId, Long userId) {
-        ProgramDetailVo programDetailVo = programRepository.findProgramDetailVo(programId)
-                .orElseThrow(() -> {
-                    throw ProgramNotFound.EXCEPTION;
-                });
+        ProgramDetailVo programDetailVo = findProgramDetailVoOrThrow(programId);
 
         List<Long> faqIdList = StringUtils.stringToList(programDetailVo.getFaqListStr());
         List<FaqVo> faqList = new ArrayList<>();
@@ -190,9 +93,9 @@ public class ProgramHelper {
         /* 회원 - 기존 신청 내역 존재 확인 */
         if (userId != null && applicationHelper.checkUserApplicationExist(programId, userId)) {
             return ProgramDetailDTO.of(programDetailVo, true, faqList, reviewList, wishJobList);
+        } else {
+            return ProgramDetailDTO.of(programDetailVo, false, faqList, reviewList, wishJobList);
         }
-
-        return ProgramDetailDTO.of(programDetailVo, false, faqList, reviewList, wishJobList);
     }
 
     public AdminProgramListDTO getAdminProgramList(String type, Integer th, Pageable pageable) {
@@ -234,6 +137,18 @@ public class ProgramHelper {
         return null;
     }
 
+    public String parseToFaqIdList(ProgramUpdateRequestDTO programUpdateRequestDTO) {
+        return StringUtils.listToString(programUpdateRequestDTO.getFaqIdList());
+    }
+
+    public ProgramStatus getProgramStatusForDueDate(ProgramUpdateRequestDTO programUpdateRequestDTO) {
+        if (programUpdateRequestDTO.getDueDate().isAfter(LocalDateTime.now())) {
+            return ProgramStatus.OPEN;
+        } else {
+            return ProgramStatus.CLOSED;
+        }
+    }
+
     public void validateChargeTypeProgramInput(ProgramCreateRequestDTO programCreateRequestDTO) {
         if (Objects.isNull(programCreateRequestDTO.getFeeCharge())
                 || Objects.isNull(programCreateRequestDTO.getAccountType())
@@ -263,6 +178,11 @@ public class ProgramHelper {
 
     public Program findProgramOrThrow(Long programId) {
         return programRepository.findById(programId)
+                .orElseThrow(() -> ProgramNotFound.EXCEPTION);
+    }
+
+    public ProgramDetailVo findProgramDetailVoOrThrow(Long programId) {
+        return programRepository.findProgramDetailVo(programId)
                 .orElseThrow(() -> ProgramNotFound.EXCEPTION);
     }
 
