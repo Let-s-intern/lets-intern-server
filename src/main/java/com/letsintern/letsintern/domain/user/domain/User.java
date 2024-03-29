@@ -27,7 +27,6 @@ import java.util.List;
 @Where(clause = "deleted_at IS NULL")
 @SQLDelete(sql = "UPDATE user SET deleted_at = CURRENT_TIMESTAMP where user_id = ?")
 public class User {
-
     @Id
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -91,7 +90,7 @@ public class User {
     private List<Application> applicationList;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @Builder.Default
+//    @Builder.Default
     private List<CouponUser> couponUserList = new ArrayList<>();
 
 
