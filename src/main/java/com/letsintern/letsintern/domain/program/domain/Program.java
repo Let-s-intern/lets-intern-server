@@ -17,7 +17,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.letsintern.letsintern.domain.program.util.ProgramUpdateValueUtils.updateValue;
+import static com.letsintern.letsintern.global.utils.EntityUpdateValueUtils.updateValue;
 
 @Entity
 @Getter
