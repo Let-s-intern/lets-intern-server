@@ -30,7 +30,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -78,8 +77,12 @@ public class ProgramService {
     }
 
     @Transactional
-    public ProgramIdResponseDTO updateProgram(Long programId, ProgramUpdateRequestDTO programUpdateRequestDTO) throws ParseException {
-        return programMapper.toProgramIdResponseDTO(programHelper.updateProgram(programId, programUpdateRequestDTO));
+    public ProgramIdResponseDTO updateProgram(Long programId, ProgramUpdateRequestDTO programUpdateRequestDTO) {
+        Program program = programHelper.findProgramOrThrow(programId);
+        ProgramStatus programStatus = programHelper.getProgramStatusForDueDate(programUpdateRequestDTO);
+        String stringFaqList = programHelper.parseToFaqIdList(programUpdateRequestDTO);
+        program.updateProgramInfo(programUpdateRequestDTO, programStatus, stringFaqList);
+        return programMapper.toProgramIdResponseDTO(program.getId());
     }
 
     public ProgramMentorPasswordResponse getProgramMentorPassword(Long programId) {
@@ -104,7 +107,9 @@ public class ProgramService {
         if (principalDetails != null) {
             final Long userId = principalDetails.getUser().getId();
             return programHelper.getProgramDetailVo(programId, userId);
-        } else return programHelper.getProgramDetailVo(programId, null);
+        } else {
+            return programHelper.getProgramDetailVo(programId, null);
+        }
     }
 
     public Program getProgram(Long programId) {
@@ -123,7 +128,6 @@ public class ProgramService {
     public void saveFinalHeadCount(Long programId) {
         programHelper.saveFinalHeadCount(programId);
     }
-
 
     public ProgramAdminEmailResponse getEmailTemplate(Long programId, MailType mailType) {
         final Program program = programRepository.findById(programId).orElseThrow(() -> ProgramNotFound.EXCEPTION);
