@@ -3,7 +3,6 @@ package com.letsintern.letsintern.domain.program.repository;
 import com.letsintern.letsintern.domain.program.domain.*;
 import com.letsintern.letsintern.domain.program.vo.ProgramDetailVo;
 import com.letsintern.letsintern.domain.program.vo.ProgramThumbnailVo;
-import com.querydsl.core.types.ConstantImpl;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -63,7 +62,7 @@ public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
         List<ProgramThumbnailVo> programThumbnailVos;
         JPAQuery<Long> count;
 
-        if(type.equals("CHALLENGE")) {
+        if (type.equals("CHALLENGE")) {
             programThumbnailVos = jpaQueryFactory
                     .select(Projections.constructor(ProgramThumbnailVo.class,
                             qProgram.id,
@@ -169,7 +168,7 @@ public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
         List<Program> programList;
         JPAQuery<Long> count;
 
-        if(type.equals("CHALLENGE")) {
+        if (type.equals("CHALLENGE")) {
             programList = jpaQueryFactory
                     .selectFrom(qProgram)
                     .where(qProgram.type.eq(ProgramType.CHALLENGE_HALF).or(qProgram.type.eq(ProgramType.CHALLENGE_FULL)))
@@ -231,7 +230,7 @@ public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
         List<Program> programList;
         JPAQuery<Long> count;
 
-        if(type.equals("CHALLENGE")) {
+        if (type.equals("CHALLENGE")) {
             programList = jpaQueryFactory
                     .selectFrom(qProgram)
                     .where(qProgram.type.eq(ProgramType.CHALLENGE_HALF).or(qProgram.type.eq(ProgramType.CHALLENGE_FULL)))
@@ -292,10 +291,10 @@ public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
         QProgram qProgram = QProgram.program;
 
         jpaQueryFactory
-            .update(qProgram)
-            .set(qProgram.status, ProgramStatus.CLOSED)
-            .where(qProgram.status.eq(ProgramStatus.OPEN), qProgram.dueDate.before(now))
-            .execute();
+                .update(qProgram)
+                .set(qProgram.status, ProgramStatus.CLOSED)
+                .where(qProgram.status.eq(ProgramStatus.OPEN), qProgram.dueDate.before(now))
+                .execute();
 
         em.flush();
         em.clear();
