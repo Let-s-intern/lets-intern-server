@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 public class ProgramDetailVo {
-
     private ProgramStatus status;
     private String title;
     private String contents;
@@ -25,6 +24,9 @@ public class ProgramDetailVo {
     private LocalDateTime announcementDate;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
+    private Integer feeRefund;
+    private Integer feeCharge;
+    private Integer discountValue;
 
     @JsonIgnore
     private String faqListStr;
@@ -32,7 +34,8 @@ public class ProgramDetailVo {
     @Builder
     public ProgramDetailVo(ProgramStatus status, String title, String contents, String notice,
                            ProgramType type, ProgramWay way, String location, ProgramTopic topic, ProgramFeeType feeType, String faqListStr,
-                           LocalDateTime dueDate, LocalDateTime announcementDate, LocalDateTime startDate, LocalDateTime endDate) {
+                           LocalDateTime dueDate, LocalDateTime announcementDate, LocalDateTime startDate, LocalDateTime endDate,
+                           Integer feeRefund, Integer feeCharge, Integer discountValue) {
         this.status = status;
         this.title = title;
         this.contents = contents;
@@ -47,5 +50,8 @@ public class ProgramDetailVo {
         this.announcementDate = announcementDate;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.feeRefund = feeRefund;
+        this.feeCharge = feeCharge;
+        this.discountValue = discountValue;
     }
 }
