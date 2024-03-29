@@ -2,8 +2,6 @@ package com.letsintern.letsintern.domain.coupon.repository;
 
 import com.letsintern.letsintern.domain.coupon.domain.Coupon;
 import com.letsintern.letsintern.domain.coupon.vo.CouponAdminVo;
-import com.letsintern.letsintern.domain.coupon.vo.CouponUserHistoryVo;
-import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
