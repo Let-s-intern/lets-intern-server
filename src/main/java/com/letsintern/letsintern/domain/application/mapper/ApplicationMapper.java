@@ -20,15 +20,10 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class ApplicationMapper {
-
     private final ProgramRepository programRepository;
 
-    public Application toEntity(Long programId, ApplicationCreateDTO applicationCreateDTO, User user) {
-        return Application.of(
-                validateProgram(programId),
-                user,
-                applicationCreateDTO
-        );
+    public Application toEntity(Long programId, ApplicationCreateDTO applicationCreateDTO, User user, Integer totalFee) {
+        return Application.of(validateProgram(programId), user, applicationCreateDTO, totalFee);
     }
 
     public ApplicationIdResponse toApplicationIdResponse(Long applicationId) {
@@ -36,7 +31,7 @@ public class ApplicationMapper {
     }
 
     public ApplicationCreateResponse toApplicationCreateResponse(Application application) {
-        return ApplicationCreateResponse.from(application.getId(), application.getProgram().getAnnouncementDate());
+        return ApplicationCreateResponse.from(application);
     }
 
     public AdminApplicationListResponse toAdminApplicationListResponse(Page<ApplicationAdminVo> applicationList) {

@@ -1,11 +1,11 @@
 package com.letsintern.letsintern.domain.application.dto.response;
 
+import com.letsintern.letsintern.domain.application.domain.Application;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Getter
 @NoArgsConstructor
@@ -20,10 +20,10 @@ public class ApplicationCreateResponse {
         this.announcementDate = announcementDate;
     }
 
-    public static ApplicationCreateResponse from(Long applicationId, LocalDateTime announcementDate) {
+    public static ApplicationCreateResponse from(Application application) {
         return ApplicationCreateResponse.builder()
-                .applicationId(applicationId)
-                .announcementDate(announcementDate)
+                .applicationId(application.getId())
+                .announcementDate(application.getProgram().getAnnouncementDate())
                 .build();
     }
 }

@@ -1,7 +1,6 @@
 package com.letsintern.letsintern.domain.user.service;
 
 import com.letsintern.letsintern.domain.program.domain.ProgramType;
-import com.letsintern.letsintern.domain.user.domain.AccountType;
 import com.letsintern.letsintern.domain.user.domain.User;
 import com.letsintern.letsintern.domain.user.domain.UserRole;
 import com.letsintern.letsintern.domain.user.dto.request.*;
@@ -48,21 +47,6 @@ public class UserService {
         final String refreshToken = tokenProvider.createRefreshToken(user.getId(), authentication);
 
         return userMapper.toTokenResponse(accessToken, refreshToken);
-    }
-
-    @Transactional
-    public void addUserDetailInfo(User user, String university, String major) {
-        user.setUniversity(university);
-        user.setMajor(major);
-        if(user.getRole().equals(UserRole.ROLE_ANONYMOUS)) user.setRole(UserRole.ROLE_USER);
-        userRepository.save(user);
-    }
-
-    @Transactional
-    public void addUserDetailAccountInfo(User user, AccountType accountType, String accountNumber) {
-        user.setAccountType(accountType);
-        user.setAccountNumber(accountNumber);
-        userRepository.save(user);
     }
 
     @Transactional

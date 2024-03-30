@@ -116,11 +116,14 @@ public class Application {
     @Nullable
     private String introduction;
 
+    @Nullable
+    private String couponCode;
+    private Integer totalFee;
 
     @Builder
     private Application(Program program, User user, Integer grade, String wishCompany, ApplicationWishJob wishJob,
                              String applyMotive, String preQuestions, InflowPath inflowPath,
-                             String name, String phoneNum, String email, AccountType accountType, String accountNumber, ApplicationWay way) {
+                             String name, String phoneNum, String email, AccountType accountType, String accountNumber, ApplicationWay way, String couponCode, Integer totalFee) {
         this.program = program;
         this.user = user;
         this.grade = grade;
@@ -129,6 +132,8 @@ public class Application {
         this.applyMotive = applyMotive;
         this.preQuestions = preQuestions;
         this.inflowPath = inflowPath;
+        this.couponCode = couponCode;
+        this.totalFee = totalFee;
         if(way != null) this.way = way;
 
         /* 비회원 */
@@ -154,7 +159,7 @@ public class Application {
         }
     }
 
-    public static Application of(Program program, User user, ApplicationCreateDTO applicationCreateDTO) {
+    public static Application of(Program program, User user, ApplicationCreateDTO applicationCreateDTO, Integer totalFee) {
         return Application.builder()
                 .program(program)
                 .user(user)
@@ -170,6 +175,8 @@ public class Application {
                 .accountType(applicationCreateDTO.getAccountType())
                 .accountNumber(applicationCreateDTO.getAccountNumber())
                 .way(applicationCreateDTO.getWay())
+                .couponCode(applicationCreateDTO.getCode())
+                .totalFee(totalFee)
                 .build();
     }
 }
