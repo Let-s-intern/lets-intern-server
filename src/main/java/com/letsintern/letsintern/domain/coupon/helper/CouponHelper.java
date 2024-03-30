@@ -49,7 +49,7 @@ public class CouponHelper {
                 });
     }
 
-    public CouponUser findCouponUserOrByCouponIdAndUserIdThrow(Long couponId, Long userId) {
+    public CouponUser findCouponUserByCouponIdAndUserIdThrow(Long couponId, Long userId) {
         return couponUserRepository.findByCouponIdAndUserId(couponId, userId)
                 .orElseThrow(() -> CouponHistoryNotFound.EXCEPTION);
     }

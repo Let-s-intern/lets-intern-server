@@ -144,7 +144,7 @@ public class ApplicationService {
 
     private CouponUser getCouponHistoryOrCreateCouponUser(CouponUserHistoryVo couponUserHistoryVo) {
         if (isCouponUsed(couponUserHistoryVo.user()))
-            return couponHelper.findCouponUserOrByCouponIdAndUserIdThrow(couponUserHistoryVo.coupon().getId(), couponUserHistoryVo.user().getId());
+            return couponHelper.findCouponUserByCouponIdAndUserIdThrow(couponUserHistoryVo.coupon().getId(), couponUserHistoryVo.user().getId());
         else
             return createCouponUserAndSave(couponUserHistoryVo);
     }
