@@ -53,8 +53,7 @@ public class User {
 
     @NotNull
     @Column(length = 10)
-    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
-    private LocalDate signedUpAt;
+    private String signedUpAt;
 
     @Nullable
     @Column(length = 10)
@@ -89,30 +88,28 @@ public class User {
     private String accountNumber;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @Builder.Default
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Application> applicationList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @Builder.Default
     private List<CouponUser> couponUserList = new ArrayList<>();
 
 
-//    @Builder
-//    private User(String email, String name, String password, String phoneNum,
-//                 AuthProvider authProvider) {
-//        this.name = name;
-//        this.email = email;
-//        this.password = password;
-//        this.phoneNum = phoneNum;
-//
-//        if(authProvider != null) this.authProvider = authProvider;
-//
-//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-//        this.signedUpAt = simpleDateFormat.format(new Date());
-//        this.role = UserRole.ROLE_ANONYMOUS;
-//        this.couponUserList = new ArrayList<>();
-//    }
+    @Builder
+    private User(String email, String name, String password, String phoneNum,
+                 AuthProvider authProvider) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.phoneNum = phoneNum;
+
+        if(authProvider != null) this.authProvider = authProvider;
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        this.signedUpAt = simpleDateFormat.format(new Date());
+        this.role = UserRole.ROLE_ANONYMOUS;
+        this.couponUserList = new ArrayList<>();
+    }
 
     public static User of(UserSignUpRequestDTO userSignUpRequestDTO, String encodedPassword) {
         return User.builder()
@@ -120,7 +117,6 @@ public class User {
                 .name(userSignUpRequestDTO.getUserVo().getName())
                 .password(encodedPassword)
                 .phoneNum(userSignUpRequestDTO.getUserVo().getPhoneNum())
-                .signedUpAt(LocalDate.now())
                 .build();
     }
 
