@@ -10,6 +10,12 @@ public record CouponUserHistoryVo(
         User user,
         Integer remainTime
 ) {
+    public CouponUserHistoryVo(Coupon coupon, User user, Integer remainTime) {
+        this.coupon = coupon;
+        this.user = user;
+        this.remainTime = remainTime;
+    }
+
     public static CouponUserHistoryVo of(Coupon coupon, Integer remainTime) {
         return CouponUserHistoryVo.builder()
                 .coupon(coupon)
