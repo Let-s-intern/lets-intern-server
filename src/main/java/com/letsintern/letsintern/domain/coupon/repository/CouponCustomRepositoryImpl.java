@@ -13,7 +13,6 @@ import org.springframework.data.support.PageableExecutionUtils;
 import java.util.List;
 
 import static com.letsintern.letsintern.domain.coupon.domain.QCoupon.coupon;
-import static com.letsintern.letsintern.domain.coupon.domain.QCouponUser.couponUser;
 
 @RequiredArgsConstructor
 public class CouponCustomRepositoryImpl implements CouponCustomRepository {
