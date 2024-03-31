@@ -42,7 +42,7 @@ public class Coupon extends BaseTimeEntity {
                 .couponType(baseCouponEnumVo.couponType())
                 .couponProgramType(baseCouponEnumVo.couponProgramType())
                 .name(baseCouponEnumVo.name())
-                .code(baseCouponEnumVo.name())
+                .code(baseCouponEnumVo.code())
                 .discount(baseCouponEnumVo.discount())
                 .startDate(baseCouponEnumVo.startDate())
                 .endDate(baseCouponEnumVo.endDate())
