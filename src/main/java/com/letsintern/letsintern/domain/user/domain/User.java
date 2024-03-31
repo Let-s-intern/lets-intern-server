@@ -107,6 +107,7 @@ public class User {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         this.signedUpAt = simpleDateFormat.format(new Date());
         this.role = UserRole.ROLE_ANONYMOUS;
+        this.couponUserList = new ArrayList<>();
     }
 
     public static User of(UserSignUpRequestDTO userSignUpRequestDTO, String encodedPassword) {
