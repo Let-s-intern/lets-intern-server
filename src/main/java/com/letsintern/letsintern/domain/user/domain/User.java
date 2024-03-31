@@ -120,6 +120,7 @@ public class User {
                 .name(userSignUpRequestDTO.getUserVo().getName())
                 .password(encodedPassword)
                 .phoneNum(userSignUpRequestDTO.getUserVo().getPhoneNum())
+                .signedUpAt(LocalDate.now())
                 .build();
     }
 
