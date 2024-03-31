@@ -33,7 +33,7 @@ public class CouponCustomRepositoryImpl implements CouponCustomRepository {
                         coupon.endDate,
                         coupon.createDate
                 ))
-                .from(couponUser)
+                .from(coupon)
                 .orderBy(coupon.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
