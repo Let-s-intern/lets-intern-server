@@ -33,7 +33,7 @@ public class CouponService {
                                                      String code) {
         User user = principalDetails.getUser();
         CouponUserHistoryVo couponUserHistoryVo = couponHelper.findCouponUserHistoryVoOrCreate(user, code);
-        couponHelper.validateApplyTimeForCoupon(couponUserHistoryVo.coupon().getEndDate());
+        couponHelper.validateApplyTimeForCoupon(couponUserHistoryVo.coupon().getStartDate(), couponUserHistoryVo.coupon().getEndDate());
         couponHelper.validateRemainTimeForUser(couponUserHistoryVo.coupon().getTime());
         return CouponApplyResponseDto.of(couponUserHistoryVo.coupon().getDiscount());
     }
