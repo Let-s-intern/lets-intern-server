@@ -24,6 +24,8 @@ import java.util.List;
 @Entity
 @Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder(access = AccessLevel.PRIVATE)
 @Where(clause = "deleted_at IS NULL")
 @SQLDelete(sql = "UPDATE user SET deleted_at = CURRENT_TIMESTAMP where user_id = ?")
 public class User {
@@ -51,7 +53,8 @@ public class User {
 
     @NotNull
     @Column(length = 10)
-    private String signedUpAt;
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
+    private LocalDate signedUpAt;
 
     @Nullable
     @Column(length = 10)
@@ -86,29 +89,30 @@ public class User {
     private String accountNumber;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
-    private List<Application> applicationList;
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<Application> applicationList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//    @Builder.Default
+    @Builder.Default
     private List<CouponUser> couponUserList = new ArrayList<>();
 
 
-    @Builder
-    private User(String email, String name, String password, String phoneNum,
-                 AuthProvider authProvider) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.phoneNum = phoneNum;
-
-        if(authProvider != null) this.authProvider = authProvider;
-
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        this.signedUpAt = simpleDateFormat.format(new Date());
-        this.role = UserRole.ROLE_ANONYMOUS;
-        this.couponUserList = new ArrayList<>();
-    }
+//    @Builder
+//    private User(String email, String name, String password, String phoneNum,
+//                 AuthProvider authProvider) {
+//        this.name = name;
+//        this.email = email;
+//        this.password = password;
+//        this.phoneNum = phoneNum;
+//
+//        if(authProvider != null) this.authProvider = authProvider;
+//
+//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//        this.signedUpAt = simpleDateFormat.format(new Date());
+//        this.role = UserRole.ROLE_ANONYMOUS;
+//        this.couponUserList = new ArrayList<>();
+//    }
 
     public static User of(UserSignUpRequestDTO userSignUpRequestDTO, String encodedPassword) {
         return User.builder()
