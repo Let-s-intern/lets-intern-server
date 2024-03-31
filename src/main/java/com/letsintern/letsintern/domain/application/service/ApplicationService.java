@@ -137,20 +137,20 @@ public class ApplicationService {
         CouponUserHistoryVo couponUserHistoryVo = couponHelper.findCouponUserHistoryVoOrCreate(user, applicationCreateDTO.getCode());
         couponHelper.validateApplyTimeForCoupon(couponUserHistoryVo.coupon().getStartDate(), couponUserHistoryVo.coupon().getEndDate());
         couponHelper.validateRemainTimeForUser(couponUserHistoryVo.remainTime());
-        CouponUser couponUser = getCouponHistoryOrCreateCouponUser(couponUserHistoryVo);
+        CouponUser couponUser = getCouponHistoryOrCreateCouponUser(user, couponUserHistoryVo);
         couponUser.decreaseRemainTime();
         return couponUserHistoryVo.coupon().getDiscount();
     }
 
-    private CouponUser getCouponHistoryOrCreateCouponUser(CouponUserHistoryVo couponUserHistoryVo) {
+    private CouponUser getCouponHistoryOrCreateCouponUser(User user, CouponUserHistoryVo couponUserHistoryVo) {
         if (isCouponUsed(couponUserHistoryVo.user()))
-            return createCouponUserAndSave(couponUserHistoryVo);
-        else
             return couponHelper.findCouponUserByCouponIdAndUserIdThrow(couponUserHistoryVo.coupon().getId(), couponUserHistoryVo.user().getId());
+        else
+            return createCouponUserAndSave(user, couponUserHistoryVo);
     }
 
-    private CouponUser createCouponUserAndSave(CouponUserHistoryVo couponUserHistoryVo) {
-        CouponUser couponUser = CouponUser.createCouponUser(couponUserHistoryVo.coupon(), couponUserHistoryVo.user());
+    private CouponUser createCouponUserAndSave(User user, CouponUserHistoryVo couponUserHistoryVo) {
+        CouponUser couponUser = CouponUser.createCouponUser(couponUserHistoryVo.coupon(), user);
         return couponHelper.saveCouponUser(couponUser);
     }
 
