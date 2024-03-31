@@ -135,7 +135,7 @@ public class ApplicationService {
         if (!isCouponApplied(applicationCreateDTO.getCode()))
             return 0;
         CouponUserHistoryVo couponUserHistoryVo = couponHelper.findCouponUserHistoryVoOrCreate(user, applicationCreateDTO.getCode());
-        couponHelper.validateApplyTimeForCoupon(couponUserHistoryVo.coupon().getEndDate());
+        couponHelper.validateApplyTimeForCoupon(couponUserHistoryVo.coupon().getStartDate(), couponUserHistoryVo.coupon().getEndDate());
         couponHelper.validateRemainTimeForUser(couponUserHistoryVo.remainTime());
         CouponUser couponUser = getCouponHistoryOrCreateCouponUser(couponUserHistoryVo);
         couponUser.decreaseRemainTime();
