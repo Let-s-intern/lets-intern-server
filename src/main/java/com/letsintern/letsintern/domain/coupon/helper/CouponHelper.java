@@ -23,9 +23,9 @@ public class CouponHelper {
 
     public void validateApplyTimeForCoupon(LocalDateTime startTime, LocalDateTime endTime) {
         LocalDateTime now = LocalDateTime.now();
-        if (startTime.isBefore(now))
+        if (now.isBefore(startTime))
             throw CouponBeforeTimeException.EXCEPTION;
-        if (endTime.isAfter(now))
+        if (now.isAfter(endTime))
             throw CouponExpiredException.EXCEPTION;
     }
 
