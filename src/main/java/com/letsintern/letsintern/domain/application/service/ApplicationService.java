@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Objects;
 
 @RequiredArgsConstructor
+@Transactional
 @Service
 public class ApplicationService {
     private final ApplicationRepository applicationRepository;
