@@ -40,7 +40,7 @@ public class CouponController {
 
     @PatchMapping("/{id}")
     public void updateCouponInfoForAdmin(@PathVariable("id") final Long couponId,
-                                 @RequestBody final BaseCouponRequestDto baseCouponRequestDto) {
+                                         @RequestBody final BaseCouponRequestDto baseCouponRequestDto) {
         couponService.updateCouponInfo(couponId, baseCouponRequestDto);
     }
 
