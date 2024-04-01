@@ -88,6 +88,7 @@ public class AttendanceHelper {
         if(attendanceAdminUpdateDTO.getComments() != null) attendance.setComments(attendanceAdminUpdateDTO.getComments());
         if(attendanceAdminUpdateDTO.getIsRefunded() != null) attendance.setIsRefunded(attendanceAdminUpdateDTO.getIsRefunded());
 
+        attendanceRepository.save(attendance);
         return attendance.getId();
     }
 
