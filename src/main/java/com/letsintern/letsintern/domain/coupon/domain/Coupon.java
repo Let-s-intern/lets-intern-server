@@ -33,7 +33,7 @@ public class Coupon extends BaseTimeEntity {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private Integer time;
-    @OneToMany(mappedBy = "coupon")
+    @OneToMany(mappedBy = "coupon", cascade = CascadeType.ALL)
     @Builder.Default
     private List<CouponUser> couponUserList = new ArrayList<>();
 
