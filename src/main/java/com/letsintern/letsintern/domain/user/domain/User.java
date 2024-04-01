@@ -90,7 +90,7 @@ public class User {
     private List<Application> applicationList;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<CouponUser> couponUserList = new ArrayList<>();
 
     @Builder
