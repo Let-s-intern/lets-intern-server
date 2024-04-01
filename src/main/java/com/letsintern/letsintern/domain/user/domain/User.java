@@ -24,7 +24,7 @@ import java.util.List;
 @Entity
 @Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 @Builder
 @Where(clause = "deleted_at IS NULL")
 @SQLDelete(sql = "UPDATE user SET deleted_at = CURRENT_TIMESTAMP where user_id = ?")
@@ -53,7 +53,6 @@ public class User {
 
     @NotNull
     @Column(length = 10)
-    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
     private String signedUpAt;
 
     @Nullable
@@ -92,12 +91,12 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Application> applicationList;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Builder.Default
     private List<CouponUser> couponUserList = new ArrayList<>();
 
 
+    @Builder
     private User(String email, String name, String password, String phoneNum,
                  AuthProvider authProvider) {
         this.name = name;
