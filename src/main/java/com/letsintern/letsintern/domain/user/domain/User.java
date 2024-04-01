@@ -15,15 +15,16 @@ import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
-@Getter @Setter
+@Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder
 @Where(clause = "deleted_at IS NULL")
 @SQLDelete(sql = "UPDATE user SET deleted_at = CURRENT_TIMESTAMP where user_id = ?")
 public class User {
@@ -51,11 +52,12 @@ public class User {
 
     @NotNull
     @Column(length = 10)
-    private String signedUpAt;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate signedUpAt;
 
     @Nullable
     @Column(length = 10)
-    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate deletedAt;
 
     @NotNull
@@ -90,22 +92,19 @@ public class User {
     private List<Application> applicationList;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//    @Builder.Default
+    @Builder.Default
     private List<CouponUser> couponUserList = new ArrayList<>();
 
 
-    @Builder
     private User(String email, String name, String password, String phoneNum,
                  AuthProvider authProvider) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.phoneNum = phoneNum;
-
-        if(authProvider != null) this.authProvider = authProvider;
-
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        this.signedUpAt = simpleDateFormat.format(new Date());
+        if (authProvider != null)
+            this.authProvider = authProvider;
+        this.signedUpAt = LocalDate.now();
         this.role = UserRole.ROLE_ANONYMOUS;
     }
 
