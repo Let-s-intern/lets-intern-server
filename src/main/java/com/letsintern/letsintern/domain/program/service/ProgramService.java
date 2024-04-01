@@ -220,8 +220,7 @@ public class ProgramService {
     private String createMentorPasswordForLetsChatType(ProgramCreateRequestDTO programCreateRequestDTO) {
         String mentorPassword = null;
         if (programCreateRequestDTO.getType().equals(ProgramType.LETS_CHAT)) {
-            int randomNumber = programHelper.generateRandomNumber();
-            mentorPassword = String.valueOf(randomNumber);
+            mentorPassword = programHelper.generateRandomNumber();
         }
         return mentorPassword;
     }

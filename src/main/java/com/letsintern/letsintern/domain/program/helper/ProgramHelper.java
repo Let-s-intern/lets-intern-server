@@ -48,10 +48,16 @@ public class ProgramHelper {
     private final ApplicationHelper applicationHelper;
     private final EmailUtils emailUtils;
 
-    public int generateRandomNumber() {
+    public String generateRandomNumber() {
         SecureRandom secureRandom = new SecureRandom();
         int upperLimit = (int) Math.pow(10, RANDOM_NUMBER_LENGTH);
-        return secureRandom.nextInt(upperLimit);
+
+        String mentorPassword = String.valueOf(secureRandom.nextInt(upperLimit));
+        while(mentorPassword.length() < RANDOM_NUMBER_LENGTH) {
+            mentorPassword = "0" + mentorPassword;
+        }
+
+        return mentorPassword;
     }
 
     public String getProgramMentorPassword(Long programId) {
