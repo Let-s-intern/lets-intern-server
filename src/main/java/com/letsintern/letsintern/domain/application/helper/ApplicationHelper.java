@@ -19,6 +19,7 @@ import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
 import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
 import com.letsintern.letsintern.domain.program.vo.ProgramEmailVo;
 import com.letsintern.letsintern.domain.user.domain.User;
+import com.letsintern.letsintern.domain.user.domain.UserRole;
 import com.letsintern.letsintern.global.common.util.EmailUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -231,5 +232,12 @@ public class ApplicationHelper {
     public void validateHasUserAccountInfo(ApplicationCreateDTO applicationCreateDTO) {
         if (Objects.isNull(applicationCreateDTO.getAccountType()) || Objects.isNull(applicationCreateDTO.getAccountNumber()))
             throw ApplicationUserBadRequestAccount.EXCEPTION;
+    }
+
+    public void validateIsChallengeParticipant(UserRole userRole, Long programId, Long userId) {
+        if(!userRole.equals(UserRole.ROLE_ADMIN)) {
+            final Application application = applicationRepository.findByProgramIdAndUserId(programId, userId);
+            if (application == null) throw ApplicationNotFound.EXCEPTION;
+        }
     }
 }

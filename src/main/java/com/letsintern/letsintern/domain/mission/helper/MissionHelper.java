@@ -1,5 +1,7 @@
 package com.letsintern.letsintern.domain.mission.helper;
 
+import com.letsintern.letsintern.domain.attendance.domain.AttendanceResult;
+import com.letsintern.letsintern.domain.attendance.domain.AttendanceStatus;
 import com.letsintern.letsintern.domain.attendance.repository.AttendanceRepository;
 import com.letsintern.letsintern.domain.contents.domain.Contents;
 import com.letsintern.letsintern.domain.contents.domain.ContentsTopic;
@@ -179,4 +181,13 @@ public class MissionHelper {
         return missionRepository.getMissionMyDashboardYetVo(missionId).orElseThrow(() -> MissionNotFound.EXCEPTION);
     }
 
+    public int getCurrentRefund(List<MissionDashboardListVo> missionList) {
+        int currentRefund = 0;
+        for(MissionDashboardListVo mission : missionList) {
+            if(mission.getMissionType().equals(MissionType.REFUND) && mission.getAttendanceStatus().equals(AttendanceStatus.PRESENT) && !mission.getAttendanceResult().equals(AttendanceResult.WRONG)) {
+                currentRefund += mission.getMissionRefund();
+            }
+        }
+        return currentRefund;
+    }
 }

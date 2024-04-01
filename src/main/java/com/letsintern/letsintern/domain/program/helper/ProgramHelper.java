@@ -120,14 +120,6 @@ public class ProgramHelper {
         return applicationRepository.findAllProgramByUserId(userId, pageable);
     }
 
-    public Program getExistingProgram(Long programId) {
-        Program program = programRepository.findById(programId)
-                .orElseThrow(() -> {
-                    throw ProgramNotFound.EXCEPTION;
-                });
-        return program;
-    }
-
     public void saveFinalHeadCount(Long programId) {
         Program program = programRepository.findById(programId).orElseThrow(() -> ProgramNotFound.EXCEPTION);
         program.setFinalHeadCount(applicationRepository.countAllByProgramIdAndStatus(programId, ApplicationStatus.IN_PROGRESS));

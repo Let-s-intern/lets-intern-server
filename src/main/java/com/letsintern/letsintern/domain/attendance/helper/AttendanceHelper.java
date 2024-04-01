@@ -69,6 +69,10 @@ public class AttendanceHelper {
         return attendance.getId();
     }
 
+    public Integer getYesterdayHeadCount(Long programId, Integer missionTh, AttendanceStatus attendanceStatus, AttendanceResult attendanceResult) {
+        return attendanceRepository.countAllByMissionProgramIdAndMissionThAndStatusAndResult(programId, missionTh, attendanceStatus, attendanceResult);
+    }
+
     public Page<AttendanceAdminVo> getAttendanceAdminList(Long missionId, Pageable pageable) {
         return attendanceRepository.getAttendanceAdminVos(missionId, pageable);
     }
