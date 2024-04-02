@@ -34,6 +34,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -182,12 +183,10 @@ public class MissionHelper {
     }
 
     public int getCurrentRefund(List<MissionDashboardListVo> missionList) {
-        int currentRefund = 0;
-        for(MissionDashboardListVo mission : missionList) {
-            if(mission.getMissionType().equals(MissionType.REFUND) && mission.getAttendanceStatus().equals(AttendanceStatus.PRESENT) && !mission.getAttendanceResult().equals(AttendanceResult.WRONG)) {
-                currentRefund += mission.getMissionRefund();
-            }
-        }
-        return currentRefund;
+        return missionList.stream().filter(missionDashboardListVo ->
+                missionDashboardListVo.getMissionType().equals(MissionType.REFUND) &&
+                missionDashboardListVo.getAttendanceStatus().equals(AttendanceStatus.PRESENT) &&
+                !missionDashboardListVo.getAttendanceResult().equals(AttendanceResult.WRONG))
+                .mapToInt(MissionDashboardListVo::getMissionRefund).sum();
     }
 }
