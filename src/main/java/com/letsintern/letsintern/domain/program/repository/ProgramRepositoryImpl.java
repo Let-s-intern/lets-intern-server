@@ -135,7 +135,7 @@ public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
                         qProgram.startDate,
                         qProgram.endDate,
                         qProgram.feeRefund,
-                        qProgram.feeRefund,
+                        qProgram.feeCharge,
                         qProgram.discountValue
                 ))
                 .from(qProgram)
