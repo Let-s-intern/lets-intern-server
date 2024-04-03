@@ -22,6 +22,7 @@ public class CouponCustomRepositoryImpl implements CouponCustomRepository {
     public Page<CouponAdminVo> findCouponAdminInfo(Pageable pageable) {
         List<CouponAdminVo> content = queryFactory
                 .select(Projections.constructor(CouponAdminVo.class,
+                        coupon.id,
                         coupon.couponType,
                         coupon.couponProgramType,
                         coupon.name,
