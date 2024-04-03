@@ -4,6 +4,7 @@ import com.letsintern.letsintern.domain.coupon.domain.Coupon;
 import com.letsintern.letsintern.domain.coupon.dto.request.BaseCouponRequestDto;
 import com.letsintern.letsintern.domain.coupon.dto.response.CouponAllResponseDto;
 import com.letsintern.letsintern.domain.coupon.dto.response.CouponApplyResponseDto;
+import com.letsintern.letsintern.domain.coupon.dto.response.CouponResponseDto;
 import com.letsintern.letsintern.domain.coupon.helper.CouponHelper;
 import com.letsintern.letsintern.domain.coupon.mapper.CouponMapper;
 import com.letsintern.letsintern.domain.coupon.vo.BaseCouponEnumVo;
@@ -23,6 +24,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class CouponService {
     private final CouponHelper couponHelper;
     private final CouponMapper couponMapper;
+
+    public CouponResponseDto getCoupon(Long couponId) {
+        Coupon coupon = couponHelper.findCouponOrThrow(couponId);
+        return couponMapper.toCouponResponseDto(coupon);
+    }
 
     public CouponAllResponseDto getCoupons(Pageable pageable) {
         Page<CouponAdminVo> couponList = couponHelper.findCouponAdminInfo(pageable);
