@@ -3,7 +3,9 @@ package com.letsintern.letsintern.domain.coupon;
 import com.letsintern.letsintern.domain.coupon.dto.request.BaseCouponRequestDto;
 import com.letsintern.letsintern.domain.coupon.dto.response.CouponAllResponseDto;
 import com.letsintern.letsintern.domain.coupon.dto.response.CouponApplyResponseDto;
+import com.letsintern.letsintern.domain.coupon.dto.response.CouponResponseDto;
 import com.letsintern.letsintern.domain.coupon.service.CouponService;
+import com.letsintern.letsintern.domain.coupon.vo.CouponAdminVo;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -26,9 +28,16 @@ public class CouponController {
         return ResponseEntity.ok(responseDto);
     }
 
-    @GetMapping("/{code}")
+    @GetMapping("/{id}")
+    public ResponseEntity<CouponResponseDto> getCoupon(@PathVariable("id") final Long couponId) {
+        final CouponResponseDto responseVo = couponService.getCoupon(couponId);
+        return ResponseEntity.ok(responseVo);
+
+    }
+
+    @GetMapping("/code")
     public ResponseEntity<CouponApplyResponseDto> getAvailableCoupon(@AuthenticationPrincipal final PrincipalDetails principalDetails,
-                                                                     @PathVariable("code") final String code) {
+                                                                     @RequestParam("code") final String code) {
         final CouponApplyResponseDto responseDto = couponService.getAvailableCoupon(principalDetails, code);
         return ResponseEntity.ok(responseDto);
     }
@@ -40,7 +49,7 @@ public class CouponController {
 
     @PatchMapping("/{id}")
     public void updateCouponInfoForAdmin(@PathVariable("id") final Long couponId,
-                                 @RequestBody final BaseCouponRequestDto baseCouponRequestDto) {
+                                         @RequestBody final BaseCouponRequestDto baseCouponRequestDto) {
         couponService.updateCouponInfo(couponId, baseCouponRequestDto);
     }
 

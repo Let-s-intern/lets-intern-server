@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 
 @Builder
 public record CouponAdminVo(
+        Long couponId,
         CouponType couponType,
         CouponProgramType couponProgramType,
         String name,

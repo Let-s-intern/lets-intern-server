@@ -171,13 +171,13 @@ public class Program {
         this.notice = notice;
         this.faqListStr = StringUtils.listToString(faqIdList);
         this.feeType = feeType;
-        this.discountValue = discountValue;
 
         // 이용료 or 보증금 프로그램
         if (feeType.equals(ProgramFeeType.CHARGE) || feeType.equals(ProgramFeeType.REFUND)) {
             if (feeType.equals(ProgramFeeType.REFUND)) this.feeRefund = feeRefund;
             this.feeCharge = feeCharge;
             this.feeDueDate = feeDueDate;
+            this.discountValue = discountValue;
             this.accountType = accountType;
             this.accountNumber = accountNumber;
         }

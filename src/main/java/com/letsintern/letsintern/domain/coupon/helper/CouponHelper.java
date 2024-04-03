@@ -2,10 +2,7 @@ package com.letsintern.letsintern.domain.coupon.helper;
 
 import com.letsintern.letsintern.domain.coupon.domain.Coupon;
 import com.letsintern.letsintern.domain.coupon.domain.CouponUser;
-import com.letsintern.letsintern.domain.coupon.exception.CouponExpiredException;
-import com.letsintern.letsintern.domain.coupon.exception.CouponHistoryNotFound;
-import com.letsintern.letsintern.domain.coupon.exception.CouponNotFound;
-import com.letsintern.letsintern.domain.coupon.exception.CouponUsageLimitExceededException;
+import com.letsintern.letsintern.domain.coupon.exception.*;
 import com.letsintern.letsintern.domain.coupon.repository.CouponRepository;
 import com.letsintern.letsintern.domain.coupon.repository.CouponUserRepository;
 import com.letsintern.letsintern.domain.coupon.vo.CouponAdminVo;
@@ -24,9 +21,11 @@ public class CouponHelper {
     private final CouponRepository couponRepository;
     private final CouponUserRepository couponUserRepository;
 
-    public void validateApplyTimeForCoupon(LocalDateTime endTime) {
+    public void validateApplyTimeForCoupon(LocalDateTime startTime, LocalDateTime endTime) {
         LocalDateTime now = LocalDateTime.now();
-        if (endTime.isAfter(now))
+        if (now.isBefore(startTime))
+            throw CouponBeforeTimeException.EXCEPTION;
+        if (now.isAfter(endTime))
             throw CouponExpiredException.EXCEPTION;
     }
 
