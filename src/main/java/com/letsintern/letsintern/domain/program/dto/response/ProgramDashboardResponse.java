@@ -1,8 +1,5 @@
 package com.letsintern.letsintern.domain.program.dto.response;
 
-import com.letsintern.letsintern.domain.attendance.domain.AttendanceResult;
-import com.letsintern.letsintern.domain.attendance.domain.AttendanceStatus;
-import com.letsintern.letsintern.domain.mission.domain.MissionType;
 import com.letsintern.letsintern.domain.mission.vo.MissionDashboardListVo;
 import com.letsintern.letsintern.domain.mission.vo.MissionDashboardVo;
 import com.letsintern.letsintern.domain.notice.domain.Notice;
@@ -35,14 +32,7 @@ public class ProgramDashboardResponse {
 
     @Builder
     private ProgramDashboardResponse(String userName, MissionDashboardVo dailyMission, Page<Notice> noticeList, List<MissionDashboardListVo> missionList,
-                                     Integer totalRefund, Integer finalHeadCount, Integer yesterdayHeadCount, Boolean isDone) {
-        int currentRefund = 0;
-        for(MissionDashboardListVo mission : missionList) {
-            if(mission.getMissionType().equals(MissionType.REFUND) && mission.getAttendanceStatus().equals(AttendanceStatus.PRESENT) && !mission.getAttendanceResult().equals(AttendanceResult.WRONG)) {
-                currentRefund += mission.getMissionRefund();
-            }
-        }
-
+                                     Integer totalRefund, Integer currentRefund, Integer finalHeadCount, Integer yesterdayHeadCount, Boolean isDone) {
         this.userName = userName;
         this.dailyMission = dailyMission;
         this.noticeList = (noticeList.hasContent()) ? noticeList.getContent() : new ArrayList<>();
@@ -50,18 +40,19 @@ public class ProgramDashboardResponse {
         this.currentRefund = currentRefund;
         this.totalRefund = totalRefund;
         this.finalHeadCount = finalHeadCount;
-        if(dailyMission != null && (dailyMission.getTh() >= 2 && dailyMission.getTh() <= 14)) this.yesterdayHeadCount = yesterdayHeadCount;
+        this.yesterdayHeadCount = yesterdayHeadCount;
         this.isDone = isDone;
     }
 
     public static ProgramDashboardResponse of(String userName, MissionDashboardVo dailyMission, Page<Notice> noticeList, List<MissionDashboardListVo> missionList,
-                                              Integer totalRefund, Integer finalHeadCount, Integer yesterdayHeadCount, Boolean isDone) {
+                                              Integer totalRefund, Integer currentRefund, Integer finalHeadCount, Integer yesterdayHeadCount, Boolean isDone) {
         return ProgramDashboardResponse.builder()
                 .userName(userName)
                 .dailyMission(dailyMission)
                 .noticeList(noticeList)
                 .missionList(missionList)
                 .totalRefund(totalRefund)
+                .currentRefund(currentRefund)
                 .finalHeadCount(finalHeadCount)
                 .yesterdayHeadCount(yesterdayHeadCount)
                 .isDone(isDone)

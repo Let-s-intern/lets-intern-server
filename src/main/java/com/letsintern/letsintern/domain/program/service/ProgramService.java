@@ -7,9 +7,12 @@ import com.letsintern.letsintern.domain.application.helper.ApplicationHelper;
 import com.letsintern.letsintern.domain.application.repository.ApplicationRepository;
 import com.letsintern.letsintern.domain.attendance.domain.AttendanceResult;
 import com.letsintern.letsintern.domain.attendance.domain.AttendanceStatus;
-import com.letsintern.letsintern.domain.attendance.repository.AttendanceRepository;
+import com.letsintern.letsintern.domain.attendance.helper.AttendanceHelper;
+import com.letsintern.letsintern.domain.mission.domain.MissionType;
 import com.letsintern.letsintern.domain.mission.helper.MissionHelper;
+import com.letsintern.letsintern.domain.mission.vo.MissionDashboardListVo;
 import com.letsintern.letsintern.domain.mission.vo.MissionDashboardVo;
+import com.letsintern.letsintern.domain.notice.domain.Notice;
 import com.letsintern.letsintern.domain.notice.helper.NoticeHelper;
 import com.letsintern.letsintern.domain.program.domain.*;
 import com.letsintern.letsintern.domain.program.dto.request.LetsChatMentorPasswordRequestDTO;
@@ -26,11 +29,13 @@ import com.letsintern.letsintern.domain.user.domain.User;
 import com.letsintern.letsintern.domain.user.domain.UserRole;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -45,9 +50,9 @@ public class ProgramService {
     private final ApplicationHelper applicationHelper;
     private final ApplicationRepository applicationRepository;
     private final MissionHelper missionHelper;
+    private final AttendanceHelper attendanceHelper;
     private final NoticeHelper noticeHelper;
     private final ZoomMeetingApiHelper zoomMeetingApiHelper;
-    private final AttendanceRepository attendanceRepository;
 
     public Long getDoneProgramCount() {
         return programRepository.countByStatusEquals(ProgramStatus.DONE);
@@ -74,6 +79,10 @@ public class ProgramService {
         /* program entity 생성 및 저장 */
         Program savedProgram = createProgramAndSave(programCreateRequestDTO, zoomMeetingCreateResponse, mentorPassword);
         return programMapper.toProgramIdResponseDTO(savedProgram.getId());
+    }
+
+    public Program getProgram(Long programId) {
+        return programHelper.findProgramOrThrow(programId);
     }
 
     @Transactional
@@ -112,10 +121,6 @@ public class ProgramService {
         }
     }
 
-    public Program getProgram(Long programId) {
-        return programHelper.getExistingProgram(programId);
-    }
-
     public void deleteProgram(Long programId) {
         Program program = programRepository.findById(programId)
                 .orElseThrow(() -> {
@@ -139,25 +144,33 @@ public class ProgramService {
 
     @Transactional(readOnly = true)
     public ProgramDashboardResponse getProgramDashboard(Long programId, PrincipalDetails principalDetails, Pageable pageable) {
-        final Program program = programRepository.findById(programId).orElseThrow(() -> ProgramNotFound.EXCEPTION);
+        final Program program = programHelper.findProgramOrThrow(programId);
         final User user = principalDetails.getUser();
-        if (!user.getRole().equals(UserRole.ROLE_ADMIN)) {
-            final Application application = applicationRepository.findByProgramIdAndUserId(programId, user.getId());
-            if (application == null) throw ApplicationNotFound.EXCEPTION;
-        }
+        applicationHelper.validateIsChallengeParticipant(user.getRole(), program.getId(), user.getId());
 
-        MissionDashboardVo dailyMission = missionHelper.getDailyMission(program.getId(), program.getStartDate());
-        Integer yesterdayHeadCount = (dailyMission == null) ? null : attendanceRepository.countAllByMissionProgramIdAndMissionThAndStatusAndResult(programId, dailyMission.getTh() - 1, AttendanceStatus.PRESENT, AttendanceResult.PASS);
+        /* 챌린지 종료 여부 */
+        boolean isDoneProgram = program.getEndDate().isBefore(LocalDateTime.now());
+        /* 데일리 미션 */
+        MissionDashboardVo dailyMission = (isDoneProgram) ? null : missionHelper.getDailyMission(program.getId(), program.getStartDate());
+        /* 공지사항 목록 */
+        Page<Notice> noticeList = noticeHelper.getNoticeList(program.getId(), pageable);
+        /* 전체 미션, 출석 현황 */
+        List<MissionDashboardListVo> missionList = missionHelper.getMissionDashboardList(program.getId(), user.getId());
+        /* 현재까지 환급금 */
+        Integer currentRefund = (isDoneProgram) ? 0 : missionHelper.getCurrentRefund(missionList);
+        /* 어제 미션을 정상 제출한 인원수 */
+        Integer yesterdayHeadCount = (isDoneProgram) ? null : attendanceHelper.getYesterdayHeadCount(program.getId(), dailyMission.getTh() - 1, AttendanceStatus.PRESENT, AttendanceResult.PASS);
 
         return programMapper.toProgramDashboardResponse(
                 user.getName(),
                 dailyMission,
-                noticeHelper.getNoticeList(programId, pageable),
-                missionHelper.getMissionDashboardList(programId, user.getId()),
+                noticeList,
+                missionList,
                 program.getFeeRefund(),
+                currentRefund,
                 program.getFinalHeadCount(),
                 yesterdayHeadCount,
-                program.getEndDate().isBefore(LocalDateTime.now())
+                isDoneProgram
         );
     }
 
@@ -165,10 +178,7 @@ public class ProgramService {
     public ProgramMyDashboardResponse getProgramMyDashboard(Long programId, PrincipalDetails principalDetails) {
         final Program program = programRepository.findById(programId).orElseThrow(() -> ProgramNotFound.EXCEPTION);
         final User user = principalDetails.getUser();
-        if (!user.getRole().equals(UserRole.ROLE_ADMIN)) {
-            final Application application = applicationRepository.findByProgramIdAndUserId(programId, user.getId());
-            if (application == null) throw ApplicationNotFound.EXCEPTION;
-        }
+        applicationHelper.validateIsChallengeParticipant(user.getRole(), program.getId(), user.getId());
 
         return programMapper.toProgramMyDashboardResponse(
                 missionHelper.getDailyMissionDetail(program.getId(), program.getStartDate(), user.getId()),
@@ -220,8 +230,7 @@ public class ProgramService {
     private String createMentorPasswordForLetsChatType(ProgramCreateRequestDTO programCreateRequestDTO) {
         String mentorPassword = null;
         if (programCreateRequestDTO.getType().equals(ProgramType.LETS_CHAT)) {
-            int randomNumber = programHelper.generateRandomNumber();
-            mentorPassword = String.valueOf(randomNumber);
+            mentorPassword = programHelper.generateRandomNumber();
         }
         return mentorPassword;
     }
