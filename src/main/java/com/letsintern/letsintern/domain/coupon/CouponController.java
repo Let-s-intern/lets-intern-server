@@ -3,7 +3,9 @@ package com.letsintern.letsintern.domain.coupon;
 import com.letsintern.letsintern.domain.coupon.dto.request.BaseCouponRequestDto;
 import com.letsintern.letsintern.domain.coupon.dto.response.CouponAllResponseDto;
 import com.letsintern.letsintern.domain.coupon.dto.response.CouponApplyResponseDto;
+import com.letsintern.letsintern.domain.coupon.dto.response.CouponResponseDto;
 import com.letsintern.letsintern.domain.coupon.service.CouponService;
+import com.letsintern.letsintern.domain.coupon.vo.CouponAdminVo;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,13 @@ public class CouponController {
     public ResponseEntity<CouponAllResponseDto> getCouponsForAdmin(@PageableDefault(size = 10) final Pageable pageable) {
         final CouponAllResponseDto responseDto = couponService.getCoupons(pageable);
         return ResponseEntity.ok(responseDto);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CouponResponseDto> getCoupon(@PathVariable("id") final Long couponId) {
+        final CouponResponseDto responseVo = couponService.getCoupon(couponId);
+        return ResponseEntity.ok(responseVo);
+
     }
 
     @GetMapping("/{code}")
