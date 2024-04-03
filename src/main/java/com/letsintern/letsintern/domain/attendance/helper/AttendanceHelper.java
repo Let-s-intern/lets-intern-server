@@ -69,6 +69,10 @@ public class AttendanceHelper {
         return attendance.getId();
     }
 
+    public Integer getYesterdayHeadCount(Long programId, Integer missionTh, AttendanceStatus attendanceStatus, AttendanceResult attendanceResult) {
+        return attendanceRepository.countAllByMissionProgramIdAndMissionThAndStatusAndResult(programId, missionTh, attendanceStatus, attendanceResult);
+    }
+
     public Page<AttendanceAdminVo> getAttendanceAdminList(Long missionId, Pageable pageable) {
         return attendanceRepository.getAttendanceAdminVos(missionId, pageable);
     }
@@ -88,6 +92,7 @@ public class AttendanceHelper {
         if(attendanceAdminUpdateDTO.getComments() != null) attendance.setComments(attendanceAdminUpdateDTO.getComments());
         if(attendanceAdminUpdateDTO.getIsRefunded() != null) attendance.setIsRefunded(attendanceAdminUpdateDTO.getIsRefunded());
 
+        attendanceRepository.save(attendance);
         return attendance.getId();
     }
 

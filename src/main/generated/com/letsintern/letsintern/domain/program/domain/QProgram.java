@@ -32,6 +32,8 @@ public class QProgram extends EntityPathBase<Program> {
 
     public final StringPath contents = createString("contents");
 
+    public final NumberPath<Integer> discountValue = createNumber("discountValue", Integer.class);
+
     public final DateTimePath<java.time.LocalDateTime> dueDate = createDateTime("dueDate", java.time.LocalDateTime.class);
 
     public final DateTimePath<java.time.LocalDateTime> endDate = createDateTime("endDate", java.time.LocalDateTime.class);

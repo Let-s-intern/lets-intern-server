@@ -1,5 +1,7 @@
 package com.letsintern.letsintern.domain.mission.helper;
 
+import com.letsintern.letsintern.domain.attendance.domain.AttendanceResult;
+import com.letsintern.letsintern.domain.attendance.domain.AttendanceStatus;
 import com.letsintern.letsintern.domain.attendance.repository.AttendanceRepository;
 import com.letsintern.letsintern.domain.contents.domain.Contents;
 import com.letsintern.letsintern.domain.contents.domain.ContentsTopic;
@@ -32,6 +34,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -179,4 +182,11 @@ public class MissionHelper {
         return missionRepository.getMissionMyDashboardYetVo(missionId).orElseThrow(() -> MissionNotFound.EXCEPTION);
     }
 
+    public int getCurrentRefund(List<MissionDashboardListVo> missionList) {
+        return missionList.stream().filter(missionDashboardListVo ->
+                missionDashboardListVo.getMissionType().equals(MissionType.REFUND) &&
+                missionDashboardListVo.getAttendanceStatus().equals(AttendanceStatus.PRESENT) &&
+                !missionDashboardListVo.getAttendanceResult().equals(AttendanceResult.WRONG))
+                .mapToInt(MissionDashboardListVo::getMissionRefund).sum();
+    }
 }
