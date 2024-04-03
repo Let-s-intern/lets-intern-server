@@ -35,7 +35,7 @@ public class CouponController {
 
     }
 
-    @GetMapping
+    @GetMapping("/code")
     public ResponseEntity<CouponApplyResponseDto> getAvailableCoupon(@AuthenticationPrincipal final PrincipalDetails principalDetails,
                                                                      @RequestParam("code") final String code) {
         final CouponApplyResponseDto responseDto = couponService.getAvailableCoupon(principalDetails, code);
