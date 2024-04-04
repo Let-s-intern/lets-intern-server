@@ -19,7 +19,8 @@ public class CouponUserRepositoryCustomImpl implements CouponUserRepositoryCusto
         return Optional.ofNullable(queryFactory
                 .select(Projections.constructor(CouponUserHistoryVo.class,
                         couponUser.coupon,
-                        couponUser.user
+                        couponUser.user,
+                        couponUser.remainTime
                 ))
                 .from(couponUser)
                 .where(

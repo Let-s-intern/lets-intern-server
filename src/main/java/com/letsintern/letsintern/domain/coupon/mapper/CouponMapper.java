@@ -5,6 +5,7 @@ import com.letsintern.letsintern.domain.coupon.domain.CouponProgramType;
 import com.letsintern.letsintern.domain.coupon.domain.CouponType;
 import com.letsintern.letsintern.domain.coupon.dto.request.BaseCouponRequestDto;
 import com.letsintern.letsintern.domain.coupon.dto.response.CouponAllResponseDto;
+import com.letsintern.letsintern.domain.coupon.dto.response.CouponResponseDto;
 import com.letsintern.letsintern.domain.coupon.vo.BaseCouponEnumVo;
 import com.letsintern.letsintern.domain.coupon.vo.CouponAdminVo;
 import com.letsintern.letsintern.global.common.dto.PageInfo;
@@ -30,5 +31,9 @@ public class CouponMapper {
     public CouponAllResponseDto toCouponAllResponseDto(Page<CouponAdminVo> couponList) {
         PageInfo pageInfo = PageInfo.of(couponList);
         return CouponAllResponseDto.of(couponList, pageInfo);
+    }
+
+    public CouponResponseDto toCouponResponseDto(Coupon coupon) {
+        return CouponResponseDto.of(coupon);
     }
 }

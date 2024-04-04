@@ -136,7 +136,7 @@ public class ProgramRepositoryImpl implements ProgramRepositoryCustom {
                         qProgram.endDate,
                         qProgram.feeDueDate,
                         qProgram.feeRefund,
-                        qProgram.feeRefund,
+                        qProgram.feeCharge,
                         qProgram.discountValue,
                         qProgram.accountType,
                         qProgram.accountNumber
