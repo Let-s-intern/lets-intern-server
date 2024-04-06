@@ -26,8 +26,8 @@ public class CouponHelper {
     private final CouponUserRepository couponUserRepository;
     private final CouponProgramRepository couponProgramRepository;
 
-    public void validateAvailableCouponProgram(List<CouponProgram> couponProgramList, CouponProgramType couponProgramType) {
-        if (!isContainProgramType(couponProgramList, couponProgramType))
+    public void validateAvailableCouponProgram(Long couponId, CouponProgramType couponProgramType) {
+        if (!existCouponProgramType(couponId, couponProgramType))
             throw InvalidCouponProgramType.EXCEPTION;
     }
 
@@ -97,8 +97,7 @@ public class CouponHelper {
         couponProgramRepository.deleteAll(couponProgramList);
     }
 
-    private boolean isContainProgramType(List<CouponProgram> couponProgramList, CouponProgramType couponProgramType) {
-        return couponProgramList.stream()
-                .anyMatch(couponProgram -> couponProgram.getCouponProgramType() == couponProgramType);
+    private boolean existCouponProgramType(Long couponId, CouponProgramType couponProgramType) {
+        return couponProgramRepository.existsByCouponIdAndCouponProgramType(couponId, couponProgramType);
     }
 }

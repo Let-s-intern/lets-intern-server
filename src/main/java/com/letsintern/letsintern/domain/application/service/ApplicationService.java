@@ -138,7 +138,7 @@ public class ApplicationService {
         CouponProgramType couponProgramType = couponMapper.toCouponProgramType(applicationCreateDTO.getCouponProgramType());
         couponHelper.validateApplyTimeForCoupon(couponUserHistoryVo.coupon().getStartDate(), couponUserHistoryVo.coupon().getEndDate());
         couponHelper.validateRemainTimeForUser(couponUserHistoryVo.remainTime());
-        couponHelper.validateAvailableCouponProgram(couponUserHistoryVo.coupon().getCouponProgramList(), couponProgramType);
+        couponHelper.validateAvailableCouponProgram(couponUserHistoryVo.coupon().getId(), couponProgramType);
         CouponUser couponUser = getCouponHistoryOrCreateCouponUser(user, couponUserHistoryVo);
         couponUser.decreaseRemainTime();
         return couponUserHistoryVo.coupon().getDiscount();
