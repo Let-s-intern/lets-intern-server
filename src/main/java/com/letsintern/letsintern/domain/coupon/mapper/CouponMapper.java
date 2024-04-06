@@ -60,7 +60,7 @@ public class CouponMapper {
     }
 
     public CouponResponseDto toCouponResponseDto(Coupon coupon) {
-        return CouponResponseDto.of(coupon);
+        return CouponResponseDto.of(coupon, coupon.getCouponProgramList());
     }
 
     public CouponProgramType toCouponProgramType(Integer type) {
