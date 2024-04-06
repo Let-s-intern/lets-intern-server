@@ -2,6 +2,7 @@ package com.letsintern.letsintern.domain.coupon.service;
 
 import com.letsintern.letsintern.domain.coupon.domain.Coupon;
 import com.letsintern.letsintern.domain.coupon.domain.CouponProgram;
+import com.letsintern.letsintern.domain.coupon.domain.CouponProgramType;
 import com.letsintern.letsintern.domain.coupon.dto.request.BaseCouponProgramRequestDto;
 import com.letsintern.letsintern.domain.coupon.dto.request.BaseCouponRequestDto;
 import com.letsintern.letsintern.domain.coupon.dto.response.CouponAllResponseDto;
@@ -46,8 +47,10 @@ public class CouponService {
                                                      Integer type) {
         User user = principalDetails.getUser();
         CouponUserHistoryVo couponUserHistoryVo = couponHelper.findCouponUserHistoryVoOrCreate(user, code);
+        CouponProgramType couponProgramType = couponMapper.toCouponProgramType(type);
         couponHelper.validateApplyTimeForCoupon(couponUserHistoryVo.coupon().getStartDate(), couponUserHistoryVo.coupon().getEndDate());
         couponHelper.validateRemainTimeForUser(couponUserHistoryVo.coupon().getTime());
+        couponHelper.validateAvailableCouponProgram(couponUserHistoryVo.coupon().getCouponProgramList(), couponProgramType);
         return CouponApplyResponseDto.of(couponUserHistoryVo.coupon().getDiscount());
     }
 
