@@ -73,8 +73,8 @@ public class CouponHelper {
                 .orElseThrow(() -> CouponNotFound.EXCEPTION);
     }
 
-    public void saveCoupon(Coupon coupon) {
-        couponRepository.save(coupon);
+    public Coupon saveCoupon(Coupon coupon) {
+        return couponRepository.save(coupon);
     }
 
     public CouponUser saveCouponUser(CouponUser couponUser) {

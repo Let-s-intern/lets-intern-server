@@ -83,8 +83,7 @@ public class CouponService {
 
     private Coupon createCouponAndSave(BaseCouponEnumVo baseCouponEnumVo) {
         Coupon newCoupon = couponMapper.toEntityCoupon(baseCouponEnumVo);
-        couponHelper.saveCoupon(newCoupon);
-        return newCoupon;
+        return couponHelper.saveCoupon(newCoupon);
     }
 
     private void createCouponProgramsAndSave(List<BaseCouponProgramEnumVo> baseCouponProgramEnumVoList,
