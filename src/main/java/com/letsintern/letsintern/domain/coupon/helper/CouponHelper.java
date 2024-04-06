@@ -26,8 +26,8 @@ public class CouponHelper {
     private final CouponUserRepository couponUserRepository;
     private final CouponProgramRepository couponProgramRepository;
 
-    public void validateDuplicateCouponCode(String code) {
-        if (existCouponCode(code))
+    public void validateDuplicateCouponCode(Long couponId, String code) {
+        if (existCouponCode(couponId, code))
             throw DuplicateCouponCode.EXCEPTION;
     }
 
@@ -106,7 +106,7 @@ public class CouponHelper {
         return couponProgramRepository.existsByCouponIdAndCouponProgramType(couponId, couponProgramType);
     }
 
-    private boolean existCouponCode(String code) {
-        return couponRepository.existsByCode(code);
+    private boolean existCouponCode(Long couponId, String code) {
+        return couponRepository.existCouponCodeExceptedCouponId(couponId, code).isPresent();
     }
 }
