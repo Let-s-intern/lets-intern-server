@@ -23,7 +23,6 @@ public record CouponResponseDto(
     public static CouponResponseDto of(Coupon coupon) {
         return CouponResponseDto.builder()
                 .couponType(coupon.getCouponType())
-                .couponProgramType(coupon.getCouponProgramType())
                 .name(coupon.getName())
                 .code(coupon.getCode())
                 .discount(coupon.getDiscount())

@@ -24,7 +24,6 @@ public class CouponCustomRepositoryImpl implements CouponCustomRepository {
                 .select(Projections.constructor(CouponAdminVo.class,
                         coupon.id,
                         coupon.couponType,
-                        coupon.couponProgramType,
                         coupon.name,
                         coupon.code,
                         coupon.discount,
