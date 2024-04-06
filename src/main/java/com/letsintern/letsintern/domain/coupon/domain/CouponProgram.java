@@ -24,6 +24,7 @@ public class CouponProgram {
     public static CouponProgram createCouponProgram(BaseCouponProgramEnumVo baseCouponProgramEnumVo, Coupon coupon) {
         CouponProgram couponProgram = CouponProgram.builder()
                 .couponProgramType(baseCouponProgramEnumVo.couponProgramType())
+                .coupon(coupon)
                 .build();
         coupon.addCouponProgramType(couponProgram);
         return couponProgram;
