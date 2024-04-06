@@ -67,4 +67,8 @@ public class Coupon extends BaseTimeEntity {
     public void addCouponProgramType(CouponProgram couponProgram) {
         this.couponProgramList.add(couponProgram);
     }
+
+    public void resetCouponProgramType() {
+        this.couponProgramList = new ArrayList<>();
+    }
 }

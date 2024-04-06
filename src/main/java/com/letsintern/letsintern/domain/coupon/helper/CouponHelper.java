@@ -86,4 +86,8 @@ public class CouponHelper {
     public void deleteCoupon(Coupon coupon) {
         couponRepository.delete(coupon);
     }
+
+    public void deleteCouponProgramList(List<CouponProgram> couponProgramList) {
+        couponProgramRepository.deleteAll(couponProgramList);
+    }
 }

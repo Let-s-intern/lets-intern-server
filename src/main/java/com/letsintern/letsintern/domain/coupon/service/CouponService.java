@@ -2,6 +2,7 @@ package com.letsintern.letsintern.domain.coupon.service;
 
 import com.letsintern.letsintern.domain.coupon.domain.Coupon;
 import com.letsintern.letsintern.domain.coupon.domain.CouponProgram;
+import com.letsintern.letsintern.domain.coupon.dto.request.BaseCouponProgramRequestDto;
 import com.letsintern.letsintern.domain.coupon.dto.request.BaseCouponRequestDto;
 import com.letsintern.letsintern.domain.coupon.dto.response.CouponAllResponseDto;
 import com.letsintern.letsintern.domain.coupon.dto.response.CouponApplyResponseDto;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @RequiredArgsConstructor
 @Transactional
@@ -60,6 +62,15 @@ public class CouponService {
         Coupon coupon = couponHelper.findCouponOrThrow(couponId);
         BaseCouponEnumVo baseCouponEnumVo = couponMapper.toCouponEnumVo(baseCouponRequestDto);
         coupon.updateCoupon(baseCouponEnumVo);
+        checkUpdatedCouponProgramAndUpdate(baseCouponRequestDto.programTypeList(), coupon);
+    }
+
+    private void checkUpdatedCouponProgramAndUpdate(List<BaseCouponProgramRequestDto> baseCouponProgramRequestDtoList,
+                                                    Coupon coupon) {
+        if (Objects.isNull(baseCouponProgramRequestDtoList)) return;
+        deleteCouponPrograms(coupon);
+        List<BaseCouponProgramEnumVo> baseCouponProgramEnumVoList = couponMapper.toCouponProgramEnumVoList(baseCouponProgramRequestDtoList);
+        createCouponProgramsAndSave(baseCouponProgramEnumVoList, coupon);
     }
 
     public void deleteCoupon(Long couponId) {
@@ -73,8 +84,14 @@ public class CouponService {
         return newCoupon;
     }
 
-    private void createCouponProgramsAndSave(List<BaseCouponProgramEnumVo> baseCouponProgramEnumVoList, Coupon coupon) {
+    private void createCouponProgramsAndSave(List<BaseCouponProgramEnumVo> baseCouponProgramEnumVoList,
+                                             Coupon coupon) {
         List<CouponProgram> couponProgramList = couponMapper.toEntityListCouponProgram(baseCouponProgramEnumVoList, coupon);
         couponHelper.saveCouponProgramList(couponProgramList);
+    }
+
+    private void deleteCouponPrograms(Coupon coupon) {
+        couponHelper.deleteCouponProgramList(coupon.getCouponProgramList());
+        coupon.resetCouponProgramType();
     }
 }
