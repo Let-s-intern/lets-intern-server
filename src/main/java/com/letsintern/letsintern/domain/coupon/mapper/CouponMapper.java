@@ -50,7 +50,7 @@ public class CouponMapper {
     }
 
     public BaseCouponProgramEnumVo toCouponProgramEnumVo(BaseCouponProgramRequestDto baseCouponProgramRequestDto) {
-        CouponProgramType couponProgramType = toEntityCode(CouponProgramType.class, baseCouponProgramRequestDto.programType());
+        CouponProgramType couponProgramType = toCouponProgramType(baseCouponProgramRequestDto.programType());
         return BaseCouponProgramEnumVo.of(couponProgramType);
     }
 
@@ -61,5 +61,9 @@ public class CouponMapper {
 
     public CouponResponseDto toCouponResponseDto(Coupon coupon) {
         return CouponResponseDto.of(coupon);
+    }
+
+    public CouponProgramType toCouponProgramType(Integer type) {
+        return toEntityCode(CouponProgramType.class, type);
     }
 }
