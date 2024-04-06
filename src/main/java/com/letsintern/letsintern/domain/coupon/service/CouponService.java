@@ -1,6 +1,7 @@
 package com.letsintern.letsintern.domain.coupon.service;
 
 import com.letsintern.letsintern.domain.coupon.domain.Coupon;
+import com.letsintern.letsintern.domain.coupon.domain.CouponProgram;
 import com.letsintern.letsintern.domain.coupon.dto.request.BaseCouponRequestDto;
 import com.letsintern.letsintern.domain.coupon.dto.response.CouponAllResponseDto;
 import com.letsintern.letsintern.domain.coupon.dto.response.CouponApplyResponseDto;
@@ -8,6 +9,7 @@ import com.letsintern.letsintern.domain.coupon.dto.response.CouponResponseDto;
 import com.letsintern.letsintern.domain.coupon.helper.CouponHelper;
 import com.letsintern.letsintern.domain.coupon.mapper.CouponMapper;
 import com.letsintern.letsintern.domain.coupon.vo.BaseCouponEnumVo;
+import com.letsintern.letsintern.domain.coupon.vo.BaseCouponProgramEnumVo;
 import com.letsintern.letsintern.domain.coupon.vo.CouponAdminVo;
 import com.letsintern.letsintern.domain.coupon.vo.CouponUserHistoryVo;
 import com.letsintern.letsintern.domain.user.domain.User;
@@ -17,6 +19,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Transactional
@@ -36,7 +40,8 @@ public class CouponService {
     }
 
     public CouponApplyResponseDto getAvailableCoupon(PrincipalDetails principalDetails,
-                                                     String code) {
+                                                     String code,
+                                                     Integer type) {
         User user = principalDetails.getUser();
         CouponUserHistoryVo couponUserHistoryVo = couponHelper.findCouponUserHistoryVoOrCreate(user, code);
         couponHelper.validateApplyTimeForCoupon(couponUserHistoryVo.coupon().getStartDate(), couponUserHistoryVo.coupon().getEndDate());
@@ -46,7 +51,9 @@ public class CouponService {
 
     public void createNewCoupon(BaseCouponRequestDto baseCouponRequestDto) {
         BaseCouponEnumVo baseCouponEnumVo = couponMapper.toCouponEnumVo(baseCouponRequestDto);
-        createCouponAndSave(baseCouponEnumVo);
+        List<BaseCouponProgramEnumVo> baseCouponProgramEnumVoList = couponMapper.toCouponProgramEnumVoList(baseCouponRequestDto.programTypeList());
+        Coupon newCoupon = createCouponAndSave(baseCouponEnumVo);
+        createCouponProgramsAndSave(baseCouponProgramEnumVoList, newCoupon);
     }
 
     public void updateCouponInfo(Long couponId, BaseCouponRequestDto baseCouponRequestDto) {
@@ -60,8 +67,14 @@ public class CouponService {
         couponHelper.deleteCoupon(coupon);
     }
 
-    private void createCouponAndSave(BaseCouponEnumVo baseCouponEnumVo) {
-        Coupon newCoupon = couponMapper.toEntity(baseCouponEnumVo);
+    private Coupon createCouponAndSave(BaseCouponEnumVo baseCouponEnumVo) {
+        Coupon newCoupon = couponMapper.toEntityCoupon(baseCouponEnumVo);
         couponHelper.saveCoupon(newCoupon);
+        return newCoupon;
+    }
+
+    private void createCouponProgramsAndSave(List<BaseCouponProgramEnumVo> baseCouponProgramEnumVoList, Coupon coupon) {
+        List<CouponProgram> couponProgramList = couponMapper.toEntityListCouponProgram(baseCouponProgramEnumVoList, coupon);
+        couponHelper.saveCouponProgramList(couponProgramList);
     }
 }
