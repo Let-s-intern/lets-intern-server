@@ -9,8 +9,10 @@ import com.letsintern.letsintern.domain.application.exception.ApplicationNotFoun
 import com.letsintern.letsintern.domain.application.helper.ApplicationHelper;
 import com.letsintern.letsintern.domain.application.mapper.ApplicationMapper;
 import com.letsintern.letsintern.domain.application.repository.ApplicationRepository;
+import com.letsintern.letsintern.domain.coupon.domain.CouponProgramType;
 import com.letsintern.letsintern.domain.coupon.domain.CouponUser;
 import com.letsintern.letsintern.domain.coupon.helper.CouponHelper;
+import com.letsintern.letsintern.domain.coupon.mapper.CouponMapper;
 import com.letsintern.letsintern.domain.coupon.vo.CouponUserHistoryVo;
 import com.letsintern.letsintern.domain.mission.repository.MissionRepository;
 import com.letsintern.letsintern.domain.program.domain.Program;
@@ -35,6 +37,7 @@ public class ApplicationService {
     private final ApplicationMapper applicationMapper;
     private final ProgramHelper programHelper;
     private final CouponHelper couponHelper;
+    private final CouponMapper couponMapper;
     private final UserHelper userHelper;
     private final MissionRepository missionRepository;
 
@@ -42,17 +45,13 @@ public class ApplicationService {
     public ApplicationCreateResponse createUserApplication(Long programId, ApplicationCreateDTO applicationCreateDTO, PrincipalDetails principalDetails) {
         User user = principalDetails.getUser();
         applicationHelper.validateDuplicateApplication(programId, user);
-        /* 대학 & 전공 추가 정보 없는 사용자 확인 및 업데이트 */
         checkUserDetailInfoAndUpdateInfo(user, applicationCreateDTO);
         Program program = programHelper.findProgramOrThrow(programId);
-        /* 보증금 프로그램인데 계좌 추가 정보 없는 사용자 확인 및 업데이트 */
         checkAccountInfoForProgramRefundTypeAndUpdate(user, applicationCreateDTO, program.getFeeType());
-        /* program application count 증가 및 저장 */
-        updateProgramApplicationCountAndSave(program);
-        /* 프로그램 등록시 쿠폰 사용여부 확인 및 적용 */
         Integer discountValue = checkCouponAppliedAndGetDiscountValue(user, applicationCreateDTO);
         Integer totalFee = applicationHelper.calculateTotalFee(program, discountValue);
         Application newUserApplication = createApplicationAndSave(user, programId, applicationCreateDTO, totalFee);
+        updateProgramApplicationCountAndSave(program);
         return applicationMapper.toApplicationCreateResponse(newUserApplication);
     }
 
@@ -136,8 +135,10 @@ public class ApplicationService {
         if (!isCouponApplied(applicationCreateDTO.getCode()))
             return 0;
         CouponUserHistoryVo couponUserHistoryVo = couponHelper.findCouponUserHistoryVoOrCreate(user, applicationCreateDTO.getCode());
+        CouponProgramType couponProgramType = couponMapper.toCouponProgramType(applicationCreateDTO.getCouponProgramType());
         couponHelper.validateApplyTimeForCoupon(couponUserHistoryVo.coupon().getStartDate(), couponUserHistoryVo.coupon().getEndDate());
         couponHelper.validateRemainTimeForUser(couponUserHistoryVo.remainTime());
+        couponHelper.validateAvailableCouponProgram(couponUserHistoryVo.coupon().getCouponProgramList(), couponProgramType);
         CouponUser couponUser = getCouponHistoryOrCreateCouponUser(user, couponUserHistoryVo);
         couponUser.decreaseRemainTime();
         return couponUserHistoryVo.coupon().getDiscount();
