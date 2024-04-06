@@ -2,9 +2,7 @@ package com.letsintern.letsintern.domain.coupon.repository;
 
 import com.letsintern.letsintern.domain.coupon.domain.Coupon;
 import com.letsintern.letsintern.domain.coupon.vo.CouponAdminVo;
-import com.letsintern.letsintern.domain.coupon.vo.CouponDetailVo;
 import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +11,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 
 import java.util.List;
-import java.util.Optional;
 
 import static com.letsintern.letsintern.domain.coupon.domain.QCoupon.coupon;
 
@@ -45,23 +42,5 @@ public class CouponCustomRepositoryImpl implements CouponCustomRepository {
                 .selectFrom(coupon);
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount);
-    }
-
-    @Override
-    public Optional<CouponDetailVo> findCouponDetailInfo(Long couponId) {
-        return Optional.ofNullable(queryFactory
-                .select(Projections.constructor(CouponDetailVo.class,
-                        coupon,
-                        coupon.couponProgramList
-                ))
-                .from(coupon)
-                .where(
-                        eqCouponId(couponId)
-                )
-                .fetchOne());
-    }
-
-    private BooleanExpression eqCouponId(Long couponId) {
-        return couponId != null ? coupon.id.eq(couponId) : null;
     }
 }

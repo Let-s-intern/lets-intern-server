@@ -7,6 +7,7 @@ import com.letsintern.letsintern.domain.coupon.dto.request.BaseCouponProgramRequ
 import com.letsintern.letsintern.domain.coupon.dto.request.BaseCouponRequestDto;
 import com.letsintern.letsintern.domain.coupon.dto.response.CouponAllResponseDto;
 import com.letsintern.letsintern.domain.coupon.dto.response.CouponApplyResponseDto;
+import com.letsintern.letsintern.domain.coupon.dto.response.CouponProgramResponseDto;
 import com.letsintern.letsintern.domain.coupon.dto.response.CouponResponseDto;
 import com.letsintern.letsintern.domain.coupon.helper.CouponHelper;
 import com.letsintern.letsintern.domain.coupon.mapper.CouponMapper;
@@ -30,8 +31,10 @@ public class CouponService {
     private final CouponMapper couponMapper;
 
     public CouponResponseDto getCoupon(Long couponId) {
-        CouponDetailVo couponDetailVo = couponHelper.findCouponDetailOrThrow(couponId);
-        return couponMapper.toCouponResponseDto(couponDetailVo);
+        Coupon coupon = couponHelper.findCouponOrThrow(couponId);
+        List<CouponProgramResponseDto> couponProgramResponseDtoList
+                = couponMapper.toCouponProgramResponseDtoList(coupon.getCouponProgramList());
+        return couponMapper.toCouponResponseDto(coupon, couponProgramResponseDtoList);
     }
 
     public CouponAllResponseDto getCoupons(Pageable pageable) {

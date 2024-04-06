@@ -9,7 +9,6 @@ import com.letsintern.letsintern.domain.coupon.repository.CouponProgramRepositor
 import com.letsintern.letsintern.domain.coupon.repository.CouponRepository;
 import com.letsintern.letsintern.domain.coupon.repository.CouponUserRepository;
 import com.letsintern.letsintern.domain.coupon.vo.CouponAdminVo;
-import com.letsintern.letsintern.domain.coupon.vo.CouponDetailVo;
 import com.letsintern.letsintern.domain.coupon.vo.CouponUserHistoryVo;
 import com.letsintern.letsintern.domain.user.domain.User;
 import lombok.RequiredArgsConstructor;
@@ -76,11 +75,6 @@ public class CouponHelper {
 
     public Coupon findCouponOrThrow(Long couponId) {
         return couponRepository.findById(couponId)
-                .orElseThrow(() -> CouponNotFound.EXCEPTION);
-    }
-
-    public CouponDetailVo findCouponDetailOrThrow(Long couponId) {
-        return couponRepository.findCouponDetailInfo(couponId)
                 .orElseThrow(() -> CouponNotFound.EXCEPTION);
     }
 
