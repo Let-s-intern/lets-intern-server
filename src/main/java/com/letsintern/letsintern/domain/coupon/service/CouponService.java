@@ -55,6 +55,7 @@ public class CouponService {
     }
 
     public void createNewCoupon(BaseCouponRequestDto baseCouponRequestDto) {
+        couponHelper.validateDuplicateCouponCode(baseCouponRequestDto.code());
         BaseCouponEnumVo baseCouponEnumVo = couponMapper.toCouponEnumVo(baseCouponRequestDto);
         List<BaseCouponProgramEnumVo> baseCouponProgramEnumVoList = couponMapper.toCouponProgramEnumVoList(baseCouponRequestDto.programTypeList());
         Coupon newCoupon = createCouponAndSave(baseCouponEnumVo);
@@ -62,6 +63,7 @@ public class CouponService {
     }
 
     public void updateCouponInfo(Long couponId, BaseCouponRequestDto baseCouponRequestDto) {
+        couponHelper.validateDuplicateCouponCode(baseCouponRequestDto.code());
         Coupon coupon = couponHelper.findCouponOrThrow(couponId);
         BaseCouponEnumVo baseCouponEnumVo = couponMapper.toCouponEnumVo(baseCouponRequestDto);
         coupon.updateCoupon(baseCouponEnumVo);

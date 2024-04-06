@@ -26,6 +26,11 @@ public class CouponHelper {
     private final CouponUserRepository couponUserRepository;
     private final CouponProgramRepository couponProgramRepository;
 
+    public void validateDuplicateCouponCode(String code) {
+        if (existCouponCode(code))
+            throw DuplicateCouponCode.EXCEPTION;
+    }
+
     public void validateAvailableCouponProgram(Long couponId, CouponProgramType couponProgramType) {
         if (!existCouponProgramType(couponId, couponProgramType))
             throw InvalidCouponProgramType.EXCEPTION;
@@ -99,5 +104,9 @@ public class CouponHelper {
 
     private boolean existCouponProgramType(Long couponId, CouponProgramType couponProgramType) {
         return couponProgramRepository.existsByCouponIdAndCouponProgramType(couponId, couponProgramType);
+    }
+
+    private boolean existCouponCode(String code) {
+        return couponRepository.existsByCode(code);
     }
 }
