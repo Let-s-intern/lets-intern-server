@@ -10,10 +10,7 @@ import com.letsintern.letsintern.domain.coupon.dto.response.CouponApplyResponseD
 import com.letsintern.letsintern.domain.coupon.dto.response.CouponResponseDto;
 import com.letsintern.letsintern.domain.coupon.helper.CouponHelper;
 import com.letsintern.letsintern.domain.coupon.mapper.CouponMapper;
-import com.letsintern.letsintern.domain.coupon.vo.BaseCouponEnumVo;
-import com.letsintern.letsintern.domain.coupon.vo.BaseCouponProgramEnumVo;
-import com.letsintern.letsintern.domain.coupon.vo.CouponAdminVo;
-import com.letsintern.letsintern.domain.coupon.vo.CouponUserHistoryVo;
+import com.letsintern.letsintern.domain.coupon.vo.*;
 import com.letsintern.letsintern.domain.user.domain.User;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
@@ -33,8 +30,8 @@ public class CouponService {
     private final CouponMapper couponMapper;
 
     public CouponResponseDto getCoupon(Long couponId) {
-        Coupon coupon = couponHelper.findCouponOrThrow(couponId);
-        return couponMapper.toCouponResponseDto(coupon);
+        CouponDetailVo couponDetailVo = couponHelper.findCouponDetailOrThrow(couponId);
+        return couponMapper.toCouponResponseDto(couponDetailVo);
     }
 
     public CouponAllResponseDto getCoupons(Pageable pageable) {

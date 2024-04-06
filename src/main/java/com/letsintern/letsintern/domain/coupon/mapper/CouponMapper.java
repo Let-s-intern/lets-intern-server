@@ -11,6 +11,7 @@ import com.letsintern.letsintern.domain.coupon.dto.response.CouponResponseDto;
 import com.letsintern.letsintern.domain.coupon.vo.BaseCouponEnumVo;
 import com.letsintern.letsintern.domain.coupon.vo.BaseCouponProgramEnumVo;
 import com.letsintern.letsintern.domain.coupon.vo.CouponAdminVo;
+import com.letsintern.letsintern.domain.coupon.vo.CouponDetailVo;
 import com.letsintern.letsintern.global.common.dto.PageInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -59,8 +60,8 @@ public class CouponMapper {
         return CouponAllResponseDto.of(couponList, pageInfo);
     }
 
-    public CouponResponseDto toCouponResponseDto(Coupon coupon) {
-        return CouponResponseDto.of(coupon, coupon.getCouponProgramList());
+    public CouponResponseDto toCouponResponseDto(CouponDetailVo couponDetailVo) {
+        return CouponResponseDto.of(couponDetailVo.coupon(), couponDetailVo.couponProgramList());
     }
 
     public CouponProgramType toCouponProgramType(Integer type) {
