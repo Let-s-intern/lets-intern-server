@@ -7,6 +7,7 @@ import com.letsintern.letsintern.domain.banner.domain.mainbanner.maper.MainBanne
 import com.letsintern.letsintern.domain.banner.domain.mainbanner.repository.MainBannerRepository;
 import com.letsintern.letsintern.domain.banner.domain.mainbanner.vo.MainBannerAdminVo;
 import com.letsintern.letsintern.domain.banner.dto.request.BannerCreateDTO;
+import com.letsintern.letsintern.domain.banner.dto.request.BannerUpdateDTO;
 import com.letsintern.letsintern.domain.banner.dto.response.BannerIdResponse;
 import com.letsintern.letsintern.domain.banner.maper.BannerMapper;
 import com.letsintern.letsintern.domain.banner.service.BannerService;
@@ -44,5 +45,16 @@ public class MainBannerService implements BannerService {
     public MainBannerListResponse getMainBannerListForAdmin(Pageable pageable) {
         Page<MainBannerAdminVo> mainBannerAdminVos = mainBannerRepository.findAllMainBannerAdminVos(pageable);
         return mainBannerMapper.toMainBannerListResponse(mainBannerAdminVos);
+    }
+
+    public void updateMainBanner(Long id, BannerUpdateDTO bannerUpdateDTO, MultipartFile file) throws IOException {
+        MainBanner mainBanner = mainBannerHelper.findMainBannerById(id);
+
+        S3SavedFileVo s3SavedFileVo = null;
+        if(file != null) {
+            s3Helper.deleteFile(S3_MAIN_BANNER_DIR + mainBanner.getImgUrl().split("/")[5]);
+            s3SavedFileVo = s3Helper.saveFile(file, S3_MAIN_BANNER_DIR);
+        }
+        mainBanner.updateMainBanner(bannerUpdateDTO, s3SavedFileVo);
     }
 }

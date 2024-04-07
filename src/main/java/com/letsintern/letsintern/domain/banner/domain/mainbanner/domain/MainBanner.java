@@ -2,9 +2,13 @@ package com.letsintern.letsintern.domain.banner.domain.mainbanner.domain;
 
 import com.letsintern.letsintern.domain.banner.domain.Banner;
 import com.letsintern.letsintern.domain.banner.dto.request.BannerCreateDTO;
+import com.letsintern.letsintern.domain.banner.dto.request.BannerUpdateDTO;
+import com.letsintern.letsintern.domain.file.vo.S3SavedFileVo;
 import jakarta.persistence.Entity;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+
+import static com.letsintern.letsintern.global.utils.EntityUpdateValueUtils.updateValue;
 
 @Entity(name = "MainBanner")
 @Getter
@@ -25,5 +29,13 @@ public class MainBanner extends Banner {
                 .bannerCreateDTO(bannerCreateDTO)
                 .s3Url(s3Url)
                 .build();
+    }
+
+    public void updateMainBanner(BannerUpdateDTO bannerUpdateDTO, S3SavedFileVo s3SavedFileVo) {
+        if(bannerUpdateDTO != null)
+            super.updateBanner(bannerUpdateDTO);
+
+        if(s3SavedFileVo != null)
+            this.imgUrl = updateValue(this.imgUrl, s3SavedFileVo.getS3Url());
     }
 }

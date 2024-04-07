@@ -3,8 +3,11 @@ package com.letsintern.letsintern.domain.banner.domain.mainbanner;
 import com.letsintern.letsintern.domain.banner.domain.mainbanner.dto.response.MainBannerListResponse;
 import com.letsintern.letsintern.domain.banner.domain.mainbanner.service.MainBannerService;
 import com.letsintern.letsintern.domain.banner.dto.request.BannerCreateDTO;
+import com.letsintern.letsintern.domain.banner.dto.request.BannerUpdateDTO;
 import com.letsintern.letsintern.domain.banner.dto.response.BannerIdResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.Nullable;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +26,7 @@ public class MainBannerController {
     public final MainBannerService mainBannerService;
 
     @PostMapping
-    public BannerIdResponse createMainBannerForAdmin(@RequestPart final BannerCreateDTO bannerCreateDTO,
+    public BannerIdResponse createMainBannerForAdmin(@RequestPart @Valid final BannerCreateDTO bannerCreateDTO,
                                                      @RequestPart("file") @NotNull MultipartFile file) throws IOException {
         return mainBannerService.createBanner(bannerCreateDTO, file);
     }
@@ -31,5 +34,12 @@ public class MainBannerController {
     @GetMapping("/admin")
     public MainBannerListResponse getMainBannerListForAdmin(@PageableDefault Pageable pageable) {
         return mainBannerService.getMainBannerListForAdmin(pageable);
+    }
+
+    @PatchMapping("/{id}")
+    public void updateMainBannerListForAdmin(@PathVariable final Long id,
+                                             @RequestPart @Nullable final BannerUpdateDTO bannerUpdateDTO,
+                                             @RequestPart("file") @Nullable MultipartFile file) throws IOException {
+        mainBannerService.updateMainBanner(id, bannerUpdateDTO, file);
     }
 }
