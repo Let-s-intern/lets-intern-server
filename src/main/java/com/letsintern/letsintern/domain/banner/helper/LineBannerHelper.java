@@ -18,7 +18,7 @@ public class LineBannerHelper {
     private final LineBannerRepository lineBannerRepository;
 
     public void validateLineBannerCreateDTO(BannerCreateDTO bannerCreateDTO) {
-        if(bannerCreateDTO.contents() == null || bannerCreateDTO.colorCode() == null) {
+        if(bannerCreateDTO.contents() == null || bannerCreateDTO.colorCode() == null || bannerCreateDTO.textColorCode() == null) {
             throw LineBannerCreateBadRequest.EXCEPTION;
         }
     }

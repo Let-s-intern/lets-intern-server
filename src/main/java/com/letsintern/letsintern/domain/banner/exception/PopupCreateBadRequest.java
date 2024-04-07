@@ -7,6 +7,6 @@ public class PopupCreateBadRequest extends BaseErrorException {
     public static final PopupCreateBadRequest EXCEPTION = new PopupCreateBadRequest();
 
     private PopupCreateBadRequest() {
-        super(PopupErrorCode.POPUP_CREATE_BAD_REQUEST);
+        super(BannerErrorCode.POPUP_CREATE_BAD_REQUEST);
     }
 }

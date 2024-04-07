@@ -1,6 +1,5 @@
 package com.letsintern.letsintern.domain.banner.domain;
 
-import com.letsintern.letsintern.domain.banner.domain.converter.BannerStatusConverter;
 import com.letsintern.letsintern.domain.banner.dto.request.BannerCreateDTO;
 import com.letsintern.letsintern.domain.banner.dto.request.BannerUpdateDTO;
 import jakarta.persistence.*;
@@ -25,6 +24,10 @@ public abstract class Banner {
     private Long id;
 
     @NotNull
+    @Enumerated(EnumType.STRING)
+    private BannerType type;
+
+    @NotNull
     private String title;
 
     @NotNull
@@ -37,18 +40,18 @@ public abstract class Banner {
     private LocalDateTime endDate;
 
     @NotNull
-    @Convert(converter = BannerStatusConverter.class)
-    private BannerStatus status;
+    private Boolean isValid;
 
     @NotNull
     private Boolean isVisible;
 
     public Banner(BannerCreateDTO bannerCreateDTO) {
+        this.type = bannerCreateDTO.type();
         this.title = bannerCreateDTO.title();
         this.link = bannerCreateDTO.link();
         this.startDate = bannerCreateDTO.startDate();
         this.endDate = bannerCreateDTO.endDate();
-        this.status = BannerStatus.VALID;
+        this.isValid = true;
         this.isVisible = false;
     }
 
@@ -57,12 +60,7 @@ public abstract class Banner {
         this.link = updateValue(this.link, bannerUpdateDTO.link());
         this.startDate = updateValue(this.startDate, bannerUpdateDTO.startDate());
         this.endDate = updateValue(this.endDate, bannerUpdateDTO.endDate());
+        this.isValid = updateValue(this.isValid, bannerUpdateDTO.endDate().isAfter(LocalDateTime.now()));
         this.isVisible = updateValue(this.isVisible, bannerUpdateDTO.isVisible());
-
-        if(bannerUpdateDTO.endDate().isAfter(LocalDateTime.now())) {
-            this.status = updateValue(this.status, BannerStatus.VALID);
-        } else {
-            this.status = updateValue(this.status, BannerStatus.INVALID);
-        }
     }
 }

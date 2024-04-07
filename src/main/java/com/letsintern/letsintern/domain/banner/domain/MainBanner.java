@@ -15,12 +15,6 @@ import static com.letsintern.letsintern.global.utils.EntityUpdateValueUtils.upda
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DiscriminatorValue("main_banner")
 public class MainBanner extends Banner {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "main_banner_id")
-    private Long id;
-
     @NotNull
     private String imgUrl;
 

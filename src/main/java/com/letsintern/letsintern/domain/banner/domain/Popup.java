@@ -14,12 +14,6 @@ import static com.letsintern.letsintern.global.utils.EntityUpdateValueUtils.upda
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DiscriminatorValue("popup")
 public class Popup extends Banner {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "popup_id")
-    private Long id;
-
     @NotNull
     private String imgUrl;
 

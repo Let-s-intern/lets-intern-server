@@ -1,9 +1,8 @@
 package com.letsintern.letsintern.domain.banner.service;
 
 import com.letsintern.letsintern.domain.banner.domain.ProgramBanner;
+import com.letsintern.letsintern.domain.banner.dto.response.BannerAdminListResponse;
 import com.letsintern.letsintern.domain.banner.helper.ProgramBannerHelper;
-import com.letsintern.letsintern.domain.banner.maper.ProgramBannerMapper;
-import com.letsintern.letsintern.domain.banner.dto.response.ProgramBannerListResponse;
 import com.letsintern.letsintern.domain.banner.vo.ProgramBannerAdminVo;
 import com.letsintern.letsintern.domain.banner.dto.request.BannerCreateDTO;
 import com.letsintern.letsintern.domain.banner.dto.request.BannerUpdateDTO;
@@ -20,22 +19,35 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
-@Service
+@Service("PROGRAM")
 @Transactional
 @RequiredArgsConstructor
-public class ProgramBannerService implements BannerService {
+public class ProgramBannerServiceImpl implements BannerService {
     private final BannerMapper bannerMapper;
-    private final ProgramBannerMapper programBannerMapper;
     private final ProgramBannerHelper programBannerHelper;
     private final S3Helper s3Helper;
     public static final String S3_PROGRAM_BANNER_DIR = "banner/program/";
 
     @Override
     public BannerIdResponse createBanner(BannerCreateDTO bannerCreateDTO, MultipartFile file) throws IOException {
+        programBannerHelper.validateProgramBannerFileExists(file);
         S3SavedFileVo s3SavedFileVo = s3Helper.saveFile(file, S3_PROGRAM_BANNER_DIR);
-        ProgramBanner newProgramBanner = programBannerMapper.toEntity(bannerCreateDTO, s3SavedFileVo.getS3Url());
+        ProgramBanner newProgramBanner = bannerMapper.toProgramBannerEntity(bannerCreateDTO, s3SavedFileVo.getS3Url());
         programBannerHelper.saveProgramBanner(newProgramBanner);
         return bannerMapper.toBannerIdResponse(newProgramBanner.getId());
+    }
+
+    @Override
+    public BannerAdminListResponse getBannerListForAdmin(Pageable pageable) {
+        Page<ProgramBannerAdminVo> programBannerAdminVos = programBannerHelper.getProgramBannerAdminList(pageable);
+        return bannerMapper.toBannerAdminListResponse(programBannerAdminVos);
+    }
+
+    @Override
+    public void updateBanner(Long id, BannerUpdateDTO bannerUpdateDTO, MultipartFile file) throws IOException {
+        ProgramBanner programBanner = programBannerHelper.findProgramBannerById(id);
+        S3SavedFileVo s3SavedFileVo = s3Helper.changeBannerImgFile(S3_PROGRAM_BANNER_DIR, programBanner.getImgUrl(), file);
+        programBanner.updateProgramBanner(bannerUpdateDTO, s3SavedFileVo);
     }
 
     @Override
@@ -44,17 +56,4 @@ public class ProgramBannerService implements BannerService {
         s3Helper.deleteFile(S3_PROGRAM_BANNER_DIR + programBanner.getImgUrl().split("/")[5]);
         programBannerHelper.deleteProgramBanner(programBanner);
     }
-
-    public ProgramBannerListResponse getProgramBannerListForAdmin(Pageable pageable) {
-        Page<ProgramBannerAdminVo> programBannerAdminVos = programBannerHelper.getProgramBannerAdminList(pageable);
-        return programBannerMapper.toProgramBannerListResponse(programBannerAdminVos);
-    }
-
-    public void updateProgramBanner(Long id, BannerUpdateDTO bannerUpdateDTO, MultipartFile file) throws IOException {
-        ProgramBanner programBanner = programBannerHelper.findProgramBannerById(id);
-        S3SavedFileVo s3SavedFileVo = s3Helper.changeBannerImgFile(S3_PROGRAM_BANNER_DIR, programBanner.getImgUrl(), file);
-        programBanner.updateProgramBanner(bannerUpdateDTO, s3SavedFileVo);
-    }
-
-
 }

@@ -14,12 +14,6 @@ import static com.letsintern.letsintern.global.utils.EntityUpdateValueUtils.upda
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DiscriminatorValue("line_banner")
 public class LineBanner extends Banner {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "line_banner_id")
-    private Long id;
-
     @NotNull
     private String contents;
 
@@ -37,7 +31,6 @@ public class LineBanner extends Banner {
         this.contents = bannerCreateDTO.contents();
         this.colorCode = bannerCreateDTO.colorCode();
         this.textColorCode = bannerCreateDTO.textColorCode();
-
     }
     public static LineBanner createLineBanner(BannerCreateDTO bannerCreateDTO) {
         return LineBanner.builder()

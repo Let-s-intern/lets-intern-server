@@ -1,6 +1,8 @@
 package com.letsintern.letsintern.domain.banner.helper;
 
 import com.letsintern.letsintern.domain.banner.domain.MainBanner;
+import com.letsintern.letsintern.domain.banner.dto.request.BannerCreateDTO;
+import com.letsintern.letsintern.domain.banner.exception.MainOrProgramBannerCreateBadRequest;
 import com.letsintern.letsintern.domain.banner.repository.MainBannerRepository;
 import com.letsintern.letsintern.domain.banner.vo.MainBannerAdminVo;
 import com.letsintern.letsintern.domain.banner.exception.BannerNotFound;
@@ -8,12 +10,19 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 @Component
 @RequiredArgsConstructor
 public class MainBannerHelper {
 
     private final MainBannerRepository mainBannerRepository;
+
+    public void validateMainBannerFileExists(MultipartFile file) {
+        if(file == null) {
+            throw MainOrProgramBannerCreateBadRequest.EXCEPTION;
+        }
+    }
 
     public MainBanner saveMainBanner(MainBanner mainBanner) {
         return mainBannerRepository.save(mainBanner);
