@@ -8,7 +8,6 @@ import com.letsintern.letsintern.domain.notice.mapper.NoticeMapper;
 import com.letsintern.letsintern.domain.notice.repository.NoticeRepository;
 import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
-import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

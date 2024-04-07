@@ -1,7 +1,6 @@
 package com.letsintern.letsintern.domain.program.dto.request;
 
-import com.letsintern.letsintern.domain.program.domain.ProgramFeeType;
-import com.letsintern.letsintern.domain.program.domain.ProgramTopic;
+import com.letsintern.letsintern.domain.payment.domail.ProgramFeeType;
 import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import com.letsintern.letsintern.domain.program.domain.ProgramWay;
 import com.letsintern.letsintern.domain.user.domain.AccountType;
@@ -61,17 +60,6 @@ public class ProgramCreateRequestDTO {
 
     @Nullable
     private String accountNumber;
-
-
-    // Challenge
-    @Nullable
-    private ProgramTopic topic;
-
-    @Nullable
-    private String openKakaoLink;
-
-    @Nullable
-    private String openKakaoPassword;
 
     // 할인 금액
     @Nullable

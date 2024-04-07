@@ -1,8 +1,8 @@
 package com.letsintern.letsintern.domain.program.dto.request;
 
+import com.letsintern.letsintern.domain.payment.domail.ProgramFeeType;
 import com.letsintern.letsintern.domain.program.domain.*;
 import com.letsintern.letsintern.domain.user.domain.AccountType;
-import jakarta.annotation.Nullable;
 import lombok.Getter;
 
 import java.time.LocalDateTime;

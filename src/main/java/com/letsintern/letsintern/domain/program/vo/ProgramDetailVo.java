@@ -1,6 +1,7 @@
 package com.letsintern.letsintern.domain.program.vo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.letsintern.letsintern.domain.payment.domail.ProgramFeeType;
 import com.letsintern.letsintern.domain.program.domain.*;
 import com.letsintern.letsintern.domain.user.domain.AccountType;
 import lombok.Builder;

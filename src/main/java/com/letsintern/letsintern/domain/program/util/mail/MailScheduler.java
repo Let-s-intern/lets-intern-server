@@ -2,7 +2,6 @@ package com.letsintern.letsintern.domain.program.util.mail;
 
 import com.letsintern.letsintern.domain.program.domain.MailStatus;
 import com.letsintern.letsintern.domain.program.domain.Program;
-import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
 import com.letsintern.letsintern.domain.program.util.mail.batch.LetsChatRemindMailJobConfig;
 import com.letsintern.letsintern.domain.program.util.mail.batch.LetsChatReviewMailJobConfig;
 import lombok.RequiredArgsConstructor;

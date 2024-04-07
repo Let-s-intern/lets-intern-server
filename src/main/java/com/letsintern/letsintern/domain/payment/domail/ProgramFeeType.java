@@ -1,4 +1,4 @@
-package com.letsintern.letsintern.domain.program.domain;
+package com.letsintern.letsintern.domain.payment.domail;
 
 public enum ProgramFeeType {
 

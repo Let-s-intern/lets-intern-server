@@ -1,7 +1,6 @@
 package com.letsintern.letsintern.domain.program.util;
 
 import com.letsintern.letsintern.domain.application.repository.ApplicationRepository;
-import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
