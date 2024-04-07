@@ -22,8 +22,9 @@ public class S3Helper {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    public S3SavedFileVo saveFile(MultipartFile multipartFile) throws IOException {
+    public S3SavedFileVo saveFile(MultipartFile multipartFile, String dir) throws IOException {
         String originalFilename = multipartFile.getOriginalFilename();
+        if(dir != null) originalFilename = dir + originalFilename;
 
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentLength(multipartFile.getSize());
