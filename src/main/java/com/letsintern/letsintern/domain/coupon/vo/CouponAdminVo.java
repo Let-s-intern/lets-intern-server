@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 public record CouponAdminVo(
         Long couponId,
         CouponType couponType,
-        CouponProgramType couponProgramType,
         String name,
         String code,
         Integer discount,
