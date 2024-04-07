@@ -10,4 +10,5 @@ public interface BannerService {
 
     BannerIdResponse createBanner(BannerCreateDTO bannerCreateDTO, MultipartFile file) throws IOException;
 
+    void deleteBanner(Long bannerId);
 }

@@ -42,6 +42,13 @@ public class MainBannerService implements BannerService {
         return bannerMapper.toBannerIdResponse(newMainBanner.getId());
     }
 
+    @Override
+    public void deleteBanner(Long bannerId) {
+        final MainBanner mainBanner = mainBannerHelper.findMainBannerById(bannerId);
+        s3Helper.deleteFile(S3_MAIN_BANNER_DIR + mainBanner.getImgUrl().split("/")[5]);
+        mainBannerHelper.deleteMainBanner(mainBanner);
+    }
+
     public MainBannerListResponse getMainBannerListForAdmin(Pageable pageable) {
         Page<MainBannerAdminVo> mainBannerAdminVos = mainBannerHelper.getMainBannerAdminList(pageable);
         return mainBannerMapper.toMainBannerListResponse(mainBannerAdminVos);
@@ -52,4 +59,6 @@ public class MainBannerService implements BannerService {
         S3SavedFileVo s3SavedFileVo = s3Helper.changeBannerImgFile(S3_MAIN_BANNER_DIR, mainBanner.getImgUrl(), file);
         mainBanner.updateMainBanner(bannerUpdateDTO, s3SavedFileVo);
     }
+
+
 }

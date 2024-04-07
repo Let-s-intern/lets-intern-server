@@ -26,4 +26,8 @@ public class MainBannerHelper {
     public Page<MainBannerAdminVo> getMainBannerAdminList(Pageable pageable) {
         return mainBannerRepository.findAllMainBannerAdminVos(pageable);
     }
+
+    public void deleteMainBanner(MainBanner mainBanner) {
+        mainBannerRepository.delete(mainBanner);
+    }
 }

@@ -42,4 +42,9 @@ public class MainBannerController {
                                              @RequestPart("file") @Nullable MultipartFile file) throws IOException {
         mainBannerService.updateMainBanner(id, bannerUpdateDTO, file);
     }
+
+    @DeleteMapping("/{id}")
+    public void deleteMainBannerForAdmin(@PathVariable final Long id) {
+        mainBannerService.deleteBanner(id);
+    }
 }
