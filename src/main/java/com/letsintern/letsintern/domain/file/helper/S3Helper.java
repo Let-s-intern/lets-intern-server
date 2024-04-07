@@ -46,4 +46,11 @@ public class S3Helper {
     public void deleteFile(String originalFilename) {
         amazonS3.deleteObject(bucket, originalFilename);
     }
+
+    public S3SavedFileVo changeBannerImgFile(String dir, String deletedFileUrl, MultipartFile newFile) throws IOException {
+        if(newFile == null) return null;
+
+        deleteFile(dir + deletedFileUrl.split("/")[5]);
+        return saveFile(newFile, dir);
+    }
 }
