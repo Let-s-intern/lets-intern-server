@@ -76,7 +76,7 @@ public class ProgramService {
         ZoomMeetingCreateResponse zoomMeetingCreateResponse = createZoomMeetingForLetsChatAndChallengeType(programCreateRequestDTO);
         /* [렛츠챗] 멘토 세션 안내 페이지용 비밀번호 생성 */
         String mentorPassword = createMentorPasswordForLetsChatType(programCreateRequestDTO);
-        /* program entity 생성 및 저장 */
+        /* program domain 생성 및 저장 */
         Program savedProgram = createProgramAndSave(programCreateRequestDTO, zoomMeetingCreateResponse, mentorPassword);
         return programMapper.toProgramIdResponseDTO(savedProgram.getId());
     }
@@ -257,7 +257,7 @@ public class ProgramService {
         }
     }
 
-    /* program entity 생성 및 저장 */
+    /* program domain 생성 및 저장 */
     private Program createProgramAndSave(ProgramCreateRequestDTO programCreateRequestDTO,
                                          ZoomMeetingCreateResponse zoomMeetingCreateResponse,
                                          String mentorPassword) {
