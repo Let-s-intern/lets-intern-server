@@ -89,10 +89,9 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Application> applicationList;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//    @Builder.Default
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<CouponUser> couponUserList = new ArrayList<>();
-
 
     @Builder
     private User(String email, String name, String password, String phoneNum,
@@ -156,4 +155,3 @@ public class User {
         this.accountNumber = accountNumber;
     }
 }
-

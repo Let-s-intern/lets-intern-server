@@ -74,5 +74,6 @@ public class ProgramCreateRequestDTO {
     private String openKakaoPassword;
 
     // 할인 금액
+    @Nullable
     private Integer discountValue;
 }
