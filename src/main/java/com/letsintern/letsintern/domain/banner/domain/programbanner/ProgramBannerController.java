@@ -27,7 +27,7 @@ public class ProgramBannerController {
 
     @PostMapping
     public BannerIdResponse createProgramBannerForAdmin(@RequestPart @Valid final BannerCreateDTO bannerCreateDTO,
-                                                     @RequestPart("file") @NotNull MultipartFile file) throws IOException {
+                                                        @RequestPart("file") @NotNull MultipartFile file) throws IOException {
         return programBannerService.createBanner(bannerCreateDTO, file);
     }
 
@@ -37,9 +37,9 @@ public class ProgramBannerController {
     }
 
     @PatchMapping("/{id}")
-    public void updateMainBannerListForAdmin(@PathVariable final Long id,
-                                             @RequestPart @Nullable final BannerUpdateDTO bannerUpdateDTO,
-                                             @RequestPart("file") @Nullable MultipartFile file) throws IOException {
+    public void updateProgramBannerForAdmin(@PathVariable final Long id,
+                                            @RequestPart @Nullable final BannerUpdateDTO bannerUpdateDTO,
+                                            @RequestPart("file") @Nullable MultipartFile file) throws IOException {
         programBannerService.updateProgramBanner(id, bannerUpdateDTO, file);
     }
 

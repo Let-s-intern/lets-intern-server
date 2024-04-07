@@ -4,7 +4,6 @@ import com.letsintern.letsintern.domain.banner.domain.mainbanner.domain.MainBann
 import com.letsintern.letsintern.domain.banner.domain.mainbanner.dto.response.MainBannerListResponse;
 import com.letsintern.letsintern.domain.banner.domain.mainbanner.helper.MainBannerHelper;
 import com.letsintern.letsintern.domain.banner.domain.mainbanner.maper.MainBannerMapper;
-import com.letsintern.letsintern.domain.banner.domain.mainbanner.repository.MainBannerRepository;
 import com.letsintern.letsintern.domain.banner.domain.mainbanner.vo.MainBannerAdminVo;
 import com.letsintern.letsintern.domain.banner.dto.request.BannerCreateDTO;
 import com.letsintern.letsintern.domain.banner.dto.request.BannerUpdateDTO;
@@ -26,8 +25,6 @@ import java.io.IOException;
 @Transactional
 @RequiredArgsConstructor
 public class MainBannerService implements BannerService {
-
-    private final MainBannerRepository mainBannerRepository;
     private final BannerMapper bannerMapper;
     private final MainBannerMapper mainBannerMapper;
     private final MainBannerHelper mainBannerHelper;

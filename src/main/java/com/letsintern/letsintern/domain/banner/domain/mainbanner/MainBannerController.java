@@ -37,9 +37,9 @@ public class MainBannerController {
     }
 
     @PatchMapping("/{id}")
-    public void updateMainBannerListForAdmin(@PathVariable final Long id,
-                                             @RequestPart @Nullable final BannerUpdateDTO bannerUpdateDTO,
-                                             @RequestPart("file") @Nullable MultipartFile file) throws IOException {
+    public void updateMainBannerForAdmin(@PathVariable final Long id,
+                                         @RequestPart @Nullable final BannerUpdateDTO bannerUpdateDTO,
+                                         @RequestPart("file") @Nullable MultipartFile file) throws IOException {
         mainBannerService.updateMainBanner(id, bannerUpdateDTO, file);
     }
 
