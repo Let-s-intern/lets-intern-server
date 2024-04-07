@@ -1,11 +1,14 @@
 package com.letsintern.letsintern.domain.banner.domain.mainbanner;
 
+import com.letsintern.letsintern.domain.banner.domain.mainbanner.dto.response.MainBannerListResponse;
 import com.letsintern.letsintern.domain.banner.domain.mainbanner.service.MainBannerService;
 import com.letsintern.letsintern.domain.banner.dto.request.BannerCreateDTO;
 import com.letsintern.letsintern.domain.banner.dto.response.BannerIdResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,5 +26,10 @@ public class MainBannerController {
     public BannerIdResponse createMainBannerForAdmin(@RequestPart final BannerCreateDTO bannerCreateDTO,
                                                      @RequestPart("file") @NotNull MultipartFile file) throws IOException {
         return mainBannerService.createBanner(bannerCreateDTO, file);
+    }
+
+    @GetMapping("/admin")
+    public MainBannerListResponse getMainBannerListForAdmin(@PageableDefault Pageable pageable) {
+        return mainBannerService.getMainBannerListForAdmin(pageable);
     }
 }
