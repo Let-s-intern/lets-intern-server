@@ -1,8 +1,11 @@
 package com.letsintern.letsintern.domain.coupon.helper;
 
 import com.letsintern.letsintern.domain.coupon.domain.Coupon;
+import com.letsintern.letsintern.domain.coupon.domain.CouponProgram;
+import com.letsintern.letsintern.domain.coupon.domain.CouponProgramType;
 import com.letsintern.letsintern.domain.coupon.domain.CouponUser;
 import com.letsintern.letsintern.domain.coupon.exception.*;
+import com.letsintern.letsintern.domain.coupon.repository.CouponProgramRepository;
 import com.letsintern.letsintern.domain.coupon.repository.CouponRepository;
 import com.letsintern.letsintern.domain.coupon.repository.CouponUserRepository;
 import com.letsintern.letsintern.domain.coupon.vo.CouponAdminVo;
@@ -14,12 +17,24 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Component
 public class CouponHelper {
     private final CouponRepository couponRepository;
     private final CouponUserRepository couponUserRepository;
+    private final CouponProgramRepository couponProgramRepository;
+
+    public void validateDuplicateCouponCode(Long couponId, String code) {
+        if (existCouponCode(couponId, code))
+            throw DuplicateCouponCode.EXCEPTION;
+    }
+
+    public void validateAvailableCouponProgram(Long couponId, CouponProgramType couponProgramType) {
+        if (!existCouponProgramType(couponId, couponProgramType))
+            throw InvalidCouponProgramType.EXCEPTION;
+    }
 
     public void validateApplyTimeForCoupon(LocalDateTime startTime, LocalDateTime endTime) {
         LocalDateTime now = LocalDateTime.now();
@@ -63,15 +78,35 @@ public class CouponHelper {
                 .orElseThrow(() -> CouponNotFound.EXCEPTION);
     }
 
-    public void saveCoupon(Coupon coupon) {
-        couponRepository.save(coupon);
+    public Coupon saveCoupon(Coupon coupon) {
+        return couponRepository.save(coupon);
     }
 
     public CouponUser saveCouponUser(CouponUser couponUser) {
         return couponUserRepository.save(couponUser);
     }
 
+    public CouponProgram saveCouponProgram(CouponProgram couponProgram) {
+        return couponProgramRepository.save(couponProgram);
+    }
+
+    public void saveCouponProgramList(List<CouponProgram> couponProgramList) {
+        couponProgramRepository.saveAll(couponProgramList);
+    }
+
     public void deleteCoupon(Coupon coupon) {
         couponRepository.delete(coupon);
+    }
+
+    public void deleteCouponProgramList(List<CouponProgram> couponProgramList) {
+        couponProgramRepository.deleteAll(couponProgramList);
+    }
+
+    private boolean existCouponProgramType(Long couponId, CouponProgramType couponProgramType) {
+        return couponProgramRepository.existsByCouponIdAndCouponProgramType(couponId, couponProgramType);
+    }
+
+    private boolean existCouponCode(Long couponId, String code) {
+        return couponRepository.existCouponCodeExceptedCouponId(couponId, code).isPresent();
     }
 }

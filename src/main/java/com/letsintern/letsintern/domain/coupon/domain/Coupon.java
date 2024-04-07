@@ -25,8 +25,6 @@ public class Coupon extends BaseTimeEntity {
     private Long id;
     @Convert(converter = CouponTypeConverter.class)
     private CouponType couponType;
-    @Convert(converter = CouponProgramTypeConverter.class)
-    private CouponProgramType couponProgramType;
     private String name;
     private String code;
     private Integer discount;
@@ -36,11 +34,13 @@ public class Coupon extends BaseTimeEntity {
     @OneToMany(mappedBy = "coupon", cascade = CascadeType.ALL)
     @Builder.Default
     private List<CouponUser> couponUserList = new ArrayList<>();
+    @OneToMany(mappedBy = "coupon", cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<CouponProgram> couponProgramList = new ArrayList<>();
 
     public static Coupon createCoupon(BaseCouponEnumVo baseCouponEnumVo) {
         return Coupon.builder()
                 .couponType(baseCouponEnumVo.couponType())
-                .couponProgramType(baseCouponEnumVo.couponProgramType())
                 .name(baseCouponEnumVo.name())
                 .code(baseCouponEnumVo.code())
                 .discount(baseCouponEnumVo.discount())
@@ -52,7 +52,6 @@ public class Coupon extends BaseTimeEntity {
 
     public void updateCoupon(BaseCouponEnumVo baseCouponEnumVo) {
         this.couponType = updateValue(this.couponType, baseCouponEnumVo.couponType());
-        this.couponProgramType = updateValue(this.couponProgramType, baseCouponEnumVo.couponProgramType());
         this.name = updateValue(this.name, baseCouponEnumVo.name());
         this.code = updateValue(this.code, baseCouponEnumVo.code());
         this.discount = updateValue(this.discount, baseCouponEnumVo.discount());
@@ -63,5 +62,13 @@ public class Coupon extends BaseTimeEntity {
 
     public void addCouponUserList(CouponUser couponUser) {
         this.couponUserList.add(couponUser);
+    }
+
+    public void addCouponProgramType(CouponProgram couponProgram) {
+        this.couponProgramList.add(couponProgram);
+    }
+
+    public void resetCouponProgramType() {
+        this.couponProgramList = new ArrayList<>();
     }
 }
