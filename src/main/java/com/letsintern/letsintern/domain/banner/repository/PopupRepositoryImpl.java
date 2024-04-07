@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static com.letsintern.letsintern.domain.banner.domain.popup.domain.QPopup.popup;
+import static com.letsintern.letsintern.domain.banner.domain.QPopup.popup;
 
 @Repository
 @RequiredArgsConstructor

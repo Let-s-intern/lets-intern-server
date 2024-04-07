@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static com.letsintern.letsintern.domain.banner.domain.programbanner.domain.QProgramBanner.programBanner;
+import static com.letsintern.letsintern.domain.banner.domain.QProgramBanner.programBanner;
 
 @Repository
 @RequiredArgsConstructor
