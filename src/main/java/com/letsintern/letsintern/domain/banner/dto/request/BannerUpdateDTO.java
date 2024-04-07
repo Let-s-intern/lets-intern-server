@@ -13,6 +13,7 @@ public record BannerUpdateDTO(
         Boolean isVisible,
         String imgUrl,
         String contents,
-        String colorCode
+        String colorCode,
+        String textColorCode
 ) {
 }

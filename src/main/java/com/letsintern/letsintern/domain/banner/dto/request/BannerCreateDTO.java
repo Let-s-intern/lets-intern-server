@@ -12,6 +12,7 @@ public record BannerCreateDTO(
         @NotNull LocalDateTime endDate,
         @Nullable String imgUrl,
         @Nullable String contents,
-        @Nullable String colorCode
+        @Nullable String colorCode,
+        @Nullable String textColorCode
 ) {
 }
