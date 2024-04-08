@@ -31,7 +31,8 @@ public class LineBannerRepositoryImpl implements LineBannerRepositoryCustom {
                         lineBanner.endDate,
                         lineBanner.isVisible,
                         lineBanner.contents,
-                        lineBanner.colorCode))
+                        lineBanner.colorCode,
+                        lineBanner.textColorCode))
                 .from(lineBanner)
                 .orderBy(lineBanner.id.desc())
                 .offset(pageable.getOffset())

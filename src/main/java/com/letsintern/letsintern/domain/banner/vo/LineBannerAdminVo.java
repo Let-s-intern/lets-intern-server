@@ -13,6 +13,7 @@ public record LineBannerAdminVo(
         LocalDateTime endDate,
         Boolean isVisible,
         String contents,
-        String colorCode
+        String colorCode,
+        String textColorCode
 ) {
 }
