@@ -18,7 +18,7 @@ public class PopupHelper {
     private final PopupRepository popupRepository;
 
     public void validatePopupCreateDTO(BannerCreateDTO bannerCreateDTO) {
-        if(bannerCreateDTO.imgUrl() == null) {
+        if (bannerCreateDTO.imgUrl() == null) {
             throw PopupCreateBadRequest.EXCEPTION;
         }
     }

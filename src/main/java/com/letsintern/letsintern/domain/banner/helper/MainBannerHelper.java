@@ -19,7 +19,7 @@ public class MainBannerHelper {
     private final MainBannerRepository mainBannerRepository;
 
     public void validateMainBannerFileExists(MultipartFile file) {
-        if(file == null) {
+        if (file == null) {
             throw MainOrProgramBannerCreateBadRequest.EXCEPTION;
         }
     }
