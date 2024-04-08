@@ -7,7 +7,6 @@ import com.letsintern.letsintern.domain.banner.dto.response.BannerAdminListRespo
 import com.letsintern.letsintern.domain.banner.dto.response.BannerIdResponse;
 import com.letsintern.letsintern.domain.banner.service.BannerServiceFactory;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +14,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,7 +25,7 @@ public class BannerController {
 
     @PostMapping
     public BannerIdResponse createBannerForAdmin(@RequestPart @Valid final BannerCreateDTO bannerCreateDTO,
-                                                 @RequestPart(required = false) MultipartFile file) throws IOException {
+                                                 @RequestPart(required = false) MultipartFile file) {
         return bannerServiceFactory.getBannerService(bannerCreateDTO.type()).createBanner(bannerCreateDTO, file);
     }
 
@@ -42,7 +39,7 @@ public class BannerController {
     public void updateBannerForAdmin(@RequestParam BannerType type,
                                      @PathVariable final Long id,
                                      @RequestPart(required = false) final BannerUpdateDTO bannerUpdateDTO,
-                                     @RequestPart(required = false) MultipartFile file) throws IOException {
+                                     @RequestPart(required = false) MultipartFile file) {
         bannerServiceFactory.getBannerService(type).updateBanner(id, bannerUpdateDTO, file);
     }
 

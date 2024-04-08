@@ -17,8 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-
 @Service("MAIN")
 @Transactional
 @RequiredArgsConstructor
@@ -29,7 +27,7 @@ public class MainBannerServiceImpl implements BannerService {
     public static final String S3_MAIN_BANNER_DIR = "banner/main/";
 
     @Override
-    public BannerIdResponse createBanner(BannerCreateDTO bannerCreateDTO, MultipartFile file) throws IOException {
+    public BannerIdResponse createBanner(BannerCreateDTO bannerCreateDTO, MultipartFile file) {
         mainBannerHelper.validateMainBannerFileExists(file);
         S3SavedFileVo s3SavedFileVo = s3Helper.saveFile(file, S3_MAIN_BANNER_DIR);
         MainBanner newMainBanner = bannerMapper.toMainBannerEntity(bannerCreateDTO, s3SavedFileVo.getS3Url());
@@ -44,7 +42,7 @@ public class MainBannerServiceImpl implements BannerService {
     }
 
     @Override
-    public void updateBanner(Long id, BannerUpdateDTO bannerUpdateDTO, MultipartFile file) throws IOException {
+    public void updateBanner(Long id, BannerUpdateDTO bannerUpdateDTO, MultipartFile file) {
         MainBanner mainBanner = mainBannerHelper.findMainBannerById(id);
         S3SavedFileVo s3SavedFileVo = s3Helper.changeBannerImgFile(S3_MAIN_BANNER_DIR, mainBanner.getImgUrl(), file);
         mainBanner.updateMainBanner(bannerUpdateDTO, s3SavedFileVo);

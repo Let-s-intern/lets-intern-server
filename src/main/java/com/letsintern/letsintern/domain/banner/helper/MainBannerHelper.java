@@ -1,7 +1,6 @@
 package com.letsintern.letsintern.domain.banner.helper;
 
 import com.letsintern.letsintern.domain.banner.domain.MainBanner;
-import com.letsintern.letsintern.domain.banner.dto.request.BannerCreateDTO;
 import com.letsintern.letsintern.domain.banner.exception.MainOrProgramBannerCreateBadRequest;
 import com.letsintern.letsintern.domain.banner.repository.MainBannerRepository;
 import com.letsintern.letsintern.domain.banner.vo.MainBannerAdminVo;
@@ -24,8 +23,8 @@ public class MainBannerHelper {
         }
     }
 
-    public MainBanner saveMainBanner(MainBanner mainBanner) {
-        return mainBannerRepository.save(mainBanner);
+    public void saveMainBanner(MainBanner mainBanner) {
+        mainBannerRepository.save(mainBanner);
     }
 
     public MainBanner findMainBannerById(Long bannerId) {

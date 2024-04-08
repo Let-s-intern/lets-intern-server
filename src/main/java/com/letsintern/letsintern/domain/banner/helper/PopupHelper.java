@@ -23,8 +23,8 @@ public class PopupHelper {
         }
     }
 
-    public Popup savePopup(Popup popup) {
-        return popupRepository.save(popup);
+    public void savePopup(Popup popup) {
+        popupRepository.save(popup);
     }
 
     public Popup findPopupById(Long bannerId) {

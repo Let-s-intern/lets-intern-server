@@ -1,5 +1,6 @@
 package com.letsintern.letsintern.domain.file.helper;
 
+import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.letsintern.letsintern.domain.file.vo.S3SavedFileVo;
@@ -22,16 +23,20 @@ public class S3Helper {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    public S3SavedFileVo saveFile(MultipartFile multipartFile, String dir) throws IOException {
-        String originalFilename = multipartFile.getOriginalFilename();
-        if(dir != null) originalFilename = dir + originalFilename;
+    public S3SavedFileVo saveFile(MultipartFile multipartFile, String dir) {
+        try {
+            String originalFilename = multipartFile.getOriginalFilename();
+            if(dir != null) originalFilename = dir + originalFilename;
 
-        ObjectMetadata metadata = new ObjectMetadata();
-        metadata.setContentLength(multipartFile.getSize());
-        metadata.setContentType(multipartFile.getContentType());
+            ObjectMetadata metadata = new ObjectMetadata();
+            metadata.setContentLength(multipartFile.getSize());
+            metadata.setContentType(multipartFile.getContentType());
 
-        amazonS3.putObject(bucket, originalFilename, multipartFile.getInputStream(), metadata);
-        return S3SavedFileVo.of(originalFilename, amazonS3.getUrl(bucket, originalFilename).toString());
+            amazonS3.putObject(bucket, originalFilename, multipartFile.getInputStream(), metadata);
+            return S3SavedFileVo.of(originalFilename, amazonS3.getUrl(bucket, originalFilename).toString());
+        } catch (SdkClientException | IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public ResponseEntity<UrlResource> downloadFile(String originalFilename) {
@@ -47,9 +52,8 @@ public class S3Helper {
         amazonS3.deleteObject(bucket, originalFilename);
     }
 
-    public S3SavedFileVo changeBannerImgFile(String dir, String deletedFileUrl, MultipartFile newFile) throws IOException {
-        if(newFile == null) return null;
-
+    public S3SavedFileVo changeBannerImgFile(String dir, String deletedFileUrl, MultipartFile newFile) {
+        if (newFile == null) return null;
         deleteFile(dir + deletedFileUrl.split("/")[5]);
         return saveFile(newFile, dir);
     }

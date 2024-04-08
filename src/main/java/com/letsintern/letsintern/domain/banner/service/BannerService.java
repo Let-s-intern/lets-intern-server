@@ -8,16 +8,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-
 @Service
 public interface BannerService {
 
-    BannerIdResponse createBanner(BannerCreateDTO bannerCreateDTO, MultipartFile file) throws IOException;
+    BannerIdResponse createBanner(BannerCreateDTO bannerCreateDTO, MultipartFile file);
 
     BannerAdminListResponse getBannerListForAdmin(Pageable pageable);
 
-    void updateBanner(Long id, BannerUpdateDTO bannerUpdateDTO, MultipartFile file) throws IOException;
+    void updateBanner(Long id, BannerUpdateDTO bannerUpdateDTO, MultipartFile file);
 
     void deleteBanner(Long bannerId);
 }

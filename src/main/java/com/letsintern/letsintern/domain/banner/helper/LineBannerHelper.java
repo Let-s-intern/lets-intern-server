@@ -23,8 +23,8 @@ public class LineBannerHelper {
         }
     }
 
-    public LineBanner saveLineBanner(LineBanner lineBanner) {
-        return lineBannerRepository.save(lineBanner);
+    public void saveLineBanner(LineBanner lineBanner) {
+        lineBannerRepository.save(lineBanner);
     }
 
     public LineBanner findLineBannerById(Long bannerId) {
