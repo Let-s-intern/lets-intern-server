@@ -17,7 +17,6 @@ import com.letsintern.letsintern.domain.program.exception.ChargeProgramCreateBad
 import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
 import com.letsintern.letsintern.domain.program.exception.RefundProgramCreateBadRequest;
 import com.letsintern.letsintern.domain.program.mapper.ProgramMapper;
-import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
 import com.letsintern.letsintern.domain.program.vo.ProgramDetailVo;
 import com.letsintern.letsintern.domain.program.vo.ProgramThumbnailVo;
 import com.letsintern.letsintern.domain.program.vo.UserProgramVo;

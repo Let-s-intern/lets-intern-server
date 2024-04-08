@@ -1,7 +1,7 @@
 package com.letsintern.letsintern.domain.application.vo;
 
 import com.letsintern.letsintern.domain.application.domain.ApplicationStatus;
-import com.letsintern.letsintern.domain.program.domain.ProgramFeeType;
+import com.letsintern.letsintern.domain.payment.domail.ProgramFeeType;
 import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import com.letsintern.letsintern.domain.user.domain.AccountType;
 import lombok.Builder;

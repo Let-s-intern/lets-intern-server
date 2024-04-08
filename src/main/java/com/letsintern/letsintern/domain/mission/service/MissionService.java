@@ -12,7 +12,6 @@ import com.letsintern.letsintern.domain.mission.dto.response.MissionMyDashboardL
 import com.letsintern.letsintern.domain.mission.vo.MissionAdminDetailVo;
 import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
-import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
 import com.letsintern.letsintern.domain.user.domain.User;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import lombok.RequiredArgsConstructor;

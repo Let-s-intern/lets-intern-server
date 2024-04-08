@@ -8,6 +8,7 @@ import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequest
 import com.letsintern.letsintern.domain.program.dto.request.ProgramUpdateRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.response.*;
 import com.letsintern.letsintern.domain.program.service.ProgramService;
+import com.letsintern.letsintern.domain.program.service.ProgramServiceFactory;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,7 +25,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/program")
 @Tag(name = "Program")
 public class ProgramController {
-    private final ProgramService programService;
+    private final ProgramServiceFactory programServiceFactory;
+    /*
+    programServiceFactory.getProgramService(입력에 따른 ProgramType)
+    해당 입력에 따른 program Service 구현체가 나옵니다.
+     */
 
     @Operation(summary = "AWS Target Group 상태 확인용")
     @GetMapping("/tg")
