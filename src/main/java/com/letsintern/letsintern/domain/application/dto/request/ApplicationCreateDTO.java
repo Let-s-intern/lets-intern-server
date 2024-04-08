@@ -64,4 +64,6 @@ public class ApplicationCreateDTO {
     /* 쿠폰 추가 내용 */
     @Nullable
     private String code;
+    @Nullable
+    private Integer couponProgramType;
 }
