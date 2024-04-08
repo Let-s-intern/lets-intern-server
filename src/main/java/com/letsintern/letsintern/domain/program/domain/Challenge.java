@@ -14,7 +14,6 @@ import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@SuperBuilder
 @Getter
 @DiscriminatorValue("challenge")
 @Entity
@@ -40,26 +39,4 @@ public class Challenge extends Program {
     @Builder.Default
     private List<Notice> noticeList = new ArrayList<>();
 
-    public static Challenge createChallenge(ChallengeBasicRequestDto challengeBasicRequestDto,
-                                            Mission mission,
-                                            Notice notice) {
-        return Challenge.builder()
-                .topic(EnumValueUtils.toEntityCode(ProgramTopic.class, challengeBasicRequestDto.topic()))
-                .finalHeadCount(challengeBasicRequestDto.finalHeadCount())
-                .openKakaoLink(challengeBasicRequestDto.openKakaoLink())
-                .openKakaoPassword(challengeBasicRequestDto.openKakaoPassword())
-                .th()
-                .title()
-                .headcount()
-                .dueDate()
-                .announcementDate()
-                .startDate()
-                .endDate()
-                .contents()
-                .way()
-                .location()
-                .notice()
-                .faqListStr()
-                .build();
-    }
 }

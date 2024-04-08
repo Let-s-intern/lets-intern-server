@@ -9,7 +9,6 @@ import lombok.experimental.SuperBuilder;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@SuperBuilder
 @Getter
 @DiscriminatorValue("bootcamp")
 @Entity

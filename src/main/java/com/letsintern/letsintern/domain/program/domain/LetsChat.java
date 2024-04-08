@@ -7,7 +7,6 @@ import lombok.experimental.SuperBuilder;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@SuperBuilder
 @Getter
 @DiscriminatorValue("lets_chat")
 @Entity

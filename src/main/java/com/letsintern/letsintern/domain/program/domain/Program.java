@@ -16,7 +16,6 @@ import static com.letsintern.letsintern.global.utils.EntityUpdateValueUtils.upda
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@SuperBuilder
 @Getter
 @Table(name = "program")
 @Entity
