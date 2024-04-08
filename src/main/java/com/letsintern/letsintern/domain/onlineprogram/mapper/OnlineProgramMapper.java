@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class OnlineProgramMapper {
 
-    public OnlineProgram toEntity(OnlineProgramCreateDTO onlineProgramCreateDTO) {
-        return OnlineProgram.createOnlineProgram(onlineProgramCreateDTO);
+    public OnlineProgram toEntity(OnlineProgramCreateDTO onlineProgramCreateDTO, String s3Url) {
+        return OnlineProgram.createOnlineProgram(onlineProgramCreateDTO, s3Url);
     }
 
     public OnlineProgramIdResponse toOnlineProgramIdResponse(OnlineProgram onlineProgram) {

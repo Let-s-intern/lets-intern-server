@@ -22,14 +22,14 @@ public class OnlineProgram {
 
     private String link;
 
-    private String thumbnailImgUrl;
+    private String thumbnailUrl;
 
-    public static OnlineProgram createOnlineProgram(OnlineProgramCreateDTO onlineProgramCreateDTO) {
+    public static OnlineProgram createOnlineProgram(OnlineProgramCreateDTO onlineProgramCreateDTO, String s3Url) {
         return OnlineProgram.builder()
                 .title(onlineProgramCreateDTO.title())
                 .description(onlineProgramCreateDTO.description())
                 .link(onlineProgramCreateDTO.link())
-                .thumbnailImgUrl(onlineProgramCreateDTO.thumbnailImgUrl())
+                .thumbnailUrl(s3Url)
                 .build();
     }
 }

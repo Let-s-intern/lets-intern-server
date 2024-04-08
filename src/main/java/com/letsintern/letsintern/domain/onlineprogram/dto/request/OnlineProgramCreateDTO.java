@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotNull;
 public record OnlineProgramCreateDTO(
         @NotNull String title,
         @NotNull String description,
-        @NotNull String link,
-        @NotNull String thumbnailImgUrl
+        @NotNull String link
 ) {
 }
