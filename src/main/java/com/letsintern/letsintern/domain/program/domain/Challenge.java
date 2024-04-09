@@ -2,6 +2,7 @@ package com.letsintern.letsintern.domain.program.domain;
 
 import com.letsintern.letsintern.domain.mission.domain.Mission;
 import com.letsintern.letsintern.domain.notice.domain.Notice;
+import com.letsintern.letsintern.domain.payment.domain.Payment;
 import com.letsintern.letsintern.domain.program.domain.converter.ChallengeTypeConverter;
 import com.letsintern.letsintern.domain.program.domain.converter.ProgramTopicConverter;
 import com.letsintern.letsintern.domain.program.dto.request.BaseProgramRequestDto;
@@ -60,5 +61,4 @@ public class Challenge extends Program {
                 .openKakaoPassword(requestDto.challengeInfo().openKakaoPassword())
                 .build();
     }
-
 }

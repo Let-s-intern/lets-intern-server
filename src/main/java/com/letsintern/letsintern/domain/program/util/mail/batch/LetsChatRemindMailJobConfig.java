@@ -3,7 +3,7 @@ package com.letsintern.letsintern.domain.program.util.mail.batch;
 import com.letsintern.letsintern.domain.application.repository.ApplicationRepository;
 import com.letsintern.letsintern.domain.program.domain.MailStatus;
 import com.letsintern.letsintern.domain.program.domain.Program;
-import com.letsintern.letsintern.domain.payment.domail.ProgramFeeType;
+import com.letsintern.letsintern.domain.payment.domain.FeeType;
 import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
 import com.letsintern.letsintern.global.common.util.EmailUtils;
 import lombok.RequiredArgsConstructor;
@@ -58,7 +58,7 @@ public class LetsChatRemindMailJobConfig {
             Program program = programRepository.findById(programId).orElseThrow(() -> ProgramNotFound.EXCEPTION);
             List<String> applicationEmailList;
 
-            if(program.getFeeType().equals(ProgramFeeType.FREE)) {
+            if(program.getFeeType().equals(FeeType.FREE)) {
                 applicationEmailList = applicationRepository.findAllEmailByIsApproved(programId, true);
             } else {
                 applicationEmailList = applicationRepository.findAllEmailByIsApprovedAndFeeIsConfirmed(programId, true, true);

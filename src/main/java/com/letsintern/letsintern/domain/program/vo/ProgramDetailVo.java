@@ -1,7 +1,7 @@
 package com.letsintern.letsintern.domain.program.vo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.letsintern.letsintern.domain.payment.domail.ProgramFeeType;
+import com.letsintern.letsintern.domain.payment.domain.FeeType;
 import com.letsintern.letsintern.domain.program.domain.*;
 import com.letsintern.letsintern.domain.user.domain.AccountType;
 import lombok.Builder;
@@ -21,7 +21,7 @@ public class ProgramDetailVo {
     private ProgramWay way;
     private String location;
     private ChallengeTopic topic;
-    private ProgramFeeType feeType;
+    private FeeType feeType;
     private LocalDateTime dueDate;
     private LocalDateTime announcementDate;
     private LocalDateTime startDate;
@@ -38,7 +38,7 @@ public class ProgramDetailVo {
 
     @Builder
     public ProgramDetailVo(ProgramStatus status, String title, String contents, String notice,
-                           ProgramType type, ProgramWay way, String location, ChallengeTopic topic, ProgramFeeType feeType, String faqListStr,
+                           ProgramType type, ProgramWay way, String location, ChallengeTopic topic, FeeType feeType, String faqListStr,
                            LocalDateTime dueDate, LocalDateTime announcementDate, LocalDateTime startDate, LocalDateTime endDate, LocalDateTime feeDueDate,
                            Integer feeRefund, Integer feeCharge, Integer discountValue, AccountType accountType, String accountNumber) {
         this.status = status;

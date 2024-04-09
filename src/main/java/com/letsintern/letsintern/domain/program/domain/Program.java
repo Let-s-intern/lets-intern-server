@@ -1,7 +1,7 @@
 package com.letsintern.letsintern.domain.program.domain;
 
 import com.letsintern.letsintern.domain.application.domain.Application;
-import com.letsintern.letsintern.domain.payment.domail.Payment;
+import com.letsintern.letsintern.domain.payment.domain.Payment;
 import com.letsintern.letsintern.domain.program.domain.converter.ProgramStatusConverter;
 import com.letsintern.letsintern.domain.program.domain.converter.ProgramWayConverter;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramRequestDto;
@@ -12,8 +12,6 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.letsintern.letsintern.global.utils.EntityUpdateValueUtils.updateValue;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -80,6 +78,10 @@ public abstract class Program {
         this.way = EnumValueUtils.toEntityCode(ProgramWay.class, requestDto.way());
         this.faqListStr = requestDto.faqIdList().toString();
         this.location = requestDto.location();
+    }
+
+    public void addPayment(Payment payment) {
+        this.payment = payment;
     }
 
     public void increaseProgramApplicationCount() {
