@@ -1,8 +1,13 @@
 package com.letsintern.letsintern.domain.onlineprogram.domain;
 
+import com.letsintern.letsintern.domain.file.vo.S3SavedFileVo;
 import com.letsintern.letsintern.domain.onlineprogram.dto.request.OnlineProgramCreateDTO;
+import com.letsintern.letsintern.domain.onlineprogram.dto.request.OnlineProgramUpdateDTO;
 import jakarta.persistence.*;
 import lombok.*;
+
+import static com.letsintern.letsintern.global.utils.EntityUpdateValueUtils.updateValue;
+
 
 @Entity(name = "OnlineProgram")
 @Getter
@@ -31,5 +36,17 @@ public class OnlineProgram {
                 .link(onlineProgramCreateDTO.link())
                 .thumbnailUrl(s3Url)
                 .build();
+    }
+
+    public void updateOnlineProgram(OnlineProgramUpdateDTO onlineProgramUpdateDTO, S3SavedFileVo s3SavedFileVo) {
+        if(onlineProgramUpdateDTO != null) {
+            this.title = updateValue(this.title, onlineProgramUpdateDTO.title());
+            this.description = updateValue(this.description, onlineProgramUpdateDTO.description());
+            this.link = updateValue(this.link, onlineProgramUpdateDTO.link());
+        }
+
+        if(s3SavedFileVo != null) {
+            this.thumbnailUrl = updateValue(this.thumbnailUrl, s3SavedFileVo.getS3Url());
+        }
     }
 }

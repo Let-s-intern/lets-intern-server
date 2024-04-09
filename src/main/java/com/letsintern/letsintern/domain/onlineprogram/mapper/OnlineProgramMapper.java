@@ -3,7 +3,6 @@ package com.letsintern.letsintern.domain.onlineprogram.mapper;
 import com.letsintern.letsintern.domain.onlineprogram.domain.OnlineProgram;
 import com.letsintern.letsintern.domain.onlineprogram.dto.request.OnlineProgramCreateDTO;
 import com.letsintern.letsintern.domain.onlineprogram.dto.response.OnlineProgramAdminListResponse;
-import com.letsintern.letsintern.domain.onlineprogram.dto.response.OnlineProgramIdResponse;
 import com.letsintern.letsintern.domain.onlineprogram.vo.OnlineProgramAdminVo;
 import com.letsintern.letsintern.global.common.dto.PageInfo;
 import org.springframework.data.domain.Page;
@@ -16,10 +15,6 @@ public class OnlineProgramMapper {
 
     public OnlineProgram toEntity(OnlineProgramCreateDTO onlineProgramCreateDTO, String s3Url) {
         return OnlineProgram.createOnlineProgram(onlineProgramCreateDTO, s3Url);
-    }
-
-    public OnlineProgramIdResponse toOnlineProgramIdResponse(OnlineProgram onlineProgram) {
-        return OnlineProgramIdResponse.from(onlineProgram);
     }
 
     public OnlineProgramAdminListResponse toOnlineProgramAdminListResponse(Page<OnlineProgramAdminVo> onlineProgramAdminVos) {

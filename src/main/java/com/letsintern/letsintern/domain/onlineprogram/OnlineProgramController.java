@@ -1,6 +1,7 @@
 package com.letsintern.letsintern.domain.onlineprogram;
 
 import com.letsintern.letsintern.domain.onlineprogram.dto.request.OnlineProgramCreateDTO;
+import com.letsintern.letsintern.domain.onlineprogram.dto.request.OnlineProgramUpdateDTO;
 import com.letsintern.letsintern.domain.onlineprogram.dto.response.OnlineProgramAdminListResponse;
 import com.letsintern.letsintern.domain.onlineprogram.service.OnlineProgramService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -20,7 +21,7 @@ public class OnlineProgramController {
     private final OnlineProgramService onlineProgramService;
 
     @PostMapping
-    public void createOnlineProgramForAdmin(@RequestPart @Valid OnlineProgramCreateDTO onlineProgramCreateDTO,
+    public void createOnlineProgramForAdmin(@RequestPart @Valid final OnlineProgramCreateDTO onlineProgramCreateDTO,
                                             @RequestParam("file")MultipartFile file) {
         onlineProgramService.createOnlineProgram(onlineProgramCreateDTO, file);
     }
@@ -29,4 +30,12 @@ public class OnlineProgramController {
     public OnlineProgramAdminListResponse getOnlineProgramListForAdmin(@PageableDefault Pageable pageable) {
         return onlineProgramService.getOnlineProgramListForAdmin(pageable);
     }
+
+    @PatchMapping("/{id}")
+    public void updateOnlineProgramForAdmin(@PathVariable Long id,
+                                            @RequestPart(required = false) final OnlineProgramUpdateDTO onlineProgramUpdateDTO,
+                                            @RequestParam(value = "file", required = false) MultipartFile file) {
+        onlineProgramService.UpdateOnlineProgram(id, onlineProgramUpdateDTO, file);
+    }
+
 }

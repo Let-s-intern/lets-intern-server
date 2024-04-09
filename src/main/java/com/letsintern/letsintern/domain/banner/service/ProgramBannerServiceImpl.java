@@ -44,7 +44,7 @@ public class ProgramBannerServiceImpl implements BannerService {
     @Override
     public void updateBanner(Long id, BannerUpdateDTO bannerUpdateDTO, MultipartFile file) {
         ProgramBanner programBanner = programBannerHelper.findProgramBannerById(id);
-        S3SavedFileVo s3SavedFileVo = s3Helper.changeBannerImgFile(S3_PROGRAM_BANNER_DIR, programBanner.getImgUrl(), file);
+        S3SavedFileVo s3SavedFileVo = s3Helper.changeImgFile(S3_PROGRAM_BANNER_DIR, programBanner.getImgUrl(), file);
         programBanner.updateProgramBanner(bannerUpdateDTO, s3SavedFileVo);
     }
 
