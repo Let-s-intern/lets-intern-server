@@ -17,6 +17,8 @@ public record ProgramRequestDto(
         Integer way,
         String location,
         String notice,
-        List<Long> faqIdList
+        List<Long> faqIdList,
+        boolean isVisible,
+        Integer programType
 ) {
 }

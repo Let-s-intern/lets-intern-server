@@ -11,10 +11,6 @@ import lombok.experimental.SuperBuilder;
 @DiscriminatorValue("lets_chat")
 @Entity
 public class LetsChat extends Program {
-    @Id
-    @Column(name = "lets_chat_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
     @Column(length = 10)
     @Convert(converter = MailStatusConverter.class)
     private MailStatus mailStatus;

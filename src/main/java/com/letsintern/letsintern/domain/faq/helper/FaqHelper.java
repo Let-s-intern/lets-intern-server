@@ -54,4 +54,8 @@ public class FaqHelper {
 
         faqRepository.delete(targetFaq);
     }
+
+    public FaqVo findFaqVoOrThrow(Long faqId) {
+        return faqRepository.findVoById(faqId);
+    }
 }

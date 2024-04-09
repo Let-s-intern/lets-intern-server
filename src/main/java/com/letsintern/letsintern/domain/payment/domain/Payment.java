@@ -54,4 +54,14 @@ public class Payment {
                 .accountNumber(requestDto.accountNumber())
                 .build();
     }
+
+    public void updatePayment(PaymentRequestDto requestDto) {
+        this.feeType = updateValue(this.feeType, toEntityCode(FeeType.class, requestDto.feeType()));
+        this.feeRefund = updateValue(this.feeRefund, requestDto.feeRefund());
+        this.feeCharge = updateValue(this.feeCharge, requestDto.feeCharge());
+        this.discountValue = updateValue(this.discountValue, requestDto.discountValue());
+        this.feeDueDate = updateValue(this.feeDueDate, requestDto.feeDueDate());
+        this.accountType = updateValue(this.accountType, requestDto.accountType());
+        this.accountNumber = updateValue(this.accountNumber, requestDto.accountNumber());
+    }
 }

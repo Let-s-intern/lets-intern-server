@@ -8,12 +8,15 @@ import com.letsintern.letsintern.domain.program.domain.converter.ProgramTopicCon
 import com.letsintern.letsintern.domain.program.dto.request.BaseProgramRequestDto;
 import com.letsintern.letsintern.domain.program.dto.request.ChallengeRequestDto;
 import com.letsintern.letsintern.global.common.entity.BaseTimeEntity;
+import com.letsintern.letsintern.global.utils.EntityUpdateValueUtils;
 import com.letsintern.letsintern.global.utils.EnumValueUtils;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.letsintern.letsintern.global.utils.EntityUpdateValueUtils.updateValue;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -22,10 +25,6 @@ import java.util.List;
 @DiscriminatorValue("challenge")
 @Entity
 public class Challenge extends Program {
-    @Id
-    @Column(name = "challenge_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
     @Column(nullable = false)
     @Convert(converter = ProgramTopicConverter.class)
     private ChallengeTopic topic;
@@ -60,5 +59,13 @@ public class Challenge extends Program {
                 .openKakaoLink(requestDto.challengeInfo().openKakaoLink())
                 .openKakaoPassword(requestDto.challengeInfo().openKakaoPassword())
                 .build();
+    }
+
+    public void updateChallenge(BaseProgramRequestDto requestDto, ProgramStatus programStatus, String fqaList) {
+        super.updateProgramInfo(requestDto.programInfo(), programStatus, fqaList);
+        this.topic = updateValue(this.topic, EnumValueUtils.toEntityCode(ChallengeTopic.class, requestDto.challengeInfo().challengeTopic()));
+        this.challengeType = updateValue(this.challengeType, EnumValueUtils.toEntityCode(ChallengeType.class, requestDto.challengeInfo().challengeType()));
+        this.openKakaoLink = updateValue(this.openKakaoLink, requestDto.challengeInfo().openKakaoLink());
+        this.openKakaoPassword = updateValue(this.openKakaoPassword, requestDto.challengeInfo().openKakaoPassword());
     }
 }

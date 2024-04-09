@@ -4,6 +4,7 @@ import com.letsintern.letsintern.domain.application.domain.Application;
 import com.letsintern.letsintern.domain.application.exception.ApplicationNotFound;
 import com.letsintern.letsintern.domain.application.repository.ApplicationRepository;
 import com.letsintern.letsintern.domain.program.domain.Program;
+import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
 import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
 import com.letsintern.letsintern.domain.review.domian.Review;
@@ -29,8 +30,6 @@ public class ReviewHelper {
     private final ApplicationRepository applicationRepository;
     private final ReviewRepository reviewRepository;
     private final ReviewMapper reviewMapper;
-
-    private final ProgramRepository programRepository;
 
     public Long createLinkReview(Long programId, ReviewCreateDTO reviewCreateDTO) {
         Program program = programRepository.findById(programId)
@@ -96,5 +95,9 @@ public class ReviewHelper {
                     throw ProgramNotFound.EXCEPTION;
                 });
         return reviewMapper.toReviewDetailVo(review, program);
+    }
+
+    public List<ReviewVo> findAllVosByProgramType(ProgramType programType) {
+        return reviewRepository.findAllVosByProgramType(programType);
     }
 }
