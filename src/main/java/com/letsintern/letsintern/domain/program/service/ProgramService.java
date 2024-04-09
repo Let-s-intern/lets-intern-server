@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface ProgramService {
-    Program
     ProgramListResponseDto getProgramList();
     void createProgram(BaseProgramRequestDto requestDto);
     void updateProgram(BaseProgramRequestDto requestDto);
