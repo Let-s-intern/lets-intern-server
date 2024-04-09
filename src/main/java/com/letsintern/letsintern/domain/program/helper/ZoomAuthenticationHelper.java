@@ -1,6 +1,5 @@
 package com.letsintern.letsintern.domain.program.helper;
 
-import com.letsintern.letsintern.domain.program.dto.response.ZoomAuthResponse;
 import com.letsintern.letsintern.domain.program.exception.ZoomTokenUnauthorizedException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

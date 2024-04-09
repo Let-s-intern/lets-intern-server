@@ -3,11 +3,9 @@ package com.letsintern.letsintern.domain.program;
 import com.letsintern.letsintern.domain.application.domain.ApplicationWishJob;
 import com.letsintern.letsintern.domain.program.domain.MailType;
 import com.letsintern.letsintern.domain.program.domain.Program;
-import com.letsintern.letsintern.domain.program.dto.request.LetsChatMentorPasswordRequestDTO;
-import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequestDTO;
-import com.letsintern.letsintern.domain.program.dto.request.ProgramUpdateRequestDTO;
+import com.letsintern.letsintern.domain.program.domain.ProgramType;
+import com.letsintern.letsintern.domain.program.dto.request.BaseProgramRequestDto;
 import com.letsintern.letsintern.domain.program.dto.response.*;
-import com.letsintern.letsintern.domain.program.service.ProgramService;
 import com.letsintern.letsintern.domain.program.service.ProgramServiceFactory;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,10 +24,13 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Program")
 public class ProgramController {
     private final ProgramServiceFactory programServiceFactory;
-    /*
-    programServiceFactory.getProgramService(입력에 따른 ProgramType)
-    해당 입력에 따른 program Service 구현체가 나옵니다.
-     */
+
+    @Operation(summary = "어드민 프로그램 신규 개설")
+    @PostMapping
+    public void createProgram(@RequestParam ProgramType programType,
+                              @RequestBody BaseProgramRequestDto requestDto) {
+        programServiceFactory.getProgramService(programType).createProgram(requestDto);
+    }
 
     @Operation(summary = "AWS Target Group 상태 확인용")
     @GetMapping("/tg")
@@ -99,12 +100,6 @@ public class ProgramController {
             @PathVariable Long programId,
             @RequestBody @Valid LetsChatMentorPasswordRequestDTO letsChatMentorPasswordRequestDTO) {
         return programService.getLetsChatAfterSessionNotice(programId, letsChatMentorPasswordRequestDTO);
-    }
-
-    @Operation(summary = "어드민 프로그램 신규 개설")
-    @PostMapping
-    public ProgramIdResponseDTO createProgram(@RequestBody ProgramCreateRequestDTO programCreateRequestDTO) {
-        return programService.createProgram(programCreateRequestDTO);
     }
 
     @Operation(summary = "어드민 프로그램 수정")

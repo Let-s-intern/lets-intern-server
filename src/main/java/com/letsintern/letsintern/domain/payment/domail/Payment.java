@@ -1,5 +1,6 @@
 package com.letsintern.letsintern.domain.payment.domail;
 
+import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.user.domain.AccountType;
 import jakarta.persistence.*;
 import lombok.*;
@@ -32,4 +33,6 @@ public class Payment {
     @Enumerated(EnumType.STRING)
     private AccountType accountType;
     private String accountNumber;
+    @OneToOne
+    private Program program;
 }

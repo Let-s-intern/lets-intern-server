@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
-public enum ProgramTopic implements EnumField {
+public enum ChallengeTopic implements EnumField {
     ALL(1, "전체"),
     MANAGEMENT(2, "경영관리"),
     FINANCE(3, "금융"),

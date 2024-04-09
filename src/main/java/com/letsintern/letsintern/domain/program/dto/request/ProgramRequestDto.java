@@ -1,12 +1,11 @@
 package com.letsintern.letsintern.domain.program.dto.request;
 
-import com.letsintern.letsintern.domain.program.domain.ProgramType;
+import com.letsintern.letsintern.domain.program.domain.ProgramWay;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-public record ChallengeBasicRequestDto(
-        ProgramType type,
+public record ProgramRequestDto(
         Integer th,
         String title,
         Integer headcount,
@@ -18,10 +17,6 @@ public record ChallengeBasicRequestDto(
         Integer way,
         String location,
         String notice,
-        List<Long> faqIdList,
-        Integer topic,
-        Integer finalHeadCount,
-        String openKakaoLink,
-        String openKakaoPassword
+        List<Long> faqIdList
 ) {
 }
