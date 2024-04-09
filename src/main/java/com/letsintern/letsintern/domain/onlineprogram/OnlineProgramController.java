@@ -22,7 +22,7 @@ public class OnlineProgramController {
 
     @PostMapping
     public void createOnlineProgramForAdmin(@RequestPart @Valid final OnlineProgramCreateDTO onlineProgramCreateDTO,
-                                            @RequestParam("file")MultipartFile file) {
+                                            @RequestParam("file") MultipartFile file) {
         onlineProgramService.createOnlineProgram(onlineProgramCreateDTO, file);
     }
 
