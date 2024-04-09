@@ -26,4 +26,8 @@ public class OnlineProgramHelper {
     public Page<OnlineProgramAdminVo> getOnlineProgramAdminList(Pageable pageable) {
         return onlineProgramRepository.findAllOnlineProgramAdminVos(pageable);
     }
+
+    public void deleteOnlineProgram(OnlineProgram onlineProgram) {
+        onlineProgramRepository.delete(onlineProgram);
+    }
 }

@@ -37,9 +37,15 @@ public class OnlineProgramService {
         return onlineProgramMapper.toOnlineProgramAdminListResponse(onlineProgramAdminVoPage);
     }
 
-    public void UpdateOnlineProgram(Long id, OnlineProgramUpdateDTO onlineProgramUpdateDTO, MultipartFile file) {
+    public void updateOnlineProgram(Long id, OnlineProgramUpdateDTO onlineProgramUpdateDTO, MultipartFile file) {
         OnlineProgram onlineProgram = onlineProgramHelper.findOnlineProgramById(id);
         S3SavedFileVo s3SavedFileVo = s3Helper.changeImgFile(S3_ONLINE_PROGRAM_DIR, onlineProgram.getThumbnailUrl(), file);
         onlineProgram.updateOnlineProgram(onlineProgramUpdateDTO, s3SavedFileVo);
+    }
+
+    public void deleteOnlineProgram(Long id) {
+        final OnlineProgram onlineProgram = onlineProgramHelper.findOnlineProgramById(id);
+        s3Helper.deleteFile(S3_ONLINE_PROGRAM_DIR + onlineProgram.getThumbnailUrl().split("/")[5]);
+        onlineProgramHelper.deleteOnlineProgram(onlineProgram);
     }
 }

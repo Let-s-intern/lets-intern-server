@@ -35,7 +35,11 @@ public class OnlineProgramController {
     public void updateOnlineProgramForAdmin(@PathVariable Long id,
                                             @RequestPart(required = false) final OnlineProgramUpdateDTO onlineProgramUpdateDTO,
                                             @RequestParam(value = "file", required = false) MultipartFile file) {
-        onlineProgramService.UpdateOnlineProgram(id, onlineProgramUpdateDTO, file);
+        onlineProgramService.updateOnlineProgram(id, onlineProgramUpdateDTO, file);
     }
 
+    @DeleteMapping("/{id}")
+    public void deleteOnlineProgramForAdmin(@PathVariable Long id) {
+        onlineProgramService.deleteOnlineProgram(id);
+    }
 }
