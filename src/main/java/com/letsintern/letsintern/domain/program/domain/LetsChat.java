@@ -2,7 +2,6 @@ package com.letsintern.letsintern.domain.program.domain;
 
 import com.letsintern.letsintern.domain.program.domain.converter.MailStatusConverter;
 import com.letsintern.letsintern.domain.program.dto.request.BaseProgramRequestDto;
-import com.letsintern.letsintern.domain.program.dto.response.ZoomMeetingCreateResponse;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,16 +21,16 @@ public class LetsChat extends Program {
     private String mentorPassword;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private LetsChat(BaseProgramRequestDto baseProgramRequestDto, ZoomMeetingCreateResponse zoomMeetingCreateResponse, String mentorPassword) {
-        super(baseProgramRequestDto.programInfo());
-        super.addZoomInfo(zoomMeetingCreateResponse);
+    private LetsChat(BaseProgramRequestDto baseProgramRequestDto, String zoomLink, String zoomPassword, String mentorPassword) {
+        super(baseProgramRequestDto.programInfo(), zoomLink, zoomPassword);
         this.mentorPassword = mentorPassword;
     }
 
-    public static LetsChat createLetsChat(BaseProgramRequestDto baseProgramRequestDto, ZoomMeetingCreateResponse zoomMeetingCreateResponse, String mentorPassword) {
+    public static LetsChat createLetsChat(BaseProgramRequestDto baseProgramRequestDto, String zoomLink, String zoomPassword, String mentorPassword) {
         return LetsChat.builder()
                 .baseProgramRequestDto(baseProgramRequestDto)
-                .zoomMeetingCreateResponse(zoomMeetingCreateResponse)
+                .zoomLink(zoomLink)
+                .zoomPassword(zoomPassword)
                 .mentorPassword(mentorPassword)
                 .build();
     }

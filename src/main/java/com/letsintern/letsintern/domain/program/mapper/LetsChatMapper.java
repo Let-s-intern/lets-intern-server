@@ -12,7 +12,7 @@ public class LetsChatMapper {
     public LetsChat toEntityLetsChat(BaseProgramRequestDto baseProgramRequestDto,
                                      ZoomMeetingCreateResponse zoomMeetingCreateResponse,
                                      String mentorPassword) {
-        return LetsChat.createLetsChat(baseProgramRequestDto, zoomMeetingCreateResponse, mentorPassword);
+        return LetsChat.createLetsChat(baseProgramRequestDto, zoomMeetingCreateResponse.join_url(), zoomMeetingCreateResponse.password(), mentorPassword);
     }
 
     public BaseProgramResponseDto<?> toBaseProgramResponseDto(LetsChat letsChat) {
