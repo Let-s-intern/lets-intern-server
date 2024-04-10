@@ -107,6 +107,10 @@ public abstract class Program {
         this.applicationCount++;
     }
 
+    public void decreaseProgramApplicationCount() {
+        this.applicationCount--;
+    }
+
     public void updateProgramInfo(ProgramRequestDto programRequestDto,
                                   ProgramStatus programStatus,
                                   String stringFaqList) {
