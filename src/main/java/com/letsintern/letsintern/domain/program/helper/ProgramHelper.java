@@ -1,19 +1,12 @@
 package com.letsintern.letsintern.domain.program.helper;
 
-import com.letsintern.letsintern.domain.application.helper.ApplicationHelper;
-import com.letsintern.letsintern.domain.application.repository.ApplicationRepository;
-import com.letsintern.letsintern.domain.faq.repository.FaqRepository;
 import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.program.domain.ProgramStatus;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramRequestDto;
 import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
-import com.letsintern.letsintern.domain.program.mapper.ProgramMapper;
 import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
 import com.letsintern.letsintern.domain.program.vo.program.ProgramDetailVo;
-import com.letsintern.letsintern.domain.review.repository.ReviewRepository;
-import com.letsintern.letsintern.global.common.util.EmailUtils;
 import com.letsintern.letsintern.global.common.util.StringUtils;
-import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -28,10 +21,14 @@ public class ProgramHelper {
     private final ProgramRepository programRepository;
 
     public String parseToFaqIdList(List<Long> faqIdList) {
+        if (Objects.isNull(faqIdList))
+            return null;
         return StringUtils.listToString(faqIdList);
     }
 
     public ProgramStatus getProgramStatusForDueDate(ProgramRequestDto programRequestDto) {
+        if (Objects.isNull(programRequestDto.dueDate()))
+            return null;
         if (programRequestDto.dueDate().isAfter(LocalDateTime.now())) {
             return ProgramStatus.OPEN;
         } else {
