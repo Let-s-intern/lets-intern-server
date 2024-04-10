@@ -15,8 +15,8 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class ReviewMapper {
 
-    public Review toEntity(Long programId, ProgramType programType, Integer programTh, ReviewCreateDTO reviewCreateDTO, String username) {
-        return Review.of(reviewCreateDTO, programId, programType, programTh, username);
+    public Review toEntity(Program program, ReviewCreateDTO reviewCreateDTO, String username) {
+        return Review.of(reviewCreateDTO, program.getId(), program.getProgramType(), program.getTh(), username);
     }
 
     public ReviewIdResponse toReviewIdResponse(Long reviewId) {
