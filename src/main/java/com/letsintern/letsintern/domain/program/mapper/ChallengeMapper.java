@@ -1,9 +1,8 @@
 package com.letsintern.letsintern.domain.program.mapper;
 
 import com.letsintern.letsintern.domain.program.domain.Challenge;
-import com.letsintern.letsintern.domain.program.dto.request.BaseProgramRequestDto;
-import com.letsintern.letsintern.domain.program.dto.response.BaseProgramResponseDto;
 import com.letsintern.letsintern.domain.program.dto.response.ZoomMeetingCreateResponse;
+import com.letsintern.letsintern.domain.program.dto.request.BaseProgramRequestDto;
 import org.springframework.stereotype.Component;
 
 @Component

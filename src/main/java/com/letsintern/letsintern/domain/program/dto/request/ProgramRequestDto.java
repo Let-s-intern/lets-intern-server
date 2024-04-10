@@ -1,7 +1,5 @@
 package com.letsintern.letsintern.domain.program.dto.request;
 
-import com.letsintern.letsintern.domain.program.domain.ProgramWay;
-
 import java.time.LocalDateTime;
 import java.util.List;
 

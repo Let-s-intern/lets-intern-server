@@ -1,9 +1,9 @@
 package com.letsintern.letsintern.domain.program.helper;
 
 import com.letsintern.letsintern.domain.program.domain.Challenge;
+import com.letsintern.letsintern.domain.program.exception.ChallengeProgramCreateBadRequest;
 import com.letsintern.letsintern.domain.program.dto.request.ChallengeRequestDto;
 import com.letsintern.letsintern.domain.program.exception.ChallengeNotFoundException;
-import com.letsintern.letsintern.domain.program.exception.ChallengeProgramCreateBadRequest;
 import com.letsintern.letsintern.domain.program.repository.ChallengeRepository;
 import com.letsintern.letsintern.domain.program.vo.challenge.ChallengeDetailVo;
 import lombok.RequiredArgsConstructor;

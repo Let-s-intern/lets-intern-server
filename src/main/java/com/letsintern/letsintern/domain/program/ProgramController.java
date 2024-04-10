@@ -2,15 +2,18 @@ package com.letsintern.letsintern.domain.program;
 
 import com.letsintern.letsintern.domain.application.domain.ApplicationWishJob;
 import com.letsintern.letsintern.domain.program.domain.MailType;
-import com.letsintern.letsintern.domain.program.domain.ProgramRequestType;
 import com.letsintern.letsintern.domain.program.dto.request.BaseProgramRequestDto;
-import com.letsintern.letsintern.domain.program.dto.response.BaseProgramResponseDto;
+import com.letsintern.letsintern.domain.program.dto.request.LetsChatMentorPasswordDto;
+import com.letsintern.letsintern.domain.program.dto.response.LetsChatMentorAfterSessionResponseDto;
+import com.letsintern.letsintern.domain.program.dto.response.LetsChatMentorPriorSessionResponseDto;
 import com.letsintern.letsintern.domain.program.dto.response.ProgramDetailResponseDto;
+import com.letsintern.letsintern.domain.program.service.LetsChatServiceImpl;
 import com.letsintern.letsintern.domain.program.service.ProgramServiceFactory;
+import com.letsintern.letsintern.domain.program.domain.ProgramRequestType;
+import com.letsintern.letsintern.domain.program.dto.response.BaseProgramResponseDto;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -24,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Program")
 public class ProgramController {
     private final ProgramServiceFactory programServiceFactory;
+    private final LetsChatServiceImpl letsChatService;
 
     @Operation(summary = "프로그램 1개 상세 보기")
     @GetMapping("/{programId}")
@@ -98,22 +102,22 @@ public class ProgramController {
 
     @Operation(summary = "어드민 렛츠챗 프로그램 1개의 멘토 비밀번호 보기")
     @GetMapping("/admin/{programId}/mentor")
-    public ProgramMentorPasswordResponse getProgramMentorPassword(@PathVariable Long programId) {
-        return programService.getProgramMentorPassword(programId);
+    public LetsChatMentorPasswordDto getProgramMentorPassword(@PathVariable Long programId) {
+        return letsChatService.getMentorPassword(programId);
     }
 
     @Operation(summary = "렛츠챗 프로그램 멘토 세션 안내 페이지 - prior")
     @PostMapping("/{programId}/mentor/prior")
-    public LetsChatPriorSessionNoticeResponse getLetsChatPriorSessionNotice(@PathVariable Long programId,
-                                                                            @RequestBody @Valid LetsChatMentorPasswordRequestDTO letsChatMentorPasswordRequestDTO) {
-        return programService.getLetsChatPriorSessionNotice(programId, letsChatMentorPasswordRequestDTO);
+    public LetsChatMentorPriorSessionResponseDto getMentorPriorSessionInfo(@PathVariable Long programId,
+                                                                           @RequestBody LetsChatMentorPasswordDto letsChatMentorPasswordDto) {
+        return letsChatService.getMentorPriorSessionInfo(programId, letsChatMentorPasswordDto);
     }
 
     @Operation(summary = "렛츠챗 프로그램 멘토 세션 마무리 페이지 - after")
     @PostMapping("/{programId}/mentor/after")
-    public LetsChatAfterSessionNoticeResponse getLetsChatAfterSessionNotice(@PathVariable Long programId,
-                                                                            @RequestBody @Valid LetsChatMentorPasswordRequestDTO letsChatMentorPasswordRequestDTO) {
-        return programService.getLetsChatAfterSessionNotice(programId, letsChatMentorPasswordRequestDTO);
+    public LetsChatMentorAfterSessionResponseDto getMentorAfterSessionInfo(@PathVariable Long programId,
+                                                                           @RequestBody LetsChatMentorPasswordDto letsChatMentorPasswordDto) {
+        return letsChatService.getMentorAfterSessionInfo(programId, letsChatMentorPasswordDto);
     }
 
     @Operation(summary = "어드민 프로그램 최종 참여자 수 저장")

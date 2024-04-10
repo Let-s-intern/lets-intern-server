@@ -1,7 +1,6 @@
 package com.letsintern.letsintern.domain.review.repository;
 
 import com.letsintern.letsintern.domain.program.domain.ProgramType;
-import com.letsintern.letsintern.domain.program.domain.QProgram;
 import com.letsintern.letsintern.domain.review.domian.QReview;
 import com.letsintern.letsintern.domain.review.domian.Review;
 import com.letsintern.letsintern.domain.review.domian.ReviewStatus;

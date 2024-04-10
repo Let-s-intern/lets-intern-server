@@ -1,10 +1,10 @@
 package com.letsintern.letsintern.domain.program.helper;
 
 import com.letsintern.letsintern.domain.program.domain.Bootcamp;
-import com.letsintern.letsintern.domain.program.dto.request.BootcampRequestDto;
-import com.letsintern.letsintern.domain.program.exception.BootcampNotFound;
 import com.letsintern.letsintern.domain.program.repository.BootcampRepository;
 import com.letsintern.letsintern.domain.program.vo.bootcamp.BootcampDetailVo;
+import com.letsintern.letsintern.domain.program.dto.request.BootcampRequestDto;
+import com.letsintern.letsintern.domain.program.exception.BootcampNotFound;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

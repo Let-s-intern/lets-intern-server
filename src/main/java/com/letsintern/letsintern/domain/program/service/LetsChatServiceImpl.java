@@ -4,23 +4,23 @@ import com.letsintern.letsintern.domain.application.domain.ApplicationWishJob;
 import com.letsintern.letsintern.domain.application.helper.ApplicationHelper;
 import com.letsintern.letsintern.domain.faq.helper.FaqHelper;
 import com.letsintern.letsintern.domain.faq.vo.FaqVo;
-import com.letsintern.letsintern.domain.payment.domain.Payment;
-import com.letsintern.letsintern.domain.payment.dto.request.PaymentRequestDto;
-import com.letsintern.letsintern.domain.payment.helper.PaymentHelper;
 import com.letsintern.letsintern.domain.program.domain.ChallengeTopic;
 import com.letsintern.letsintern.domain.program.domain.LetsChat;
 import com.letsintern.letsintern.domain.program.domain.ProgramStatus;
-import com.letsintern.letsintern.domain.program.dto.request.BaseProgramRequestDto;
-import com.letsintern.letsintern.domain.program.dto.response.BaseProgramResponseDto;
-import com.letsintern.letsintern.domain.program.dto.response.ProgramDetailResponseDto;
-import com.letsintern.letsintern.domain.program.dto.response.ProgramListResponseDto;
-import com.letsintern.letsintern.domain.program.dto.response.ZoomMeetingCreateResponse;
+import com.letsintern.letsintern.domain.program.dto.request.LetsChatMentorPasswordDto;
+import com.letsintern.letsintern.domain.notice.program.dto.response.*;
 import com.letsintern.letsintern.domain.program.helper.LetsChatHelper;
 import com.letsintern.letsintern.domain.program.helper.ProgramHelper;
 import com.letsintern.letsintern.domain.program.helper.ZoomMeetingApiHelper;
 import com.letsintern.letsintern.domain.program.mapper.LetsChatMapper;
 import com.letsintern.letsintern.domain.program.mapper.ProgramMapper;
-import com.letsintern.letsintern.domain.program.vo.program.ProgramDetailVo;
+import com.letsintern.letsintern.domain.payment.domain.Payment;
+import com.letsintern.letsintern.domain.payment.dto.request.PaymentRequestDto;
+import com.letsintern.letsintern.domain.payment.helper.PaymentHelper;
+import com.letsintern.letsintern.domain.program.dto.request.BaseProgramRequestDto;
+import com.letsintern.letsintern.domain.program.dto.response.*;
+import com.letsintern.letsintern.domain.program.vo.letschat.LetsChatMentorInfoVo;
+import com.letsintern.letsintern.domain.program.vo.letschat.LetsChatDetailVo;
 import com.letsintern.letsintern.domain.review.helper.ReviewHelper;
 import com.letsintern.letsintern.domain.review.vo.ReviewVo;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
@@ -57,7 +57,7 @@ public class LetsChatServiceImpl implements ProgramService {
 
     @Override
     public ProgramDetailResponseDto<?> getProgramDetail(Long programId, PrincipalDetails principalDetails) {
-        ProgramDetailVo letsChatDetailVo = letsChatHelper.findLetsChatDetailVoOrThrow(programId);
+        LetsChatDetailVo letsChatDetailVo = letsChatHelper.findLetsChatDetailVoOrThrow(programId);
         List<FaqVo> faqList = faqHelper.createFaqVoList(letsChatDetailVo.faqListStr());
         List<ReviewVo> reviewList = reviewHelper.findAllVosByProgramType(letsChatDetailVo.programType());
         List<ApplicationWishJob> wishJobList = ApplicationWishJob.getApplicationWishJobListByProgramTopic(ChallengeTopic.ALL);
@@ -87,6 +87,24 @@ public class LetsChatServiceImpl implements ProgramService {
     public void deleteProgram(Long programId) {
         final LetsChat letsChat = letsChatHelper.findLetsChatByIdOrThrow(programId);
         letsChatHelper.deleteLetsChat(letsChat);
+    }
+
+    public LetsChatMentorPasswordDto getMentorPassword(Long programId) {
+        final LetsChat letsChat = letsChatHelper.findLetsChatByIdOrThrow(programId);
+        return letsChatMapper.toLetsChatMentorPasswordDto(letsChat.getMentorPassword());
+    }
+
+    public LetsChatMentorPriorSessionResponseDto getMentorPriorSessionInfo(Long programId, LetsChatMentorPasswordDto letsChatMentorPasswordDto) {
+        LetsChatMentorInfoVo letsChatMentorInfoVo = letsChatHelper.findLetsChatMentorInfoVo(programId);
+        List<String> applyMotiveList = applicationHelper.getApplicationApplyMotiveList(programId);
+        List<String> preQuestionList = applicationHelper.getApplicationPreQuestionList(programId);
+        return letsChatMapper.toLetsChatMentorPriorSessionResponseDto(letsChatMentorInfoVo, applyMotiveList, preQuestionList);
+    }
+
+    public LetsChatMentorAfterSessionResponseDto getMentorAfterSessionInfo(Long programId, LetsChatMentorPasswordDto letsChatMentorPasswordDto) {
+        final LetsChat letsChat = letsChatHelper.findLetsChatByIdOrThrow(programId);
+        List<String> reviewList = reviewHelper.findAllReviewContentsByProgramId(programId);
+        return letsChatMapper.toLetsChatMentorAfterSessionResponseDto(letsChat.getTitle(), reviewList);
     }
 
     private boolean checkExistingApplication(PrincipalDetails principalDetails, Long programId) {

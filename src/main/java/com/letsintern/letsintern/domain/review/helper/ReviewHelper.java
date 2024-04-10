@@ -6,7 +6,6 @@ import com.letsintern.letsintern.domain.application.repository.ApplicationReposi
 import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
-import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
 import com.letsintern.letsintern.domain.review.domian.Review;
 import com.letsintern.letsintern.domain.review.dto.request.ReviewCreateDTO;
 import com.letsintern.letsintern.domain.review.dto.request.ReviewUpdateDTO;
@@ -63,6 +62,10 @@ public class ReviewHelper {
 
     public Page<Review> getReviewListOfProgram(Long programId, Pageable pageable) {
         return reviewRepository.findAllByProgramId(programId, pageable);
+    }
+
+    public List<String> findAllReviewContentsByProgramId(Long programId) {
+        return reviewRepository.findAllReviewContentsByProgramId(programId);
     }
 
     public Long updateReviewStatus(Long reviewId, ReviewUpdateDTO reviewUpdateDTO) {

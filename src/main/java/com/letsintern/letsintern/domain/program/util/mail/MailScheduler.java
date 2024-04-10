@@ -1,9 +1,9 @@
 package com.letsintern.letsintern.domain.program.util.mail;
 
-import com.letsintern.letsintern.domain.program.domain.MailStatus;
-import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.program.util.mail.batch.LetsChatRemindMailJobConfig;
 import com.letsintern.letsintern.domain.program.util.mail.batch.LetsChatReviewMailJobConfig;
+import com.letsintern.letsintern.domain.program.domain.MailStatus;
+import com.letsintern.letsintern.domain.program.domain.Program;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.JobParametersInvalidException;
