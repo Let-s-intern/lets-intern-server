@@ -136,10 +136,14 @@ public class ProgramHelper {
     }
 
     public String parseToFaqIdList(ProgramUpdateRequestDTO programUpdateRequestDTO) {
+        if (Objects.isNull(programUpdateRequestDTO.getFaqIdList()))
+            return null;
         return StringUtils.listToString(programUpdateRequestDTO.getFaqIdList());
     }
 
     public ProgramStatus getProgramStatusForDueDate(ProgramUpdateRequestDTO programUpdateRequestDTO) {
+        if (Objects.isNull(programUpdateRequestDTO.getDueDate()))
+            return null;
         if (programUpdateRequestDTO.getDueDate().isAfter(LocalDateTime.now())) {
             return ProgramStatus.OPEN;
         } else {
