@@ -8,6 +8,7 @@ import com.letsintern.letsintern.domain.notice.mapper.NoticeMapper;
 import com.letsintern.letsintern.domain.notice.repository.NoticeRepository;
 import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
+import com.letsintern.letsintern.domain.program.helper.ProgramHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,15 +17,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class NoticeHelper {
-
     private final NoticeRepository noticeRepository;
-    private final NoticeMapper noticeMapper;
-    private final ProgramRepository programRepository;
-
-    public Long createNotice(Long programId, NoticeCreateDTO noticeCreateDTO) {
-        final Program program = programRepository.findById(programId).orElseThrow(() -> ProgramNotFound.EXCEPTION);
-        return noticeRepository.save(noticeMapper.toEntity(program, noticeCreateDTO)).getId();
-    }
 
     public Long updateNotice(Long noticeId, NoticeUpdateDTO noticeUpdateDTO) {
         Notice notice = noticeRepository.findById(noticeId).orElseThrow(() -> NoticeNotFound.EXCEPTION);
@@ -43,7 +36,10 @@ public class NoticeHelper {
     }
 
     public Page<Notice> getNoticeList(Long programId, Pageable pageable) {
-        final Program program = programRepository.findById(programId).orElseThrow(() -> ProgramNotFound.EXCEPTION);
         return noticeRepository.findAllByProgramIdOrderByIdDesc(programId, pageable);
+    }
+
+    public Notice saveNotice(Notice notice) {
+        return noticeRepository.save(notice);
     }
 }
