@@ -48,15 +48,6 @@ public class Challenge extends Program {
         this.openKakaoPassword = requestDto.challengeInfo().openKakaoPassword();
     }
 
-//    public static Challenge createChallenge(BaseProgramRequestDto requestDto, String zoomLink, String zoomPassword) {
-//        return Challenge.builder()
-//                .topic(EnumValueUtils.toEntityCode(ChallengeTopic.class, requestDto.challengeInfo().challengeTopic()))
-//                .challengeType(EnumValueUtils.toEntityCode(ChallengeType.class, requestDto.challengeInfo().challengeType()))
-//                .openKakaoLink(requestDto.challengeInfo().openKakaoLink())
-//                .openKakaoPassword(requestDto.challengeInfo().openKakaoPassword())
-//                .build();
-//    }
-
     public void updateChallenge(BaseProgramRequestDto requestDto, ProgramStatus programStatus, String fqaList) {
         super.updateProgramInfo(requestDto.programInfo(), programStatus, fqaList);
         this.topic = updateValue(this.topic, EnumValueUtils.toEntityCode(ChallengeTopic.class, requestDto.challengeInfo().challengeTopic()));
