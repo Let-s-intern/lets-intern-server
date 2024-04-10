@@ -2,8 +2,8 @@ package com.letsintern.letsintern.domain.application.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.letsintern.letsintern.domain.application.dto.request.ApplicationCreateDTO;
+import com.letsintern.letsintern.domain.payment.domain.FeeType;
 import com.letsintern.letsintern.domain.program.domain.Program;
-import com.letsintern.letsintern.domain.program.domain.ProgramFeeType;
 import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import com.letsintern.letsintern.domain.user.domain.AccountType;
 import com.letsintern.letsintern.domain.user.domain.User;
@@ -18,7 +18,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Entity
-@Getter @Setter
+@Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Application {
 
@@ -95,7 +96,6 @@ public class Application {
     private Program program;
 
 
-
     /* Default */
     @NotNull
     private Boolean isApproved = false;
@@ -122,8 +122,8 @@ public class Application {
 
     @Builder
     private Application(Program program, User user, Integer grade, String wishCompany, ApplicationWishJob wishJob,
-                             String applyMotive, String preQuestions, InflowPath inflowPath,
-                             String name, String phoneNum, String email, AccountType accountType, String accountNumber, ApplicationWay way, String couponCode, Integer totalFee) {
+                        String applyMotive, String preQuestions, InflowPath inflowPath,
+                        String name, String phoneNum, String email, AccountType accountType, String accountNumber, ApplicationWay way, String couponCode, Integer totalFee) {
         this.program = program;
         this.user = user;
         this.grade = grade;
@@ -134,16 +134,16 @@ public class Application {
         this.inflowPath = inflowPath;
         this.couponCode = couponCode;
         this.totalFee = totalFee;
-        if(way != null) this.way = way;
+        if (way != null) this.way = way;
 
         /* 비회원 */
-        if(user == null) {
+        if (user == null) {
             this.type = ApplicationType.GUEST;
             this.name = name;
             this.phoneNum = phoneNum;
             this.email = email;
 
-            if(program.getFeeType().equals(ProgramFeeType.REFUND)) {
+            if (program.getPayment().getFeeType().equals(FeeType.REFUND)) {
                 this.accountType = accountType;
                 this.accountNumber = accountNumber;
             }
@@ -153,7 +153,7 @@ public class Application {
         else {
             this.type = ApplicationType.USER;
 
-            if(program.getType().equals(ProgramType.CHALLENGE_FULL) || program.getType().equals(ProgramType.CHALLENGE_HALF)) {
+            if (program.getProgramType().equals(ProgramType.CHALLENGE_FULL) || program.getProgramType().equals(ProgramType.CHALLENGE_HALF)) {
                 this.introduction = "안녕하세요, " + user.getName() + "입니다";
             }
         }
