@@ -75,7 +75,7 @@ public abstract class Program {
     @OneToOne
     private Payment payment;
 
-    public Program(ProgramRequestDto requestDto) {
+    public Program(ProgramRequestDto requestDto, String zoomLink, String zoomLinkPassword) {
         this.title = requestDto.title();
         this.contents = requestDto.contents();
         this.notice = requestDto.notice();
@@ -90,6 +90,8 @@ public abstract class Program {
         this.location = requestDto.location();
         this.isVisible = requestDto.isVisible();
         this.programType = toEntityCode(ProgramType.class, requestDto.programType());
+        this.zoomLink = zoomLink;
+        this.zoomLinkPassword = zoomLinkPassword;
     }
 
     public void addPayment(Payment payment) {

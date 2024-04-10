@@ -42,7 +42,7 @@ public class LetsChatQueryRepositoryImpl implements LetsChatQueryRepository {
                         letsChat.faqListStr,
                         letsChat.programType))
                 .from(letsChat)
-                .leftJoin(letsChat, payment.program)
+                .leftJoin(letsChat._super, payment.program)
                 .where(letsChat.id.equals(letsChatId))
                 .fetchOne());
     }
