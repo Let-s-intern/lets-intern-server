@@ -1,6 +1,5 @@
 package com.letsintern.letsintern.domain.program.repository;
 
-import com.letsintern.letsintern.domain.program.vo.ProgramDetailVo;
 import com.letsintern.letsintern.domain.program.vo.bootcamp.BootcampDetailVo;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -12,7 +11,6 @@ import java.util.Optional;
 
 import static com.letsintern.letsintern.domain.payment.domain.QPayment.payment;
 import static com.letsintern.letsintern.domain.program.domain.QBootcamp.bootcamp;
-import static com.letsintern.letsintern.domain.program.domain.QChallenge.challenge;
 
 @RequiredArgsConstructor
 @Repository
