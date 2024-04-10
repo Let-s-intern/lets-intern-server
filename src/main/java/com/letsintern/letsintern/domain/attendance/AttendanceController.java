@@ -34,19 +34,23 @@ public class AttendanceController {
 
     @PatchMapping("/{attendanceId}")
     @Operation(summary = "출석 다시 제출")
-    public AttendanceIdResponse updateAttendance(@PathVariable Long attendanceId, @RequestBody AttendanceCreateDTO attendanceUpdateDTO, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+    public AttendanceIdResponse updateAttendance(@PathVariable Long attendanceId,
+                                                 @RequestBody AttendanceCreateDTO attendanceUpdateDTO,
+                                                 @AuthenticationPrincipal PrincipalDetails principalDetails) {
         return attendanceService.updateAttendance(attendanceId, attendanceUpdateDTO, principalDetails);
     }
 
     @GetMapping("/admin")
     @Operation(summary = "어드민 출석 목록 보기")
-    public AttendanceAdminListResponse getAttendanceAdminList(@RequestParam(required = false) Long missionId, @PageableDefault(size = 20) Pageable pageable) {
+    public AttendanceAdminListResponse getAttendanceAdminList(@RequestParam(required = false) Long missionId,
+                                                              @PageableDefault(size = 20) Pageable pageable) {
         return attendanceService.getAttendanceAdminList(missionId, pageable);
     }
 
     @PatchMapping("/admin/{attendanceId}")
     @Operation(summary = "어드민 출석 업데이트")
-    public AttendanceIdResponse updateAttendanceAdmin(@PathVariable Long attendanceId, @RequestBody AttendanceAdminUpdateDTO attendanceAdminUpdateDTO) {
+    public AttendanceIdResponse updateAttendanceAdmin(@PathVariable Long attendanceId,
+                                                      @RequestBody AttendanceAdminUpdateDTO attendanceAdminUpdateDTO) {
         return attendanceService.updateAttendanceAdmin(attendanceId, attendanceAdminUpdateDTO);
     }
 
@@ -59,7 +63,8 @@ public class AttendanceController {
     @GetMapping("/{applicationId}")
     @Operation(summary = "유저 대시보드 - 우리의 기록장 1명 상세보기")
     public AttendanceDashboardResponse getAttendanceDashboardList(@PathVariable Long applicationId,
+                                                                  @RequestParam Integer topic,
                                                                   @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        return attendanceService.getAttendanceDashboardList(applicationId, principalDetails);
+        return attendanceService.getAttendanceDashboardList(applicationId, principalDetails, topic);
     }
 }
