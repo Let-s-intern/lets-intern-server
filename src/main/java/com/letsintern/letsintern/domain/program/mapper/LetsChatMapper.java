@@ -7,8 +7,8 @@ import com.letsintern.letsintern.domain.program.dto.response.ZoomMeetingCreateRe
 public class LetsChatMapper {
 
     public LetsChat toEntityLetsChat(BaseProgramRequestDto baseProgramRequestDto,
-                                     String mentorPassword,
-                                     ZoomMeetingCreateResponse zoomMeetingCreateResponse) {
+                                     ZoomMeetingCreateResponse zoomMeetingCreateResponse,
+                                     String mentorPassword) {
         return LetsChat.createLetsChat(baseProgramRequestDto, zoomMeetingCreateResponse, mentorPassword);
     }
 }

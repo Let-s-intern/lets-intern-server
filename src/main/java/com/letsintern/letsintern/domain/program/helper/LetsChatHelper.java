@@ -1,6 +1,7 @@
 package com.letsintern.letsintern.domain.program.helper;
 
 import com.letsintern.letsintern.domain.program.domain.LetsChat;
+import com.letsintern.letsintern.domain.program.exception.LetsChatNotFoundException;
 import com.letsintern.letsintern.domain.program.repository.LetsChatRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -18,15 +19,23 @@ public class LetsChatHelper {
         SecureRandom secureRandom = new SecureRandom();
         int upperLimit = (int) Math.pow(10, RANDOM_NUMBER_LENGTH);
 
-        String mentorPassword = String.valueOf(secureRandom.nextInt(upperLimit));
+        StringBuilder mentorPassword = new StringBuilder(String.valueOf(secureRandom.nextInt(upperLimit)));
         while(mentorPassword.length() < RANDOM_NUMBER_LENGTH) {
-            mentorPassword = "0" + mentorPassword;
+            mentorPassword.insert(0, "0");
         }
 
-        return mentorPassword;
+        return mentorPassword.toString();
     }
 
-    public void saveLetsChat(LetsChat letsChat) {
-        letsChatRepository.save(letsChat);
+    public LetsChat saveLetsChat(LetsChat letsChat) {
+        return letsChatRepository.save(letsChat);
+    }
+
+    public LetsChat findLetsChatByIdOrThrow(Long id) {
+        return letsChatRepository.findById(id).orElseThrow(() -> LetsChatNotFoundException.EXCEPTION);
+    }
+
+    public void deleteLetsChat(LetsChat letsChat) {
+        letsChatRepository.delete(letsChat);
     }
 }

@@ -6,6 +6,8 @@ import com.letsintern.letsintern.domain.program.dto.response.ZoomMeetingCreateRe
 import jakarta.persistence.*;
 import lombok.*;
 
+import static com.letsintern.letsintern.global.utils.EntityUpdateValueUtils.updateValue;
+
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
@@ -32,5 +34,10 @@ public class LetsChat extends Program {
                 .zoomMeetingCreateResponse(zoomMeetingCreateResponse)
                 .mentorPassword(mentorPassword)
                 .build();
+    }
+
+    public void updateLetsChat(BaseProgramRequestDto requestDto, ProgramStatus programStatus, String faqList) {
+        super.updateProgramInfo(requestDto.programInfo(), programStatus, faqList);
+        this.mentorPassword = updateValue(this.mentorPassword, requestDto.letsCHatRequestDto().mentorPassword());
     }
 }
