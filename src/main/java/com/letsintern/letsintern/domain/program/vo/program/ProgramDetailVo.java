@@ -1,4 +1,4 @@
-package com.letsintern.letsintern.domain.program.vo;
+package com.letsintern.letsintern.domain.program.vo.program;
 
 import com.letsintern.letsintern.domain.payment.domain.FeeType;
 import com.letsintern.letsintern.domain.program.domain.ChallengeTopic;
@@ -12,14 +12,13 @@ import java.time.LocalDateTime;
 
 @Builder
 public record ProgramDetailVo(
-        Long challengeId,
+        Long programId,
         ProgramStatus status,
         String title,
         String contents,
         String notice,
         ProgramWay way,
         String location,
-        ChallengeTopic topic,
         LocalDateTime dueDate,
         LocalDateTime announcementDate,
         LocalDateTime startDate,

@@ -6,7 +6,7 @@ public record BaseProgramRequestDto(
         ProgramRequestDto programInfo,
         PaymentRequestDto paymentInfo,
         ChallengeRequestDto challengeInfo,
-        LetsChatRequestDto letsCHatRequestDto
-        // Bootcamp, 렛츠챗도 여기 넣어주세요
+        LetsChatRequestDto letsCHatRequestDto,
+        BootcampRequestDto bootcampRequestDto
 ) {
 }

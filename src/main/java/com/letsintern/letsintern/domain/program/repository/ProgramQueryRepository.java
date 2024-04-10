@@ -4,7 +4,6 @@ import com.letsintern.letsintern.domain.program.vo.program.ProgramDetailVo;
 
 import java.util.Optional;
 
-public interface LetsChatQueryRepository {
-
-    Optional<ProgramDetailVo> findLetsChatDetailVo(Long letsChatId);
+public interface ProgramQueryRepository {
+    Optional<ProgramDetailVo> findProgramDetailVo(Long programId);
 }

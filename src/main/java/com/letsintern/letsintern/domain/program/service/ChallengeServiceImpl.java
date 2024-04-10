@@ -9,13 +9,14 @@ import com.letsintern.letsintern.domain.payment.dto.request.PaymentRequestDto;
 import com.letsintern.letsintern.domain.payment.helper.PaymentHelper;
 import com.letsintern.letsintern.domain.program.domain.Challenge;
 import com.letsintern.letsintern.domain.program.domain.ProgramStatus;
-import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import com.letsintern.letsintern.domain.program.dto.request.BaseProgramRequestDto;
 import com.letsintern.letsintern.domain.program.dto.response.BaseProgramResponseDto;
 import com.letsintern.letsintern.domain.program.dto.response.ProgramDetailResponseDto;
 import com.letsintern.letsintern.domain.program.dto.response.ProgramListResponseDto;
+import com.letsintern.letsintern.domain.program.dto.response.ZoomMeetingCreateResponse;
 import com.letsintern.letsintern.domain.program.helper.ChallengeHelper;
 import com.letsintern.letsintern.domain.program.helper.ProgramHelper;
+import com.letsintern.letsintern.domain.program.helper.ZoomMeetingApiHelper;
 import com.letsintern.letsintern.domain.program.mapper.ChallengeMapper;
 import com.letsintern.letsintern.domain.program.mapper.ProgramMapper;
 import com.letsintern.letsintern.domain.program.vo.challenge.ChallengeDetailVo;
@@ -41,11 +42,12 @@ public class ChallengeServiceImpl implements ProgramService {
     private final ProgramMapper programMapper;
     private final ApplicationHelper applicationHelper;
     private final FaqHelper faqHelper;
+    private final ZoomMeetingApiHelper zoomMeetingApiHelper;
 
     @Override
     public BaseProgramResponseDto<?> getProgramForAdmin(Long programId) {
         Challenge challenge = challengeHelper.findChallengeOrThrow(programId);
-        return challengeMapper.toBaseProgramResponseDto(challenge);
+        return programMapper.toBaseProgramResponseDto(challenge);
     }
 
     @Override
@@ -68,7 +70,9 @@ public class ChallengeServiceImpl implements ProgramService {
     public void createProgram(BaseProgramRequestDto baseProgramRequestDto) {
         paymentHelper.validatePaymentProgramInput(baseProgramRequestDto.paymentInfo());
         challengeHelper.validateChallengeTypeProgramInput(baseProgramRequestDto.challengeInfo());
-        Challenge newChallenge = createChallengeAndSave(baseProgramRequestDto);
+        ZoomMeetingCreateResponse zoomMeetingCreateResponse
+                = zoomMeetingApiHelper.createMeeting(baseProgramRequestDto.programInfo());
+        Challenge newChallenge = createChallengeAndSave(baseProgramRequestDto, zoomMeetingCreateResponse);
         checkPaymentInputAndCreateAndSave(baseProgramRequestDto.paymentInfo(), newChallenge);
     }
 
@@ -104,8 +108,9 @@ public class ChallengeServiceImpl implements ProgramService {
         payment.updatePayment(paymentRequestDto);
     }
 
-    private Challenge createChallengeAndSave(BaseProgramRequestDto baseProgramRequestDto) {
-        Challenge challenge = challengeMapper.toEntityChallenge(baseProgramRequestDto);
+    private Challenge createChallengeAndSave(BaseProgramRequestDto baseProgramRequestDto,
+                                             ZoomMeetingCreateResponse zoomMeetingCreateResponse) {
+        Challenge challenge = challengeMapper.toEntityChallenge(baseProgramRequestDto, zoomMeetingCreateResponse);
         return challengeHelper.saveChallenge(challenge);
     }
 

@@ -5,6 +5,7 @@ import com.letsintern.letsintern.domain.application.dto.request.ApplicationCreat
 import com.letsintern.letsintern.domain.application.dto.request.ApplicationUpdateDTO;
 import com.letsintern.letsintern.domain.application.dto.response.*;
 import com.letsintern.letsintern.domain.application.service.ApplicationService;
+import com.letsintern.letsintern.domain.program.domain.ProgramRequestType;
 import com.letsintern.letsintern.domain.user.domain.User;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import io.swagger.v3.oas.annotations.Operation;

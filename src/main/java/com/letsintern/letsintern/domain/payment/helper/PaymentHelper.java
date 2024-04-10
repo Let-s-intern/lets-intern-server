@@ -1,7 +1,6 @@
 package com.letsintern.letsintern.domain.payment.helper;
 
 import com.letsintern.letsintern.domain.payment.domain.FeeType;
-import com.letsintern.letsintern.domain.payment.domain.Payment;
 import com.letsintern.letsintern.domain.payment.dto.request.PaymentRequestDto;
 import com.letsintern.letsintern.domain.payment.exception.ChargeProgramCreateBadRequest;
 import com.letsintern.letsintern.domain.payment.exception.RefundProgramCreateBadRequest;
@@ -17,10 +16,6 @@ import static com.letsintern.letsintern.global.utils.EnumValueUtils.toEntityCode
 @Component
 public class PaymentHelper {
     private final PaymentRepository paymentRepository;
-
-    public Payment findPaymentFromProgramIdOrThrow(Long programId) {
-
-    }
 
     public void validatePaymentProgramInput(PaymentRequestDto requestDto) {
         if (Objects.isNull(requestDto)) return;

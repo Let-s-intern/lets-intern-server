@@ -47,6 +47,20 @@ public class ProgramController {
         programServiceFactory.getProgramService(programRequestType).createProgram(requestDto);
     }
 
+    @Operation(summary = "어드민 프로그램 수정")
+    @PatchMapping("/{programId}")
+    public void updateProgram(@PathVariable Long programId,
+                              @RequestParam ProgramRequestType programRequestType,
+                              @RequestBody BaseProgramRequestDto requestDto) {
+        programServiceFactory.getProgramService(programRequestType).updateProgram(programId, requestDto);
+    }
+
+    @Operation(summary = "어드민 프로그램 삭제")
+    @DeleteMapping("/{programId}")
+    public void deleteProgram(@PathVariable Long programId,
+                              @RequestParam ProgramRequestType programRequestType) {
+        programServiceFactory.getProgramService(programRequestType).deleteProgram(programId);
+    }
 
     @Operation(summary = "AWS Target Group 상태 확인용")
     @GetMapping("/tg")
@@ -62,9 +76,8 @@ public class ProgramController {
 
     @Operation(summary = "프로그램 목록 (전체, 타입 - CHALLENGE, BOOTCAMP, LETS_CHAT)")
     @GetMapping("")
-    public ProgramListDTO getProgramThumbnailList(
-            @RequestParam(required = false) String type,
-            @PageableDefault(size = 20) Pageable pageable) {
+    public ProgramListDTO getProgramThumbnailList(@RequestParam(required = false) String type,
+                                                  @PageableDefault(size = 20) Pageable pageable) {
         return programService.getProgramThumbnailList(type, pageable);
     }
 
@@ -78,9 +91,8 @@ public class ProgramController {
 
     @Operation(summary = "어드민 유저 1명의 프로그램 목록")
     @GetMapping("/admin/user/{userId}")
-    public UserProgramVoResponse getAdminUserProgramList(
-            @PathVariable Long userId,
-            @PageableDefault(size = 20) Pageable pageable) {
+    public UserProgramVoResponse getAdminUserProgramList(@PathVariable Long userId,
+                                                         @PageableDefault(size = 20) Pageable pageable) {
         return programService.getAdminUserProgramList(userId, pageable);
     }
 
@@ -99,24 +111,9 @@ public class ProgramController {
 
     @Operation(summary = "렛츠챗 프로그램 멘토 세션 마무리 페이지 - after")
     @PostMapping("/{programId}/mentor/after")
-    public LetsChatAfterSessionNoticeResponse getLetsChatAfterSessionNotice(
-            @PathVariable Long programId,
-            @RequestBody @Valid LetsChatMentorPasswordRequestDTO letsChatMentorPasswordRequestDTO) {
+    public LetsChatAfterSessionNoticeResponse getLetsChatAfterSessionNotice(@PathVariable Long programId,
+                                                                            @RequestBody @Valid LetsChatMentorPasswordRequestDTO letsChatMentorPasswordRequestDTO) {
         return programService.getLetsChatAfterSessionNotice(programId, letsChatMentorPasswordRequestDTO);
-    }
-
-    @Operation(summary = "어드민 프로그램 수정")
-    @PatchMapping("/{programId}")
-    public ProgramIdResponseDTO updateProgram(@PathVariable Long programId,
-                                              @RequestBody ProgramUpdateRequestDTO programUpdateRequestDTO) {
-        return programService.updateProgram(programId, programUpdateRequestDTO);
-    }
-
-    @Operation(summary = "어드민 프로그램 삭제")
-    @DeleteMapping("/{programId}")
-    public ResponseEntity<?> deleteProgram(@PathVariable Long programId) {
-        programService.deleteProgram(programId);
-        return ResponseEntity.ok(null);
     }
 
     @Operation(summary = "어드민 프로그램 최종 참여자 수 저장")

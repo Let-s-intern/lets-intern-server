@@ -2,13 +2,9 @@ package com.letsintern.letsintern.domain.program.domain;
 
 import com.letsintern.letsintern.domain.mission.domain.Mission;
 import com.letsintern.letsintern.domain.notice.domain.Notice;
-import com.letsintern.letsintern.domain.payment.domain.Payment;
 import com.letsintern.letsintern.domain.program.domain.converter.ChallengeTypeConverter;
 import com.letsintern.letsintern.domain.program.domain.converter.ProgramTopicConverter;
 import com.letsintern.letsintern.domain.program.dto.request.BaseProgramRequestDto;
-import com.letsintern.letsintern.domain.program.dto.request.ChallengeRequestDto;
-import com.letsintern.letsintern.global.common.entity.BaseTimeEntity;
-import com.letsintern.letsintern.global.utils.EntityUpdateValueUtils;
 import com.letsintern.letsintern.global.utils.EnumValueUtils;
 import jakarta.persistence.*;
 import lombok.*;
@@ -44,21 +40,12 @@ public class Challenge extends Program {
     @Builder.Default
     private List<Notice> noticeList = new ArrayList<>();
 
-    public Challenge(BaseProgramRequestDto requestDto) {
-        super(requestDto.programInfo());
+    public Challenge(BaseProgramRequestDto requestDto, String zoomLink, String zoomPassword) {
+        super(requestDto.programInfo(), zoomLink, zoomPassword);
         this.topic = EnumValueUtils.toEntityCode(ChallengeTopic.class, requestDto.challengeInfo().challengeTopic());
         this.challengeType = EnumValueUtils.toEntityCode(ChallengeType.class, requestDto.challengeInfo().challengeTopic());
         this.openKakaoLink = requestDto.challengeInfo().openKakaoLink();
         this.openKakaoPassword = requestDto.challengeInfo().openKakaoPassword();
-    }
-
-    public static Challenge createChallenge(BaseProgramRequestDto requestDto) {
-        return Challenge.builder()
-                .topic(EnumValueUtils.toEntityCode(ChallengeTopic.class, requestDto.challengeInfo().challengeTopic()))
-                .challengeType(EnumValueUtils.toEntityCode(ChallengeType.class, requestDto.challengeInfo().challengeType()))
-                .openKakaoLink(requestDto.challengeInfo().openKakaoLink())
-                .openKakaoPassword(requestDto.challengeInfo().openKakaoPassword())
-                .build();
     }
 
     public void updateChallenge(BaseProgramRequestDto requestDto, ProgramStatus programStatus, String fqaList) {
