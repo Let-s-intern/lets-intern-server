@@ -1,4 +1,4 @@
-package com.letsintern.letsintern.domain.program.vo;
+package com.letsintern.letsintern.domain.program.vo.program;
 
 import com.letsintern.letsintern.domain.payment.domain.FeeType;
 import com.letsintern.letsintern.domain.program.domain.ChallengeTopic;
@@ -19,7 +19,6 @@ public record ProgramDetailVo(
         String notice,
         ProgramWay way,
         String location,
-        ChallengeTopic topic,
         LocalDateTime dueDate,
         LocalDateTime announcementDate,
         LocalDateTime startDate,
