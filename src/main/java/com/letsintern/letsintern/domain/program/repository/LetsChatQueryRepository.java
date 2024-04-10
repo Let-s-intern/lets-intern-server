@@ -1,6 +1,6 @@
 package com.letsintern.letsintern.domain.program.repository;
 
-import com.letsintern.letsintern.domain.program.vo.ProgramDetailVo;
+import com.letsintern.letsintern.domain.program.vo.program.ProgramDetailVo;
 
 import java.util.Optional;
 

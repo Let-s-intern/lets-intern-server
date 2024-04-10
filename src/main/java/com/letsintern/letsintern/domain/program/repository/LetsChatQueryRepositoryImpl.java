@@ -1,6 +1,6 @@
 package com.letsintern.letsintern.domain.program.repository;
 
-import com.letsintern.letsintern.domain.program.vo.ProgramDetailVo;
+import com.letsintern.letsintern.domain.program.vo.program.ProgramDetailVo;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
