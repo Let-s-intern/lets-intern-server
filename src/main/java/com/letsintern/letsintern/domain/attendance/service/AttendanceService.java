@@ -12,10 +12,10 @@ import com.letsintern.letsintern.domain.attendance.dto.response.AttendanceDashbo
 import com.letsintern.letsintern.domain.attendance.dto.response.AttendanceIdResponse;
 import com.letsintern.letsintern.domain.attendance.helper.AttendanceHelper;
 import com.letsintern.letsintern.domain.attendance.mapper.AttendanceMapper;
-import com.letsintern.letsintern.domain.attendance.repository.AttendanceRepository;
-import com.letsintern.letsintern.domain.mission.repository.MissionRepository;
+import com.letsintern.letsintern.domain.program.domain.ChallengeTopic;
 import com.letsintern.letsintern.domain.user.domain.User;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
+import com.letsintern.letsintern.global.utils.EnumValueUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -55,19 +55,19 @@ public class AttendanceService {
     }
 
     @Transactional(readOnly = true)
-    public AttendanceDashboardResponse getAttendanceDashboardList(Long applicationId, PrincipalDetails principalDetails) {
+    public AttendanceDashboardResponse getAttendanceDashboardList(Long applicationId, PrincipalDetails principalDetails, Integer topic) {
         final Application application = applicationRepository.findById(applicationId).orElseThrow(() -> ApplicationNotFound.EXCEPTION);
         final User user = principalDetails.getUser();
         boolean isMine = Objects.equals(application.getUser().getId(), user.getId());
-        List<ApplicationWishJob> wishJobList = isMine ? ApplicationWishJob.getApplicationWishJobListByProgramTopic(application.getProgram().getTopic()) : new ArrayList<>();
+        ChallengeTopic challengeTopic = EnumValueUtils.toEntityCode(ChallengeTopic.class, topic);
+        List<ApplicationWishJob> wishJobList = isMine ? ApplicationWishJob.getApplicationWishJobListByProgramTopic(challengeTopic) : new ArrayList<>();
         return attendanceMapper.toAttendanceDashboardResponse(
                 application.getUser().getName(),
                 application.getWishJob(),
                 application.getIntroduction(),
                 isMine,
                 wishJobList,
-                attendanceHelper.getAttendanceDashboardList(application)
-        );
+                attendanceHelper.getAttendanceDashboardList(application));
     }
 
     public AccountListResponse getAccountListResponse(Long missionId) {
