@@ -17,7 +17,6 @@ import java.util.Objects;
 @Component
 @RequiredArgsConstructor
 public class ProgramHelper {
-    private final static int RANDOM_NUMBER_LENGTH = 4;
     private final ProgramRepository programRepository;
 
     public String parseToFaqIdList(List<Long> faqIdList) {
