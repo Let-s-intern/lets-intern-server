@@ -267,4 +267,5 @@ public class Program {
         this.openKakaoLink = updateValue(this.openKakaoLink, programUpdateRequestDTO.getOpenKakaoLink());
         this.openKakaoPassword = updateValue(this.openKakaoPassword, programUpdateRequestDTO.getOpenKakaoPassword());
     }
+
 }
