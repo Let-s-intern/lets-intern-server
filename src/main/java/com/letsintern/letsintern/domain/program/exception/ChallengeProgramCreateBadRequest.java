@@ -1,5 +1,6 @@
 package com.letsintern.letsintern.domain.program.exception;
 
+import com.letsintern.letsintern.domain.payment.exception.PaymentErrorCode;
 import com.letsintern.letsintern.global.error.BaseErrorException;
 
 public class ChallengeProgramCreateBadRequest extends BaseErrorException {

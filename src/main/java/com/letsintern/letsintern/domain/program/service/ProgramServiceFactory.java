@@ -1,7 +1,7 @@
 package com.letsintern.letsintern.domain.program.service;
 
-import com.letsintern.letsintern.domain.program.domain.ProgramType;
+import com.letsintern.letsintern.domain.program.domain.ProgramRequestType;
 
 public interface ProgramServiceFactory {
-    ProgramService getProgramService(ProgramType programType);
+    ProgramService getProgramService(ProgramRequestType programType);
 }

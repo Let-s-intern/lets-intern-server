@@ -13,8 +13,5 @@ import lombok.experimental.SuperBuilder;
 @DiscriminatorValue("bootcamp")
 @Entity
 public class Bootcamp extends Program{
-    @Id
-    @Column(name = "challenge_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+
 }

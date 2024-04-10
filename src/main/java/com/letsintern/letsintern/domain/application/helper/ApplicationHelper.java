@@ -16,7 +16,6 @@ import com.letsintern.letsintern.domain.application.vo.ApplicationEntireDashboar
 import com.letsintern.letsintern.domain.application.vo.ApplicationVo;
 import com.letsintern.letsintern.domain.program.domain.*;
 import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
-import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
 import com.letsintern.letsintern.domain.program.vo.ProgramEmailVo;
 import com.letsintern.letsintern.domain.user.domain.User;
 import com.letsintern.letsintern.domain.user.domain.UserRole;

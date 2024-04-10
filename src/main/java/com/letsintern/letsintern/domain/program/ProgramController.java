@@ -2,12 +2,10 @@ package com.letsintern.letsintern.domain.program;
 
 import com.letsintern.letsintern.domain.application.domain.ApplicationWishJob;
 import com.letsintern.letsintern.domain.program.domain.MailType;
-import com.letsintern.letsintern.domain.program.domain.Program;
-import com.letsintern.letsintern.domain.program.dto.request.LetsChatMentorPasswordRequestDTO;
-import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequestDTO;
-import com.letsintern.letsintern.domain.program.dto.request.ProgramUpdateRequestDTO;
-import com.letsintern.letsintern.domain.program.dto.response.*;
-import com.letsintern.letsintern.domain.program.service.ProgramService;
+import com.letsintern.letsintern.domain.program.domain.ProgramRequestType;
+import com.letsintern.letsintern.domain.program.dto.request.BaseProgramRequestDto;
+import com.letsintern.letsintern.domain.program.dto.response.BaseProgramResponseDto;
+import com.letsintern.letsintern.domain.program.dto.response.ProgramDetailResponseDto;
 import com.letsintern.letsintern.domain.program.service.ProgramServiceFactory;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,10 +24,29 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Program")
 public class ProgramController {
     private final ProgramServiceFactory programServiceFactory;
-    /*
-    programServiceFactory.getProgramService(입력에 따른 ProgramType)
-    해당 입력에 따른 program Service 구현체가 나옵니다.
-     */
+
+    @Operation(summary = "프로그램 1개 상세 보기")
+    @GetMapping("/{programId}")
+    public ProgramDetailResponseDto<?> getProgramDetailVo(@AuthenticationPrincipal PrincipalDetails principalDetails,
+                                                          @PathVariable Long programId,
+                                                          @RequestParam ProgramRequestType programRequestType) {
+        return programServiceFactory.getProgramService(programRequestType).getProgramDetail(programId, principalDetails);
+    }
+
+    @Operation(summary = "어드민 프로그램 1개 상세 보기")
+    @GetMapping("/admin/{programId}")
+    public BaseProgramResponseDto<?> getProgram(@PathVariable Long programId,
+                                                @RequestParam ProgramRequestType programRequestType) {
+        return programServiceFactory.getProgramService(programRequestType).getProgramForAdmin(programId);
+    }
+
+    @Operation(summary = "어드민 프로그램 신규 개설")
+    @PostMapping
+    public void createProgram(@RequestParam ProgramRequestType programRequestType,
+                              @RequestBody BaseProgramRequestDto requestDto) {
+        programServiceFactory.getProgramService(programRequestType).createProgram(requestDto);
+    }
+
 
     @Operation(summary = "AWS Target Group 상태 확인용")
     @GetMapping("/tg")
@@ -51,13 +68,6 @@ public class ProgramController {
         return programService.getProgramThumbnailList(type, pageable);
     }
 
-    @Operation(summary = "프로그램 1개 상세 보기")
-    @GetMapping("/{programId}")
-    public ProgramDetailDTO getProgramDetailVo(@PathVariable Long programId,
-                                               @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        return programService.getProgramDetailDTO(programId, principalDetails);
-    }
-
     @Operation(summary = "어드민 프로그램 목록 (전체, 타입, 타입&기수)")
     @GetMapping("/admin")
     public AdminProgramListDTO getAdminProgramList(@RequestParam(required = false) String type,
@@ -72,12 +82,6 @@ public class ProgramController {
             @PathVariable Long userId,
             @PageableDefault(size = 20) Pageable pageable) {
         return programService.getAdminUserProgramList(userId, pageable);
-    }
-
-    @Operation(summary = "어드민 프로그램 1개 상세 보기")
-    @GetMapping("/admin/{programId}")
-    public Program getProgram(@PathVariable Long programId) {
-        return programService.getProgram(programId);
     }
 
     @Operation(summary = "어드민 렛츠챗 프로그램 1개의 멘토 비밀번호 보기")
@@ -99,12 +103,6 @@ public class ProgramController {
             @PathVariable Long programId,
             @RequestBody @Valid LetsChatMentorPasswordRequestDTO letsChatMentorPasswordRequestDTO) {
         return programService.getLetsChatAfterSessionNotice(programId, letsChatMentorPasswordRequestDTO);
-    }
-
-    @Operation(summary = "어드민 프로그램 신규 개설")
-    @PostMapping
-    public ProgramIdResponseDTO createProgram(@RequestBody ProgramCreateRequestDTO programCreateRequestDTO) {
-        return programService.createProgram(programCreateRequestDTO);
     }
 
     @Operation(summary = "어드민 프로그램 수정")

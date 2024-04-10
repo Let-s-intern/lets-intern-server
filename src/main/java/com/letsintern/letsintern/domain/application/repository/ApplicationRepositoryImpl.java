@@ -1,7 +1,6 @@
 package com.letsintern.letsintern.domain.application.repository;
 
 import com.letsintern.letsintern.domain.application.domain.*;
-import com.letsintern.letsintern.domain.application.dto.response.ApplicationChallengeAdminVoDetail;
 import com.letsintern.letsintern.domain.application.filter.ApplicationFilter;
 import com.letsintern.letsintern.domain.application.vo.ApplicationAdminVo;
 import com.letsintern.letsintern.domain.application.vo.ApplicationChallengeAdminVo;
@@ -10,7 +9,6 @@ import com.letsintern.letsintern.domain.application.vo.ApplicationVo;
 import com.letsintern.letsintern.domain.program.domain.ProgramFeeType;
 import com.letsintern.letsintern.domain.program.domain.ProgramStatus;
 import com.letsintern.letsintern.domain.program.vo.UserProgramVo;
-import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
@@ -26,7 +24,6 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -332,7 +329,7 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
                     .from(qApplication)
                     .where(
                             qApplication.program.id.eq(programId),
-                            qApplication.wishJob.in(ApplicationWishJob.getApplicationWishJobListByProgramTopic(applicationWishJob.getProgramTopic())),
+                            qApplication.wishJob.in(ApplicationWishJob.getApplicationWishJobListByProgramTopic(applicationWishJob.getChallengeTopic())),
                             qApplication.status.in(ApplicationStatus.IN_PROGRESS, ApplicationStatus.DONE))
                     .orderBy(isMineOrder.asc(), qApplication.id.desc())
                     .offset(pageable.getOffset())
@@ -344,7 +341,7 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
                     .from(qApplication)
                     .where(
                             qApplication.program.id.eq(programId),
-                            qApplication.program.topic.eq(applicationWishJob.getProgramTopic()),
+                            qApplication.program.topic.eq(applicationWishJob.getChallengeTopic()),
                             qApplication.status.in(ApplicationStatus.IN_PROGRESS, ApplicationStatus.DONE));
         }
 

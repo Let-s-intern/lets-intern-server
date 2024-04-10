@@ -1,18 +1,21 @@
 package com.letsintern.letsintern.domain.program.domain;
 
 import com.letsintern.letsintern.domain.application.domain.Application;
+import com.letsintern.letsintern.domain.payment.domain.Payment;
 import com.letsintern.letsintern.domain.program.domain.converter.ProgramStatusConverter;
+import com.letsintern.letsintern.domain.program.domain.converter.ProgramTypeConverter;
 import com.letsintern.letsintern.domain.program.domain.converter.ProgramWayConverter;
-import com.letsintern.letsintern.domain.program.dto.request.ProgramUpdateRequestDTO;
+import com.letsintern.letsintern.domain.program.dto.request.ProgramRequestDto;
+import com.letsintern.letsintern.domain.program.dto.response.ZoomMeetingCreateResponse;
 import jakarta.persistence.*;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.letsintern.letsintern.global.utils.EntityUpdateValueUtils.updateValue;
+import static com.letsintern.letsintern.global.utils.EnumValueUtils.toEntityCode;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -56,34 +59,69 @@ public abstract class Program {
     @Column(nullable = false)
     private String faqListStr;
     private String location;
+    private String zoomLink;
+    @Column(length = 8)
+    private String zoomLinkPassword;
     @Column(length = 10, nullable = false)
     @Convert(converter = ProgramStatusConverter.class)
     @Builder.Default
     private ProgramStatus status = ProgramStatus.OPEN;
+    @Column(length = 20, nullable = false)
+    @Convert(converter = ProgramTypeConverter.class)
+    private ProgramType programType;
     @OneToMany(mappedBy = "program", orphanRemoval = true)
     @Builder.Default
     private List<Application> applicationList = new ArrayList<>();
+    @OneToOne
+    private Payment payment;
+
+    public Program(ProgramRequestDto requestDto) {
+        this.title = requestDto.title();
+        this.contents = requestDto.contents();
+        this.notice = requestDto.notice();
+        this.th = requestDto.th();
+        this.announcementDate = requestDto.announcementDate();
+        this.dueDate = requestDto.dueDate();
+        this.startDate = requestDto.startDate();
+        this.endDate = requestDto.endDate();
+        this.headcount = requestDto.headcount();
+        this.way = toEntityCode(ProgramWay.class, requestDto.way());
+        this.faqListStr = requestDto.faqIdList().toString();
+        this.location = requestDto.location();
+        this.isVisible = requestDto.isVisible();
+        this.programType = toEntityCode(ProgramType.class, requestDto.programType());
+    }
+
+    public void addPayment(Payment payment) {
+        this.payment = payment;
+    }
+
+    public void addZoomInfo(ZoomMeetingCreateResponse zoomMeetingCreateResponse) {
+        this.zoomLink = zoomMeetingCreateResponse.join_url();
+        this.zoomLinkPassword = zoomMeetingCreateResponse.password();
+    }
 
     public void increaseProgramApplicationCount() {
         this.applicationCount++;
     }
 
-    public void updateProgramInfo(ProgramUpdateRequestDTO programUpdateRequestDTO,
+    public void updateProgramInfo(ProgramRequestDto programRequestDto,
                                   ProgramStatus programStatus,
                                   String stringFaqList) {
-        this.th = updateValue(this.th, programUpdateRequestDTO.getTh());
-        this.title = updateValue(this.title, programUpdateRequestDTO.getTitle());
-        this.headcount = updateValue(this.headcount, programUpdateRequestDTO.getHeadcount());
-        this.dueDate = updateValue(this.dueDate, programUpdateRequestDTO.getDueDate());
-        this.announcementDate = updateValue(this.announcementDate, programUpdateRequestDTO.getAnnouncementDate());
-        this.startDate = updateValue(this.startDate, programUpdateRequestDTO.getStartDate());
-        this.endDate = updateValue(this.endDate, programUpdateRequestDTO.getEndDate());
-        this.contents = updateValue(this.contents, programUpdateRequestDTO.getContents());
-        this.way = updateValue(this.way, programUpdateRequestDTO.getWay());
-        this.location = updateValue(this.location, programUpdateRequestDTO.getLocation());
-        this.notice = updateValue(this.notice, programUpdateRequestDTO.getNotice());
+        this.th = updateValue(this.th, programRequestDto.th());
+        this.title = updateValue(this.title, programRequestDto.title());
+        this.headcount = updateValue(this.headcount, programRequestDto.headcount());
+        this.dueDate = updateValue(this.dueDate, programRequestDto.dueDate());
+        this.announcementDate = updateValue(this.announcementDate, programRequestDto.announcementDate());
+        this.startDate = updateValue(this.startDate, programRequestDto.startDate());
+        this.endDate = updateValue(this.endDate, programRequestDto.endDate());
+        this.contents = updateValue(this.contents, programRequestDto.contents());
+        this.way = updateValue(this.way, toEntityCode(ProgramWay.class, programRequestDto.way()));
+        this.location = updateValue(this.location, programRequestDto.location());
+        this.notice = updateValue(this.notice, programRequestDto.notice());
         this.status = updateValue(this.status, programStatus);
-        this.isVisible = updateValue(this.isVisible, programUpdateRequestDTO.getIsVisible());
+        this.isVisible = updateValue(this.isVisible, programRequestDto.isVisible());
         this.faqListStr = updateValue(this.faqListStr, stringFaqList);
+        this.programType = updateValue(this.programType, toEntityCode(ProgramType.class, programRequestDto.programType()));
     }
 }
