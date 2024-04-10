@@ -6,6 +6,7 @@ import com.letsintern.letsintern.domain.program.domain.converter.ProgramStatusCo
 import com.letsintern.letsintern.domain.program.domain.converter.ProgramTypeConverter;
 import com.letsintern.letsintern.domain.program.domain.converter.ProgramWayConverter;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramRequestDto;
+import com.letsintern.letsintern.domain.program.dto.response.ZoomMeetingCreateResponse;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -58,6 +59,9 @@ public abstract class Program {
     @Column(nullable = false)
     private String faqListStr;
     private String location;
+    private String zoomLink;
+    @Column(length = 8)
+    private String zoomLinkPassword;
     @Column(length = 10, nullable = false)
     @Convert(converter = ProgramStatusConverter.class)
     @Builder.Default
@@ -90,6 +94,11 @@ public abstract class Program {
 
     public void addPayment(Payment payment) {
         this.payment = payment;
+    }
+
+    public void addZoomInfo(ZoomMeetingCreateResponse zoomMeetingCreateResponse) {
+        this.zoomLink = zoomMeetingCreateResponse.join_url();
+        this.zoomLinkPassword = zoomMeetingCreateResponse.password();
     }
 
     public void increaseProgramApplicationCount() {

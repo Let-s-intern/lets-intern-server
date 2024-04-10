@@ -7,10 +7,13 @@ import com.letsintern.letsintern.domain.faq.exception.FaqNotFound;
 import com.letsintern.letsintern.domain.faq.repository.FaqRepository;
 import com.letsintern.letsintern.domain.faq.vo.FaqVo;
 import com.letsintern.letsintern.domain.program.domain.ProgramType;
+import com.letsintern.letsintern.domain.program.vo.challenge.ChallengeDetailVo;
+import com.letsintern.letsintern.global.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -57,5 +60,12 @@ public class FaqHelper {
 
     public FaqVo findFaqVoOrThrow(Long faqId) {
         return faqRepository.findVoById(faqId);
+    }
+
+    public List<FaqVo> createFaqVoList(String faqListStr) {
+        List<Long> faqIdList = StringUtils.stringToList(faqListStr);
+        return faqIdList.stream()
+                .map(this::findFaqVoOrThrow)
+                .collect(Collectors.toList());
     }
 }

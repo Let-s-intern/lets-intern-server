@@ -3,6 +3,7 @@ package com.letsintern.letsintern.domain.program.mapper;
 import com.letsintern.letsintern.domain.application.domain.ApplicationWishJob;
 import com.letsintern.letsintern.domain.faq.vo.FaqVo;
 import com.letsintern.letsintern.domain.program.dto.response.ProgramDetailResponseDto;
+import com.letsintern.letsintern.domain.program.vo.ProgramDetailVo;
 import com.letsintern.letsintern.domain.program.vo.challenge.ChallengeDetailVo;
 import com.letsintern.letsintern.domain.review.vo.ReviewVo;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProgramMapper {
 
-    public ProgramDetailResponseDto<?> toProgramDetailResponseDto(ChallengeDetailVo programDetailVo,
+    public ProgramDetailResponseDto<?> toProgramDetailResponseDto(ProgramDetailVo programDetailVo,
                                                                   boolean existApplication,
                                                                   List<FaqVo> faqList,
                                                                   List<ReviewVo> reviewList,

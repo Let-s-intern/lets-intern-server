@@ -1,7 +1,6 @@
 package com.letsintern.letsintern.domain.program.helper;
 
-import com.letsintern.letsintern.domain.program.domain.ProgramType;
-import com.letsintern.letsintern.domain.program.dto.request.BaseProgramRequestDto;
+import com.letsintern.letsintern.domain.program.dto.request.ProgramRequestDto;
 import com.letsintern.letsintern.domain.program.dto.request.ZoomMeetingCreateDto;
 import com.letsintern.letsintern.domain.program.dto.response.ZoomMeetingCreateResponse;
 import com.letsintern.letsintern.domain.program.exception.ZoomCreateInternalServerException;
@@ -16,8 +15,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import java.time.LocalDateTime;
-
 @Slf4j
 @RequiredArgsConstructor
 @Component
@@ -31,9 +28,8 @@ public class ZoomMeetingApiHelper {
     @Value("${spring.zoom.email.host}")
     private String hostEmail;
 
-    public ZoomMeetingCreateResponse createMeeting(ProgramType type, BaseProgramRequestDto baseProgramRequestDto) {
-        ZoomMeetingCreateDto requestDTO
-                = ZoomMeetingCreateDto.of(type, baseProgramRequestDto.title(), baseProgramRequestDto.th(), baseProgramRequestDto.startDate());
+    public ZoomMeetingCreateResponse createMeeting(ProgramRequestDto programRequestDto) {
+        ZoomMeetingCreateDto requestDTO = ZoomMeetingCreateDto.of(programRequestDto);
         String requestUrl = zoomApiUri + "/v2/users/" + hostEmail + "/meetings";
 
         RestTemplate restTemplate = new RestTemplate();
