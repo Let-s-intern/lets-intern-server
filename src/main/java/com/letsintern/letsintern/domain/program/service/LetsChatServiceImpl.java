@@ -1,6 +1,7 @@
 package com.letsintern.letsintern.domain.program.service;
 
 import com.letsintern.letsintern.domain.application.domain.ApplicationWishJob;
+import com.letsintern.letsintern.domain.application.helper.ApplicationHelper;
 import com.letsintern.letsintern.domain.faq.helper.FaqHelper;
 import com.letsintern.letsintern.domain.faq.vo.FaqVo;
 import com.letsintern.letsintern.domain.payment.domain.Payment;
@@ -19,7 +20,7 @@ import com.letsintern.letsintern.domain.program.helper.ProgramHelper;
 import com.letsintern.letsintern.domain.program.helper.ZoomMeetingApiHelper;
 import com.letsintern.letsintern.domain.program.mapper.LetsChatMapper;
 import com.letsintern.letsintern.domain.program.mapper.ProgramMapper;
-import com.letsintern.letsintern.domain.program.vo.ProgramDetailVo;
+import com.letsintern.letsintern.domain.program.vo.program.ProgramDetailVo;
 import com.letsintern.letsintern.domain.review.helper.ReviewHelper;
 import com.letsintern.letsintern.domain.review.vo.ReviewVo;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
@@ -41,6 +42,7 @@ public class LetsChatServiceImpl implements ProgramService {
     private final ZoomMeetingApiHelper zoomMeetingApiHelper;
     private final FaqHelper faqHelper;
     private final ReviewHelper reviewHelper;
+    private final ApplicationHelper applicationHelper;
 
     @Override
     public BaseProgramResponseDto<?> getProgramForAdmin(Long programId) {
@@ -59,7 +61,7 @@ public class LetsChatServiceImpl implements ProgramService {
         List<FaqVo> faqList = faqHelper.createFaqVoList(letsChatDetailVo.faqListStr());
         List<ReviewVo> reviewList = reviewHelper.findAllVosByProgramType(letsChatDetailVo.programType());
         List<ApplicationWishJob> wishJobList = ApplicationWishJob.getApplicationWishJobListByProgramTopic(ChallengeTopic.ALL);
-        boolean existApplication = programHelper.checkExistingApplication(principalDetails, programId);
+        boolean existApplication = checkExistingApplication(principalDetails, programId);
         return programMapper.toProgramDetailResponseDto(letsChatDetailVo, existApplication, faqList, reviewList, wishJobList);
     }
 
@@ -85,6 +87,11 @@ public class LetsChatServiceImpl implements ProgramService {
     public void deleteProgram(Long programId) {
         final LetsChat letsChat = letsChatHelper.findLetsChatByIdOrThrow(programId);
         letsChatHelper.deleteLetsChat(letsChat);
+    }
+
+    private boolean checkExistingApplication(PrincipalDetails principalDetails, Long programId) {
+        return !Objects.isNull(principalDetails)
+                && applicationHelper.checkUserApplicationExist(programId, principalDetails.getUser().getId());
     }
 
     private LetsChat createLetsChatAndSave(BaseProgramRequestDto baseProgramRequestDto,
