@@ -3,6 +3,7 @@ package com.letsintern.letsintern.domain.program.helper;
 import com.letsintern.letsintern.domain.program.domain.LetsChat;
 import com.letsintern.letsintern.domain.program.exception.LetsChatNotFoundException;
 import com.letsintern.letsintern.domain.program.repository.LetsChatRepository;
+import com.letsintern.letsintern.domain.program.vo.ProgramDetailVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -33,6 +34,10 @@ public class LetsChatHelper {
 
     public LetsChat findLetsChatByIdOrThrow(Long id) {
         return letsChatRepository.findById(id).orElseThrow(() -> LetsChatNotFoundException.EXCEPTION);
+    }
+
+    public ProgramDetailVo findLetsChatDetailVoOrThrow(Long letsChatId) {
+        return letsChatRepository.findLetsChatDetailVo(letsChatId).orElseThrow(() -> LetsChatNotFoundException.EXCEPTION);
     }
 
     public void deleteLetsChat(LetsChat letsChat) {

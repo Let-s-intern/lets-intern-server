@@ -1,8 +1,12 @@
 package com.letsintern.letsintern.domain.program.service;
 
+import com.letsintern.letsintern.domain.application.domain.ApplicationWishJob;
+import com.letsintern.letsintern.domain.faq.helper.FaqHelper;
+import com.letsintern.letsintern.domain.faq.vo.FaqVo;
 import com.letsintern.letsintern.domain.payment.domain.Payment;
 import com.letsintern.letsintern.domain.payment.dto.request.PaymentRequestDto;
 import com.letsintern.letsintern.domain.payment.helper.PaymentHelper;
+import com.letsintern.letsintern.domain.program.domain.ChallengeTopic;
 import com.letsintern.letsintern.domain.program.domain.LetsChat;
 import com.letsintern.letsintern.domain.program.domain.ProgramStatus;
 import com.letsintern.letsintern.domain.program.dto.request.BaseProgramRequestDto;
@@ -14,10 +18,15 @@ import com.letsintern.letsintern.domain.program.helper.LetsChatHelper;
 import com.letsintern.letsintern.domain.program.helper.ProgramHelper;
 import com.letsintern.letsintern.domain.program.helper.ZoomMeetingApiHelper;
 import com.letsintern.letsintern.domain.program.mapper.LetsChatMapper;
+import com.letsintern.letsintern.domain.program.mapper.ProgramMapper;
+import com.letsintern.letsintern.domain.program.vo.ProgramDetailVo;
+import com.letsintern.letsintern.domain.review.helper.ReviewHelper;
+import com.letsintern.letsintern.domain.review.vo.ReviewVo;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 
 @RequiredArgsConstructor
@@ -25,15 +34,18 @@ import java.util.Objects;
 public class LetsChatServiceImpl implements ProgramService {
 
     private final ProgramHelper programHelper;
+    private final ProgramMapper programMapper;
     private final LetsChatHelper letsChatHelper;
     private final LetsChatMapper letsChatMapper;
-
     private final PaymentHelper paymentHelper;
     private final ZoomMeetingApiHelper zoomMeetingApiHelper;
+    private final FaqHelper faqHelper;
+    private final ReviewHelper reviewHelper;
 
     @Override
     public BaseProgramResponseDto<?> getProgramForAdmin(Long programId) {
-        return null;
+        final LetsChat letsChat = letsChatHelper.findLetsChatByIdOrThrow(programId);
+        return letsChatMapper.toBaseProgramResponseDto(letsChat);
     }
 
     @Override
@@ -43,7 +55,12 @@ public class LetsChatServiceImpl implements ProgramService {
 
     @Override
     public ProgramDetailResponseDto<?> getProgramDetail(Long programId, PrincipalDetails principalDetails) {
-        return null;
+        ProgramDetailVo letsChatDetailVo = letsChatHelper.findLetsChatDetailVoOrThrow(programId);
+        List<FaqVo> faqList = faqHelper.createFaqVoList(letsChatDetailVo.faqListStr());
+        List<ReviewVo> reviewList = reviewHelper.findAllVosByProgramType(letsChatDetailVo.programType());
+        List<ApplicationWishJob> wishJobList = ApplicationWishJob.getApplicationWishJobListByProgramTopic(ChallengeTopic.ALL);
+        boolean existApplication = programHelper.checkExistingApplication(principalDetails, programId);
+        return programMapper.toProgramDetailResponseDto(letsChatDetailVo, existApplication, faqList, reviewList, wishJobList);
     }
 
     @Override

@@ -18,10 +18,12 @@ import com.letsintern.letsintern.domain.program.mapper.ProgramMapper;
 import com.letsintern.letsintern.domain.program.vo.ProgramDetailVo;
 import com.letsintern.letsintern.domain.program.vo.ProgramThumbnailVo;
 import com.letsintern.letsintern.domain.program.vo.UserProgramVo;
+import com.letsintern.letsintern.domain.program.vo.challenge.ChallengeDetailVo;
 import com.letsintern.letsintern.domain.review.repository.ReviewRepository;
 import com.letsintern.letsintern.domain.review.vo.ReviewVo;
 import com.letsintern.letsintern.global.common.util.EmailUtils;
 import com.letsintern.letsintern.global.common.util.StringUtils;
+import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -54,5 +56,10 @@ public class ProgramHelper {
         } else {
             return ProgramStatus.CLOSED;
         }
+    }
+
+    public boolean checkExistingApplication(PrincipalDetails principalDetails, Long programId) {
+        return !Objects.isNull(principalDetails)
+                && applicationHelper.checkUserApplicationExist(programId, principalDetails.getUser().getId());
     }
 }
