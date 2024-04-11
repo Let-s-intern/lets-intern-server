@@ -7,8 +7,14 @@ import lombok.Builder;
 import java.util.List;
 
 @Builder(access = AccessLevel.PRIVATE)
-public record ProgramListResponseDto(
-        List<?> programList,
+public record ProgramListResponseDto<T>(
+        T programList,
         PageInfo pageInfo
 ) {
+    public static <T> ProgramListResponseDto<?> of(T programList, PageInfo pageInfo) {
+        return ProgramListResponseDto.builder()
+                .programList(programList)
+                .pageInfo(pageInfo)
+                .build();
+    }
 }

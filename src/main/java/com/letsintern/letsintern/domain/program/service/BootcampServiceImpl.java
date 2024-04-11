@@ -19,11 +19,14 @@ import com.letsintern.letsintern.domain.program.dto.response.ProgramListResponse
 import com.letsintern.letsintern.domain.program.helper.BootcampHelper;
 import com.letsintern.letsintern.domain.program.mapper.BootcampMapper;
 import com.letsintern.letsintern.domain.program.vo.bootcamp.BootcampDetailVo;
+import com.letsintern.letsintern.domain.program.vo.program.ProgramThumbnailVo;
 import com.letsintern.letsintern.domain.review.helper.ReviewHelper;
 import com.letsintern.letsintern.domain.review.vo.ReviewVo;
 import com.letsintern.letsintern.global.common.util.StringUtils;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -50,8 +53,9 @@ public class BootcampServiceImpl implements ProgramService {
     }
 
     @Override
-    public ProgramListResponseDto getProgramList() {
-        return null;
+    public ProgramListResponseDto<?> getProgramList(Pageable pageable) {
+        Page<ProgramThumbnailVo> programThumbnailVoPage = bootcampHelper.findProgramList(pageable);
+        return programMapper.toProgramListResponseDto(programThumbnailVoPage);
     }
 
     @Override

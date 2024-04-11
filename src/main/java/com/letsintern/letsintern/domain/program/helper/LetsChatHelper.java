@@ -5,7 +5,10 @@ import com.letsintern.letsintern.domain.program.exception.LetsChatNotFoundExcept
 import com.letsintern.letsintern.domain.program.repository.LetsChatRepository;
 import com.letsintern.letsintern.domain.program.vo.letschat.LetsChatMentorInfoVo;
 import com.letsintern.letsintern.domain.program.vo.letschat.LetsChatDetailVo;
+import com.letsintern.letsintern.domain.program.vo.program.ProgramThumbnailVo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.security.SecureRandom;
@@ -39,6 +42,10 @@ public class LetsChatHelper {
 
     public LetsChatDetailVo findLetsChatDetailVoOrThrow(Long letsChatId) {
         return letsChatRepository.findLetsChatDetailVo(letsChatId).orElseThrow(() -> LetsChatNotFoundException.EXCEPTION);
+    }
+
+    public Page<ProgramThumbnailVo> findProgramList(Pageable pageable) {
+        return letsChatRepository.findProgramThumbnailsByType(pageable);
     }
 
     public void deleteLetsChat(LetsChat letsChat) {

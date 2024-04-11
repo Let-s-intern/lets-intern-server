@@ -16,6 +16,8 @@ public record BootcampDetailVo(
         String notice,
         ProgramWay way,
         String location,
+        String zoomLink,
+        String zoomLinkPassword,
         LocalDateTime dueDate,
         LocalDateTime announcementDate,
         LocalDateTime startDate,

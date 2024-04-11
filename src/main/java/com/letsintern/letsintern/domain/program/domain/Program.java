@@ -106,6 +106,10 @@ public abstract class Program {
         this.applicationCount--;
     }
 
+    public void updateHeadCount(Integer headcount) {
+        this.headcount = headcount;
+    }
+
     public void updateProgramInfo(ProgramRequestDto programRequestDto,
                                   ProgramStatus programStatus,
                                   String stringFaqList) {

@@ -37,15 +37,15 @@ public class ProgramEmailVo {
 
     public static ProgramEmailVo from(Program program) {
         return ProgramEmailVo.builder()
-                .type(program.getType())
+                .type(program.getProgramType())
                 .th(program.getTh())
                 .title(program.getTitle())
                 .startDate(program.getStartDate())
                 .endDate(program.getEndDate())
                 .way(program.getWay())
                 .location(program.getLocation())
-                .link(program.getLink())
-                .linkPassword(program.getLinkPassword())
+                .link(program.getZoomLink())
+                .linkPassword(program.getZoomLinkPassword())
                 .build();
     }
 }

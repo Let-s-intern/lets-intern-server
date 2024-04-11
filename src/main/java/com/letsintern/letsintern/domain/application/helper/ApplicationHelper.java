@@ -20,6 +20,7 @@ import com.letsintern.letsintern.domain.program.domain.ProgramStatus;
 import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import com.letsintern.letsintern.domain.program.vo.ProgramEmailVo;
 import com.letsintern.letsintern.domain.program.vo.program.ProgramDetailVo;
+import com.letsintern.letsintern.domain.program.vo.program.UserProgramVo;
 import com.letsintern.letsintern.domain.user.domain.User;
 import com.letsintern.letsintern.domain.user.domain.UserRole;
 import com.letsintern.letsintern.global.common.util.EmailUtils;
@@ -62,6 +63,10 @@ public class ApplicationHelper {
     /* 프로그램 1개의 승인된 지원서 목록 */
     public Page<ApplicationAdminVo> getApplicationListOfProgramIdAndApproved(Long programId, Boolean isApproved, Pageable pageable) {
         return applicationRepository.findAllByProgramIdAndIsApproved(programId, isApproved, pageable);
+    }
+
+    public Page<UserProgramVo> findAllProgramByUserId(Long userId, Pageable pageable) {
+        return applicationRepository.findAllProgramByUserId(userId, pageable);
     }
 
     /* 프로그램 1개의 안내 메일 전송 대상자 메일 주소 목록 */
@@ -256,5 +261,9 @@ public class ApplicationHelper {
         if (!programDetailVo.feeType().equals(FeeType.REFUND)) return;
         if (Objects.isNull(applicationCreateDTO.getAccountType()) || Objects.isNull(applicationCreateDTO.getAccountNumber()))
             throw ApplicationUserBadRequestAccount.EXCEPTION;
+    }
+
+    public Integer countAllByProgramIdAndStatus(Long programId, ApplicationStatus status) {
+        return applicationRepository.countAllByProgramIdAndStatus(programId, status);
     }
 }

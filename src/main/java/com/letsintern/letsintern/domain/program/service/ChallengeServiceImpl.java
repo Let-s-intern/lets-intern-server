@@ -4,27 +4,30 @@ import com.letsintern.letsintern.domain.application.domain.ApplicationWishJob;
 import com.letsintern.letsintern.domain.application.helper.ApplicationHelper;
 import com.letsintern.letsintern.domain.faq.helper.FaqHelper;
 import com.letsintern.letsintern.domain.faq.vo.FaqVo;
-import com.letsintern.letsintern.domain.program.domain.Challenge;
-import com.letsintern.letsintern.domain.program.domain.ProgramStatus;
-import com.letsintern.letsintern.domain.program.dto.response.ZoomMeetingCreateResponse;
-import com.letsintern.letsintern.domain.program.helper.ProgramHelper;
-import com.letsintern.letsintern.domain.program.helper.ZoomMeetingApiHelper;
-import com.letsintern.letsintern.domain.program.mapper.ProgramMapper;
 import com.letsintern.letsintern.domain.payment.domain.Payment;
 import com.letsintern.letsintern.domain.payment.dto.request.PaymentRequestDto;
 import com.letsintern.letsintern.domain.payment.helper.PaymentHelper;
+import com.letsintern.letsintern.domain.program.domain.Challenge;
+import com.letsintern.letsintern.domain.program.domain.ProgramStatus;
 import com.letsintern.letsintern.domain.program.dto.request.BaseProgramRequestDto;
 import com.letsintern.letsintern.domain.program.dto.response.BaseProgramResponseDto;
 import com.letsintern.letsintern.domain.program.dto.response.ProgramDetailResponseDto;
 import com.letsintern.letsintern.domain.program.dto.response.ProgramListResponseDto;
+import com.letsintern.letsintern.domain.program.dto.response.ZoomMeetingCreateResponse;
 import com.letsintern.letsintern.domain.program.helper.ChallengeHelper;
+import com.letsintern.letsintern.domain.program.helper.ProgramHelper;
+import com.letsintern.letsintern.domain.program.helper.ZoomMeetingApiHelper;
 import com.letsintern.letsintern.domain.program.mapper.ChallengeMapper;
+import com.letsintern.letsintern.domain.program.mapper.ProgramMapper;
 import com.letsintern.letsintern.domain.program.vo.challenge.ChallengeDetailVo;
+import com.letsintern.letsintern.domain.program.vo.program.ProgramThumbnailVo;
 import com.letsintern.letsintern.domain.review.helper.ReviewHelper;
 import com.letsintern.letsintern.domain.review.vo.ReviewVo;
 import com.letsintern.letsintern.global.common.util.StringUtils;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -51,9 +54,9 @@ public class ChallengeServiceImpl implements ProgramService {
     }
 
     @Override
-    public ProgramListResponseDto getProgramList() {
-
-        return null;
+    public ProgramListResponseDto<?> getProgramList(Pageable pageable) {
+        Page<ProgramThumbnailVo> programThumbnailVos = challengeHelper.findProgramList(pageable);
+        return programMapper.toProgramListResponseDto(programThumbnailVos);
     }
 
     @Override
