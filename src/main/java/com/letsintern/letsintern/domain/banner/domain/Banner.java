@@ -60,7 +60,8 @@ public abstract class Banner {
         this.link = updateValue(this.link, bannerUpdateDTO.link());
         this.startDate = updateValue(this.startDate, bannerUpdateDTO.startDate());
         this.endDate = updateValue(this.endDate, bannerUpdateDTO.endDate());
-        this.isValid = updateValue(this.isValid, bannerUpdateDTO.endDate().isAfter(LocalDateTime.now()));
         this.isVisible = updateValue(this.isVisible, bannerUpdateDTO.isVisible());
+        if(bannerUpdateDTO.endDate() != null)
+            this.isValid = updateValue(this.isValid, bannerUpdateDTO.endDate().isAfter(LocalDateTime.now()));
     }
 }
