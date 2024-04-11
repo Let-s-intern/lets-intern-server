@@ -1,8 +1,6 @@
 package com.letsintern.letsintern.domain.program.helper;
 
-import com.letsintern.letsintern.domain.program.domain.MailType;
-import com.letsintern.letsintern.domain.program.domain.ProgramStatus;
-import com.letsintern.letsintern.domain.program.domain.Program;
+import com.letsintern.letsintern.domain.program.domain.*;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramRequestDto;
 import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
 import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
@@ -45,7 +43,7 @@ public class ProgramHelper {
         if (MailType.APPROVED.equals(mailType))
             return emailUtils.getChallengeApprovedEmailText(program);
         else if (MailType.FEE_CONFIRMED.equals(mailType))
-            return emailUtils.getChallengeFeeConfirmedEmailText(program);
+            return emailUtils.getChallengeFeeConfirmedEmailText((Challenge) program);
         else
             return null;
     }
@@ -66,5 +64,9 @@ public class ProgramHelper {
 
     public void saveProgram(Program program) {
         programRepository.save(program);
+    }
+
+    public Page<Program> findAllProgramByTypeAndTh(ProgramRequestType type, Integer th, Pageable pageable) {
+        return programRepository.findAllProgramByTypeAndTh(type, th, pageable);
     }
 }

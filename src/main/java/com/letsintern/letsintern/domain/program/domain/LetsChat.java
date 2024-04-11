@@ -15,7 +15,6 @@ import static com.letsintern.letsintern.global.utils.EntityUpdateValueUtils.upda
 public class LetsChat extends Program {
     @Column(length = 10, nullable = false)
     @Convert(converter = MailStatusConverter.class)
-    @Builder.Default
     private MailStatus mailStatus = MailStatus.YET;
     @Column(nullable = false)
     private String mentorPassword;

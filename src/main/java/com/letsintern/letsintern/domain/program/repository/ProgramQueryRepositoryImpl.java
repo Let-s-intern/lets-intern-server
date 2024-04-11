@@ -1,11 +1,9 @@
 package com.letsintern.letsintern.domain.program.repository;
 
-import com.letsintern.letsintern.domain.program.domain.Program;
-import com.letsintern.letsintern.domain.program.domain.ProgramStatus;
-import com.letsintern.letsintern.domain.program.domain.ProgramType;
-import com.letsintern.letsintern.domain.program.domain.QProgram;
+import com.letsintern.letsintern.domain.program.domain.*;
 import com.letsintern.letsintern.domain.program.vo.program.ProgramDetailVo;
 import com.letsintern.letsintern.domain.program.vo.program.UserProgramVo;
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -102,41 +100,21 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
     }
 
     @Override
-    public Page<Program> findAllAdminByTypeAndTh(String type, Integer th, Pageable pageable) {
-        List<Program> programList;
-        JPAQuery<Long> count;
+    public Page<Program> findAllProgramByTypeAndTh(ProgramRequestType type, Integer th, Pageable pageable) {
+        BooleanBuilder booleanBuilder = filterAdminProgram(type, th);
 
-        if (type.equals("CHALLENGE")) {
-            programList = jpaQueryFactory
-                    .selectFrom(program)
-                    .where(program.programType.eq(ProgramType.CHALLENGE_HALF).or(program.programType.eq(ProgramType.CHALLENGE_FULL)))
-                    .where(program.th.eq(th))
-                    .orderBy(program.id.desc())
-                    .offset(pageable.getOffset())
-                    .limit(pageable.getPageSize())
-                    .fetch();
-
-            count = jpaQueryFactory.select(program.count())
-                    .from(program)
-                    .where(program.programType.eq(ProgramType.CHALLENGE_HALF).or(program.programType.eq(ProgramType.CHALLENGE_FULL)))
-                    .where(program.th.eq(th));
-
-            return PageableExecutionUtils.getPage(programList, pageable, count::fetchOne);
-        }
-
-        programList = jpaQueryFactory
+        List<Program> programList = jpaQueryFactory
                 .selectFrom(program)
-                .where(program.programType.eq(ProgramType.valueOf(type)), program.th.eq(th))
-                .where(program.th.eq(th))
+                .where(booleanBuilder)
                 .orderBy(program.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        count = jpaQueryFactory.select(program.count())
+        JPAQuery<Long> count = jpaQueryFactory
+                .select(program.count())
                 .from(program)
-                .where(program.programType.eq(ProgramType.valueOf(type)), program.th.eq(th))
-                .where(program.th.eq(th));
+                .where(booleanBuilder);
 
         return PageableExecutionUtils.getPage(programList, pageable, count::fetchOne);
     }
@@ -147,6 +125,24 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
 
     private BooleanExpression eqProgramStatus(ProgramStatus programStatus) {
         return program.status.eq(programStatus);
+    }
+
+    private BooleanExpression eqProgramType(ProgramType programType) { return program.programType.eq(programType); }
+
+    private BooleanExpression eqProgramTh(Integer programTh) { return program.th.eq(programTh); }
+
+    private BooleanBuilder filterAdminProgram(ProgramRequestType programType, Integer programTh) {
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        if(programType != null) {
+            switch (programType) {
+                case CHALLENGE -> booleanBuilder.and(program.programType.in(ProgramType.CHALLENGE_HALF, ProgramType.CHALLENGE_FULL));
+                case BOOTCAMP -> booleanBuilder.and(eqProgramType(ProgramType.BOOTCAMP));
+                case LETS_CHAT -> booleanBuilder.and(eqProgramType(ProgramType.LETS_CHAT));
+                default -> booleanBuilder.and(eqProgramType(ProgramType.ETC));
+            }
+        }
+        if(programTh != null) booleanBuilder.and(eqProgramTh(programTh));
+        return booleanBuilder;
     }
 
     private BooleanExpression isClosedProgram(LocalDateTime now) {
