@@ -6,7 +6,7 @@ import com.letsintern.letsintern.domain.application.vo.ApplicationAdminVo;
 import com.letsintern.letsintern.domain.application.vo.ApplicationChallengeAdminVo;
 import com.letsintern.letsintern.domain.application.vo.ApplicationEntireDashboardVo;
 import com.letsintern.letsintern.domain.application.vo.ApplicationVo;
-import com.letsintern.letsintern.domain.program.vo.UserProgramVo;
+import com.letsintern.letsintern.domain.program.vo.program.UserProgramVo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

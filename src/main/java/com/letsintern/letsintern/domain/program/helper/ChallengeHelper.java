@@ -1,12 +1,16 @@
 package com.letsintern.letsintern.domain.program.helper;
 
 import com.letsintern.letsintern.domain.program.domain.Challenge;
+import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import com.letsintern.letsintern.domain.program.exception.ChallengeProgramCreateBadRequest;
 import com.letsintern.letsintern.domain.program.dto.request.ChallengeRequestDto;
 import com.letsintern.letsintern.domain.program.exception.ChallengeNotFoundException;
 import com.letsintern.letsintern.domain.program.repository.ChallengeRepository;
 import com.letsintern.letsintern.domain.program.vo.challenge.ChallengeDetailVo;
+import com.letsintern.letsintern.domain.program.vo.program.ProgramThumbnailVo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
@@ -31,6 +35,10 @@ public class ChallengeHelper {
     public ChallengeDetailVo findChallengeDetailOrThrow(Long challengeId) {
         return challengeRepository.findChallengeDetailVo(challengeId)
                 .orElseThrow(() -> ChallengeNotFoundException.EXCEPTION);
+    }
+
+    public Page<ProgramThumbnailVo> findProgramList(Pageable pageable) {
+        return challengeRepository.findProgramThumbnailsByType(pageable);
     }
 
     public Challenge saveChallenge(Challenge challenge) {

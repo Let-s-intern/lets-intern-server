@@ -1,4 +1,4 @@
-package com.letsintern.letsintern.domain.program.vo;
+package com.letsintern.letsintern.domain.program.vo.program;
 
 import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.program.domain.ProgramType;
@@ -7,7 +7,6 @@ import lombok.Getter;
 
 @Getter
 public class UserProgramVo {
-
     private Long id;
     private ProgramType type;
     private Integer th;
@@ -24,7 +23,7 @@ public class UserProgramVo {
     public static UserProgramVo from(Program program) {
         return UserProgramVo.builder()
                 .id(program.getId())
-                .type(program.getType())
+                .type(program.getProgramType())
                 .th(program.getTh())
                 .title(program.getTitle())
                 .build();

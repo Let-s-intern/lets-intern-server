@@ -126,10 +126,11 @@ public class MissionHelper {
     public MissionDashboardVo getDailyMission(Long programId, LocalDateTime startDate) {
         LocalDate today = LocalDate.now();
         Period period = Period.between(LocalDate.from(startDate), today);
-
         int currentHour = LocalDateTime.now().getHour();
-        if (currentHour < 6) return missionRepository.getMissionDashboardVo(programId, period.getDays()).orElse(null);
-        return missionRepository.getMissionDashboardVo(programId, period.getDays() + 1).orElse(null);
+        if (currentHour < 6)
+            return missionRepository.getMissionDashboardVo(programId, period.getDays()).orElse(null);
+        else
+            return missionRepository.getMissionDashboardVo(programId, period.getDays() + 1).orElse(null);
     }
 
     public MissionMyDashboardVo getDailyMissionDetail(Long programId, LocalDateTime startDate, Long userId) {

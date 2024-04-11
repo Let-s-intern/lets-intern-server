@@ -5,12 +5,13 @@ import com.letsintern.letsintern.domain.program.dto.response.BaseProgramResponse
 import com.letsintern.letsintern.domain.program.dto.response.ProgramDetailResponseDto;
 import com.letsintern.letsintern.domain.program.dto.response.ProgramListResponseDto;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
 public interface ProgramService {
     BaseProgramResponseDto<?> getProgramForAdmin(Long programId);
-    ProgramListResponseDto getProgramList();
+    ProgramListResponseDto<?> getProgramList(Pageable pageable);
     ProgramDetailResponseDto<?> getProgramDetail(Long programId, PrincipalDetails principalDetails);
     void createProgram(BaseProgramRequestDto requestDto);
     void updateProgram(Long programId, BaseProgramRequestDto requestDto);

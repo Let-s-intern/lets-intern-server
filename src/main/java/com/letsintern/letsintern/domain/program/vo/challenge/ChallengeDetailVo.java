@@ -19,6 +19,8 @@ public record ChallengeDetailVo(
         String notice,
         ProgramWay way,
         String location,
+        String zoomLink,
+        String zoomLinkPassword,
         ChallengeTopic topic,
         LocalDateTime dueDate,
         LocalDateTime announcementDate,

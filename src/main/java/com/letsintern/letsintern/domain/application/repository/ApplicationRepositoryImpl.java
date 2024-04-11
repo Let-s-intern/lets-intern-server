@@ -1,14 +1,17 @@
 package com.letsintern.letsintern.domain.application.repository;
 
-import com.letsintern.letsintern.domain.application.domain.*;
+import com.letsintern.letsintern.domain.application.domain.Application;
+import com.letsintern.letsintern.domain.application.domain.ApplicationStatus;
+import com.letsintern.letsintern.domain.application.domain.ApplicationWishJob;
+import com.letsintern.letsintern.domain.application.domain.QApplication;
 import com.letsintern.letsintern.domain.application.filter.ApplicationFilter;
 import com.letsintern.letsintern.domain.application.vo.ApplicationAdminVo;
 import com.letsintern.letsintern.domain.application.vo.ApplicationChallengeAdminVo;
 import com.letsintern.letsintern.domain.application.vo.ApplicationEntireDashboardVo;
 import com.letsintern.letsintern.domain.application.vo.ApplicationVo;
-import com.letsintern.letsintern.domain.program.domain.ProgramFeeType;
+import com.letsintern.letsintern.domain.payment.domain.FeeType;
 import com.letsintern.letsintern.domain.program.domain.ProgramStatus;
-import com.letsintern.letsintern.domain.program.vo.UserProgramVo;
+import com.letsintern.letsintern.domain.program.vo.program.UserProgramVo;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
@@ -95,11 +98,11 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
                         qApplication.feeIsConfirmed,
                         qApplication.program.id,
                         qApplication.program.title,
-                        qApplication.program.type,
-                        qApplication.program.feeType,
-                        qApplication.program.feeDueDate,
-                        qApplication.program.accountType,
-                        qApplication.program.accountNumber,
+                        qApplication.program.programType,
+                        qApplication.program.payment.feeType,
+                        qApplication.program.payment.feeDueDate,
+                        qApplication.program.payment.accountType,
+                        qApplication.program.payment.accountNumber,
                         qApplication.reviewId,
                         qApplication.program.announcementDate,
                         qApplication.program.startDate,
@@ -149,7 +152,7 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
         userProgramVos = jpaQueryFactory
                 .select(Projections.constructor(UserProgramVo.class,
                         qApplication.program.id,
-                        qApplication.program.type,
+                        qApplication.program.programType,
                         qApplication.program.th,
                         qApplication.program.title))
                 .from(qApplication)
@@ -213,10 +216,10 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
                 .update(qApplication)
                 .set(qApplication.status, ApplicationStatus.FEE_NOT_APPROVED)
                 .where(
-                        qApplication.program.feeType.ne(ProgramFeeType.FREE),
+                        qApplication.program.payment.feeType.ne(FeeType.FREE),
                         qApplication.program.status.eq(ProgramStatus.CLOSED),
-                        qApplication.program.feeDueDate.isNotNull(),
-                        qApplication.program.feeDueDate.before(now),
+                        qApplication.program.payment.feeDueDate.isNotNull(),
+                        qApplication.program.payment.feeDueDate.before(now),
                         qApplication.isApproved.eq(true),
                         qApplication.feeIsConfirmed.eq(false))
                 .execute();
@@ -291,7 +294,7 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
                 .when(qApplication.user.id.eq(Expressions.asNumber(userId))).then(0)
                 .otherwise(1);
 
-        if(applicationWishJob == null || applicationWishJob.equals(ApplicationWishJob.ALL)) {
+        if (applicationWishJob == null || applicationWishJob.equals(ApplicationWishJob.ALL)) {
             applicationEntireDashboardVos = jpaQueryFactory
                     .select(Projections.constructor(ApplicationEntireDashboardVo.class,
                             qApplication.id,
@@ -315,9 +318,7 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
                     .where(
                             qApplication.program.id.eq(programId),
                             qApplication.status.in(ApplicationStatus.IN_PROGRESS, ApplicationStatus.DONE));
-        }
-
-        else if(applicationWishJob.equals(ApplicationWishJob.MARKETING_ALL) || applicationWishJob.equals(ApplicationWishJob.DEVELOPMENT_ALL)) {
+        } else if (applicationWishJob.equals(ApplicationWishJob.MARKETING_ALL) || applicationWishJob.equals(ApplicationWishJob.DEVELOPMENT_ALL)) {
             applicationEntireDashboardVos = jpaQueryFactory
                     .select(Projections.constructor(ApplicationEntireDashboardVo.class,
                             qApplication.id,
@@ -343,9 +344,7 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
                             qApplication.program.id.eq(programId),
                             qApplication.program.topic.eq(applicationWishJob.getChallengeTopic()),
                             qApplication.status.in(ApplicationStatus.IN_PROGRESS, ApplicationStatus.DONE));
-        }
-
-        else {
+        } else {
             applicationEntireDashboardVos = jpaQueryFactory
                     .select(Projections.constructor(ApplicationEntireDashboardVo.class,
                             qApplication.id,

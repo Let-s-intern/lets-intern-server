@@ -1,12 +1,20 @@
 package com.letsintern.letsintern.domain.program.repository;
 
+import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.program.domain.ProgramStatus;
+import com.letsintern.letsintern.domain.program.domain.ProgramType;
+import com.letsintern.letsintern.domain.program.domain.QProgram;
 import com.letsintern.letsintern.domain.program.vo.program.ProgramDetailVo;
+import com.letsintern.letsintern.domain.program.vo.program.UserProgramVo;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -18,7 +26,7 @@ import static com.letsintern.letsintern.domain.program.domain.QProgram.program;
 
 @RequiredArgsConstructor
 @Repository
-public class ProgramRepositoryImpl implements ProgramQueryRepository {
+public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
     private final JPAQueryFactory jpaQueryFactory;
     private final EntityManager em;
 
@@ -91,6 +99,46 @@ public class ProgramRepositoryImpl implements ProgramQueryRepository {
         em.clear();
 
         return programIdList;
+    }
+
+    @Override
+    public Page<Program> findAllAdminByTypeAndTh(String type, Integer th, Pageable pageable) {
+        List<Program> programList;
+        JPAQuery<Long> count;
+
+        if (type.equals("CHALLENGE")) {
+            programList = jpaQueryFactory
+                    .selectFrom(program)
+                    .where(program.programType.eq(ProgramType.CHALLENGE_HALF).or(program.programType.eq(ProgramType.CHALLENGE_FULL)))
+                    .where(program.th.eq(th))
+                    .orderBy(program.id.desc())
+                    .offset(pageable.getOffset())
+                    .limit(pageable.getPageSize())
+                    .fetch();
+
+            count = jpaQueryFactory.select(program.count())
+                    .from(program)
+                    .where(program.programType.eq(ProgramType.CHALLENGE_HALF).or(program.programType.eq(ProgramType.CHALLENGE_FULL)))
+                    .where(program.th.eq(th));
+
+            return PageableExecutionUtils.getPage(programList, pageable, count::fetchOne);
+        }
+
+        programList = jpaQueryFactory
+                .selectFrom(program)
+                .where(program.programType.eq(ProgramType.valueOf(type)), program.th.eq(th))
+                .where(program.th.eq(th))
+                .orderBy(program.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        count = jpaQueryFactory.select(program.count())
+                .from(program)
+                .where(program.programType.eq(ProgramType.valueOf(type)), program.th.eq(th))
+                .where(program.th.eq(th));
+
+        return PageableExecutionUtils.getPage(programList, pageable, count::fetchOne);
     }
 
     private BooleanExpression eqProgramId(Long programId) {
