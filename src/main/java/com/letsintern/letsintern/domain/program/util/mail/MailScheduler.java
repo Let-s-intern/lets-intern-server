@@ -1,9 +1,10 @@
 package com.letsintern.letsintern.domain.program.util.mail;
 
+import com.letsintern.letsintern.domain.program.domain.LetsChat;
+import com.letsintern.letsintern.domain.program.repository.LetsChatRepository;
 import com.letsintern.letsintern.domain.program.util.mail.batch.LetsChatRemindMailJobConfig;
 import com.letsintern.letsintern.domain.program.util.mail.batch.LetsChatReviewMailJobConfig;
 import com.letsintern.letsintern.domain.program.domain.MailStatus;
-import com.letsintern.letsintern.domain.program.domain.Program;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.JobParametersInvalidException;
@@ -23,15 +24,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MailScheduler {
 
-    private final ProgramRepository programRepository;
+    private final LetsChatRepository letsChatRepository;
     private final JobLauncher jobLauncher;
     private final LetsChatRemindMailJobConfig letsChatRemindMailJobConfig;
     private final LetsChatReviewMailJobConfig letsChatReviewMailJobConfig;
 
     @Scheduled(cron = "0 1 9 * * ?")
     public void sendLetsChatRemindMail() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
-        List<Program> mailStatusYetLetsChats = programRepository.findAllLetsChatByMailStatusAndStartDate(MailStatus.YET, LocalDate.now());
-        for(Program letsChat : mailStatusYetLetsChats) {
+        List<LetsChat> mailStatusYetLetsChats = letsChatRepository.findAllLetsChatByMailStatusAndStartDate(MailStatus.YET, LocalDate.now());
+        for(LetsChat letsChat : mailStatusYetLetsChats) {
             jobLauncher.run(
                     letsChatRemindMailJobConfig.remindMailJob(),
                     new JobParametersBuilder()
@@ -44,8 +45,8 @@ public class MailScheduler {
 
     @Scheduled(cron = "0 1 23 * * ?")
     public void sendLetsChatReviewMail() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
-        List<Program> mailStatusRemindLetsChats = programRepository.findAllLetsChatByMailStatusAndEndDate(MailStatus.REMIND, LocalDateTime.now());
-        for(Program letsChat : mailStatusRemindLetsChats) {
+        List<LetsChat> mailStatusRemindLetsChats = letsChatRepository.findAllLetsChatByMailStatusAndEndDate(MailStatus.REMIND, LocalDateTime.now());
+        for(LetsChat letsChat : mailStatusRemindLetsChats) {
             jobLauncher.run(
                     letsChatReviewMailJobConfig.reviewMailJob(),
                     new JobParametersBuilder()

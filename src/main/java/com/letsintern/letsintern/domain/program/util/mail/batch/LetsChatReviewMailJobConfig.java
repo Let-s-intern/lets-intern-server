@@ -1,10 +1,9 @@
 package com.letsintern.letsintern.domain.program.util.mail.batch;
 
-import com.letsintern.letsintern.domain.application.repository.ApplicationRepository;
+import com.letsintern.letsintern.domain.application.helper.ApplicationHelper;
+import com.letsintern.letsintern.domain.program.domain.LetsChat;
 import com.letsintern.letsintern.domain.program.domain.MailStatus;
-import com.letsintern.letsintern.domain.program.domain.Program;
-import com.letsintern.letsintern.domain.payment.domain.FeeType;
-import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
+import com.letsintern.letsintern.domain.program.helper.LetsChatHelper;
 import com.letsintern.letsintern.global.common.util.EmailUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
@@ -32,8 +31,8 @@ public class LetsChatReviewMailJobConfig {
     private final PlatformTransactionManager transactionManager;
 
     private final EmailUtils emailUtils;
-    private final ApplicationRepository applicationRepository;
-    private final ProgramRepository programRepository;
+    private final ApplicationHelper applicationHelper;
+    private final LetsChatHelper letsChatHelper;
 
     @Bean
     public Job reviewMailJob() {
@@ -55,17 +54,9 @@ public class LetsChatReviewMailJobConfig {
     @StepScope
     public Tasklet sendReviewMailTasklet(@Value("#{jobParameters[programId]}") Long programId) {
         return ((contribution, chunkContext) -> {
-            Program program = programRepository.findById(programId).orElseThrow(() -> ProgramNotFound.EXCEPTION);
-            List<String> applicationEmailList;
-
-            if(program.getFeeType().equals(FeeType.FREE)) {
-                applicationEmailList = applicationRepository.findAllEmailByIsApproved(programId, true);
-            } else {
-                applicationEmailList = applicationRepository.findAllEmailByIsApprovedAndFeeIsConfirmed(programId, true, true);
-            }
-
-            if(!applicationEmailList.isEmpty()) emailUtils.sendLetsChatReviewMail(applicationEmailList, program);
-
+            LetsChat letsChat = letsChatHelper.findLetsChatByIdOrThrow(programId);
+            List<String> applicationEmailList = applicationHelper.getApplicationEmailListByPaymentFeeType(letsChat.getPayment().getFeeType(), letsChat.getId());
+            if(applicationEmailList != null && !applicationEmailList.isEmpty()) emailUtils.sendLetsChatReviewMail(applicationEmailList, letsChat);
             return RepeatStatus.FINISHED;
         });
     }
@@ -81,10 +72,9 @@ public class LetsChatReviewMailJobConfig {
     @StepScope
     public Tasklet updateMailStatusReviewTasklet(@Value("#{jobParameters[programId]}") Long programId) {
         return ((contribution, chunkContext) -> {
-            Program program = programRepository.findById(programId).orElseThrow(() -> ProgramNotFound.EXCEPTION);
-            program.setMailStatus(MailStatus.REVIEW);
-            programRepository.save(program);
-
+            LetsChat letsChat = letsChatHelper.findLetsChatByIdOrThrow(programId);
+            letsChat.updateLetsChatMailStatus(MailStatus.REVIEW);
+            letsChatHelper.saveLetsChat(letsChat);
             return RepeatStatus.FINISHED;
         });
     }

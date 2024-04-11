@@ -39,4 +39,8 @@ public class LetsChat extends Program {
         super.updateProgramInfo(requestDto.programInfo(), programStatus, faqList);
         this.mentorPassword = updateValue(this.mentorPassword, requestDto.letsCHatRequestDto().mentorPassword());
     }
+
+    public void updateLetsChatMailStatus(MailStatus mailStatus) {
+        this.mailStatus = updateValue(this.mailStatus, mailStatus);
+    }
 }

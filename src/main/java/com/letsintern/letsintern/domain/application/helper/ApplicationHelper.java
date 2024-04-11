@@ -220,6 +220,15 @@ public class ApplicationHelper {
         return applicationRepository.findAllPreQuestionsByProgramId(programId);
     }
 
+    public List<String> getApplicationEmailListByPaymentFeeType(FeeType feeType, Long programId) {
+        List<String> emailList = null;
+        switch (feeType) {
+            case FREE -> emailList = applicationRepository.findAllEmailByIsApproved(programId, true);
+            case CHARGE, REFUND -> emailList = applicationRepository.findAllEmailByIsApprovedAndFeeIsConfirmed(programId, true, true);
+        }
+        return emailList;
+    }
+
     public void validateIsChallengeParticipant(UserRole userRole, Long programId, Long userId) {
         if (!userRole.equals(UserRole.ROLE_ADMIN)) {
             final Application application = applicationRepository.findByProgramIdAndUserId(programId, userId);
