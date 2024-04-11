@@ -4,6 +4,7 @@ import com.letsintern.letsintern.domain.attendance.domain.QAttendance;
 import com.letsintern.letsintern.domain.contents.domain.QContents;
 import com.letsintern.letsintern.domain.mission.domain.QMission;
 import com.letsintern.letsintern.domain.mission.vo.*;
+import com.letsintern.letsintern.domain.program.domain.QChallenge;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -42,7 +43,7 @@ public class MissionRepositoryImpl implements MissionRepositoryCustom {
                         qContents.topic,
                         qMission.attendanceCount,
                         qMission.lateAttendanceCount,
-                        qMission.program.finalHeadCount))
+                        qMission.program.as(QChallenge.class).finalHeadCount))
                 .from(qMission)
                 .leftJoin(qContents)
                 .on(
