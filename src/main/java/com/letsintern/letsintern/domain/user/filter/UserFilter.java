@@ -47,10 +47,10 @@ public class UserFilter {
 
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         if(programTh == null) {
-            booleanBuilder.and(qApplication.program.type.eq(programType))
+            booleanBuilder.and(qApplication.program.programType.eq(programType))
                     .and(qApplication.program.th.eq(programTh));
         } else {
-            booleanBuilder.and(qApplication.program.type.eq(programType));
+            booleanBuilder.and(qApplication.program.programType.eq(programType));
         }
 
         return booleanBuilder;

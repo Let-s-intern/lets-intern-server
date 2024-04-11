@@ -83,7 +83,7 @@ public class MissionRepositoryImpl implements MissionRepositoryCustom {
                         qMission.startDate,
                         qMission.endDate,
                         qMission.refund,
-                        qMission.program.feeRefund,
+                        qMission.program.payment.feeRefund,
                         qEssentialContents.topic,
                         qAdditionalContents.topic,
                         qLimitedContents.topic))

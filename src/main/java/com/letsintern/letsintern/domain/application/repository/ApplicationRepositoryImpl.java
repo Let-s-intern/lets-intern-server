@@ -11,6 +11,7 @@ import com.letsintern.letsintern.domain.application.vo.ApplicationEntireDashboar
 import com.letsintern.letsintern.domain.application.vo.ApplicationVo;
 import com.letsintern.letsintern.domain.payment.domain.FeeType;
 import com.letsintern.letsintern.domain.program.domain.ProgramStatus;
+import com.letsintern.letsintern.domain.program.domain.QChallenge;
 import com.letsintern.letsintern.domain.program.vo.program.UserProgramVo;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.CaseBuilder;
@@ -27,6 +28,9 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static com.letsintern.letsintern.domain.program.domain.QChallenge.challenge;
+import static com.letsintern.letsintern.domain.application.domain.QApplication.application;
 
 @Repository
 @RequiredArgsConstructor
@@ -318,6 +322,7 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
                     .where(
                             qApplication.program.id.eq(programId),
                             qApplication.status.in(ApplicationStatus.IN_PROGRESS, ApplicationStatus.DONE));
+
         } else if (applicationWishJob.equals(ApplicationWishJob.MARKETING_ALL) || applicationWishJob.equals(ApplicationWishJob.DEVELOPMENT_ALL)) {
             applicationEntireDashboardVos = jpaQueryFactory
                     .select(Projections.constructor(ApplicationEntireDashboardVo.class,
@@ -342,7 +347,7 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
                     .from(qApplication)
                     .where(
                             qApplication.program.id.eq(programId),
-                            qApplication.program.topic.eq(applicationWishJob.getChallengeTopic()),
+                            qApplication.program.as(QChallenge.class).topic.eq(applicationWishJob.getChallengeTopic()),
                             qApplication.status.in(ApplicationStatus.IN_PROGRESS, ApplicationStatus.DONE));
         } else {
             applicationEntireDashboardVos = jpaQueryFactory

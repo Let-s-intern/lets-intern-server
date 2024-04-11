@@ -1,9 +1,6 @@
 package com.letsintern.letsintern.global.common.util;
 
-import com.letsintern.letsintern.domain.program.domain.LetsChat;
-import com.letsintern.letsintern.domain.program.domain.Program;
-import com.letsintern.letsintern.domain.program.domain.ProgramType;
-import com.letsintern.letsintern.domain.program.domain.ProgramWay;
+import com.letsintern.letsintern.domain.program.domain.*;
 import com.letsintern.letsintern.domain.program.vo.ProgramEmailVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
@@ -130,11 +127,11 @@ public class EmailUtils {
                 "챌린지는 동기부여를 위한 보증금과 함께\n" +
                 "현직자 연사 초청 및 네트워킹 마련 등을 위한 운영비를 받고 있습니다.\n\n" +
 
-                "본격적인 안내에 앞서 " + (program.getFeeCharge() + program.getFeeRefund()) + "원을 입금 부탁 드립니다.\n" +
+                "본격적인 안내에 앞서 " + (program.getPayment().getFeeCharge() + program.getPayment().getFeeRefund()) + "원을 입금 부탁 드립니다.\n" +
                 "이때 입금주 명은 신청인 이름과 동일하게 설정해 주세요.\n\n" +
 
-                "\uD83C\uDFE6 계좌 : " + program.getAccountType().getValue() + " " + program.getAccountNumber() + "\n" +
-                "\uD83D\uDCC5 기한 : " + StringUtils.dateToString(program.getFeeDueDate()) + "까지\n\n" +
+                "\uD83C\uDFE6 계좌 : " + program.getPayment().getAccountType().getValue() + " " + program.getPayment().getAccountNumber() + "\n" +
+                "\uD83D\uDCC5 기한 : " + StringUtils.dateToString(program.getPayment().getFeeDueDate()) + "까지\n\n" +
 
                 "입금 기한 직후, 입금이 확인된 인원을 대상으로\n" +
                 "오픈채팅방 및 온라인 OT 참여 링크, 챌린지 대시보드 접속 안내 등의 공지를 드립니다.\n\n" +
@@ -144,17 +141,17 @@ public class EmailUtils {
     }
 
     /* 챌린지 - 참여 확정 안내 메일 TEXT */
-    public String getChallengeFeeConfirmedEmailText(Program program) {
+    public String getChallengeFeeConfirmedEmailText(Challenge challenge) {
         final String HEADER = messageSource.getMessage("mail.lets-chat.header", null, null);
         final String FOOTER = messageSource.getMessage("mail.lets-chat.footer", null, null);
 
-        return "[렛츠인턴] " + program.getTitle() + " 참여 확정 공지\n\n" +
+        return "[렛츠인턴] " + challenge.getTitle() + " 참여 확정 공지\n\n" +
                 HEADER +
-                "드디어 내일(" + StringUtils.dateToStringMMdd(program.getStartDate()) + ") OT와 함께 " + program.getTitle() + "가 시작합니다!\n" +
+                "드디어 내일(" + StringUtils.dateToStringMMdd(challenge.getStartDate()) + ") OT와 함께 " + challenge.getTitle() + "가 시작합니다!\n" +
                 "챌린지 참여에 핵심이 될 공지를 몇가지 드리려 합니다.\n" +
                 "안내 사항에 따라 설정 및 접속 부탁 드리겠습니다.\n\n" +
 
-                "[1] 챌린지 " + program.getTitle() + "기 카카오톡 오픈 채팅방에 들어와 주세요!\n" +
+                "[1] 챌린지 " + challenge.getTitle() + "기 카카오톡 오픈 채팅방에 들어와 주세요!\n" +
                 "참여자들 간의 소통이 이루어지는 공간입니다.\n" +
 
                 "이때 카카오프렌즈 프로필이 아닌 \"새로운 오픈 프로필 만들기\"로 가입해주세요!\n" +
@@ -167,14 +164,14 @@ public class EmailUtils {
 
                 "채팅 설정은 한번 프로필을 만든 후에는 수정이 어려워,\n" +
                 "다시 만들어야 한다는 번거로움이 있어 상기 조건을 한번 더 확인해 주세요.\n" +
-                "\uD83D\uDD17 링크: " + program.getOpenKakaoLink() + " \n" +
-                "\uD83D\uDD10 비밀번호 : " + program.getOpenKakaoPassword() + "\n\n" +
+                "\uD83D\uDD17 링크: " + challenge.getOpenKakaoLink() + " \n" +
+                "\uD83D\uDD10 비밀번호 : " + challenge.getOpenKakaoPassword() + "\n\n" +
 
-                "[2] OT는 온라인으로 " + StringUtils.dateToStringMMddEaHHmm(program.getStartDate()) + "에 진행됩니다.\n" +
+                "[2] OT는 온라인으로 " + StringUtils.dateToStringMMddEaHHmm(challenge.getStartDate()) + "에 진행됩니다.\n" +
                 "1시간 소요 예정으로 렛츠인턴 소개와 챌린지 운영 방식, 보증금 및 혜택을 안내 드립니다.\n" +
                 "참여하신 분들만을 위해 커리큘럼을 상세하게 설명 드리오니 최대한 참여해 주세요.\n" +
-                "\uD83D\uDD17 링크 : " + program.getLink() + " \n" +
-                "\uD83D\uDD10 비밀번호 : " + program.getLinkPassword() + "\n\n" +
+                "\uD83D\uDD17 링크 : " + challenge.getZoomLink() + " \n" +
+                "\uD83D\uDD10 비밀번호 : " + challenge.getZoomLinkPassword() + "\n\n" +
 
                 "[3] 이번 챌린지는 렛츠인턴 웹사이트에서 콘텐츠 및 미션 공지와 인증이 이루어집니다.\n" +
                 "신청하신 계정의 마이페이지에서 챌린지 대시보드에 바로 접속하실 수 있습니다.\n" +
@@ -182,7 +179,7 @@ public class EmailUtils {
                 "\uD83D\uDD17 링크 : https://www.letsintern.co.kr/ \n" +
                 "\uD83D\uDC49 방법 : 로그인 후 마이페이지 → 신청 현황 → 참여 중 섹션 → 챌린지로 이동 클릭\n\n" +
 
-                program.getTitle() + "에 함께 하게 되신 걸 다시 한번 환영합니다.\n" +
+                challenge.getTitle() + "에 함께 하게 되신 걸 다시 한번 환영합니다.\n" +
                 "모두 내일 OT에서 만나요 \uD83D\uDE0A \n\n" +
                 FOOTER;
     }
