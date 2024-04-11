@@ -48,7 +48,8 @@ public abstract class Program {
     @Builder.Default
     private Integer applicationCount = 0;
     @Column(nullable = false)
-    private Integer headcount;
+    @Builder.Default
+    private Integer headcount = 0;
     @Column(nullable = false)
     @Builder.Default
     private Boolean isVisible = false;
