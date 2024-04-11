@@ -30,31 +30,45 @@ public class MailScheduler {
     private final LetsChatReviewMailJobConfig letsChatReviewMailJobConfig;
 
     @Scheduled(cron = "0 1 9 * * ?")
-    public void sendLetsChatRemindMail() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
+    public void sendLetsChatRemindMail() {
         List<LetsChat> mailStatusYetLetsChats = letsChatRepository.findAllLetsChatByMailStatusAndStartDate(MailStatus.YET, LocalDate.now());
-        for(LetsChat letsChat : mailStatusYetLetsChats) {
-            jobLauncher.run(
-                    letsChatRemindMailJobConfig.remindMailJob(),
-                    new JobParametersBuilder()
-                            .addLong("programId", letsChat.getId())
-                            .addLong("time", new Date().getTime())
-                            .toJobParameters()
-            );
-        }
+        mailStatusYetLetsChats.stream()
+                .map(LetsChat::getId)
+                .forEach(id -> {
+                    try {
+                        jobLauncher.run(
+                                letsChatRemindMailJobConfig.remindMailJob(),
+                                new JobParametersBuilder()
+                                        .addLong("programId", id)
+                                        .addLong("time", new Date().getTime())
+                                        .toJobParameters()
+                        );
+                    } catch (JobInstanceAlreadyCompleteException | JobExecutionAlreadyRunningException |
+                             JobParametersInvalidException | JobRestartException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
     }
 
     @Scheduled(cron = "0 1 23 * * ?")
-    public void sendLetsChatReviewMail() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
+    public void sendLetsChatReviewMail() {
         List<LetsChat> mailStatusRemindLetsChats = letsChatRepository.findAllLetsChatByMailStatusAndEndDate(MailStatus.REMIND, LocalDateTime.now());
-        for(LetsChat letsChat : mailStatusRemindLetsChats) {
-            jobLauncher.run(
-                    letsChatReviewMailJobConfig.reviewMailJob(),
-                    new JobParametersBuilder()
-                            .addLong("programId", letsChat.getId())
-                            .addLong("time", new Date().getTime())
-                            .toJobParameters()
-            );
-        }
+        mailStatusRemindLetsChats.stream()
+                .map(LetsChat::getId)
+                .forEach(id -> {
+                    try {
+                        jobLauncher.run(
+                                letsChatReviewMailJobConfig.reviewMailJob(),
+                                new JobParametersBuilder()
+                                        .addLong("programId", id)
+                                        .addLong("time", new Date().getTime())
+                                        .toJobParameters()
+                        );
+                    } catch (JobExecutionAlreadyRunningException | JobRestartException |
+                             JobInstanceAlreadyCompleteException | JobParametersInvalidException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
     }
 
 }
