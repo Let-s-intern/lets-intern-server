@@ -1,5 +1,6 @@
 package com.letsintern.letsintern.global.common.util;
 
+import com.letsintern.letsintern.domain.program.domain.LetsChat;
 import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import com.letsintern.letsintern.domain.program.domain.ProgramWay;
@@ -27,12 +28,12 @@ public class EmailUtils {
         javaMailSender.send(createApplicationApprovedMessage(emailAddress, programEmailVo));
     }
 
-    public void sendLetsChatRemindMail(List<String> applicationEmailList, Program program) {
-        javaMailSender.send(createLetsChatRemindMessage(applicationEmailList, program));
+    public void sendLetsChatRemindMail(List<String> applicationEmailList, LetsChat letsChat) {
+        javaMailSender.send(createLetsChatRemindMessage(applicationEmailList, letsChat));
     }
 
-    public void sendLetsChatReviewMail(List<String> applicationEmailList, Program program) {
-        javaMailSender.send(createLetsChatReviewMessage(applicationEmailList, program));
+    public void sendLetsChatReviewMail(List<String> applicationEmailList, LetsChat letsChat) {
+        javaMailSender.send(createLetsChatReviewMessage(applicationEmailList, letsChat));
     }
 
     /* 비밀번호 재설정 메일 */
@@ -56,12 +57,12 @@ public class EmailUtils {
 
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setTo(emailAddress);
-        simpleMailMessage.setSubject("[렛츠인턴] " + programEmailVo.getType().getValue() + " #" + programEmailVo.getTh() + ". " + programEmailVo.getTitle() + " 세션 확정 안내");
+        simpleMailMessage.setSubject("[렛츠인턴] " + programEmailVo.getType().getDesc() + " #" + programEmailVo.getTh() + ". " + programEmailVo.getTitle() + " 세션 확정 안내");
 
         simpleMailMessage.setText(
                 HEADER +
                 createTitleInfo(programEmailVo.getType(), programEmailVo.getTh(), programEmailVo.getTitle()) + "에 신청해주셔서 감사합니다!\n" +
-                programEmailVo.getType().getValue() + " #" + programEmailVo.getTh() + " 참여 확정되어 안내드립니다.\n\n" +
+                programEmailVo.getType().getDesc() + " #" + programEmailVo.getTh() + " 참여 확정되어 안내드립니다.\n\n" +
                 createStartDateInfo(programEmailVo.getStartDate(), programEmailVo.getEndDate()) +
                 createProgramWayInfo(programEmailVo.getWay(), programEmailVo.getLink(), programEmailVo.getLinkPassword(), programEmailVo.getLocation()) + "\n\n" +
                 NOTICE_CANCEL +
@@ -71,21 +72,21 @@ public class EmailUtils {
     }
 
     /* 렛츠챗 - 매일 9시에 쿼리 후 대량 발송되는 D-day 리마인드 메일 */
-    private SimpleMailMessage createLetsChatRemindMessage(List<String> applicationEmailList, Program program) {
+    private SimpleMailMessage createLetsChatRemindMessage(List<String> applicationEmailList, LetsChat letsChat) {
         final String HEADER = messageSource.getMessage("mail.lets-chat.header", null, null);
         final String FOOTER = messageSource.getMessage("mail.lets-chat.footer", null, null);
         final String NOTICE_CANCEL = messageSource.getMessage("mail.lets-chat.notice.cancel", null, null);
 
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setBcc(applicationEmailList.toArray(String[]::new));
-        simpleMailMessage.setSubject("[렛츠인턴] D-day 안내: " + program.getTitle());
+        simpleMailMessage.setSubject("[렛츠인턴] D-day 안내: " + letsChat.getTitle());
 
         simpleMailMessage.setText(
                 HEADER +
-                "오늘은 신청해주신 " + createTitleInfo(program.getType(), program.getTh(), program.getTitle()) + "이 예정되어있는 날입니다.\n" +
+                "오늘은 신청해주신 " + createTitleInfo(letsChat.getProgramType(), letsChat.getTh(), letsChat.getTitle()) + "이 예정되어있는 날입니다.\n" +
                 "다들 잊지 않으셨죠? 아래 일정 확인하시어, 원활한 세션 진행을 위해 5분 전 입장 부탁드립니다.\n\n" +
-                createStartDateInfo(program.getStartDate(), program.getEndDate()) +
-                createProgramWayInfo(program.getWay(), program.getLink(), program.getLinkPassword(), program.getLocation()) + "\n\n" +
+                createStartDateInfo(letsChat.getStartDate(), letsChat.getEndDate()) +
+                createProgramWayInfo(letsChat.getWay(), letsChat.getZoomLink(), letsChat.getZoomLinkPassword(), letsChat.getLocation()) + "\n\n" +
                 NOTICE_CANCEL +
                 FOOTER);
 
@@ -93,7 +94,7 @@ public class EmailUtils {
     }
 
     /* 렛츠챗 - 매일 23시에 쿼리 후 대량 발송되는 리뷰 작성 메일 */
-    private SimpleMailMessage createLetsChatReviewMessage(List<String> applicationEmailList, Program program) {
+    private SimpleMailMessage createLetsChatReviewMessage(List<String> applicationEmailList, LetsChat letsChat) {
         final String HEADER = messageSource.getMessage("mail.lets-chat.header", null, null);
         final String FOOTER = messageSource.getMessage("mail.lets-chat.footer", null, null);
         final String NOTICE_REVIEW = messageSource.getMessage("mail.lets-chat.notice.review", null, null);
@@ -101,13 +102,13 @@ public class EmailUtils {
 
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setBcc(applicationEmailList.toArray(String[]::new));
-        simpleMailMessage.setSubject("[렛츠인턴] " + program.getType().getValue() + " #" + program.getTh() + ". " + program.getTitle() + " 후기 작성 안내");
+        simpleMailMessage.setSubject("[렛츠인턴] " + letsChat.getProgramType().getDesc() + " #" + letsChat.getTh() + ". " + letsChat.getTitle() + " 후기 작성 안내");
 
         simpleMailMessage.setText(
                 HEADER +
-                "시간 내어 " + createTitleInfo(program.getType(), program.getTh(), program.getTitle()) + "에 참여해주셔서 감사합니다!\n\n" +
+                "시간 내어 " + createTitleInfo(letsChat.getProgramType(), letsChat.getTh(), letsChat.getTitle()) + "에 참여해주셔서 감사합니다!\n\n" +
                 "렛츠챗 후기를 작성해주세요!\n" +
-                "- 작성링크 : https://www.letsintern.co.kr/program/" + program.getId() + "/review/create " + "\n" +
+                "- 작성링크 : https://www.letsintern.co.kr/program/" + letsChat.getId() + "/review/create " + "\n" +
                 NOTICE_REVIEW +
                 NOTICE_MORE+
                 FOOTER);
@@ -187,7 +188,7 @@ public class EmailUtils {
     }
 
     private String createTitleInfo(ProgramType type, Integer th, String title) {
-        return type.getValue() + " #" + th + " [" + title + "]";
+        return type.getDesc() + " #" + th + " [" + title + "]";
     }
 
     private String createProgramWayInfo(ProgramWay way, String link, String linkPassword, String location) {
