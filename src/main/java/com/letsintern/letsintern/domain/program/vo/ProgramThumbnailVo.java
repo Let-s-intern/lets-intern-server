@@ -2,14 +2,11 @@ package com.letsintern.letsintern.domain.program.vo;
 
 import com.letsintern.letsintern.domain.program.domain.ProgramStatus;
 import com.letsintern.letsintern.domain.program.domain.ProgramType;
-import com.querydsl.core.annotations.QueryProjection;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.Getter;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Getter
 public class ProgramThumbnailVo {

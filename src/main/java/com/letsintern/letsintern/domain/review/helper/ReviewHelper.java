@@ -45,6 +45,10 @@ public class ReviewHelper {
         return reviewRepository.findAllByProgramId(programId, pageable);
     }
 
+    public List<String> findAllReviewContentsByProgramId(Long programId) {
+        return reviewRepository.findAllReviewContentsByProgramId(programId);
+    }
+
     public Long updateReviewStatus(Long reviewId, ReviewUpdateDTO reviewUpdateDTO) {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> ReviewNotFound.EXCEPTION);

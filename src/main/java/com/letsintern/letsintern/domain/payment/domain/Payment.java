@@ -4,8 +4,6 @@ import com.letsintern.letsintern.domain.payment.domain.coverter.FeeTypeConverter
 import com.letsintern.letsintern.domain.payment.dto.request.PaymentRequestDto;
 import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.user.domain.AccountType;
-import com.letsintern.letsintern.global.utils.EntityUpdateValueUtils;
-import com.letsintern.letsintern.global.utils.EnumValueUtils;
 import jakarta.persistence.*;
 import lombok.*;
 

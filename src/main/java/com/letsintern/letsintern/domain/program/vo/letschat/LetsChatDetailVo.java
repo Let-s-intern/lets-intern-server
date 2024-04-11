@@ -1,6 +1,5 @@
-package com.letsintern.letsintern.domain.program.vo.challenge;
+package com.letsintern.letsintern.domain.program.vo.letschat;
 
-import com.letsintern.letsintern.domain.program.domain.ChallengeTopic;
 import com.letsintern.letsintern.domain.program.domain.ProgramStatus;
 import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import com.letsintern.letsintern.domain.program.domain.ProgramWay;
@@ -11,15 +10,16 @@ import lombok.Builder;
 import java.time.LocalDateTime;
 
 @Builder
-public record ChallengeDetailVo(
-        Long challengeId,
+public record LetsChatDetailVo(
+        Long letsChatId,
         ProgramStatus status,
         String title,
         String contents,
         String notice,
         ProgramWay way,
         String location,
-        ChallengeTopic topic,
+        String zoomLink,
+        String zoomLinkPassword,
         LocalDateTime dueDate,
         LocalDateTime announcementDate,
         LocalDateTime startDate,

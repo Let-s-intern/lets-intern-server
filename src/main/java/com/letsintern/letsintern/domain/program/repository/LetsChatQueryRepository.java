@@ -1,10 +1,13 @@
 package com.letsintern.letsintern.domain.program.repository;
 
-import com.letsintern.letsintern.domain.program.vo.program.ProgramDetailVo;
+import com.letsintern.letsintern.domain.program.vo.letschat.LetsChatDetailVo;
+import com.letsintern.letsintern.domain.program.vo.letschat.LetsChatMentorInfoVo;
 
 import java.util.Optional;
 
 public interface LetsChatQueryRepository {
 
-    Optional<ProgramDetailVo> findLetsChatDetailVo(Long letsChatId);
+    Optional<LetsChatDetailVo> findLetsChatDetailVo(Long letsChatId);
+
+    Optional<LetsChatMentorInfoVo> findLetsChatMentorInfoVo(Long letsChatId);
 }

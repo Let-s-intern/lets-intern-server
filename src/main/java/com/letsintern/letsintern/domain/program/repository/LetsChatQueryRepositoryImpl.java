@@ -1,7 +1,9 @@
 package com.letsintern.letsintern.domain.program.repository;
 
-import com.letsintern.letsintern.domain.program.vo.program.ProgramDetailVo;
+import com.letsintern.letsintern.domain.program.vo.letschat.LetsChatDetailVo;
+import com.letsintern.letsintern.domain.program.vo.letschat.LetsChatMentorInfoVo;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -18,9 +20,9 @@ public class LetsChatQueryRepositoryImpl implements LetsChatQueryRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Optional<ProgramDetailVo> findLetsChatDetailVo(Long letsChatId) {
-        return Optional.empty(jpaQueryFactory
-                .select(Projections.constructor(ProgramDetailVo.class,
+    public Optional<LetsChatDetailVo> findLetsChatDetailVo(Long letsChatId) {
+        return Optional.ofNullable(jpaQueryFactory
+                .select(Projections.constructor(LetsChatDetailVo.class,
                         letsChat.id,
                         letsChat.status,
                         letsChat.title,
@@ -28,6 +30,8 @@ public class LetsChatQueryRepositoryImpl implements LetsChatQueryRepository {
                         letsChat.notice,
                         letsChat.way,
                         letsChat.location,
+                        letsChat.zoomLink,
+                        letsChat.zoomLinkPassword,
                         letsChat.dueDate,
                         letsChat.announcementDate,
                         letsChat.startDate,
@@ -43,7 +47,28 @@ public class LetsChatQueryRepositoryImpl implements LetsChatQueryRepository {
                         letsChat.programType))
                 .from(letsChat)
                 .leftJoin(letsChat._super, payment.program)
-                .where(letsChat.id.equals(letsChatId))
+                .where(eqLetsChatId(letsChatId))
                 .fetchOne());
+    }
+
+    @Override
+    public Optional<LetsChatMentorInfoVo> findLetsChatMentorInfoVo(Long letsChatId) {
+        return Optional.ofNullable(jpaQueryFactory
+                .select(Projections.constructor(LetsChatMentorInfoVo.class,
+                        letsChat.title,
+                        letsChat.way,
+                        letsChat.location,
+                        letsChat.zoomLink,
+                        letsChat.zoomLinkPassword,
+                        letsChat.startDate,
+                        letsChat.endDate,
+                        letsChat.applicationCount))
+                .from(letsChat)
+                .where(eqLetsChatId(letsChatId))
+                .fetchOne());
+    }
+
+    private BooleanExpression eqLetsChatId(Long letsChatId) {
+        return letsChatId != null ? letsChat.id.eq(letsChatId) : null;
     }
 }

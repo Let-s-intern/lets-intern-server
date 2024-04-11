@@ -212,6 +212,14 @@ public class ApplicationHelper {
             throw ApplicationUserBadRequestAccount.EXCEPTION;
     }
 
+    public List<String> getApplicationApplyMotiveList(Long programId) {
+        return applicationRepository.findAllApplyMotiveByProgramId(programId);
+    }
+
+    public List<String> getApplicationPreQuestionList(Long programId) {
+        return applicationRepository.findAllPreQuestionsByProgramId(programId);
+    }
+
     public void validateIsChallengeParticipant(UserRole userRole, Long programId, Long userId) {
         if (!userRole.equals(UserRole.ROLE_ADMIN)) {
             final Application application = applicationRepository.findByProgramIdAndUserId(programId, userId);
