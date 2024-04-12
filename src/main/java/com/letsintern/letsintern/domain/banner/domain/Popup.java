@@ -31,9 +31,9 @@ public class Popup extends Banner {
                 .build();
     }
 
-    public void updatePopup(BannerUpdateDTO bannerUpdateDTO, S3SavedFileVo s3SavedFileVo) {
+    public void updatePopup(BannerUpdateDTO bannerUpdateDTO, S3SavedFileVo s3SavedFileVo, Boolean isVisible) {
         if(bannerUpdateDTO != null)
-            super.updateBanner(bannerUpdateDTO);
+            super.updateBanner(bannerUpdateDTO, isVisible);
 
         if(s3SavedFileVo != null)
             this.imgUrl = updateValue(this.imgUrl, s3SavedFileVo.getS3Url());

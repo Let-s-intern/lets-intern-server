@@ -17,6 +17,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
+import java.util.Objects;
+
 @Service("POPUP")
 @Transactional
 @RequiredArgsConstructor
@@ -45,12 +48,20 @@ public class PopupServiceImpl implements BannerService {
     public void updateBanner(Long id, BannerUpdateDTO bannerUpdateDTO, MultipartFile file) {
         Popup popup = popupHelper.findPopupById(id);
         S3SavedFileVo s3SavedFileVo = s3Helper.changeImgFile(S3_POPUP_DIR, popup.getImgUrl(), file);
-        popup.updatePopup(bannerUpdateDTO, s3SavedFileVo);
+        Boolean isVisible = getIsVisibleForEndDateOrNull(bannerUpdateDTO.endDate());
+        popup.updatePopup(bannerUpdateDTO, s3SavedFileVo, isVisible);
     }
 
     @Override
     public void deleteBanner(Long bannerId) {
         final Popup popup = popupHelper.findPopupById(bannerId);
         popupHelper.deletePopup(popup);
+    }
+
+    private Boolean getIsVisibleForEndDateOrNull(LocalDateTime endDate) {
+        if (Objects.isNull(endDate))
+            return null;
+        else
+            return endDate.isAfter(LocalDateTime.now());
     }
 }

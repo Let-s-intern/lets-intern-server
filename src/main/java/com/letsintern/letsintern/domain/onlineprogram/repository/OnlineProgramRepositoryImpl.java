@@ -28,7 +28,9 @@ public class OnlineProgramRepositoryImpl implements OnlineProgramRepositoryCusto
                         onlineProgram.title,
                         onlineProgram.description,
                         onlineProgram.link,
-                        onlineProgram.thumbnailUrl))
+                        onlineProgram.thumbnailUrl,
+                        onlineProgram.isVisible,
+                        onlineProgram.createDate))
                 .from(onlineProgram)
                 .orderBy(onlineProgram.id.desc())
                 .offset(pageable.getOffset())
