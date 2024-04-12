@@ -1,5 +1,6 @@
 package com.letsintern.letsintern.domain.program.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.letsintern.letsintern.domain.application.domain.Application;
 import com.letsintern.letsintern.domain.payment.domain.Payment;
 import com.letsintern.letsintern.domain.program.domain.converter.ProgramStatusConverter;
@@ -66,6 +67,7 @@ public abstract class Program {
     @Convert(converter = ProgramTypeConverter.class)
     private ProgramType programType;
     @OneToMany(mappedBy = "program", orphanRemoval = true)
+    @JsonIgnore
     private List<Application> applicationList = new ArrayList<>();
     @OneToOne
     private Payment payment;

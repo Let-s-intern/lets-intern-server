@@ -1,5 +1,6 @@
 package com.letsintern.letsintern.domain.program.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.letsintern.letsintern.domain.program.dto.request.BaseProgramRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
@@ -11,6 +12,7 @@ import lombok.*;
 @DiscriminatorValue("bootcamp")
 @Entity
 public class Bootcamp extends Program{
+    @JsonIgnore
     private Integer dum;
 
     public Bootcamp(BaseProgramRequestDto requestDto, String zoomLink, String zoomPassword) {
