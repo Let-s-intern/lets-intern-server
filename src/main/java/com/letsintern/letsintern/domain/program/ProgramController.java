@@ -103,10 +103,10 @@ public class ProgramController {
 
     @Operation(summary = "프로그램 목록 (전체, 타입 - CHALLENGE, BOOTCAMP, LETS_CHAT)")
     @GetMapping
-    public ResponseEntity<ProgramListResponseDto<?>> getProgramThumbnailList(@RequestParam(name = "type") ProgramRequestType programRequestType,
+    public ResponseEntity<ProgramListResponseDto<?>> getProgramThumbnailList(@RequestParam(name = "type", required = false) ProgramRequestType programRequestType,
                                                                              @PageableDefault(size = 20) Pageable pageable) {
-        final ProgramListResponseDto<?> responseDto
-                = programServiceFactory.getProgramService(programRequestType).getProgramList(pageable);
+        final ProgramListResponseDto<?> responseDto = (programRequestType == null) ?
+                programSpecificService.getProgramList(pageable) : programServiceFactory.getProgramService(programRequestType).getProgramList(pageable);
         return ResponseEntity.ok(responseDto);
     }
 

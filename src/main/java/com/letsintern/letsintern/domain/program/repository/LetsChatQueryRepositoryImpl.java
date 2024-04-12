@@ -95,7 +95,7 @@ public class LetsChatQueryRepositoryImpl implements LetsChatQueryRepository {
                 ))
                 .from(letsChat)
                 .where(
-                        eqProgramType(ProgramType.BOOTCAMP),
+                        eqProgramType(ProgramType.LETS_CHAT),
                         eqIsVisible(Boolean.TRUE)
                 )
                 .orderBy(letsChat.id.desc())
@@ -106,7 +106,7 @@ public class LetsChatQueryRepositoryImpl implements LetsChatQueryRepository {
         JPAQuery<Long> count = jpaQueryFactory.select(letsChat.count())
                 .from(letsChat)
                 .where(
-                        eqProgramType(ProgramType.BOOTCAMP),
+                        eqProgramType(ProgramType.LETS_CHAT),
                         eqIsVisible(Boolean.TRUE)
                 );
 
