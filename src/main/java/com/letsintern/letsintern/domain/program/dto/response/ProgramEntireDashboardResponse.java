@@ -13,7 +13,6 @@ import java.util.List;
 @Getter
 public class ProgramEntireDashboardResponse {
     private List<ApplicationEntireDashboardVo> dashboardList;
-
     private List<ApplicationWishJob> wishJobList;
     private PageInfo pageInfo;
 
