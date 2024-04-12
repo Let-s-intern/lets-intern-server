@@ -15,6 +15,11 @@ spring:
         format_sql: true
         default_batch_fetch_size: 1000
 
+  servlet:
+    multipart:
+      maxFileSize: 100MB # ?? ??? ?? ??
+      maxRequestSize: 100MB
+
   datasource:
     - secret
     - dev
