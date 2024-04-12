@@ -45,13 +45,10 @@ public abstract class Program {
     @Column(nullable = false)
     private LocalDateTime endDate;
     @Column(nullable = false)
-    @Builder.Default
     private Integer applicationCount = 0;
     @Column(nullable = false)
-    @Builder.Default
     private Integer headcount = 0;
     @Column(nullable = false)
-    @Builder.Default
     private Boolean isVisible = false;
     @Column(nullable = false)
     @Convert(converter = ProgramWayConverter.class)
@@ -64,13 +61,11 @@ public abstract class Program {
     private String zoomLinkPassword;
     @Column(length = 10, nullable = false)
     @Convert(converter = ProgramStatusConverter.class)
-    @Builder.Default
     private ProgramStatus status = ProgramStatus.OPEN;
     @Column(length = 20, nullable = false)
     @Convert(converter = ProgramTypeConverter.class)
     private ProgramType programType;
     @OneToMany(mappedBy = "program", orphanRemoval = true)
-    @Builder.Default
     private List<Application> applicationList = new ArrayList<>();
     @OneToOne
     private Payment payment;

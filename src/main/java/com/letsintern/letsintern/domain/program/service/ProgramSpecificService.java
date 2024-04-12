@@ -13,10 +13,7 @@ import com.letsintern.letsintern.domain.mission.vo.MissionDashboardVo;
 import com.letsintern.letsintern.domain.mission.vo.MissionMyDashboardVo;
 import com.letsintern.letsintern.domain.notice.domain.Notice;
 import com.letsintern.letsintern.domain.notice.helper.NoticeHelper;
-import com.letsintern.letsintern.domain.program.domain.Challenge;
-import com.letsintern.letsintern.domain.program.domain.MailType;
-import com.letsintern.letsintern.domain.program.domain.Program;
-import com.letsintern.letsintern.domain.program.domain.ProgramStatus;
+import com.letsintern.letsintern.domain.program.domain.*;
 import com.letsintern.letsintern.domain.program.dto.response.*;
 import com.letsintern.letsintern.domain.program.helper.ProgramHelper;
 import com.letsintern.letsintern.domain.program.mapper.ProgramMapper;
@@ -115,5 +112,10 @@ public class ProgramSpecificService {
             return null;
         else
             return attendanceHelper.getYesterdayHeadCount(program.getId(), dailyMission.getTh() - 1, AttendanceStatus.PRESENT, AttendanceResult.PASS);
+    }
+
+    public ProgramListResponseDto<?> getProgramAdminList(ProgramRequestType type, Integer th, Pageable pageable) {
+        Page<Program> programPage = programHelper.findAllProgramByTypeAndTh(type, th, pageable);
+        return programMapper.toProgramListResponseDto(programPage);
     }
 }

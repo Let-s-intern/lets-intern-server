@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class BannerServiceFactoryConfig {
     @Bean
-    public ServiceLocatorFactoryBean serviceLocatorFactoryBean() {
+    public ServiceLocatorFactoryBean bannerServiceLocatorFactoryBean() {
         ServiceLocatorFactoryBean factoryBean = new ServiceLocatorFactoryBean();
         factoryBean.setServiceLocatorInterface(BannerServiceFactory.class);
         return factoryBean;

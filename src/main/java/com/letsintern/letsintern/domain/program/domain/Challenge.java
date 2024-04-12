@@ -33,10 +33,10 @@ public class Challenge extends Program {
     private String openKakaoLink;
     @Column(length = 10)
     private String openKakaoPassword;
-    @OneToMany(mappedBy = "challenge", orphanRemoval = true)
+    @OneToMany(mappedBy = "program", orphanRemoval = true)
     @Builder.Default
     private List<Mission> missionList = new ArrayList<>();
-    @OneToMany(mappedBy = "challenge", orphanRemoval = true)
+    @OneToMany(mappedBy = "program", orphanRemoval = true)
     @Builder.Default
     private List<Notice> noticeList = new ArrayList<>();
 

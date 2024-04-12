@@ -3,6 +3,7 @@ package com.letsintern.letsintern.domain.program;
 import com.letsintern.letsintern.domain.application.domain.ApplicationWishJob;
 import com.letsintern.letsintern.domain.program.domain.MailType;
 import com.letsintern.letsintern.domain.program.domain.ProgramRequestType;
+import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import com.letsintern.letsintern.domain.program.dto.request.BaseProgramRequestDto;
 import com.letsintern.letsintern.domain.program.dto.request.LetsChatMentorPasswordDto;
 import com.letsintern.letsintern.domain.program.dto.response.*;
@@ -155,11 +156,11 @@ public class ProgramController {
         return programSpecificService.getProgramEntireDashboard(programId, applicationWishJob, principalDetails, pageable);
     }
 
-    @Operation(summary = "어드민 프로그램 목록 (전체, 타입, 타입&기수)")
+    @Operation(summary = "어드민 프로그램 목록 (전체, 타입, 타입 & 기수)")
     @GetMapping("/admin")
-    public ResponseEntity<ProgramListResponseDto<?>> getAdminProgramList(@RequestParam(required = false) String type,
+    public ResponseEntity<ProgramListResponseDto<?>> getAdminProgramList(@RequestParam(required = false) ProgramRequestType type,
                                                                          @RequestParam(required = false) Integer th,
                                                                          @PageableDefault(size = 20) Pageable pageable) {
-        return programSpecificService.getProgramAdminList(type, th, pageable);
+        return ResponseEntity.ok(programSpecificService.getProgramAdminList(type, th, pageable));
     }
 }
