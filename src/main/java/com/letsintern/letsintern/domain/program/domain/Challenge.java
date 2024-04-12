@@ -49,6 +49,7 @@ public class Challenge extends Program {
         this.challengeType = EnumValueUtils.toEntityCode(ChallengeType.class, requestDto.challengeInfo().challengeTopic());
         this.openKakaoLink = requestDto.challengeInfo().openKakaoLink();
         this.openKakaoPassword = requestDto.challengeInfo().openKakaoPassword();
+        this.finalHeadCount = 0;
     }
 
     public void updateChallenge(BaseProgramRequestDto requestDto, ProgramStatus programStatus, String fqaList) {

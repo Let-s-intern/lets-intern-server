@@ -69,7 +69,7 @@ public abstract class Program {
     @OneToMany(mappedBy = "program", orphanRemoval = true)
     @JsonIgnore
     private List<Application> applicationList = new ArrayList<>();
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     private Payment payment;
 
     public Program(ProgramRequestDto requestDto, String zoomLink, String zoomLinkPassword) {
