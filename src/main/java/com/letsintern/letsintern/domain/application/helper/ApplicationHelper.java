@@ -6,7 +6,6 @@ import com.letsintern.letsintern.domain.application.domain.ApplicationWishJob;
 import com.letsintern.letsintern.domain.application.dto.request.ApplicationChallengeUpdateDTO;
 import com.letsintern.letsintern.domain.application.dto.request.ApplicationCreateDTO;
 import com.letsintern.letsintern.domain.application.dto.request.ApplicationUpdateDTO;
-import com.letsintern.letsintern.domain.application.dto.response.ApplicationCreateResponse;
 import com.letsintern.letsintern.domain.application.exception.*;
 import com.letsintern.letsintern.domain.application.mapper.ApplicationMapper;
 import com.letsintern.letsintern.domain.application.repository.ApplicationRepository;
@@ -14,10 +13,14 @@ import com.letsintern.letsintern.domain.application.vo.ApplicationAdminVo;
 import com.letsintern.letsintern.domain.application.vo.ApplicationChallengeAdminVo;
 import com.letsintern.letsintern.domain.application.vo.ApplicationEntireDashboardVo;
 import com.letsintern.letsintern.domain.application.vo.ApplicationVo;
-import com.letsintern.letsintern.domain.program.domain.*;
-import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
-import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
+import com.letsintern.letsintern.domain.payment.domain.FeeType;
+import com.letsintern.letsintern.domain.program.domain.MailType;
+import com.letsintern.letsintern.domain.program.domain.Program;
+import com.letsintern.letsintern.domain.program.domain.ProgramStatus;
+import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import com.letsintern.letsintern.domain.program.vo.ProgramEmailVo;
+import com.letsintern.letsintern.domain.program.vo.program.ProgramDetailVo;
+import com.letsintern.letsintern.domain.program.vo.program.UserProgramVo;
 import com.letsintern.letsintern.domain.user.domain.User;
 import com.letsintern.letsintern.domain.user.domain.UserRole;
 import com.letsintern.letsintern.global.common.util.EmailUtils;
@@ -37,9 +40,7 @@ import java.util.Objects;
 public class ApplicationHelper {
     private final ApplicationRepository applicationRepository;
     private final ApplicationMapper applicationMapper;
-    private final ProgramRepository programRepository;
     private final EmailUtils emailUtils;
-
 
     /* 회원 - 기존 신청 내역 확인 */
     public boolean checkUserApplicationExist(Long programId, Long userId) {
@@ -53,34 +54,6 @@ public class ApplicationHelper {
         return application != null;
     }
 
-    /* 비회원 - 지원서 생성 */
-    public ApplicationCreateResponse createGuestApplication(Long programId, ApplicationCreateDTO applicationCreateDTO) {
-        /* 비회원 신청인 경우 name, phoneNum, email 입력 여부 확인 */
-        if (applicationCreateDTO.getGuestName() == null || applicationCreateDTO.getGuestPhoneNum() == null || applicationCreateDTO.getGuestEmail() == null) {
-            throw ApplicationGuestBadRequest.EXCEPTION;
-        }
-
-        Program program = programRepository.findById(programId).orElseThrow(() -> ProgramNotFound.EXCEPTION);
-        /* 보증금 프로그램인데 계좌 추가 정보 없는 경우 */
-        if (program.getFeeType().equals(ProgramFeeType.REFUND)) {
-            if (applicationCreateDTO.getAccountType() == null || applicationCreateDTO.getAccountNumber() == null) {
-                throw ApplicationUserBadRequestAccount.EXCEPTION;
-            }
-        }
-
-        /* 기존 신청 내역 확인 */
-        if (checkGuestApplicationExist(programId, applicationCreateDTO.getGuestEmail()))
-            throw DuplicateApplication.EXCEPTION;
-
-        Integer totalFee = calculateTotalFee(program, 0);
-        Application newGuestApplication = applicationMapper.toEntity(programId, applicationCreateDTO, null, totalFee);
-        Application savedApplication = applicationRepository.save(newGuestApplication);
-
-        program.setApplicationCount(program.getApplicationCount() + 1);
-
-        return applicationMapper.toApplicationCreateResponse(savedApplication);
-    }
-
     /* 프로그램 1개의 전체 지원서 목록 */
     public Page<ApplicationAdminVo> getApplicationListOfProgramId(Long programId, Pageable pageable) {
         PageRequest pageRequest = makePageRequest(pageable);
@@ -92,11 +65,15 @@ public class ApplicationHelper {
         return applicationRepository.findAllByProgramIdAndIsApproved(programId, isApproved, pageable);
     }
 
+    public Page<UserProgramVo> findAllProgramByUserId(Long userId, Pageable pageable) {
+        return applicationRepository.findAllProgramByUserId(userId, pageable);
+    }
+
     /* 프로그램 1개의 안내 메일 전송 대상자 메일 주소 목록 */
     public List<String> getApplicationEmailListOfProgramIdAndMailType(Program program, MailType mailType) {
         switch (mailType) {
             case APPROVED -> {
-                switch (program.getType()) {
+                switch (program.getProgramType()) {
                     case CHALLENGE_FULL, CHALLENGE_HALF -> {
                         return applicationRepository.findAllEmailByIsApproved(program.getId(), true);
                     }
@@ -141,7 +118,7 @@ public class ApplicationHelper {
                 application.setStatus(ApplicationStatus.IN_PROGRESS);
 
                 // 렛츠챗 참여 확정 메일 전송
-                if (application.getProgram().getType().equals(ProgramType.LETS_CHAT) && application.getIsApproved() && application.getFeeIsConfirmed()) {
+                if (application.getProgram().getProgramType().equals(ProgramType.LETS_CHAT) && application.getIsApproved() && application.getFeeIsConfirmed()) {
                     String emailAddress = (application.getUser() == null) ? application.getEmail() : application.getUser().getEmail();
                     emailUtils.sendApplicationApprovedEmail(emailAddress, ProgramEmailVo.from(application.getProgram()));
                 }
@@ -177,7 +154,7 @@ public class ApplicationHelper {
                 });
 
         if (application.getProgram().getStatus().equals(ProgramStatus.OPEN)) {
-            application.getProgram().setApplicationCount(application.getProgram().getApplicationCount() - 1);
+            application.getProgram().decreaseProgramApplicationCount();
             applicationRepository.delete(application);
         } else {
             throw ApplicationCannotDeleted.EXCEPTION;
@@ -215,8 +192,14 @@ public class ApplicationHelper {
         return applicationRepository.getApplicationChallengeAdminList(programId, pageable);
     }
 
-    public Integer calculateTotalFee(Program program, Integer couponValue) {
-        return (program.getFeeCharge() + program.getFeeCharge()) - program.getDiscountValue() - couponValue;
+    public Integer calculateTotalFee(ProgramDetailVo programDetailVo, Integer couponValue) {
+        return (programDetailVo.feeCharge() + programDetailVo.feeCharge()) - programDetailVo.discountValue() - couponValue;
+    }
+
+    public void validateGuestApplicationInput(ProgramDetailVo programDetailVo, ApplicationCreateDTO applicationCreateDTO) {
+        validateGuestInfo(applicationCreateDTO);
+        validateDuplicateGuestApplication(programDetailVo.programId(), applicationCreateDTO);
+        validateRefundTypeInput(programDetailVo, applicationCreateDTO);
     }
 
     public void validateDuplicateApplication(Long programId, User user) {
@@ -234,10 +217,53 @@ public class ApplicationHelper {
             throw ApplicationUserBadRequestAccount.EXCEPTION;
     }
 
+    public List<String> getApplicationApplyMotiveList(Long programId) {
+        return applicationRepository.findAllApplyMotiveByProgramId(programId);
+    }
+
+    public List<String> getApplicationPreQuestionList(Long programId) {
+        return applicationRepository.findAllPreQuestionsByProgramId(programId);
+    }
+
+    public List<String> getApplicationEmailListByPaymentFeeType(FeeType feeType, Long programId) {
+        List<String> emailList = null;
+        switch (feeType) {
+            case FREE -> emailList = applicationRepository.findAllEmailByIsApproved(programId, true);
+            case CHARGE, REFUND -> emailList = applicationRepository.findAllEmailByIsApprovedAndFeeIsConfirmed(programId, true, true);
+        }
+        return emailList;
+    }
+
     public void validateIsChallengeParticipant(UserRole userRole, Long programId, Long userId) {
-        if(!userRole.equals(UserRole.ROLE_ADMIN)) {
+        if (!userRole.equals(UserRole.ROLE_ADMIN)) {
             final Application application = applicationRepository.findByProgramIdAndUserId(programId, userId);
             if (application == null) throw ApplicationNotFound.EXCEPTION;
         }
+    }
+
+    /* 비회원 신청인 경우 name, phoneNum, email 입력 여부 확인 */
+    private void validateGuestInfo(ApplicationCreateDTO applicationCreateDTO) {
+        if (Objects.isNull(applicationCreateDTO.getGuestName())
+                || Objects.isNull(applicationCreateDTO.getGuestPhoneNum())
+                || Objects.isNull(applicationCreateDTO.getGuestEmail())) {
+            throw ApplicationGuestBadRequest.EXCEPTION;
+        }
+    }
+
+    /* 기존 신청 내역 확인 */
+    private void validateDuplicateGuestApplication(Long programId, ApplicationCreateDTO applicationCreateDTO) {
+        if (checkGuestApplicationExist(programId, applicationCreateDTO.getGuestEmail()))
+            throw DuplicateApplication.EXCEPTION;
+    }
+
+    /* 보증금 프로그램인데 계좌 추가 정보 없는 경우 */
+    private void validateRefundTypeInput(ProgramDetailVo programDetailVo, ApplicationCreateDTO applicationCreateDTO) {
+        if (!programDetailVo.feeType().equals(FeeType.REFUND)) return;
+        if (Objects.isNull(applicationCreateDTO.getAccountType()) || Objects.isNull(applicationCreateDTO.getAccountNumber()))
+            throw ApplicationUserBadRequestAccount.EXCEPTION;
+    }
+
+    public Integer countAllByProgramIdAndStatus(Long programId, ApplicationStatus status) {
+        return applicationRepository.countAllByProgramIdAndStatus(programId, status);
     }
 }

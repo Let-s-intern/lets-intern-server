@@ -2,69 +2,68 @@ package com.letsintern.letsintern.domain.program.mapper;
 
 import com.letsintern.letsintern.domain.application.domain.ApplicationWishJob;
 import com.letsintern.letsintern.domain.application.vo.ApplicationEntireDashboardVo;
+import com.letsintern.letsintern.domain.faq.vo.FaqVo;
 import com.letsintern.letsintern.domain.mission.vo.MissionDashboardListVo;
 import com.letsintern.letsintern.domain.mission.vo.MissionDashboardVo;
 import com.letsintern.letsintern.domain.mission.vo.MissionMyDashboardVo;
 import com.letsintern.letsintern.domain.notice.domain.Notice;
 import com.letsintern.letsintern.domain.program.domain.Program;
-import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.response.*;
-import com.letsintern.letsintern.domain.program.vo.ProgramThumbnailVo;
-import com.letsintern.letsintern.domain.program.vo.UserProgramVo;
+import com.letsintern.letsintern.domain.review.vo.ReviewVo;
+import com.letsintern.letsintern.domain.user.domain.User;
+import com.letsintern.letsintern.global.common.dto.PageInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
 @RequiredArgsConstructor
 public class ProgramMapper {
 
-    public Program toEntity(ProgramCreateRequestDTO programCreateRequestDTO, String mentorPassword, ZoomMeetingCreateResponse zoomMeetingCreateResponse) {
-        return Program.of(programCreateRequestDTO, mentorPassword, zoomMeetingCreateResponse);
+    public <T> ProgramListResponseDto<?> toProgramListResponseDto(Page<T> programThumbnailVos) {
+        PageInfo pageInfo = PageInfo.of(programThumbnailVos);
+        return ProgramListResponseDto.of(programThumbnailVos.getContent(), pageInfo);
     }
 
-    public ProgramAdminEmailResponse toProgramAdminEmailResponse(List<String> emailAddressList, String emailContents) {
-        return ProgramAdminEmailResponse.of(emailAddressList, emailContents);
+    public <T> ProgramDetailResponseDto<?> toProgramDetailResponseDto(T programDetailVo,
+                                                                      boolean existApplication,
+                                                                      List<FaqVo> faqList,
+                                                                      List<ReviewVo> reviewList,
+                                                                      List<ApplicationWishJob> wishJobList) {
+        return ProgramDetailResponseDto.of(programDetailVo, existApplication, faqList, reviewList, wishJobList);
     }
 
-    public ProgramIdResponseDTO toProgramIdResponseDTO(Long programId) {
-        return ProgramIdResponseDTO.from(programId);
+    public <T> BaseProgramResponseDto<?> toBaseProgramResponseDto(T program) {
+        return BaseProgramResponseDto.of(program);
     }
 
-    public ProgramMentorPasswordResponse toProgramMentorPasswordResponse(String mentorPassword) {
-        return ProgramMentorPasswordResponse.from(mentorPassword);
+    public ProgramCountResponseDto toProgramCountResponseDto(Long count) {
+        return ProgramCountResponseDto.of(count);
     }
 
-    public LetsChatPriorSessionNoticeResponse toLetsChatPriorSessionNoticeResponse(Program program, List<String> applyMotiveList, List<String> preQuestionList) {
-        return LetsChatPriorSessionNoticeResponse.of(program, applyMotiveList, preQuestionList);
+    public ProgramAdminEmailResponseDto toProgramAdminEmailResponse(List<String> emailAddressList, String emailContents) {
+        return ProgramAdminEmailResponseDto.of(emailAddressList, emailContents);
     }
 
-    public LetsChatAfterSessionNoticeResponse toLetsChatAfterSessionNoticeResponse(String title, List<String> reviewList) {
-        return LetsChatAfterSessionNoticeResponse.of(title, reviewList);
+    public ProgramDashboardResponseDto toProgramDashboardResponse(User user,
+                                                                  MissionDashboardVo dailyMission,
+                                                                  Page<Notice> noticeList,
+                                                                  List<MissionDashboardListVo> missionList,
+                                                                  Program program,
+                                                                  Integer currentRefund,
+                                                                  Integer yesterdayHeadCount) {
+        return ProgramDashboardResponseDto.of(user, dailyMission, noticeList, missionList, program, currentRefund, yesterdayHeadCount);
     }
 
-    public ProgramListDTO toProgramListDTO(Page<ProgramThumbnailVo> programList) {
-        return ProgramListDTO.from(programList);
+    public ProgramMyDashboardResponseDto toProgramMyDashboardResponse(MissionMyDashboardVo dailyMission, List<MissionDashboardListVo> missionList, Program program) {
+        boolean isDone = program.getEndDate().isBefore(LocalDateTime.now());
+        return ProgramMyDashboardResponseDto.of(dailyMission, missionList, isDone);
     }
 
-    public UserProgramVoResponse toUserProgramVoResponse(Page<UserProgramVo> userProgramList) {
-        return UserProgramVoResponse.from(userProgramList);
+    public ProgramEntireDashboardResponseDto toProgramEntireDashboardResponse(Page<ApplicationEntireDashboardVo> dashboardList, List<ApplicationWishJob> wishJobList) {
+        return ProgramEntireDashboardResponseDto.of(dashboardList, wishJobList);
     }
-
-    public ProgramDashboardResponse toProgramDashboardResponse(String userName, MissionDashboardVo dailyMission, Page<Notice> noticeList, List<MissionDashboardListVo> missionList,
-                                                               Integer totalRefund, Integer currentRefund, Integer finalHeadCount, Integer yesterdayHeadCount, Boolean isDone) {
-        return ProgramDashboardResponse.of(userName, dailyMission, noticeList, missionList, totalRefund, currentRefund, finalHeadCount, yesterdayHeadCount, isDone);
-    }
-
-    public ProgramMyDashboardResponse toProgramMyDashboardResponse(MissionMyDashboardVo dailyMission, List<MissionDashboardListVo> missionList, Boolean isDone) {
-        return ProgramMyDashboardResponse.of(dailyMission, missionList, isDone);
-    }
-
-    public ProgramEntireDashboardResponse toProgramEntireDashboardResponse(Page<ApplicationEntireDashboardVo> dashboardList, List<ApplicationWishJob> wishJobList) {
-        return ProgramEntireDashboardResponse.of(dashboardList, wishJobList);
-    }
-
-
 }

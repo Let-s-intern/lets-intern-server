@@ -2,270 +2,130 @@ package com.letsintern.letsintern.domain.program.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.letsintern.letsintern.domain.application.domain.Application;
-import com.letsintern.letsintern.domain.mission.domain.Mission;
-import com.letsintern.letsintern.domain.notice.domain.Notice;
-import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequestDTO;
-import com.letsintern.letsintern.domain.program.dto.request.ProgramUpdateRequestDTO;
-import com.letsintern.letsintern.domain.program.dto.response.ZoomMeetingCreateResponse;
-import com.letsintern.letsintern.domain.user.domain.AccountType;
+import com.letsintern.letsintern.domain.payment.domain.Payment;
+import com.letsintern.letsintern.domain.program.domain.converter.ProgramStatusConverter;
+import com.letsintern.letsintern.domain.program.domain.converter.ProgramTypeConverter;
+import com.letsintern.letsintern.domain.program.domain.converter.ProgramWayConverter;
+import com.letsintern.letsintern.domain.program.dto.request.ProgramRequestDto;
 import com.letsintern.letsintern.global.common.util.StringUtils;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.letsintern.letsintern.global.utils.EntityUpdateValueUtils.updateValue;
+import static com.letsintern.letsintern.global.utils.EnumValueUtils.toEntityCode;
 
-@Entity
-@Getter
-@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Program {
-
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Getter
+@Table(name = "program")
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(discriminatorType = DiscriminatorType.STRING)
+public abstract class Program {
     @Id
     @Column(name = "program_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @NotNull
-    @Column(length = 20)
-    @Enumerated(EnumType.STRING)
-    private ProgramType type;
-
-    @NotNull
-    private Integer th;
-
-    @NotNull
-    @Column(length = 50)
+    @Column(length = 50, nullable = false)
     private String title;
-
-    @NotNull
-    private Integer headcount;
-
-    @NotNull
-    private Integer applicationCount = 0;
-
-    @NotNull
-    private Integer finalHeadCount = 0;
-
-    @NotNull
-    private LocalDateTime dueDate;
-
-    @NotNull
-    private LocalDateTime announcementDate;
-
-    @NotNull
-    private LocalDateTime startDate;
-
-    @NotNull
-    private LocalDateTime endDate;
-
-    @NotNull
-    @Column(length = 300)
+    @Column(length = 300, nullable = false)
     private String contents;
-
-    @NotNull
-    private ProgramWay way;
-
-    @Nullable
-    private String location;
-
-    @Nullable
-    private String link;
-
-    @Nullable
-    @Column(length = 8)
-    private String linkPassword;
-
-    @NotNull
-    @Column(length = 300)
+    @Column(length = 300, nullable = false)
     private String notice;
-
-    @NotNull
-    private String faqListStr;
-
-    @NotNull
-    @Column(length = 10)
-    @Enumerated(EnumType.STRING)
-    private ProgramStatus status = ProgramStatus.OPEN;
-
-    @Nullable
-    @Column(length = 10)
-    @Enumerated(EnumType.STRING)
-    private MailStatus mailStatus;
-
-    @NotNull
+    @Column(nullable = false)
+    private Integer th;
+    @Column(nullable = false)
+    private LocalDateTime announcementDate;
+    @Column(nullable = false)
+    private LocalDateTime dueDate;
+    @Column(nullable = false)
+    private LocalDateTime startDate;
+    @Column(nullable = false)
+    private LocalDateTime endDate;
+    @Column(nullable = false)
+    private Integer applicationCount = 0;
+    @Column(nullable = false)
+    private Integer headcount = 0;
+    @Column(nullable = false)
     private Boolean isVisible = false;
-
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    private ProgramFeeType feeType;
-
-    @NotNull
-    private Integer feeRefund = 0;
-
-    @NotNull
-    private Integer feeCharge = 0;
-
-    @NotNull
-    private Integer discountValue = 0;
-
-    @Nullable
-    private LocalDateTime feeDueDate;
-
-    @Nullable
-    @Enumerated(EnumType.STRING)
-    private AccountType accountType;
-
-    @Nullable
-    private String accountNumber;
-
-    /* Lets Chat */
-    @Nullable
-    private String mentorPassword;
-
-    /* Challenge */
-    @Nullable
-    @Enumerated(EnumType.STRING)
-    private ProgramTopic topic;
-
-    @Nullable
-    private String openKakaoLink;
-
-    @Nullable
-    @Column(length = 10)
-    private String openKakaoPassword;
-
-    @JsonIgnore
+    @Column(nullable = false)
+    @Convert(converter = ProgramWayConverter.class)
+    private ProgramWay way;
+    @Column(nullable = false)
+    private String faqListStr;
+    private String location;
+    private String zoomLink;
+    @Column(length = 8)
+    private String zoomLinkPassword;
+    @Column(length = 10, nullable = false)
+    @Convert(converter = ProgramStatusConverter.class)
+    private ProgramStatus status = ProgramStatus.OPEN;
+    @Column(length = 20, nullable = false)
+    @Convert(converter = ProgramTypeConverter.class)
+    private ProgramType programType;
     @OneToMany(mappedBy = "program", orphanRemoval = true)
-    private List<Application> applicationList;
-
     @JsonIgnore
-    @OneToMany(mappedBy = "program", orphanRemoval = true)
-    private List<Mission> missionList;
+    private List<Application> applicationList = new ArrayList<>();
+    @OneToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "payment_id", referencedColumnName = "payment_id")
+    private Payment payment;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "program", orphanRemoval = true)
-    private List<Notice> noticeList;
-
-    @Builder
-    private Program(ProgramType type, Integer th, String title, Integer headcount,
-                    LocalDateTime dueDate, LocalDateTime announcementDate, LocalDateTime startDate, LocalDateTime endDate,
-                    String contents, ProgramWay way, String location, String notice, List<Long> faqIdList,
-                    ProgramFeeType feeType, Integer feeRefund, Integer feeCharge, Integer discountValue, LocalDateTime feeDueDate, AccountType accountType, String accountNumber, String mentorPassword,
-                    ProgramTopic topic, String openKakaoLink, String openKakaoPassword, ZoomMeetingCreateResponse zoomMeetingCreateResponse) {
-        this.type = type;
-        this.th = th;
-        this.title = title;
-        this.headcount = headcount;
-        this.dueDate = dueDate;
-        this.announcementDate = announcementDate;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.contents = contents;
-        this.way = way;
-        this.location = location;
-        this.notice = notice;
-        this.faqListStr = StringUtils.listToString(faqIdList);
-        this.feeType = feeType;
-
-        // 이용료 or 보증금 프로그램
-        if (feeType.equals(ProgramFeeType.CHARGE) || feeType.equals(ProgramFeeType.REFUND)) {
-            if (feeType.equals(ProgramFeeType.REFUND)) this.feeRefund = feeRefund;
-            this.feeCharge = feeCharge;
-            this.feeDueDate = feeDueDate;
-            this.discountValue = discountValue;
-            this.accountType = accountType;
-            this.accountNumber = accountNumber;
-        }
-
-        // Zoom Link
-        if ((way.equals(ProgramWay.ONLINE) || way.equals(ProgramWay.ALL)) && zoomMeetingCreateResponse != null) {
-            this.link = zoomMeetingCreateResponse.getJoin_url();
-            this.linkPassword = zoomMeetingCreateResponse.getPassword();
-        }
-
-        // CHALLENGE
-        if (type.equals(ProgramType.CHALLENGE_HALF) || type.equals(ProgramType.CHALLENGE_FULL)) {
-            this.topic = topic;
-            this.openKakaoLink = openKakaoLink;
-            this.openKakaoPassword = openKakaoPassword;
-        }
-
-        // LETS_CHAT
-        if (type.equals(ProgramType.LETS_CHAT)) {
-            this.mentorPassword = mentorPassword;
-            this.mailStatus = MailStatus.YET;
-        }
+    public Program(ProgramRequestDto requestDto, String zoomLink, String zoomLinkPassword) {
+        this.title = requestDto.title();
+        this.contents = requestDto.contents();
+        this.notice = requestDto.notice();
+        this.th = requestDto.th();
+        this.announcementDate = requestDto.announcementDate();
+        this.dueDate = requestDto.dueDate();
+        this.startDate = requestDto.startDate();
+        this.endDate = requestDto.endDate();
+        this.headcount = requestDto.headcount();
+        this.way = toEntityCode(ProgramWay.class, requestDto.way());
+        this.faqListStr = StringUtils.listToString(requestDto.faqIdList());
+        this.location = requestDto.location();
+        this.isVisible = requestDto.isVisible();
+        this.programType = toEntityCode(ProgramType.class, requestDto.programType());
+        this.zoomLink = zoomLink;
+        this.zoomLinkPassword = zoomLinkPassword;
     }
 
-    public static Program of(ProgramCreateRequestDTO programCreateRequestDTO, String mentorPassword, ZoomMeetingCreateResponse zoomMeetingCreateResponse) {
-        return Program.builder()
-                .type(programCreateRequestDTO.getType())
-                .th(programCreateRequestDTO.getTh())
-                .title(programCreateRequestDTO.getTitle())
-                .headcount(programCreateRequestDTO.getHeadcount())
-                .dueDate(programCreateRequestDTO.getDueDate())
-                .announcementDate(programCreateRequestDTO.getAnnouncementDate())
-                .startDate(programCreateRequestDTO.getStartDate())
-                .endDate(programCreateRequestDTO.getEndDate())
-                .contents(programCreateRequestDTO.getContents())
-                .way(programCreateRequestDTO.getWay())
-                .location(programCreateRequestDTO.getLocation())
-                .notice(programCreateRequestDTO.getNotice())
-                .faqIdList(programCreateRequestDTO.getFaqIdList())
-                .feeType(programCreateRequestDTO.getFeeType())
-                .feeRefund(programCreateRequestDTO.getFeeRefund())
-                .feeCharge(programCreateRequestDTO.getFeeCharge())
-                .discountValue(programCreateRequestDTO.getDiscountValue())
-                .feeDueDate(programCreateRequestDTO.getFeeDueDate())
-                .accountType(programCreateRequestDTO.getAccountType())
-                .accountNumber(programCreateRequestDTO.getAccountNumber())
-                .mentorPassword(mentorPassword)
-                .topic(programCreateRequestDTO.getTopic())
-                .openKakaoLink(programCreateRequestDTO.getOpenKakaoLink())
-                .openKakaoPassword(programCreateRequestDTO.getOpenKakaoPassword())
-                .zoomMeetingCreateResponse(zoomMeetingCreateResponse)
-                .build();
+    public void addPayment(Payment payment) {
+        this.payment = payment;
     }
 
     public void increaseProgramApplicationCount() {
         this.applicationCount++;
     }
 
-    public void updateProgramInfo(ProgramUpdateRequestDTO programUpdateRequestDTO,
-                                  ProgramStatus programStatus,
-                                  String stringFaqList) {
-        this.type = updateValue(this.type, programUpdateRequestDTO.getType());
-        this.th = updateValue(this.th, programUpdateRequestDTO.getTh());
-        this.title = updateValue(this.title, programUpdateRequestDTO.getTitle());
-        this.headcount = updateValue(this.headcount, programUpdateRequestDTO.getHeadcount());
-        this.dueDate = updateValue(this.dueDate, programUpdateRequestDTO.getDueDate());
-        this.announcementDate = updateValue(this.announcementDate, programUpdateRequestDTO.getAnnouncementDate());
-        this.startDate = updateValue(this.startDate, programUpdateRequestDTO.getStartDate());
-        this.endDate = updateValue(this.endDate, programUpdateRequestDTO.getEndDate());
-        this.contents = updateValue(this.contents, programUpdateRequestDTO.getContents());
-        this.way = updateValue(this.way, programUpdateRequestDTO.getWay());
-        this.location = updateValue(this.location, programUpdateRequestDTO.getLocation());
-        this.notice = updateValue(this.notice, programUpdateRequestDTO.getNotice());
-        this.status = updateValue(this.status, programStatus);
-        this.isVisible = updateValue(this.isVisible, programUpdateRequestDTO.getIsVisible());
-        this.faqListStr = updateValue(this.faqListStr, stringFaqList);
-        this.link = updateValue(this.link, programUpdateRequestDTO.getLink());
-        this.linkPassword = updateValue(this.linkPassword, programUpdateRequestDTO.getLinkPassword());
-        this.feeType = updateValue(this.feeType, programUpdateRequestDTO.getFeeType());
-        this.feeRefund = updateValue(this.feeRefund, programUpdateRequestDTO.getFeeRefund());
-        this.feeCharge = updateValue(this.feeCharge, programUpdateRequestDTO.getFeeCharge());
-        this.discountValue = updateValue(this.discountValue, programUpdateRequestDTO.getDiscountValue());
-        this.feeDueDate = updateValue(this.feeDueDate, programUpdateRequestDTO.getFeeDueDate());
-        this.accountType = updateValue(this.accountType, programUpdateRequestDTO.getAccountType());
-        this.accountNumber = updateValue(this.accountNumber, programUpdateRequestDTO.getAccountNumber());
-        this.topic = updateValue(this.topic, programUpdateRequestDTO.getTopic());
-        this.openKakaoLink = updateValue(this.openKakaoLink, programUpdateRequestDTO.getOpenKakaoLink());
-        this.openKakaoPassword = updateValue(this.openKakaoPassword, programUpdateRequestDTO.getOpenKakaoPassword());
+    public void decreaseProgramApplicationCount() {
+        this.applicationCount--;
     }
 
+    public void updateHeadCount(Integer headcount) {
+        this.headcount = headcount;
+    }
+
+    public void updateProgramInfo(ProgramRequestDto programRequestDto,
+                                  ProgramStatus programStatus,
+                                  String stringFaqList) {
+        this.th = updateValue(this.th, programRequestDto.th());
+        this.title = updateValue(this.title, programRequestDto.title());
+        this.headcount = updateValue(this.headcount, programRequestDto.headcount());
+        this.dueDate = updateValue(this.dueDate, programRequestDto.dueDate());
+        this.announcementDate = updateValue(this.announcementDate, programRequestDto.announcementDate());
+        this.startDate = updateValue(this.startDate, programRequestDto.startDate());
+        this.endDate = updateValue(this.endDate, programRequestDto.endDate());
+        this.contents = updateValue(this.contents, programRequestDto.contents());
+        this.way = updateValue(this.way, toEntityCode(ProgramWay.class, programRequestDto.way()));
+        this.location = updateValue(this.location, programRequestDto.location());
+        this.notice = updateValue(this.notice, programRequestDto.notice());
+        this.status = updateValue(this.status, programStatus);
+        this.isVisible = updateValue(this.isVisible, programRequestDto.isVisible());
+        this.faqListStr = updateValue(this.faqListStr, stringFaqList);
+        this.programType = updateValue(this.programType, toEntityCode(ProgramType.class, programRequestDto.programType()));
+    }
 }

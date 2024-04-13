@@ -1,9 +1,9 @@
 package com.letsintern.letsintern.domain.program.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 public class ZoomAuthResponse {
 
     @JsonProperty(value = "access_token")

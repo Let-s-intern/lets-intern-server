@@ -12,10 +12,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.Calendar;
-import java.util.TimeZone;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -52,11 +49,7 @@ public class ZoomAuthenticationHelper {
         long differenceInMillis = this.tokenExpiryTime - now.getTimeInMillis();
 
         // 토큰 이미 만료 or 20분내 만료 예정
-        if (differenceInMillis < 0 || TimeUnit.MILLISECONDS.toMinutes(differenceInMillis) < 20) {
-            return true;
-        }
-
-        return false;
+        return differenceInMillis < 0 || TimeUnit.MILLISECONDS.toMinutes(differenceInMillis) < 20;
     }
 
     private void fetchToken() {
@@ -66,7 +59,7 @@ public class ZoomAuthenticationHelper {
         String encodedCredentials = new String(Base64.getEncoder().encodeToString(credentials.getBytes()));
 
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setAccept(Arrays.asList(MediaType.APPLICATION_FORM_URLENCODED));
+        httpHeaders.setAccept(List.of(MediaType.APPLICATION_FORM_URLENCODED));
         httpHeaders.add("Authorization", "Basic " + encodedCredentials);
         httpHeaders.add("Host", "zoom.us");
 
@@ -81,15 +74,6 @@ public class ZoomAuthenticationHelper {
             ResponseEntity<String> errorResponse = new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
             log.info("[[Code]]: " + errorResponse.getStatusCode().value() + " [[body]]: " + errorResponse.getBody());
             throw ZoomTokenUnauthorizedException.EXCEPTION;
-            //            throw new Exception(
-//                    (String
-//                            .format(
-//                                "Unable to get authentication token due to %s. Response code: %d",
-//                                errorResponse.getBody(),
-//                                errorResponse.getStatusCode().value()
-//                            )
-//                    )
-//            );
         }
 
         Calendar now = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"));

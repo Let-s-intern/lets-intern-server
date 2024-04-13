@@ -15,9 +15,10 @@ import com.letsintern.letsintern.domain.coupon.helper.CouponHelper;
 import com.letsintern.letsintern.domain.coupon.mapper.CouponMapper;
 import com.letsintern.letsintern.domain.coupon.vo.CouponUserHistoryVo;
 import com.letsintern.letsintern.domain.mission.repository.MissionRepository;
+import com.letsintern.letsintern.domain.payment.domain.FeeType;
 import com.letsintern.letsintern.domain.program.domain.Program;
-import com.letsintern.letsintern.domain.program.domain.ProgramFeeType;
 import com.letsintern.letsintern.domain.program.helper.ProgramHelper;
+import com.letsintern.letsintern.domain.program.vo.program.ProgramDetailVo;
 import com.letsintern.letsintern.domain.user.domain.User;
 import com.letsintern.letsintern.domain.user.helper.UserHelper;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
@@ -42,22 +43,30 @@ public class ApplicationService {
     private final MissionRepository missionRepository;
 
     @Transactional
-    public ApplicationCreateResponse createUserApplication(Long programId, ApplicationCreateDTO applicationCreateDTO, PrincipalDetails principalDetails) {
+    public ApplicationCreateResponse createUserApplication(Long programId,
+                                                           ApplicationCreateDTO applicationCreateDTO,
+                                                           PrincipalDetails principalDetails) {
         User user = principalDetails.getUser();
         applicationHelper.validateDuplicateApplication(programId, user);
         checkUserDetailInfoAndUpdateInfo(user, applicationCreateDTO);
-        Program program = programHelper.findProgramOrThrow(programId);
-        checkAccountInfoForProgramRefundTypeAndUpdate(user, applicationCreateDTO, program.getFeeType());
+        ProgramDetailVo programDetailVo = programHelper.findProgramDetailOrThrow(programId);
+        checkAccountInfoForProgramRefundTypeAndUpdate(user, applicationCreateDTO, programDetailVo.feeType());
         Integer discountValue = checkCouponAppliedAndGetDiscountValue(user, applicationCreateDTO);
-        Integer totalFee = applicationHelper.calculateTotalFee(program, discountValue);
+        Integer totalFee = applicationHelper.calculateTotalFee(programDetailVo, discountValue);
         Application newUserApplication = createApplicationAndSave(user, programId, applicationCreateDTO, totalFee);
-        updateProgramApplicationCountAndSave(program);
+        updateProgramApplicationCountAndSave(newUserApplication.getProgram());
         return applicationMapper.toApplicationCreateResponse(newUserApplication);
     }
 
     @Transactional
     public ApplicationCreateResponse createGuestApplication(Long programId, ApplicationCreateDTO applicationCreateDTO) {
-        return applicationHelper.createGuestApplication(programId, applicationCreateDTO);
+        ProgramDetailVo programDetailVo = programHelper.findProgramDetailOrThrow(programId);
+        applicationHelper.validateGuestApplicationInput(programDetailVo, applicationCreateDTO);
+        Integer totalFee = applicationHelper.calculateTotalFee(programDetailVo, 0);
+        Application newGuestApplication = createApplicationAndSave(null, programId, applicationCreateDTO, totalFee);
+        Application savedApplication = applicationRepository.save(newGuestApplication);
+        updateProgramApplicationCountAndSave(savedApplication.getProgram());
+        return applicationMapper.toApplicationCreateResponse(savedApplication);
     }
 
     public AdminApplicationListResponse getApplicationListOfProgram(Long programId, Pageable pageable) {
@@ -123,8 +132,8 @@ public class ApplicationService {
     }
 
     /* 보증금 프로그램인데 계좌 추가 정보 없는 사용자 */
-    private void checkAccountInfoForProgramRefundTypeAndUpdate(User user, ApplicationCreateDTO applicationCreateDTO, ProgramFeeType programFeeType) {
-        if (!(programFeeType.equals(ProgramFeeType.REFUND) && !userHelper.checkDetailAccountInfoExist(user))) return;
+    private void checkAccountInfoForProgramRefundTypeAndUpdate(User user, ApplicationCreateDTO applicationCreateDTO, FeeType feeType) {
+        if (!(feeType.equals(FeeType.REFUND) && !userHelper.checkDetailAccountInfoExist(user))) return;
         applicationHelper.validateHasUserAccountInfo(applicationCreateDTO);
         userHelper.addUserDetailAccountInfo(user, applicationCreateDTO.getAccountType(), applicationCreateDTO.getAccountNumber());
     }
@@ -157,7 +166,8 @@ public class ApplicationService {
     }
 
     private Application createApplicationAndSave(User user, Long programId, ApplicationCreateDTO applicationCreateDTO, Integer totalFee) {
-        Application newUserApplication = applicationMapper.toEntity(programId, applicationCreateDTO, user, totalFee);
+        Program program = programHelper.findProgramOrThrow(programId);
+        Application newUserApplication = applicationMapper.toEntity(program, applicationCreateDTO, user, totalFee);
         return applicationRepository.save(newUserApplication);
     }
 

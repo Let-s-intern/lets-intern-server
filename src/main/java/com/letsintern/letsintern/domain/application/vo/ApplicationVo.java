@@ -1,7 +1,7 @@
 package com.letsintern.letsintern.domain.application.vo;
 
 import com.letsintern.letsintern.domain.application.domain.ApplicationStatus;
-import com.letsintern.letsintern.domain.program.domain.ProgramFeeType;
+import com.letsintern.letsintern.domain.payment.domain.FeeType;
 import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import com.letsintern.letsintern.domain.user.domain.AccountType;
 import lombok.Builder;
@@ -24,7 +24,7 @@ public class ApplicationVo {
 
     private ProgramType programType;
 
-    private ProgramFeeType programFeeType;
+    private FeeType feeType;
 
     private LocalDateTime programFeeDueDate;
 
@@ -42,7 +42,7 @@ public class ApplicationVo {
 
     @Builder
     public ApplicationVo(Long id, ApplicationStatus status, Boolean feeIsConfirmed, Long programId, String programTitle, ProgramType programType,
-                         ProgramFeeType programFeeType, LocalDateTime programFeeDueDate, AccountType programAccountType, String programAccountNumber,
+                         FeeType feeType, LocalDateTime programFeeDueDate, AccountType programAccountType, String programAccountNumber,
                          Long reviewId, LocalDateTime announcementDate, LocalDateTime startDate, LocalDateTime endDate) {
         this.id = id;
         this.status = status;
@@ -50,7 +50,7 @@ public class ApplicationVo {
         this.programId = programId;
         this.programTitle = programTitle;
         this.programType = programType;
-        this.programFeeType = programFeeType;
+        this.feeType = feeType;
         this.programFeeDueDate = programFeeDueDate;
         this.programAccountType = programAccountType;
         this.programAccountNumber = programAccountNumber;
