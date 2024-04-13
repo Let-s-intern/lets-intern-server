@@ -52,6 +52,10 @@ public class Challenge extends Program {
         this.finalHeadCount = 0;
     }
 
+    public void updateFinalHeadCount(Integer finalHeadCount) {
+        this.finalHeadCount = updateValue(this.finalHeadCount, finalHeadCount);
+    }
+
     public void updateChallenge(BaseProgramRequestDto requestDto, ProgramStatus programStatus, String fqaList) {
         super.updateProgramInfo(requestDto.programInfo(), programStatus, fqaList);
         this.topic = updateValue(this.topic, EnumValueUtils.toEntityCode(ChallengeTopic.class, requestDto.challengeInfo().challengeTopic()));

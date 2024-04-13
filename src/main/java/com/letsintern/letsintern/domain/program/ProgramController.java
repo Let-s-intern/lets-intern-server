@@ -28,12 +28,19 @@ public class ProgramController {
     private final ProgramServiceFactory programServiceFactory;
     private final ProgramSpecificService programSpecificService;
 
-    @Operation(summary = "프로그램 1개 상세 보기")
-    @GetMapping("/{programId}")
-    public ProgramDetailResponseDto<?> getProgramDetailVo(@AuthenticationPrincipal PrincipalDetails principalDetails,
-                                                          @PathVariable Long programId,
-                                                          @RequestParam(name = "type") ProgramRequestType programRequestType) {
-        return programServiceFactory.getProgramService(programRequestType).getProgramDetail(programId, principalDetails);
+    @Operation(summary = "어드민 프로그램 신규 개설")
+    @PostMapping
+    public void createProgram(@RequestParam(name = "type") ProgramRequestType programRequestType,
+                              @RequestBody BaseProgramRequestDto requestDto) {
+        programServiceFactory.getProgramService(programRequestType).createProgram(requestDto);
+    }
+
+    @Operation(summary = "어드민 프로그램 목록 - type, th 필터링 가능")
+    @GetMapping("/admin")
+    public ResponseEntity<ProgramListResponseDto<?>> getAdminProgramList(@RequestParam(name = "type", required = false) ProgramRequestType type,
+                                                                         @RequestParam(required = false) Integer th,
+                                                                         @PageableDefault(size = 20) Pageable pageable) {
+        return ResponseEntity.ok(programSpecificService.getProgramAdminList(type, th, pageable));
     }
 
     @Operation(summary = "어드민 프로그램 1개 상세 보기")
@@ -43,11 +50,19 @@ public class ProgramController {
         return programServiceFactory.getProgramService(programRequestType).getProgramForAdmin(programId);
     }
 
-    @Operation(summary = "어드민 프로그램 신규 개설")
-    @PostMapping
-    public void createProgram(@RequestParam(name = "type") ProgramRequestType programRequestType,
-                              @RequestBody BaseProgramRequestDto requestDto) {
-        programServiceFactory.getProgramService(programRequestType).createProgram(requestDto);
+    @Operation(summary = "어드민 유저 1명의 프로그램 목록")
+    @GetMapping("/admin/user/{userId}")
+    public ProgramListResponseDto<?> getAdminUserProgramList(@PathVariable Long userId,
+                                                             @PageableDefault(size = 20) Pageable pageable) {
+        final ProgramListResponseDto<?> responseDto = programSpecificService.getAdminUserProgramList(userId, pageable);
+        return responseDto;
+    }
+
+    @Operation(summary = "어드민 렛츠챗 프로그램 1개의 멘토 비밀번호 보기")
+    @GetMapping("/admin/{programId}/mentor")
+    public LetsChatMentorPasswordDto getProgramMentorPassword(@PathVariable Long programId) {
+        ProgramService programService = programServiceFactory.getProgramService(ProgramRequestType.LETS_CHAT);
+        return ((LetsChatServiceImpl) programService).getMentorPassword(programId);
     }
 
     @Operation(summary = "어드민 프로그램 수정")
@@ -65,11 +80,17 @@ public class ProgramController {
         programServiceFactory.getProgramService(programRequestType).deleteProgram(programId);
     }
 
-    @Operation(summary = "어드민 렛츠챗 프로그램 1개의 멘토 비밀번호 보기")
-    @GetMapping("/admin/{programId}/mentor")
-    public LetsChatMentorPasswordDto getProgramMentorPassword(@PathVariable Long programId) {
-        ProgramService programService = programServiceFactory.getProgramService(ProgramRequestType.LETS_CHAT);
-        return ((LetsChatServiceImpl) programService).getMentorPassword(programId);
+    @Operation(summary = "어드민 챌린지 프로그램 선발 및 입금 안내, 참여 확정 안내 메일 템플릿")
+    @GetMapping("/admin/{programId}/email")
+    public ProgramAdminEmailResponseDto getEmailTemplate(@PathVariable Long programId,
+                                                         @RequestParam MailType mailType) {
+        return programSpecificService.getEmailTemplate(programId, mailType);
+    }
+
+    @Operation(summary = "어드민 챌린지 프로그램 최종 참여자 수 저장")
+    @GetMapping("/admin/{programId}/headcount")
+    public void saveFinalHeadCount(@PathVariable Long programId) {
+        programSpecificService.saveFinalHeadCount(programId);
     }
 
     @Operation(summary = "렛츠챗 프로그램 멘토 세션 안내 페이지 - prior")
@@ -88,17 +109,19 @@ public class ProgramController {
         return ((LetsChatServiceImpl) programService).getMentorAfterSessionInfo(programId, letsChatMentorPasswordDto);
     }
 
-    @Operation(summary = "AWS Target Group 상태 확인용")
-    @GetMapping("/tg")
-    public ResponseEntity<String> targetGroup() {
-        return ResponseEntity.ok("success");
-    }
-
     @Operation(summary = "브랜드 스토리 진행 완료 프로그램 개수")
     @GetMapping("/count")
     public ResponseEntity<ProgramCountResponseDto> getProgramCount() {
         final ProgramCountResponseDto responseDto = programSpecificService.getDoneProgramCount();
         return ResponseEntity.ok(responseDto);
+    }
+
+    @Operation(summary = "프로그램 1개 상세 보기")
+    @GetMapping("/{programId}")
+    public ProgramDetailResponseDto<?> getProgramDetailVo(@AuthenticationPrincipal PrincipalDetails principalDetails,
+                                                          @PathVariable Long programId,
+                                                          @RequestParam(name = "type") ProgramRequestType programRequestType) {
+        return programServiceFactory.getProgramService(programRequestType).getProgramDetail(programId, principalDetails);
     }
 
     @Operation(summary = "프로그램 목록 (전체, 타입 - CHALLENGE, BOOTCAMP, LETS_CHAT)")
@@ -108,27 +131,6 @@ public class ProgramController {
         final ProgramListResponseDto<?> responseDto = (programRequestType == null) ?
                 programSpecificService.getProgramList(pageable) : programServiceFactory.getProgramService(programRequestType).getProgramList(pageable);
         return ResponseEntity.ok(responseDto);
-    }
-
-    @Operation(summary = "어드민 유저 1명의 프로그램 목록")
-    @GetMapping("/admin/user/{userId}")
-    public ProgramListResponseDto<?> getAdminUserProgramList(@PathVariable Long userId,
-                                                             @PageableDefault(size = 20) Pageable pageable) {
-        final ProgramListResponseDto<?> responseDto = programSpecificService.getAdminUserProgramList(userId, pageable);
-        return responseDto;
-    }
-
-    @Operation(summary = "어드민 챌린지 프로그램 선발 및 입금 안내, 참여 확정 안내 메일 템플릿")
-    @GetMapping("/admin/{programId}/email")
-    public ProgramAdminEmailResponseDto getEmailTemplate(@PathVariable Long programId,
-                                                         @RequestParam MailType mailType) {
-        return programSpecificService.getEmailTemplate(programId, mailType);
-    }
-
-    @Operation(summary = "어드민 프로그램 최종 참여자 수 저장")
-    @GetMapping("/admin/{programId}/headcount")
-    public void saveFinalHeadCount(@PathVariable Long programId) {
-        programSpecificService.saveFinalHeadCount(programId);
     }
 
     @Operation(summary = "유저 챌린지 대시보드 - 대시보드")
@@ -155,11 +157,9 @@ public class ProgramController {
         return programSpecificService.getProgramEntireDashboard(programId, applicationWishJob, principalDetails, pageable);
     }
 
-    @Operation(summary = "어드민 프로그램 목록 (전체, 타입, 타입 & 기수)")
-    @GetMapping("/admin")
-    public ResponseEntity<ProgramListResponseDto<?>> getAdminProgramList(@RequestParam(name = "type", required = false) ProgramRequestType type,
-                                                                         @RequestParam(required = false) Integer th,
-                                                                         @PageableDefault(size = 20) Pageable pageable) {
-        return ResponseEntity.ok(programSpecificService.getProgramAdminList(type, th, pageable));
+    @Operation(summary = "AWS Target Group 상태 확인용")
+    @GetMapping("/tg")
+    public ResponseEntity<String> targetGroup() {
+        return ResponseEntity.ok("success");
     }
 }
