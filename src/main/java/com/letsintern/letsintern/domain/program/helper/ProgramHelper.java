@@ -6,7 +6,6 @@ import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
 import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
 import com.letsintern.letsintern.domain.program.vo.program.ProgramDetailVo;
 import com.letsintern.letsintern.domain.program.vo.program.ProgramThumbnailVo;
-import com.letsintern.letsintern.domain.program.vo.program.UserProgramVo;
 import com.letsintern.letsintern.global.common.util.EmailUtils;
 import com.letsintern.letsintern.global.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;

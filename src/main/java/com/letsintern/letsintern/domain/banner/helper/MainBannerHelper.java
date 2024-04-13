@@ -1,7 +1,7 @@
 package com.letsintern.letsintern.domain.banner.helper;
 
 import com.letsintern.letsintern.domain.banner.domain.MainBanner;
-import com.letsintern.letsintern.domain.banner.exception.MainOrProgramBannerCreateBadRequest;
+import com.letsintern.letsintern.domain.banner.exception.BannerCreateNoFileBadRequest;
 import com.letsintern.letsintern.domain.banner.repository.MainBannerRepository;
 import com.letsintern.letsintern.domain.banner.vo.MainBannerAdminVo;
 import com.letsintern.letsintern.domain.banner.exception.BannerNotFound;
@@ -19,7 +19,7 @@ public class MainBannerHelper {
 
     public void validateMainBannerFileExists(MultipartFile file) {
         if (file == null) {
-            throw MainOrProgramBannerCreateBadRequest.EXCEPTION;
+            throw BannerCreateNoFileBadRequest.EXCEPTION;
         }
     }
 

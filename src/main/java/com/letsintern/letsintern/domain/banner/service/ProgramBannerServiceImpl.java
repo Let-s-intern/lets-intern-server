@@ -17,6 +17,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
+import java.util.Objects;
+
 @Service("PROGRAM")
 @Transactional
 @RequiredArgsConstructor
@@ -45,7 +48,8 @@ public class ProgramBannerServiceImpl implements BannerService {
     public void updateBanner(Long id, BannerUpdateDTO bannerUpdateDTO, MultipartFile file) {
         ProgramBanner programBanner = programBannerHelper.findProgramBannerById(id);
         S3SavedFileVo s3SavedFileVo = s3Helper.changeImgFile(S3_PROGRAM_BANNER_DIR, programBanner.getImgUrl(), file);
-        programBanner.updateProgramBanner(bannerUpdateDTO, s3SavedFileVo);
+        Boolean isVisible = getIsVisibleForEndDateOrNull(bannerUpdateDTO.endDate());
+        programBanner.updateProgramBanner(bannerUpdateDTO, s3SavedFileVo, isVisible);
     }
 
     @Override
@@ -53,5 +57,12 @@ public class ProgramBannerServiceImpl implements BannerService {
         final ProgramBanner programBanner = programBannerHelper.findProgramBannerById(bannerId);
         s3Helper.deleteFile(S3_PROGRAM_BANNER_DIR + programBanner.getImgUrl().split("/")[5]);
         programBannerHelper.deleteProgramBanner(programBanner);
+    }
+
+    private Boolean getIsVisibleForEndDateOrNull(LocalDateTime endDate) {
+        if (Objects.isNull(endDate))
+            return null;
+        else
+            return endDate.isAfter(LocalDateTime.now());
     }
 }

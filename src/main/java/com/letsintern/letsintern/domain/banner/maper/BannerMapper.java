@@ -24,8 +24,8 @@ public class BannerMapper {
         return MainBanner.createMainBanner(bannerCreateDTO, s3Url);
     }
 
-    public Popup toPopupEntity(BannerCreateDTO bannerCreateDTO) {
-        return Popup.createPopup(bannerCreateDTO);
+    public Popup toPopupEntity(BannerCreateDTO bannerCreateDTO, String s3Url) {
+        return Popup.createPopup(bannerCreateDTO, s3Url);
     }
 
     public ProgramBanner toProgramBannerEntity(BannerCreateDTO bannerCreateDTO, String s3Url) {
