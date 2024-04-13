@@ -38,6 +38,8 @@ public class Payment {
     @Enumerated(EnumType.STRING)
     private AccountType accountType;
     private String accountNumber;
+    @OneToOne(mappedBy = "payment", fetch = FetchType.LAZY)
+    private Program program;
 
     public static Payment createPayment(PaymentRequestDto requestDto) {
         return Payment.builder()
