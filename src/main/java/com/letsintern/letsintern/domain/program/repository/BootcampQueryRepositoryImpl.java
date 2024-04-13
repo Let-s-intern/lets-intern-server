@@ -41,6 +41,7 @@ public class BootcampQueryRepositoryImpl implements BootcampQueryRepository {
                         bootcamp.startDate,
                         bootcamp.endDate,
                         bootcamp.payment.feeDueDate,
+                        bootcamp.payment.feeType,
                         bootcamp.payment.feeRefund,
                         bootcamp.payment.feeCharge,
                         bootcamp.payment.discountValue,
