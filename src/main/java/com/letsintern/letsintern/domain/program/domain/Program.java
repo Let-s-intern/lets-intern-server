@@ -69,7 +69,8 @@ public abstract class Program {
     @OneToMany(mappedBy = "program", orphanRemoval = true)
     @JsonIgnore
     private List<Application> applicationList = new ArrayList<>();
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "payment_id", referencedColumnName = "payment_id")
     private Payment payment;
 
     public Program(ProgramRequestDto requestDto, String zoomLink, String zoomLinkPassword) {

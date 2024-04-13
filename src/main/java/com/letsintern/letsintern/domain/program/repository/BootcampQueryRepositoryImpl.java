@@ -16,9 +16,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-import static com.letsintern.letsintern.domain.payment.domain.QPayment.payment;
 import static com.letsintern.letsintern.domain.program.domain.QBootcamp.bootcamp;
-import static com.letsintern.letsintern.domain.program.domain.QChallenge.challenge;
 
 @RequiredArgsConstructor
 @Repository
@@ -42,17 +40,16 @@ public class BootcampQueryRepositoryImpl implements BootcampQueryRepository {
                         bootcamp.announcementDate,
                         bootcamp.startDate,
                         bootcamp.endDate,
-                        payment.feeDueDate,
-                        payment.feeRefund,
-                        payment.feeCharge,
-                        payment.discountValue,
-                        payment.accountType,
-                        payment.accountNumber,
+                        bootcamp.payment.feeDueDate,
+                        bootcamp.payment.feeRefund,
+                        bootcamp.payment.feeCharge,
+                        bootcamp.payment.discountValue,
+                        bootcamp.payment.accountType,
+                        bootcamp.payment.accountNumber,
                         bootcamp.faqListStr,
                         bootcamp.programType
                 ))
                 .from(bootcamp)
-                .leftJoin(bootcamp._super, payment.program)
                 .where(
                         eqBootcampId(bootcampId)
                 ).fetchOne());

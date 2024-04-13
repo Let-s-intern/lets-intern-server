@@ -19,8 +19,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import static com.letsintern.letsintern.domain.payment.domain.QPayment.payment;
-import static com.letsintern.letsintern.domain.program.domain.QLetsChat.letsChat;
 import static com.letsintern.letsintern.domain.program.domain.QProgram.program;
 
 @RequiredArgsConstructor
@@ -44,17 +42,16 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
                         program.announcementDate,
                         program.startDate,
                         program.endDate,
-                        payment.feeDueDate,
-                        payment.feeRefund,
-                        payment.feeCharge,
-                        payment.discountValue,
-                        payment.accountType,
-                        payment.accountNumber,
+                        program.payment.feeDueDate,
+                        program.payment.feeRefund,
+                        program.payment.feeCharge,
+                        program.payment.discountValue,
+                        program.payment.accountType,
+                        program.payment.accountNumber,
                         program.faqListStr,
                         program.programType
                 ))
                 .from(program)
-                .leftJoin(program.payment, payment)
                 .where(
                         eqProgramId(programId)
                 ).fetchOne());
