@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import static com.letsintern.letsintern.domain.payment.domain.QPayment.payment;
 import static com.letsintern.letsintern.domain.program.domain.QProgram.program;
 
 @RequiredArgsConstructor
@@ -103,6 +104,7 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
 
         List<Program> programList = jpaQueryFactory
                 .selectFrom(program)
+                .leftJoin(program.payment, payment)
                 .where(booleanBuilder)
                 .orderBy(program.id.desc())
                 .offset(pageable.getOffset())
