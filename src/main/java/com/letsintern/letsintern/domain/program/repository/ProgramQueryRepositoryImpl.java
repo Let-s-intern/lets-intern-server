@@ -2,7 +2,7 @@ package com.letsintern.letsintern.domain.program.repository;
 
 import com.letsintern.letsintern.domain.program.domain.*;
 import com.letsintern.letsintern.domain.program.vo.program.ProgramDetailVo;
-import com.letsintern.letsintern.domain.program.vo.program.UserProgramVo;
+import com.letsintern.letsintern.domain.program.vo.program.ProgramThumbnailVo;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -19,7 +19,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import static com.letsintern.letsintern.domain.payment.domain.QPayment.payment;
 import static com.letsintern.letsintern.domain.program.domain.QProgram.program;
 
 @RequiredArgsConstructor
@@ -43,17 +42,16 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
                         program.announcementDate,
                         program.startDate,
                         program.endDate,
-                        payment.feeDueDate,
-                        payment.feeRefund,
-                        payment.feeCharge,
-                        payment.discountValue,
-                        payment.accountType,
-                        payment.accountNumber,
+                        program.payment.feeDueDate,
+                        program.payment.feeRefund,
+                        program.payment.feeCharge,
+                        program.payment.discountValue,
+                        program.payment.accountType,
+                        program.payment.accountNumber,
                         program.faqListStr,
                         program.programType
                 ))
                 .from(program)
-                .leftJoin(program.payment, payment)
                 .where(
                         eqProgramId(programId)
                 ).fetchOne());
@@ -119,6 +117,36 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
         return PageableExecutionUtils.getPage(programList, pageable, count::fetchOne);
     }
 
+    @Override
+    public Page<ProgramThumbnailVo> findProgramThumbnails(Pageable pageable) {
+        List<ProgramThumbnailVo> programThumbnailVos = jpaQueryFactory
+                .select(Projections.constructor(ProgramThumbnailVo.class,
+                        program.id,
+                        program.status,
+                        program.programType,
+                        program.th,
+                        program.title,
+                        program.dueDate,
+                        program.startDate
+                ))
+                .from(program)
+                .where(
+                        eqIsVisible(Boolean.TRUE)
+                )
+                .orderBy(program.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        JPAQuery<Long> count = jpaQueryFactory.select(program.count())
+                .from(program)
+                .where(
+                        eqIsVisible(Boolean.TRUE)
+                );
+
+        return PageableExecutionUtils.getPage(programThumbnailVos, pageable, count::fetchOne);
+    }
+
     private BooleanExpression eqProgramId(Long programId) {
         return programId != null ? program.id.eq(programId) : null;
     }
@@ -130,6 +158,10 @@ public class ProgramQueryRepositoryImpl implements ProgramQueryRepository {
     private BooleanExpression eqProgramType(ProgramType programType) { return program.programType.eq(programType); }
 
     private BooleanExpression eqProgramTh(Integer programTh) { return program.th.eq(programTh); }
+
+    private BooleanExpression eqIsVisible(Boolean isVisible) {
+        return isVisible != null ? program.isVisible.eq(isVisible) : null;
+    }
 
     private BooleanBuilder filterAdminProgram(ProgramRequestType programType, Integer programTh) {
         BooleanBuilder booleanBuilder = new BooleanBuilder();

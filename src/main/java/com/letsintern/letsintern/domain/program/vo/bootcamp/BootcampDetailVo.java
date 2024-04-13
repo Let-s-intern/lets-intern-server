@@ -5,9 +5,11 @@ import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import com.letsintern.letsintern.domain.program.domain.ProgramWay;
 import com.letsintern.letsintern.domain.payment.domain.FeeType;
 import com.letsintern.letsintern.domain.user.domain.AccountType;
+import lombok.Builder;
 
 import java.time.LocalDateTime;
 
+@Builder
 public record BootcampDetailVo(
         Long bootcampId,
         ProgramStatus status,

@@ -1,5 +1,6 @@
 package com.letsintern.letsintern.domain.program.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.letsintern.letsintern.domain.mission.domain.Mission;
 import com.letsintern.letsintern.domain.notice.domain.Notice;
 import com.letsintern.letsintern.domain.program.domain.converter.ChallengeTypeConverter;
@@ -35,9 +36,11 @@ public class Challenge extends Program {
     private String openKakaoPassword;
     @OneToMany(mappedBy = "program", orphanRemoval = true)
     @Builder.Default
+    @JsonIgnore
     private List<Mission> missionList = new ArrayList<>();
     @OneToMany(mappedBy = "program", orphanRemoval = true)
     @Builder.Default
+    @JsonIgnore
     private List<Notice> noticeList = new ArrayList<>();
 
     public Challenge(BaseProgramRequestDto requestDto, String zoomLink, String zoomPassword) {
@@ -46,6 +49,7 @@ public class Challenge extends Program {
         this.challengeType = EnumValueUtils.toEntityCode(ChallengeType.class, requestDto.challengeInfo().challengeTopic());
         this.openKakaoLink = requestDto.challengeInfo().openKakaoLink();
         this.openKakaoPassword = requestDto.challengeInfo().openKakaoPassword();
+        this.finalHeadCount = 0;
     }
 
     public void updateChallenge(BaseProgramRequestDto requestDto, ProgramStatus programStatus, String fqaList) {

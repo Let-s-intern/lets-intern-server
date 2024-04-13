@@ -1,11 +1,13 @@
 package com.letsintern.letsintern.domain.program.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.letsintern.letsintern.domain.application.domain.Application;
 import com.letsintern.letsintern.domain.payment.domain.Payment;
 import com.letsintern.letsintern.domain.program.domain.converter.ProgramStatusConverter;
 import com.letsintern.letsintern.domain.program.domain.converter.ProgramTypeConverter;
 import com.letsintern.letsintern.domain.program.domain.converter.ProgramWayConverter;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramRequestDto;
+import com.letsintern.letsintern.global.common.util.StringUtils;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -66,8 +68,10 @@ public abstract class Program {
     @Convert(converter = ProgramTypeConverter.class)
     private ProgramType programType;
     @OneToMany(mappedBy = "program", orphanRemoval = true)
+    @JsonIgnore
     private List<Application> applicationList = new ArrayList<>();
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "payment_id", referencedColumnName = "payment_id")
     private Payment payment;
 
     public Program(ProgramRequestDto requestDto, String zoomLink, String zoomLinkPassword) {
@@ -81,7 +85,7 @@ public abstract class Program {
         this.endDate = requestDto.endDate();
         this.headcount = requestDto.headcount();
         this.way = toEntityCode(ProgramWay.class, requestDto.way());
-        this.faqListStr = requestDto.faqIdList().toString();
+        this.faqListStr = StringUtils.listToString(requestDto.faqIdList());
         this.location = requestDto.location();
         this.isVisible = requestDto.isVisible();
         this.programType = toEntityCode(ProgramType.class, requestDto.programType());

@@ -17,6 +17,7 @@ import com.letsintern.letsintern.domain.program.domain.*;
 import com.letsintern.letsintern.domain.program.dto.response.*;
 import com.letsintern.letsintern.domain.program.helper.ProgramHelper;
 import com.letsintern.letsintern.domain.program.mapper.ProgramMapper;
+import com.letsintern.letsintern.domain.program.vo.program.ProgramThumbnailVo;
 import com.letsintern.letsintern.domain.program.vo.program.UserProgramVo;
 import com.letsintern.letsintern.domain.user.domain.User;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
@@ -117,5 +118,10 @@ public class ProgramSpecificService {
     public ProgramListResponseDto<?> getProgramAdminList(ProgramRequestType type, Integer th, Pageable pageable) {
         Page<Program> programPage = programHelper.findAllProgramByTypeAndTh(type, th, pageable);
         return programMapper.toProgramListResponseDto(programPage);
+    }
+
+    public ProgramListResponseDto<?> getProgramList(Pageable pageable) {
+        Page<ProgramThumbnailVo> programThumbnailVoPage = programHelper.findProgramList(pageable);
+        return programMapper.toProgramListResponseDto(programThumbnailVoPage);
     }
 }

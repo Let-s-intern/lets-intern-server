@@ -16,9 +16,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-import static com.letsintern.letsintern.domain.payment.domain.QPayment.payment;
 import static com.letsintern.letsintern.domain.program.domain.QChallenge.challenge;
-import static com.letsintern.letsintern.domain.program.domain.QProgram.program;
 
 @Repository
 @RequiredArgsConstructor
@@ -43,18 +41,17 @@ public class ChallengeQueryRepositoryImpl implements ChallengeQueryRepository {
                         challenge.announcementDate,
                         challenge.startDate,
                         challenge.endDate,
-                        payment.feeDueDate,
-                        payment.feeType,
-                        payment.feeRefund,
-                        payment.feeCharge,
-                        payment.discountValue,
-                        payment.accountType,
-                        payment.accountNumber,
+                        challenge.payment.feeDueDate,
+                        challenge.payment.feeType,
+                        challenge.payment.feeRefund,
+                        challenge.payment.feeCharge,
+                        challenge.payment.discountValue,
+                        challenge.payment.accountType,
+                        challenge.payment.accountNumber,
                         challenge.faqListStr,
                         challenge.programType
                 ))
                 .from(challenge)
-                .leftJoin(challenge._super, payment.program)
                 .where(
                         eqChallengeId(challengeId)
                 )

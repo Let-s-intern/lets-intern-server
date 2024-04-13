@@ -5,6 +5,7 @@ import com.letsintern.letsintern.domain.program.dto.request.ProgramRequestDto;
 import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
 import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
 import com.letsintern.letsintern.domain.program.vo.program.ProgramDetailVo;
+import com.letsintern.letsintern.domain.program.vo.program.ProgramThumbnailVo;
 import com.letsintern.letsintern.domain.program.vo.program.UserProgramVo;
 import com.letsintern.letsintern.global.common.util.EmailUtils;
 import com.letsintern.letsintern.global.common.util.StringUtils;
@@ -68,5 +69,9 @@ public class ProgramHelper {
 
     public Page<Program> findAllProgramByTypeAndTh(ProgramRequestType type, Integer th, Pageable pageable) {
         return programRepository.findAllProgramByTypeAndTh(type, th, pageable);
+    }
+
+    public Page<ProgramThumbnailVo> findProgramList(Pageable pageable) {
+        return programRepository.findProgramThumbnails(pageable);
     }
 }

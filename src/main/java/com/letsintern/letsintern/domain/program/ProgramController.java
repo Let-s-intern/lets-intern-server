@@ -3,7 +3,6 @@ package com.letsintern.letsintern.domain.program;
 import com.letsintern.letsintern.domain.application.domain.ApplicationWishJob;
 import com.letsintern.letsintern.domain.program.domain.MailType;
 import com.letsintern.letsintern.domain.program.domain.ProgramRequestType;
-import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import com.letsintern.letsintern.domain.program.dto.request.BaseProgramRequestDto;
 import com.letsintern.letsintern.domain.program.dto.request.LetsChatMentorPasswordDto;
 import com.letsintern.letsintern.domain.program.dto.response.*;
@@ -33,20 +32,20 @@ public class ProgramController {
     @GetMapping("/{programId}")
     public ProgramDetailResponseDto<?> getProgramDetailVo(@AuthenticationPrincipal PrincipalDetails principalDetails,
                                                           @PathVariable Long programId,
-                                                          @RequestParam ProgramRequestType programRequestType) {
+                                                          @RequestParam(name = "type") ProgramRequestType programRequestType) {
         return programServiceFactory.getProgramService(programRequestType).getProgramDetail(programId, principalDetails);
     }
 
     @Operation(summary = "어드민 프로그램 1개 상세 보기")
     @GetMapping("/admin/{programId}")
     public BaseProgramResponseDto<?> getProgram(@PathVariable Long programId,
-                                                @RequestParam ProgramRequestType programRequestType) {
+                                                @RequestParam(name = "type") ProgramRequestType programRequestType) {
         return programServiceFactory.getProgramService(programRequestType).getProgramForAdmin(programId);
     }
 
     @Operation(summary = "어드민 프로그램 신규 개설")
     @PostMapping
-    public void createProgram(@RequestParam ProgramRequestType programRequestType,
+    public void createProgram(@RequestParam(name = "type") ProgramRequestType programRequestType,
                               @RequestBody BaseProgramRequestDto requestDto) {
         programServiceFactory.getProgramService(programRequestType).createProgram(requestDto);
     }
@@ -54,7 +53,7 @@ public class ProgramController {
     @Operation(summary = "어드민 프로그램 수정")
     @PatchMapping("/{programId}")
     public void updateProgram(@PathVariable Long programId,
-                              @RequestParam ProgramRequestType programRequestType,
+                              @RequestParam(name = "type") ProgramRequestType programRequestType,
                               @RequestBody BaseProgramRequestDto requestDto) {
         programServiceFactory.getProgramService(programRequestType).updateProgram(programId, requestDto);
     }
@@ -104,10 +103,10 @@ public class ProgramController {
 
     @Operation(summary = "프로그램 목록 (전체, 타입 - CHALLENGE, BOOTCAMP, LETS_CHAT)")
     @GetMapping
-    public ResponseEntity<ProgramListResponseDto<?>> getProgramThumbnailList(@RequestParam ProgramRequestType programRequestType,
+    public ResponseEntity<ProgramListResponseDto<?>> getProgramThumbnailList(@RequestParam(name = "type", required = false) ProgramRequestType programRequestType,
                                                                              @PageableDefault(size = 20) Pageable pageable) {
-        final ProgramListResponseDto<?> responseDto
-                = programServiceFactory.getProgramService(programRequestType).getProgramList(pageable);
+        final ProgramListResponseDto<?> responseDto = (programRequestType == null) ?
+                programSpecificService.getProgramList(pageable) : programServiceFactory.getProgramService(programRequestType).getProgramList(pageable);
         return ResponseEntity.ok(responseDto);
     }
 
@@ -158,7 +157,7 @@ public class ProgramController {
 
     @Operation(summary = "어드민 프로그램 목록 (전체, 타입, 타입 & 기수)")
     @GetMapping("/admin")
-    public ResponseEntity<ProgramListResponseDto<?>> getAdminProgramList(@RequestParam(required = false) ProgramRequestType type,
+    public ResponseEntity<ProgramListResponseDto<?>> getAdminProgramList(@RequestParam(name = "type", required = false) ProgramRequestType type,
                                                                          @RequestParam(required = false) Integer th,
                                                                          @PageableDefault(size = 20) Pageable pageable) {
         return ResponseEntity.ok(programSpecificService.getProgramAdminList(type, th, pageable));

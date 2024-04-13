@@ -4,6 +4,7 @@ import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.program.domain.ProgramRequestType;
 import com.letsintern.letsintern.domain.program.domain.ProgramType;
 import com.letsintern.letsintern.domain.program.vo.program.ProgramDetailVo;
+import com.letsintern.letsintern.domain.program.vo.program.ProgramThumbnailVo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -16,4 +17,5 @@ public interface ProgramQueryRepository {
     void updateAllProgramStatusClosedByDueDate(LocalDateTime now);
     List<Long> findAllProgramIdListAndUpdateStatusToDone(LocalDateTime now);
     Page<Program> findAllProgramByTypeAndTh(ProgramRequestType type, Integer th, Pageable pageable);
+    Page<ProgramThumbnailVo> findProgramThumbnails(Pageable pageable);
 }

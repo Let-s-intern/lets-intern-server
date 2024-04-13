@@ -19,12 +19,8 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.List;
 import java.util.Optional;
 
-import static com.letsintern.letsintern.domain.payment.domain.QPayment.payment;
-import static com.letsintern.letsintern.domain.program.domain.QBootcamp.bootcamp;
-import static com.letsintern.letsintern.domain.program.domain.QChallenge.challenge;
 import static com.letsintern.letsintern.domain.program.domain.QLetsChat.letsChat;
 
 @Repository
@@ -49,17 +45,16 @@ public class LetsChatQueryRepositoryImpl implements LetsChatQueryRepository {
                         letsChat.announcementDate,
                         letsChat.startDate,
                         letsChat.endDate,
-                        payment.feeDueDate,
-                        payment.feeType,
-                        payment.feeRefund,
-                        payment.feeCharge,
-                        payment.discountValue,
-                        payment.accountType,
-                        payment.accountNumber,
+                        letsChat.payment.feeDueDate,
+                        letsChat.payment.feeType,
+                        letsChat.payment.feeRefund,
+                        letsChat.payment.feeCharge,
+                        letsChat.payment.discountValue,
+                        letsChat.payment.accountType,
+                        letsChat.payment.accountNumber,
                         letsChat.faqListStr,
                         letsChat.programType))
                 .from(letsChat)
-                .leftJoin(letsChat._super, payment.program)
                 .where(eqLetsChatId(letsChatId))
                 .fetchOne());
     }
@@ -95,7 +90,7 @@ public class LetsChatQueryRepositoryImpl implements LetsChatQueryRepository {
                 ))
                 .from(letsChat)
                 .where(
-                        eqProgramType(ProgramType.BOOTCAMP),
+                        eqProgramType(ProgramType.LETS_CHAT),
                         eqIsVisible(Boolean.TRUE)
                 )
                 .orderBy(letsChat.id.desc())
@@ -106,7 +101,7 @@ public class LetsChatQueryRepositoryImpl implements LetsChatQueryRepository {
         JPAQuery<Long> count = jpaQueryFactory.select(letsChat.count())
                 .from(letsChat)
                 .where(
-                        eqProgramType(ProgramType.BOOTCAMP),
+                        eqProgramType(ProgramType.LETS_CHAT),
                         eqIsVisible(Boolean.TRUE)
                 );
 
