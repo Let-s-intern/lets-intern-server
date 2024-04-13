@@ -15,6 +15,7 @@ import com.letsintern.letsintern.domain.notice.domain.Notice;
 import com.letsintern.letsintern.domain.notice.helper.NoticeHelper;
 import com.letsintern.letsintern.domain.program.domain.*;
 import com.letsintern.letsintern.domain.program.dto.response.*;
+import com.letsintern.letsintern.domain.program.helper.ChallengeHelper;
 import com.letsintern.letsintern.domain.program.helper.ProgramHelper;
 import com.letsintern.letsintern.domain.program.mapper.ProgramMapper;
 import com.letsintern.letsintern.domain.program.vo.program.ProgramThumbnailVo;
@@ -25,15 +26,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @RequiredArgsConstructor
 @Service
+@Transactional
 public class ProgramSpecificService {
     private final ProgramHelper programHelper;
     private final ProgramMapper programMapper;
+    private final ChallengeHelper challengeHelper;
     private final ApplicationHelper applicationHelper;
     private final MissionHelper missionHelper;
     private final NoticeHelper noticeHelper;
@@ -57,9 +61,9 @@ public class ProgramSpecificService {
     }
 
     public void saveFinalHeadCount(Long programId) {
-        Program program = programHelper.findProgramOrThrow(programId);
+        Challenge challenge = challengeHelper.findChallengeOrThrow(programId);
         Integer count = applicationHelper.countAllByProgramIdAndStatus(programId, ApplicationStatus.IN_PROGRESS);
-        program.updateHeadCount(count);
+        challenge.updateFinalHeadCount(count);
     }
 
     public ProgramDashboardResponseDto getProgramDashboard(Long programId, PrincipalDetails principalDetails, Pageable pageable) {

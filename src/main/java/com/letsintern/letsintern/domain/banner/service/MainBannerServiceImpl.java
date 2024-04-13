@@ -2,7 +2,9 @@ package com.letsintern.letsintern.domain.banner.service;
 
 import com.letsintern.letsintern.domain.banner.domain.MainBanner;
 import com.letsintern.letsintern.domain.banner.dto.response.BannerAdminListResponse;
+import com.letsintern.letsintern.domain.banner.dto.response.BannerListResponseDto;
 import com.letsintern.letsintern.domain.banner.helper.MainBannerHelper;
+import com.letsintern.letsintern.domain.banner.vo.BannerVo;
 import com.letsintern.letsintern.domain.banner.vo.MainBannerAdminVo;
 import com.letsintern.letsintern.domain.banner.dto.request.BannerCreateDTO;
 import com.letsintern.letsintern.domain.banner.dto.request.BannerUpdateDTO;
@@ -57,6 +59,12 @@ public class MainBannerServiceImpl implements BannerService {
         final MainBanner mainBanner = mainBannerHelper.findMainBannerById(bannerId);
         s3Helper.deleteFile(S3_MAIN_BANNER_DIR + mainBanner.getImgUrl().split("/")[5]);
         mainBannerHelper.deleteMainBanner(mainBanner);
+    }
+
+    @Override
+    public BannerListResponseDto<?> getBannerList(Pageable pageable) {
+        Page<BannerVo> bannerVoPage = mainBannerHelper.findBannerList(pageable);
+        return bannerMapper.toBannerListResponseDto(bannerVoPage);
     }
 
     private Boolean getIsVisibleForEndDateOrNull(LocalDateTime endDate) {

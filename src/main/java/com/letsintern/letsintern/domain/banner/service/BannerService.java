@@ -4,6 +4,7 @@ import com.letsintern.letsintern.domain.banner.dto.request.BannerCreateDTO;
 import com.letsintern.letsintern.domain.banner.dto.request.BannerUpdateDTO;
 import com.letsintern.letsintern.domain.banner.dto.response.BannerIdResponse;
 import com.letsintern.letsintern.domain.banner.dto.response.BannerAdminListResponse;
+import com.letsintern.letsintern.domain.banner.dto.response.BannerListResponseDto;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,4 +19,6 @@ public interface BannerService {
     void updateBanner(Long id, BannerUpdateDTO bannerUpdateDTO, MultipartFile file);
 
     void deleteBanner(Long bannerId);
+
+    BannerListResponseDto<?> getBannerList(Pageable pageable);
 }

@@ -3,6 +3,7 @@ package com.letsintern.letsintern.domain.banner.helper;
 import com.letsintern.letsintern.domain.banner.domain.MainBanner;
 import com.letsintern.letsintern.domain.banner.exception.BannerCreateNoFileBadRequest;
 import com.letsintern.letsintern.domain.banner.repository.MainBannerRepository;
+import com.letsintern.letsintern.domain.banner.vo.BannerVo;
 import com.letsintern.letsintern.domain.banner.vo.MainBannerAdminVo;
 import com.letsintern.letsintern.domain.banner.exception.BannerNotFound;
 import lombok.RequiredArgsConstructor;
@@ -37,5 +38,9 @@ public class MainBannerHelper {
 
     public void deleteMainBanner(MainBanner mainBanner) {
         mainBannerRepository.delete(mainBanner);
+    }
+
+    public Page<BannerVo> findBannerList(Pageable pageable) {
+        return mainBannerRepository.findValidAndVisibleBanner(pageable);
     }
 }
