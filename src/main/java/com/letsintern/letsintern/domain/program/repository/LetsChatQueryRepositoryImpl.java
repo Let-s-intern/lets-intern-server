@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import static com.letsintern.letsintern.domain.payment.domain.QPayment.payment;
 import static com.letsintern.letsintern.domain.program.domain.QLetsChat.letsChat;
 
 @Repository
@@ -55,6 +56,7 @@ public class LetsChatQueryRepositoryImpl implements LetsChatQueryRepository {
                         letsChat.faqListStr,
                         letsChat.programType))
                 .from(letsChat)
+                .leftJoin(letsChat.payment, payment)
                 .where(eqLetsChatId(letsChatId))
                 .fetchOne());
     }
