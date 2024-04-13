@@ -70,7 +70,7 @@ public abstract class Program {
     @OneToMany(mappedBy = "program", orphanRemoval = true)
     @JsonIgnore
     private List<Application> applicationList = new ArrayList<>();
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "payment_id", referencedColumnName = "payment_id")
     private Payment payment;
 
