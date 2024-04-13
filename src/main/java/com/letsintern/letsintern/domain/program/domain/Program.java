@@ -7,6 +7,7 @@ import com.letsintern.letsintern.domain.program.domain.converter.ProgramStatusCo
 import com.letsintern.letsintern.domain.program.domain.converter.ProgramTypeConverter;
 import com.letsintern.letsintern.domain.program.domain.converter.ProgramWayConverter;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramRequestDto;
+import com.letsintern.letsintern.global.common.util.StringUtils;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -84,7 +85,7 @@ public abstract class Program {
         this.endDate = requestDto.endDate();
         this.headcount = requestDto.headcount();
         this.way = toEntityCode(ProgramWay.class, requestDto.way());
-        this.faqListStr = requestDto.faqIdList().toString();
+        this.faqListStr = StringUtils.listToString(requestDto.faqIdList());
         this.location = requestDto.location();
         this.isVisible = requestDto.isVisible();
         this.programType = toEntityCode(ProgramType.class, requestDto.programType());
