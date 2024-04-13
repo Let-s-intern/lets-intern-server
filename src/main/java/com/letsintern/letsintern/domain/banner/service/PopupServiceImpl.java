@@ -4,6 +4,7 @@ import com.letsintern.letsintern.domain.banner.domain.Popup;
 import com.letsintern.letsintern.domain.banner.dto.response.BannerAdminListResponse;
 import com.letsintern.letsintern.domain.banner.dto.response.BannerListResponseDto;
 import com.letsintern.letsintern.domain.banner.helper.PopupHelper;
+import com.letsintern.letsintern.domain.banner.vo.BannerVo;
 import com.letsintern.letsintern.domain.banner.vo.PopupAdminVo;
 import com.letsintern.letsintern.domain.banner.dto.request.BannerCreateDTO;
 import com.letsintern.letsintern.domain.banner.dto.request.BannerUpdateDTO;
@@ -61,7 +62,8 @@ public class PopupServiceImpl implements BannerService {
 
     @Override
     public BannerListResponseDto<?> getBannerList(Pageable pageable) {
-        return null;
+        Page<BannerVo> bannerVoPage = popupHelper.findBannerList(pageable);
+        return bannerMapper.toBannerListResponseDto(bannerVoPage);
     }
 
     private Boolean getIsVisibleForEndDateOrNull(LocalDateTime endDate) {
