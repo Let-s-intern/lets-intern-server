@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+import static com.letsintern.letsintern.domain.payment.domain.QPayment.payment;
 import static com.letsintern.letsintern.domain.program.domain.QChallenge.challenge;
 
 @Repository
@@ -52,6 +53,7 @@ public class ChallengeQueryRepositoryImpl implements ChallengeQueryRepository {
                         challenge.programType
                 ))
                 .from(challenge)
+                .leftJoin(challenge.payment, payment)
                 .where(
                         eqChallengeId(challengeId)
                 )
