@@ -1,7 +1,9 @@
 package com.letsintern.letsintern.domain.banner.repository;
 
 import com.letsintern.letsintern.domain.banner.vo.LineBannerAdminVo;
+import com.letsintern.letsintern.domain.banner.vo.LineBannerVo;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -44,5 +46,42 @@ public class LineBannerRepositoryImpl implements LineBannerRepositoryCustom {
                 .from(lineBanner);
 
         return PageableExecutionUtils.getPage(lineBannerAdminVoList, pageable, count::fetchOne);
+    }
+
+    @Override
+    public Page<LineBannerVo> findValidAndVisibleBanner(Pageable pageable) {
+        List<LineBannerVo> bannerVoList = jpaQueryFactory
+                .select(Projections.constructor(LineBannerVo.class,
+                        lineBanner.id,
+                        lineBanner.title,
+                        lineBanner.link,
+                        lineBanner.contents,
+                        lineBanner.colorCode,
+                        lineBanner.textColorCode))
+                .from(lineBanner)
+                .where(
+                        eqIsValid(true),
+                        eqIsVisible(true)
+                )
+                .orderBy(lineBanner.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        JPAQuery<Long> count = jpaQueryFactory
+                .select(lineBanner.count())
+                .where(
+                        eqIsValid(true),
+                        eqIsVisible(true));
+
+        return PageableExecutionUtils.getPage(bannerVoList, pageable, count::fetchOne);
+    }
+
+    private BooleanExpression eqIsValid(Boolean isValid) {
+        return isValid != null ? lineBanner.isValid : null;
+    }
+
+    private BooleanExpression eqIsVisible(Boolean isVisible) {
+        return isVisible != null ? lineBanner.isVisible : null;
     }
 }

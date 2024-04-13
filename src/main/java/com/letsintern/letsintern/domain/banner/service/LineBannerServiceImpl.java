@@ -9,6 +9,7 @@ import com.letsintern.letsintern.domain.banner.dto.response.BannerListResponseDt
 import com.letsintern.letsintern.domain.banner.helper.LineBannerHelper;
 import com.letsintern.letsintern.domain.banner.maper.BannerMapper;
 import com.letsintern.letsintern.domain.banner.vo.LineBannerAdminVo;
+import com.letsintern.letsintern.domain.banner.vo.LineBannerVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -55,7 +56,8 @@ public class LineBannerServiceImpl implements BannerService {
 
     @Override
     public BannerListResponseDto<?> getBannerList(Pageable pageable) {
-        return null;
+        Page<LineBannerVo> bannerVoPage = lineBannerHelper.findBannerList(pageable);
+        return bannerMapper.toBannerListResponseDto(bannerVoPage);
     }
 
     private Boolean getIsVisibleForEndDateOrNull(LocalDateTime endDate) {
