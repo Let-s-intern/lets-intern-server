@@ -78,6 +78,12 @@ public class CouponHelper {
                 .orElseThrow(() -> CouponNotFound.EXCEPTION);
     }
 
+    public List<CouponProgramType> getCouponProgramType(List<CouponProgram> couponProgramList) {
+        return couponProgramList.stream()
+                .map(CouponProgram::getCouponProgramType)
+                .toList();
+    }
+
     public Coupon saveCoupon(Coupon coupon) {
         return couponRepository.save(coupon);
     }

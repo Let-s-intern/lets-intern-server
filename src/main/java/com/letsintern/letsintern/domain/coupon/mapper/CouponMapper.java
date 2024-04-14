@@ -60,8 +60,8 @@ public class CouponMapper {
         return CouponAllResponseDto.of(couponList, pageInfo);
     }
 
-    public CouponResponseDto toCouponResponseDto(Coupon coupon, List<CouponProgramResponseDto> couponProgramResponseDtoList) {
-        return CouponResponseDto.of(coupon, couponProgramResponseDtoList);
+    public CouponResponseDto toCouponResponseDto(Coupon coupon, List<CouponProgramType> couponProgramList) {
+        return CouponResponseDto.of(coupon, couponProgramList);
     }
 
     public List<CouponProgramResponseDto> toCouponProgramResponseDtoList(List<CouponProgram> couponProgramList) {
