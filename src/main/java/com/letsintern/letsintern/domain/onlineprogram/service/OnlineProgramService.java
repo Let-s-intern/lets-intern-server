@@ -6,6 +6,7 @@ import com.letsintern.letsintern.domain.onlineprogram.domain.OnlineProgram;
 import com.letsintern.letsintern.domain.onlineprogram.dto.request.OnlineProgramCreateDTO;
 import com.letsintern.letsintern.domain.onlineprogram.dto.request.OnlineProgramUpdateDTO;
 import com.letsintern.letsintern.domain.onlineprogram.dto.response.OnlineProgramAdminListResponse;
+import com.letsintern.letsintern.domain.onlineprogram.dto.response.OnlineProgramAdminResponse;
 import com.letsintern.letsintern.domain.onlineprogram.helper.OnlineProgramHelper;
 import com.letsintern.letsintern.domain.onlineprogram.mapper.OnlineProgramMapper;
 import com.letsintern.letsintern.domain.onlineprogram.vo.OnlineProgramAdminVo;
@@ -35,6 +36,11 @@ public class OnlineProgramService {
     public OnlineProgramAdminListResponse getOnlineProgramListForAdmin(Pageable pageable) {
         Page<OnlineProgramAdminVo> onlineProgramAdminVoPage = onlineProgramHelper.getOnlineProgramAdminList(pageable);
         return onlineProgramMapper.toOnlineProgramAdminListResponse(onlineProgramAdminVoPage);
+    }
+
+    public OnlineProgramAdminResponse getOnlineProgramForAdmin(Long id) {
+        final OnlineProgram onlineProgram = onlineProgramHelper.findOnlineProgramById(id);
+        return onlineProgramMapper.toOnlineProgramAdminResponse(onlineProgram);
     }
 
     public void updateOnlineProgram(Long id, OnlineProgramUpdateDTO onlineProgramUpdateDTO, MultipartFile file) {
