@@ -3,6 +3,7 @@ package com.letsintern.letsintern.domain.banner.helper;
 import com.letsintern.letsintern.domain.banner.domain.Popup;
 import com.letsintern.letsintern.domain.banner.exception.BannerCreateNoFileBadRequest;
 import com.letsintern.letsintern.domain.banner.repository.PopupRepository;
+import com.letsintern.letsintern.domain.banner.vo.BannerVo;
 import com.letsintern.letsintern.domain.banner.vo.PopupAdminVo;
 import com.letsintern.letsintern.domain.banner.exception.BannerNotFound;
 import lombok.RequiredArgsConstructor;
@@ -37,5 +38,9 @@ public class PopupHelper {
 
     public void deletePopup(Popup popup) {
         popupRepository.delete(popup);
+    }
+
+    public Page<BannerVo> findBannerList(Pageable pageable) {
+        return popupRepository.findValidAndVisibleBanner(pageable);
     }
 }

@@ -3,7 +3,9 @@ package com.letsintern.letsintern.domain.banner.service;
 import com.letsintern.letsintern.domain.banner.domain.Popup;
 import com.letsintern.letsintern.domain.banner.dto.response.BannerAdminListResponse;
 import com.letsintern.letsintern.domain.banner.dto.response.BannerAdminResponse;
+import com.letsintern.letsintern.domain.banner.dto.response.BannerListResponseDto;
 import com.letsintern.letsintern.domain.banner.helper.PopupHelper;
+import com.letsintern.letsintern.domain.banner.vo.BannerVo;
 import com.letsintern.letsintern.domain.banner.vo.PopupAdminVo;
 import com.letsintern.letsintern.domain.banner.dto.request.BannerCreateDTO;
 import com.letsintern.letsintern.domain.banner.dto.request.BannerUpdateDTO;
@@ -63,6 +65,12 @@ public class PopupServiceImpl implements BannerService {
     public void deleteBanner(Long bannerId) {
         final Popup popup = popupHelper.findPopupById(bannerId);
         popupHelper.deletePopup(popup);
+    }
+
+    @Override
+    public BannerListResponseDto<?> getBannerList(Pageable pageable) {
+        Page<BannerVo> bannerVoPage = popupHelper.findBannerList(pageable);
+        return bannerMapper.toBannerListResponseDto(bannerVoPage);
     }
 
     private Boolean getIsVisibleForEndDateOrNull(LocalDateTime endDate) {

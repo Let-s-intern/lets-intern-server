@@ -5,7 +5,9 @@ import com.letsintern.letsintern.domain.banner.dto.request.BannerCreateDTO;
 import com.letsintern.letsintern.domain.banner.dto.request.BannerUpdateDTO;
 import com.letsintern.letsintern.domain.banner.dto.response.BannerAdminListResponse;
 import com.letsintern.letsintern.domain.banner.dto.response.BannerIdResponse;
+import com.letsintern.letsintern.domain.banner.dto.response.BannerListResponseDto;
 import com.letsintern.letsintern.domain.banner.service.BannerServiceFactory;
+import com.letsintern.letsintern.domain.banner.service.BannerSpecificService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -24,9 +26,10 @@ import org.springframework.web.multipart.MultipartFile;
 public class BannerController {
 
     private final BannerServiceFactory bannerServiceFactory;
+    private final BannerSpecificService bannerSpecificService;
 
     @PostMapping
-    @Operation(summary = "어드민 배너 생성")
+    @Operation(summary = "어드민 배너 1개 생성")
     public BannerIdResponse createBannerForAdmin(@RequestPart @Valid final BannerCreateDTO bannerCreateDTO,
                                                  @RequestPart(required = false) MultipartFile file) {
         return bannerServiceFactory.getBannerService(bannerCreateDTO.type()).createBanner(bannerCreateDTO, file);
@@ -61,4 +64,12 @@ public class BannerController {
                                          @PathVariable final Long id) {
         bannerServiceFactory.getBannerService(type).deleteBanner(id);
     }
+
+    @GetMapping
+    @Operation(summary = "타입별 유효한 배너 목록")
+    public ResponseEntity<BannerListResponseDto<?>> getBannerList(@RequestParam(name = "type") BannerType bannerType,
+                                                                 @PageableDefault Pageable pageable) {
+        return ResponseEntity.ok(bannerServiceFactory.getBannerService(bannerType).getBannerList(pageable));
+    }
+
 }
