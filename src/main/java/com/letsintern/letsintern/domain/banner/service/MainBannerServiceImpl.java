@@ -2,6 +2,7 @@ package com.letsintern.letsintern.domain.banner.service;
 
 import com.letsintern.letsintern.domain.banner.domain.MainBanner;
 import com.letsintern.letsintern.domain.banner.dto.response.BannerAdminListResponse;
+import com.letsintern.letsintern.domain.banner.dto.response.BannerAdminResponse;
 import com.letsintern.letsintern.domain.banner.helper.MainBannerHelper;
 import com.letsintern.letsintern.domain.banner.vo.MainBannerAdminVo;
 import com.letsintern.letsintern.domain.banner.dto.request.BannerCreateDTO;
@@ -42,6 +43,12 @@ public class MainBannerServiceImpl implements BannerService {
     public BannerAdminListResponse getBannerListForAdmin(Pageable pageable) {
         Page<MainBannerAdminVo> mainBannerAdminVos = mainBannerHelper.getMainBannerAdminList(pageable);
         return bannerMapper.toBannerAdminListResponse(mainBannerAdminVos);
+    }
+
+    @Override
+    public BannerAdminResponse<?> getBannerForAdmin(Long id) {
+        final MainBanner mainBanner = mainBannerHelper.findMainBannerById(id);
+        return bannerMapper.toBannerAdminResponse(mainBanner);
     }
 
     @Override

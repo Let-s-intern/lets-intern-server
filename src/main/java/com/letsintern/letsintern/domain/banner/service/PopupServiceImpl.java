@@ -2,6 +2,7 @@ package com.letsintern.letsintern.domain.banner.service;
 
 import com.letsintern.letsintern.domain.banner.domain.Popup;
 import com.letsintern.letsintern.domain.banner.dto.response.BannerAdminListResponse;
+import com.letsintern.letsintern.domain.banner.dto.response.BannerAdminResponse;
 import com.letsintern.letsintern.domain.banner.helper.PopupHelper;
 import com.letsintern.letsintern.domain.banner.vo.PopupAdminVo;
 import com.letsintern.letsintern.domain.banner.dto.request.BannerCreateDTO;
@@ -42,6 +43,12 @@ public class PopupServiceImpl implements BannerService {
     public BannerAdminListResponse getBannerListForAdmin(Pageable pageable) {
         Page<PopupAdminVo> popupAdminVos = popupHelper.getPopupAdminList(pageable);
         return bannerMapper.toBannerAdminListResponse(popupAdminVos);
+    }
+
+    @Override
+    public BannerAdminResponse<?> getBannerForAdmin(Long id) {
+        final Popup popup = popupHelper.findPopupById(id);
+        return bannerMapper.toBannerAdminResponse(popup);
     }
 
     @Override

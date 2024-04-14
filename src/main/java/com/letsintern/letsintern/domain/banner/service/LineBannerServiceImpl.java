@@ -4,6 +4,7 @@ import com.letsintern.letsintern.domain.banner.domain.LineBanner;
 import com.letsintern.letsintern.domain.banner.dto.request.BannerCreateDTO;
 import com.letsintern.letsintern.domain.banner.dto.request.BannerUpdateDTO;
 import com.letsintern.letsintern.domain.banner.dto.response.BannerAdminListResponse;
+import com.letsintern.letsintern.domain.banner.dto.response.BannerAdminResponse;
 import com.letsintern.letsintern.domain.banner.dto.response.BannerIdResponse;
 import com.letsintern.letsintern.domain.banner.helper.LineBannerHelper;
 import com.letsintern.letsintern.domain.banner.maper.BannerMapper;
@@ -37,6 +38,12 @@ public class LineBannerServiceImpl implements BannerService {
     public BannerAdminListResponse getBannerListForAdmin(Pageable pageable) {
         Page<LineBannerAdminVo> lineBannerAdminVos = lineBannerHelper.getLineBannerAdminList(pageable);
         return bannerMapper.toBannerAdminListResponse(lineBannerAdminVos);
+    }
+
+    @Override
+    public BannerAdminResponse<?> getBannerForAdmin(Long id) {
+        final LineBanner lineBanner = lineBannerHelper.findLineBannerById(id);
+        return bannerMapper.toBannerAdminResponse(lineBanner);
     }
 
     @Override
