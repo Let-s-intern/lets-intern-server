@@ -5,11 +5,9 @@ import com.letsintern.letsintern.domain.banner.dto.request.BannerCreateDTO;
 import com.letsintern.letsintern.domain.banner.dto.request.BannerUpdateDTO;
 import com.letsintern.letsintern.domain.banner.dto.response.BannerAdminListResponse;
 import com.letsintern.letsintern.domain.banner.dto.response.BannerIdResponse;
-import com.letsintern.letsintern.domain.banner.dto.response.BannerListResponseDto;
 import com.letsintern.letsintern.domain.banner.helper.LineBannerHelper;
 import com.letsintern.letsintern.domain.banner.maper.BannerMapper;
 import com.letsintern.letsintern.domain.banner.vo.LineBannerAdminVo;
-import com.letsintern.letsintern.domain.banner.vo.LineBannerVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -52,12 +50,6 @@ public class LineBannerServiceImpl implements BannerService {
     public void deleteBanner(Long bannerId) {
         final LineBanner lineBanner = lineBannerHelper.findLineBannerById(bannerId);
         lineBannerHelper.deleteLineBanner(lineBanner);
-    }
-
-    @Override
-    public BannerListResponseDto<?> getBannerList(Pageable pageable) {
-        Page<LineBannerVo> bannerVoPage = lineBannerHelper.findBannerList(pageable);
-        return bannerMapper.toBannerListResponseDto(bannerVoPage);
     }
 
     private Boolean getIsVisibleForEndDateOrNull(LocalDateTime endDate) {

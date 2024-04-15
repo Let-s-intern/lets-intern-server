@@ -6,7 +6,6 @@ import com.letsintern.letsintern.domain.banner.repository.LineBannerRepository;
 import com.letsintern.letsintern.domain.banner.vo.LineBannerAdminVo;
 import com.letsintern.letsintern.domain.banner.dto.request.BannerCreateDTO;
 import com.letsintern.letsintern.domain.banner.exception.BannerNotFound;
-import com.letsintern.letsintern.domain.banner.vo.LineBannerVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -38,9 +37,5 @@ public class LineBannerHelper {
 
     public void deleteLineBanner(LineBanner lineBanner) {
         lineBannerRepository.delete(lineBanner);
-    }
-
-    public Page<LineBannerVo> findBannerList(Pageable pageable) {
-        return lineBannerRepository.findValidAndVisibleBanner(pageable);
     }
 }

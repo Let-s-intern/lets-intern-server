@@ -7,7 +7,6 @@ import com.letsintern.letsintern.domain.banner.domain.ProgramBanner;
 import com.letsintern.letsintern.domain.banner.dto.request.BannerCreateDTO;
 import com.letsintern.letsintern.domain.banner.dto.response.BannerAdminListResponse;
 import com.letsintern.letsintern.domain.banner.dto.response.BannerIdResponse;
-import com.letsintern.letsintern.domain.banner.dto.response.BannerListResponseDto;
 import com.letsintern.letsintern.global.common.dto.PageInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
@@ -41,13 +40,6 @@ public class BannerMapper {
         return BannerAdminListResponse.of(
                 (bannerAdminVos.hasContent()) ? bannerAdminVos.getContent() : new ArrayList<>(),
                 PageInfo.of(bannerAdminVos)
-        );
-    }
-
-    public BannerListResponseDto<?> toBannerListResponseDto(Page<?> bannerVoPage) {
-        return BannerListResponseDto.of(
-                bannerVoPage.hasContent() ? bannerVoPage.getContent() : new ArrayList<>(),
-                PageInfo.of(bannerVoPage)
         );
     }
 }
