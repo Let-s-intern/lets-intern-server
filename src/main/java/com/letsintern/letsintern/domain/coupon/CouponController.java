@@ -5,7 +5,6 @@ import com.letsintern.letsintern.domain.coupon.dto.response.CouponAllResponseDto
 import com.letsintern.letsintern.domain.coupon.dto.response.CouponApplyResponseDto;
 import com.letsintern.letsintern.domain.coupon.dto.response.CouponResponseDto;
 import com.letsintern.letsintern.domain.coupon.service.CouponService;
-import com.letsintern.letsintern.domain.coupon.vo.CouponAdminVo;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
