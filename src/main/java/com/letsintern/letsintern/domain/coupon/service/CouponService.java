@@ -7,11 +7,13 @@ import com.letsintern.letsintern.domain.coupon.dto.request.BaseCouponProgramRequ
 import com.letsintern.letsintern.domain.coupon.dto.request.BaseCouponRequestDto;
 import com.letsintern.letsintern.domain.coupon.dto.response.CouponAllResponseDto;
 import com.letsintern.letsintern.domain.coupon.dto.response.CouponApplyResponseDto;
-import com.letsintern.letsintern.domain.coupon.dto.response.CouponProgramResponseDto;
 import com.letsintern.letsintern.domain.coupon.dto.response.CouponResponseDto;
 import com.letsintern.letsintern.domain.coupon.helper.CouponHelper;
 import com.letsintern.letsintern.domain.coupon.mapper.CouponMapper;
-import com.letsintern.letsintern.domain.coupon.vo.*;
+import com.letsintern.letsintern.domain.coupon.vo.BaseCouponEnumVo;
+import com.letsintern.letsintern.domain.coupon.vo.BaseCouponProgramEnumVo;
+import com.letsintern.letsintern.domain.coupon.vo.CouponAdminVo;
+import com.letsintern.letsintern.domain.coupon.vo.CouponUserHistoryVo;
 import com.letsintern.letsintern.domain.user.domain.User;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
@@ -32,9 +34,9 @@ public class CouponService {
 
     public CouponResponseDto getCoupon(Long couponId) {
         Coupon coupon = couponHelper.findCouponOrThrow(couponId);
-        List<CouponProgramResponseDto> couponProgramResponseDtoList
-                = couponMapper.toCouponProgramResponseDtoList(coupon.getCouponProgramList());
-        return couponMapper.toCouponResponseDto(coupon, couponProgramResponseDtoList);
+        List<CouponProgramType> couponProgramTypeList
+                = couponMapper.toCouponProgramTypeList(coupon.getCouponProgramList());
+        return couponMapper.toCouponResponseDto(coupon, couponProgramTypeList);
     }
 
     public CouponAllResponseDto getCoupons(Pageable pageable) {

@@ -60,13 +60,13 @@ public class CouponMapper {
         return CouponAllResponseDto.of(couponList, pageInfo);
     }
 
-    public CouponResponseDto toCouponResponseDto(Coupon coupon, List<CouponProgramResponseDto> couponProgramResponseDtoList) {
+    public CouponResponseDto toCouponResponseDto(Coupon coupon, List<CouponProgramType> couponProgramResponseDtoList) {
         return CouponResponseDto.of(coupon, couponProgramResponseDtoList);
     }
 
-    public List<CouponProgramResponseDto> toCouponProgramResponseDtoList(List<CouponProgram> couponProgramList) {
+    public List<CouponProgramType> toCouponProgramTypeList(List<CouponProgram> couponProgramList) {
         return couponProgramList.stream()
-                .map(couponProgram -> CouponProgramResponseDto.of(couponProgram.getCouponProgramType()))
+                .map(CouponProgram::getCouponProgramType)
                 .collect(Collectors.toList());
     }
 
