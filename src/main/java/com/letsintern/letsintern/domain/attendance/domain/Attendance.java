@@ -8,12 +8,12 @@ import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDateTime;
 
-@Entity
-@Getter @Setter
+@Entity(name = "attendance")
+@Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Attendance {
 
@@ -27,12 +27,10 @@ public class Attendance {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    @ColumnDefault("PRESENT")
     private AttendanceStatus status;
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    @ColumnDefault("WAITING")
     private AttendanceResult result;
 
     @Nullable
@@ -56,7 +54,7 @@ public class Attendance {
         this.mission = mission;
         this.user = user;
         this.link = link;
-        if(mission.getEndDate().isAfter(LocalDateTime.now())) this.status = AttendanceStatus.PRESENT;
+        if (mission.getEndDate().isAfter(LocalDateTime.now())) this.status = AttendanceStatus.PRESENT;
         else this.status = AttendanceStatus.LATE;
         this.result = AttendanceResult.WAITING;
         this.isRefunded = false;
