@@ -32,6 +32,8 @@ public class CouponHelper {
     }
 
     public void validateAvailableCouponProgram(Long couponId, CouponProgramType couponProgramType) {
+        if (existAllCouponType(couponId))
+            return;
         if (!existCouponProgramType(couponId, couponProgramType))
             throw InvalidCouponProgramType.EXCEPTION;
     }
@@ -104,6 +106,10 @@ public class CouponHelper {
 
     private boolean existCouponProgramType(Long couponId, CouponProgramType couponProgramType) {
         return couponProgramRepository.existsByCouponIdAndCouponProgramType(couponId, couponProgramType);
+    }
+
+    private boolean existAllCouponType(Long couponId) {
+        return couponProgramRepository.existsByCouponIdAndCouponProgramType(couponId, CouponProgramType.ALL);
     }
 
     private boolean existCouponCode(Long couponId, String code) {
