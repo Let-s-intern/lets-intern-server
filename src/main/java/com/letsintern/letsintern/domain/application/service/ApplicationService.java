@@ -9,6 +9,7 @@ import com.letsintern.letsintern.domain.application.exception.ApplicationNotFoun
 import com.letsintern.letsintern.domain.application.helper.ApplicationHelper;
 import com.letsintern.letsintern.domain.application.mapper.ApplicationMapper;
 import com.letsintern.letsintern.domain.application.repository.ApplicationRepository;
+import com.letsintern.letsintern.domain.coupon.domain.Coupon;
 import com.letsintern.letsintern.domain.coupon.domain.CouponProgramType;
 import com.letsintern.letsintern.domain.coupon.domain.CouponUser;
 import com.letsintern.letsintern.domain.coupon.helper.CouponHelper;
@@ -157,7 +158,8 @@ public class ApplicationService {
     }
 
     private Application createApplicationAndSave(User user, Long programId, ApplicationCreateDTO applicationCreateDTO, Integer totalFee) {
-        Application newUserApplication = applicationMapper.toEntity(programId, applicationCreateDTO, user, totalFee);
+        Coupon coupon = couponHelper.findCouponByCodeOrThrow(applicationCreateDTO.getCode());
+        Application newUserApplication = applicationMapper.toEntity(programId, applicationCreateDTO, user, totalFee, coupon.getName());
         return applicationRepository.save(newUserApplication);
     }
 

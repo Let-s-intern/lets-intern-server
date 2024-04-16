@@ -73,7 +73,7 @@ public class ApplicationHelper {
             throw DuplicateApplication.EXCEPTION;
 
         Integer totalFee = calculateTotalFee(program, 0);
-        Application newGuestApplication = applicationMapper.toEntity(programId, applicationCreateDTO, null, totalFee);
+        Application newGuestApplication = applicationMapper.toEntity(programId, applicationCreateDTO, null, totalFee, null);
         Application savedApplication = applicationRepository.save(newGuestApplication);
 
         program.setApplicationCount(program.getApplicationCount() + 1);
