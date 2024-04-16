@@ -1,6 +1,7 @@
 package com.letsintern.letsintern.domain.coupon.dto.response;
 
 import com.letsintern.letsintern.domain.coupon.domain.Coupon;
+import com.letsintern.letsintern.domain.coupon.domain.CouponProgramType;
 import com.letsintern.letsintern.domain.coupon.domain.CouponType;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -11,7 +12,7 @@ import java.util.List;
 @Builder(access = AccessLevel.PRIVATE)
 public record CouponResponseDto(
         CouponType couponType,
-        List<CouponProgramResponseDto> couponProgramList,
+        List<CouponProgramType> couponProgramList,
         String name,
         String code,
         Integer discount,
@@ -20,7 +21,7 @@ public record CouponResponseDto(
         LocalDateTime endDate,
         LocalDateTime createDate
 ) {
-    public static CouponResponseDto of(Coupon coupon, List<CouponProgramResponseDto> couponProgramList) {
+    public static CouponResponseDto of(Coupon coupon, List<CouponProgramType> couponProgramList) {
         return CouponResponseDto.builder()
                 .couponType(coupon.getCouponType())
                 .couponProgramList(couponProgramList)
