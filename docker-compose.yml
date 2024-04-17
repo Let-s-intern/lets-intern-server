@@ -17,3 +17,4 @@ services:
       context: ./config/nginx
     ports:
       - "80:80"
+      - "9010:9010"
