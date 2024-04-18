@@ -49,7 +49,7 @@ public class CouponService {
         CouponUserHistoryVo couponUserHistoryVo = couponHelper.findCouponUserHistoryVoOrCreate(user, code);
         CouponProgramType couponProgramType = couponMapper.toCouponProgramType(type);
         couponHelper.validateApplyTimeForCoupon(couponUserHistoryVo.coupon().getStartDate(), couponUserHistoryVo.coupon().getEndDate());
-        couponHelper.validateRemainTimeForUser(couponUserHistoryVo.coupon().getTime());
+        couponHelper.validateRemainTimeForUser(couponUserHistoryVo.remainTime());
         couponHelper.validateAvailableCouponProgram(couponUserHistoryVo.coupon().getId(), couponProgramType);
         return CouponApplyResponseDto.of(couponUserHistoryVo.coupon().getDiscount());
     }
