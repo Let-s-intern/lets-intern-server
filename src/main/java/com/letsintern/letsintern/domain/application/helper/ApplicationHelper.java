@@ -240,4 +240,14 @@ public class ApplicationHelper {
             if (application == null) throw ApplicationNotFound.EXCEPTION;
         }
     }
+
+    public void validateApplicationOpenStatus(Application application) {
+        if (!application.getProgram().getStatus().equals(ProgramStatus.OPEN))
+            throw ApplicationCannotDeleted.EXCEPTION;
+    }
+
+    public Application findApplicationOrThrow(Long applicationId) {
+        return applicationRepository.findById(applicationId)
+                .orElseThrow(() -> ApplicationNotFound.EXCEPTION);
+    }
 }

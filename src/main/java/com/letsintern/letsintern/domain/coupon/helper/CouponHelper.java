@@ -68,6 +68,11 @@ public class CouponHelper {
                 .orElseThrow(() -> CouponHistoryNotFound.EXCEPTION);
     }
 
+    public CouponUser findCouponUserByCodeAndUserIdOrThrow(String code, Long userId) {
+        return couponUserRepository.findByCouponCodeAndUserId(code, userId)
+                .orElseThrow(() -> CouponHistoryNotFound.EXCEPTION);
+    }
+
     public Coupon findCouponByCodeOrThrow(String code) {
         return couponRepository.findByCode(code)
                 .orElseThrow(() -> CouponNotFound.EXCEPTION);

@@ -1,5 +1,6 @@
 package com.letsintern.letsintern.domain.coupon.repository;
 
+import com.letsintern.letsintern.domain.coupon.domain.CouponUser;
 import com.letsintern.letsintern.domain.coupon.vo.CouponUserHistoryVo;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -23,6 +24,17 @@ public class CouponUserRepositoryCustomImpl implements CouponUserRepositoryCusto
                         couponUser.remainTime
                 ))
                 .from(couponUser)
+                .where(
+                        eqUserId(userId),
+                        eqCouponCode(code)
+                )
+                .fetchOne());
+    }
+
+    @Override
+    public Optional<CouponUser> findByCouponCodeAndUserId(String code, Long userId) {
+        return Optional.ofNullable(queryFactory
+                .selectFrom(couponUser)
                 .where(
                         eqUserId(userId),
                         eqCouponCode(code)

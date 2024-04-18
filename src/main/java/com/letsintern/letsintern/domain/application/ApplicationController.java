@@ -46,8 +46,9 @@ public class ApplicationController {
 
     @Operation(summary = "마이페이지 지원 내역 취소")
     @DeleteMapping("/{applicationId}")
-    public ResponseEntity<String> deleteApplication(@PathVariable Long applicationId) {
-        applicationService.deleteApplication(applicationId);
+    public ResponseEntity<String> deleteApplication(@AuthenticationPrincipal PrincipalDetails principalDetails,
+                                                    @PathVariable Long applicationId) {
+        applicationService.deleteApplication(applicationId, principalDetails);
         return ResponseEntity.ok("success");
     }
 
