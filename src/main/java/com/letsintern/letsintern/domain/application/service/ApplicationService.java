@@ -139,7 +139,7 @@ public class ApplicationService {
 
     /* 프로그램 등록시 쿠폰 사용여부 판단 */
     private Integer checkCouponAppliedAndGetDiscountValue(User user, ApplicationCreateDTO applicationCreateDTO) {
-        if (!isCouponApplied(applicationCreateDTO.getCode()))
+        if (Objects.isNull(applicationCreateDTO.getCode()))
             return 0;
         CouponUserHistoryVo couponUserHistoryVo = couponHelper.findCouponUserHistoryVoOrCreate(user, applicationCreateDTO.getCode());
         CouponProgramType couponProgramType = couponMapper.toCouponProgramType(applicationCreateDTO.getCouponProgramType());
