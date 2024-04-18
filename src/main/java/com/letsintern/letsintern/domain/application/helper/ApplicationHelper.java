@@ -218,7 +218,7 @@ public class ApplicationHelper {
     public Integer calculateTotalFee(Program program, Integer couponValue) {
         if (couponValue == -1)
             return 0;
-        return (program.getFeeCharge() + program.getFeeCharge()) - program.getDiscountValue() - couponValue;
+        return (program.getFeeCharge() + program.getFeeRefund()) - program.getDiscountValue() - couponValue;
     }
 
     public void validateDuplicateApplication(Long programId, User user) {
