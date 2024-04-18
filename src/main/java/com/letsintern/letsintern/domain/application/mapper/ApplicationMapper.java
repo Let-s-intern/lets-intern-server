@@ -6,6 +6,7 @@ import com.letsintern.letsintern.domain.application.dto.response.*;
 import com.letsintern.letsintern.domain.application.vo.ApplicationAdminVo;
 import com.letsintern.letsintern.domain.application.vo.ApplicationChallengeAdminVo;
 import com.letsintern.letsintern.domain.application.vo.ApplicationVo;
+import com.letsintern.letsintern.domain.coupon.domain.Coupon;
 import com.letsintern.letsintern.domain.program.domain.Program;
 import com.letsintern.letsintern.domain.program.exception.ProgramNotFound;
 import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
@@ -22,8 +23,8 @@ import java.util.List;
 public class ApplicationMapper {
     private final ProgramRepository programRepository;
 
-    public Application toEntity(Long programId, ApplicationCreateDTO applicationCreateDTO, User user, Integer totalFee, String couponName) {
-        return Application.of(validateProgram(programId), user, applicationCreateDTO, totalFee, couponName);
+    public Application toEntity(Long programId, ApplicationCreateDTO applicationCreateDTO, User user, Integer totalFee, String name) {
+        return Application.of(validateProgram(programId), user, applicationCreateDTO, totalFee, name);
     }
 
     public ApplicationIdResponse toApplicationIdResponse(Long applicationId) {

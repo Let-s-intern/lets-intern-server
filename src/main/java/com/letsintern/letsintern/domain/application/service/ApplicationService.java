@@ -170,9 +170,18 @@ public class ApplicationService {
     }
 
     private Application createApplicationAndSave(User user, Long programId, ApplicationCreateDTO applicationCreateDTO, Integer totalFee) {
-        Coupon coupon = couponHelper.findCouponByCodeOrThrow(applicationCreateDTO.getCode());
-        Application newUserApplication = applicationMapper.toEntity(programId, applicationCreateDTO, user, totalFee, coupon.getName());
+        String name = getCouponNameForInput(applicationCreateDTO.getCode());
+        Application newUserApplication = applicationMapper.toEntity(programId, applicationCreateDTO, user, totalFee, name);
         return applicationRepository.save(newUserApplication);
+    }
+
+    private String getCouponNameForInput(String code) {
+        if(Objects.isNull(code))
+            return null;
+        else {
+            Coupon coupon = couponHelper.findCouponByCodeOrThrow(code);
+            return coupon.getName();
+        }
     }
 
     /* program application count 증가 및 저장 */
