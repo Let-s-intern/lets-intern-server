@@ -48,7 +48,7 @@ public class CouponUserRepositoryCustomImpl implements CouponUserRepositoryCusto
     }
 
     private BooleanExpression eqCouponCode(String code) {
-        return code != null ? Expressions.booleanTemplate("BINARY {0} = {1}", couponUser.coupon.code, code) : null;
+        return code != null ? couponUser.coupon.code.eq(code) : null;
     }
 
 }
