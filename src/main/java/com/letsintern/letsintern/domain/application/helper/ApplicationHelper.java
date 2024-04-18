@@ -216,7 +216,7 @@ public class ApplicationHelper {
     }
 
     public Integer calculateTotalFee(Program program, Integer couponValue) {
-        if (program.getDiscountValue() == -1)
+        if (couponValue == -1)
             return 0;
         return (program.getFeeCharge() + program.getFeeCharge()) - program.getDiscountValue() - couponValue;
     }
