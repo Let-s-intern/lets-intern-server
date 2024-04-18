@@ -4,6 +4,7 @@ import com.letsintern.letsintern.domain.coupon.domain.CouponUser;
 import com.letsintern.letsintern.domain.coupon.vo.CouponUserHistoryVo;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
@@ -47,6 +48,7 @@ public class CouponUserRepositoryCustomImpl implements CouponUserRepositoryCusto
     }
 
     private BooleanExpression eqCouponCode(String code) {
-        return code != null ? couponUser.coupon.code.eq(code) : null;
+        return code != null ? Expressions.booleanTemplate("BINARY {0} = {1}", couponUser.coupon.code, code) : null;
     }
+
 }
