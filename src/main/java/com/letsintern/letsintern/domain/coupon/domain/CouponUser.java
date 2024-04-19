@@ -33,6 +33,11 @@ public class CouponUser {
         return couponUser;
     }
 
+    public void increaseRemainTime() {
+        if (this.remainTime != -1)
+            this.remainTime++;
+    }
+
     public void decreaseRemainTime() {
         if (this.remainTime != -1)
             this.remainTime--;

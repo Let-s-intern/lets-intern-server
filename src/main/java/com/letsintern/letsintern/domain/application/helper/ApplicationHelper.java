@@ -73,7 +73,7 @@ public class ApplicationHelper {
             throw DuplicateApplication.EXCEPTION;
 
         Integer totalFee = calculateTotalFee(program, 0);
-        Application newGuestApplication = applicationMapper.toEntity(programId, applicationCreateDTO, null, totalFee);
+        Application newGuestApplication = applicationMapper.toEntity(programId, applicationCreateDTO, null, totalFee, null);
         Application savedApplication = applicationRepository.save(newGuestApplication);
 
         program.setApplicationCount(program.getApplicationCount() + 1);
@@ -216,7 +216,9 @@ public class ApplicationHelper {
     }
 
     public Integer calculateTotalFee(Program program, Integer couponValue) {
-        return (program.getFeeCharge() + program.getFeeCharge()) - program.getDiscountValue() - couponValue;
+        if (couponValue == -1)
+            return 0;
+        return (program.getFeeCharge() + program.getFeeRefund()) - program.getDiscountValue() - couponValue;
     }
 
     public void validateDuplicateApplication(Long programId, User user) {
@@ -239,5 +241,15 @@ public class ApplicationHelper {
             final Application application = applicationRepository.findByProgramIdAndUserId(programId, userId);
             if (application == null) throw ApplicationNotFound.EXCEPTION;
         }
+    }
+
+    public void validateApplicationOpenStatus(Application application) {
+        if (!application.getProgram().getStatus().equals(ProgramStatus.OPEN))
+            throw ApplicationCannotDeleted.EXCEPTION;
+    }
+
+    public Application findApplicationOrThrow(Long applicationId) {
+        return applicationRepository.findById(applicationId)
+                .orElseThrow(() -> ApplicationNotFound.EXCEPTION);
     }
 }

@@ -51,12 +51,13 @@ public class CouponService {
         CouponUserHistoryVo couponUserHistoryVo = couponHelper.findCouponUserHistoryVoOrCreate(user, code);
         CouponProgramType couponProgramType = couponMapper.toCouponProgramType(type);
         couponHelper.validateApplyTimeForCoupon(couponUserHistoryVo.coupon().getStartDate(), couponUserHistoryVo.coupon().getEndDate());
-        couponHelper.validateRemainTimeForUser(couponUserHistoryVo.coupon().getTime());
         couponHelper.validateAvailableCouponProgram(couponUserHistoryVo.coupon().getId(), couponProgramType);
+        couponHelper.validateRemainTimeForUser(couponUserHistoryVo.remainTime());
         return CouponApplyResponseDto.of(couponUserHistoryVo.coupon().getDiscount());
     }
 
     public void createNewCoupon(BaseCouponRequestDto baseCouponRequestDto) {
+        couponHelper.validateCodeSensitive(baseCouponRequestDto.code());
         couponHelper.validateDuplicateCouponCode(null, baseCouponRequestDto.code());
         BaseCouponEnumVo baseCouponEnumVo = couponMapper.toCouponEnumVo(baseCouponRequestDto);
         List<BaseCouponProgramEnumVo> baseCouponProgramEnumVoList = couponMapper.toCouponProgramEnumVoList(baseCouponRequestDto.programTypeList());
@@ -65,6 +66,7 @@ public class CouponService {
     }
 
     public void updateCouponInfo(Long couponId, BaseCouponRequestDto baseCouponRequestDto) {
+        couponHelper.validateCodeSensitive(baseCouponRequestDto.code());
         couponHelper.validateDuplicateCouponCode(couponId, baseCouponRequestDto.code());
         Coupon coupon = couponHelper.findCouponOrThrow(couponId);
         BaseCouponEnumVo baseCouponEnumVo = couponMapper.toCouponEnumVo(baseCouponRequestDto);

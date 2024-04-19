@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @RequiredArgsConstructor
 @Component
@@ -25,6 +26,13 @@ public class CouponHelper {
     private final CouponRepository couponRepository;
     private final CouponUserRepository couponUserRepository;
     private final CouponProgramRepository couponProgramRepository;
+
+    public void validateCodeSensitive(String code) {
+        if (Objects.isNull(code))
+            return;
+        if (!code.equals(code.toUpperCase()))
+            throw CouponCodeSensitiveException.EXCEPTION;
+    }
 
     public void validateDuplicateCouponCode(Long couponId, String code) {
         if (existCouponCode(couponId, code))
@@ -67,6 +75,11 @@ public class CouponHelper {
 
     public CouponUser findCouponUserByCouponIdAndUserIdThrow(Long couponId, Long userId) {
         return couponUserRepository.findByCouponIdAndUserId(couponId, userId)
+                .orElseThrow(() -> CouponHistoryNotFound.EXCEPTION);
+    }
+
+    public CouponUser findCouponUserByCodeAndUserIdOrThrow(String code, Long userId) {
+        return couponUserRepository.findByCouponCodeAndUserId(code, userId)
                 .orElseThrow(() -> CouponHistoryNotFound.EXCEPTION);
     }
 

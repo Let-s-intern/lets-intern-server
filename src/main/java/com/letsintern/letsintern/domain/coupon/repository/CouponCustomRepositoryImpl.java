@@ -1,6 +1,7 @@
 package com.letsintern.letsintern.domain.coupon.repository;
 
 import com.letsintern.letsintern.domain.coupon.domain.Coupon;
+import com.letsintern.letsintern.domain.coupon.domain.CouponUser;
 import com.letsintern.letsintern.domain.coupon.vo.CouponAdminVo;
 import com.letsintern.letsintern.domain.coupon.vo.CouponUserHistoryVo;
 import com.querydsl.core.types.Projections;

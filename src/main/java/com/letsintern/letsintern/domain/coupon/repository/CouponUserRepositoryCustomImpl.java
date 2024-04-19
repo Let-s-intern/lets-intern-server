@@ -1,8 +1,10 @@
 package com.letsintern.letsintern.domain.coupon.repository;
 
+import com.letsintern.letsintern.domain.coupon.domain.CouponUser;
 import com.letsintern.letsintern.domain.coupon.vo.CouponUserHistoryVo;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
@@ -30,6 +32,17 @@ public class CouponUserRepositoryCustomImpl implements CouponUserRepositoryCusto
                 .fetchOne());
     }
 
+    @Override
+    public Optional<CouponUser> findByCouponCodeAndUserId(String code, Long userId) {
+        return Optional.ofNullable(queryFactory
+                .selectFrom(couponUser)
+                .where(
+                        eqUserId(userId),
+                        eqCouponCode(code)
+                )
+                .fetchOne());
+    }
+
     private BooleanExpression eqUserId(Long userId) {
         return userId != null ? couponUser.user.id.eq(userId) : null;
     }
@@ -37,4 +50,5 @@ public class CouponUserRepositoryCustomImpl implements CouponUserRepositoryCusto
     private BooleanExpression eqCouponCode(String code) {
         return code != null ? couponUser.coupon.code.eq(code) : null;
     }
+
 }
