@@ -30,6 +30,8 @@ public class QApplication extends EntityPathBase<Application> {
 
     public final EnumPath<ApplicationAttendance> attendance = createEnum("attendance", ApplicationAttendance.class);
 
+    public final StringPath couponCode = createString("couponCode");
+
     public final StringPath createdAt = createString("createdAt");
 
     public final StringPath email = createString("email");
@@ -57,6 +59,8 @@ public class QApplication extends EntityPathBase<Application> {
     public final NumberPath<Long> reviewId = createNumber("reviewId", Long.class);
 
     public final EnumPath<ApplicationStatus> status = createEnum("status", ApplicationStatus.class);
+
+    public final NumberPath<Integer> totalFee = createNumber("totalFee", Integer.class);
 
     public final EnumPath<ApplicationType> type = createEnum("type", ApplicationType.class);
 

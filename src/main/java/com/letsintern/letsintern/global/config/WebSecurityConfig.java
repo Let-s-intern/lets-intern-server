@@ -59,20 +59,20 @@ public class WebSecurityConfig {
 
     private final String[] AdminGetPatterns = {
             "/user/admin/**", "/memo/**", "/program/admin/**", "/faq/**", "/application/admin/**", "/review/admin/**",
-            "/attendance/admin/**", "/contents/**", "/mission/admin/**"
+            "/attendance/admin/**", "/contents/**", "/mission/admin/**", "/banner/admin/**", "/online-program/admin/**"
     };
 
     private final String[] AdminPostPatterns = {
-            "/memo/**", "/program", "/faq/**", "/contents/**", "/mission/**", "/notice/**"
+            "/memo/**", "/program", "/faq/**", "/contents/**", "/mission/**", "/notice/**", "/banner/**", "/online-program/**"
     };
 
     private final String[] AdminPatchPatterns = {
             "/user/admin/**", "/memo/**", "/program/**", "/faq/**", "/application/admin/**", "/review/**",
-            "/attendance/admin/**", "/contents/**", "/mission/**", "/notice/**"
+            "/attendance/admin/**", "/contents/**", "/mission/**", "/notice/**", "/banner/**", "/online-program/**"
     };
 
     private final String[] AdminDeletePatterns = {
-            "/memo/**", "/program/**", "/faq/**", "/user/admin/**", "/contents/**", "/mission/**", "/notice/**"
+            "/memo/**", "/program/**", "/faq/**", "/user/admin/**", "/contents/**", "/mission/**", "/notice/**", "/banner/**", "/online-program/**"
     };
 
     private final String[] UserGetPatterns = {
@@ -157,6 +157,7 @@ public class WebSecurityConfig {
                         "http://localhost:8080",
                         "http://localhost:3000",
                         "https://lets-intern.vercel.app",
+                        "https://lets-intern-client-test.vercel.app",
                         "https://letsintern.co.kr",
                         "https://www.letsintern.co.kr",
                         SERVER_URL

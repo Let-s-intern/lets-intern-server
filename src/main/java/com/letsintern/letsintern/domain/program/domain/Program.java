@@ -5,6 +5,7 @@ import com.letsintern.letsintern.domain.application.domain.Application;
 import com.letsintern.letsintern.domain.mission.domain.Mission;
 import com.letsintern.letsintern.domain.notice.domain.Notice;
 import com.letsintern.letsintern.domain.program.dto.request.ProgramCreateRequestDTO;
+import com.letsintern.letsintern.domain.program.dto.request.ProgramUpdateRequestDTO;
 import com.letsintern.letsintern.domain.program.dto.response.ZoomMeetingCreateResponse;
 import com.letsintern.letsintern.domain.user.domain.AccountType;
 import com.letsintern.letsintern.global.common.util.StringUtils;
@@ -16,8 +17,11 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static com.letsintern.letsintern.global.utils.EntityUpdateValueUtils.updateValue;
+
 @Entity
-@Getter @Setter
+@Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Program {
 
@@ -106,6 +110,9 @@ public class Program {
     @NotNull
     private Integer feeCharge = 0;
 
+    @NotNull
+    private Integer discountValue = 0;
+
     @Nullable
     private LocalDateTime feeDueDate;
 
@@ -132,7 +139,6 @@ public class Program {
     @Column(length = 10)
     private String openKakaoPassword;
 
-
     @JsonIgnore
     @OneToMany(mappedBy = "program", orphanRemoval = true)
     private List<Application> applicationList;
@@ -149,7 +155,7 @@ public class Program {
     private Program(ProgramType type, Integer th, String title, Integer headcount,
                     LocalDateTime dueDate, LocalDateTime announcementDate, LocalDateTime startDate, LocalDateTime endDate,
                     String contents, ProgramWay way, String location, String notice, List<Long> faqIdList,
-                    ProgramFeeType feeType, Integer feeRefund, Integer feeCharge, LocalDateTime feeDueDate, AccountType accountType, String accountNumber, String mentorPassword,
+                    ProgramFeeType feeType, Integer feeRefund, Integer feeCharge, Integer discountValue, LocalDateTime feeDueDate, AccountType accountType, String accountNumber, String mentorPassword,
                     ProgramTopic topic, String openKakaoLink, String openKakaoPassword, ZoomMeetingCreateResponse zoomMeetingCreateResponse) {
         this.type = type;
         this.th = th;
@@ -167,29 +173,30 @@ public class Program {
         this.feeType = feeType;
 
         // 이용료 or 보증금 프로그램
-        if(feeType.equals(ProgramFeeType.CHARGE) || feeType.equals(ProgramFeeType.REFUND)) {
-            if(feeType.equals(ProgramFeeType.REFUND)) this.feeRefund = feeRefund;
+        if (feeType.equals(ProgramFeeType.CHARGE) || feeType.equals(ProgramFeeType.REFUND)) {
+            if (feeType.equals(ProgramFeeType.REFUND)) this.feeRefund = feeRefund;
             this.feeCharge = feeCharge;
             this.feeDueDate = feeDueDate;
+            this.discountValue = discountValue;
             this.accountType = accountType;
             this.accountNumber = accountNumber;
         }
 
         // Zoom Link
-        if((way.equals(ProgramWay.ONLINE) || way.equals(ProgramWay.ALL)) && zoomMeetingCreateResponse != null) {
+        if ((way.equals(ProgramWay.ONLINE) || way.equals(ProgramWay.ALL)) && zoomMeetingCreateResponse != null) {
             this.link = zoomMeetingCreateResponse.getJoin_url();
             this.linkPassword = zoomMeetingCreateResponse.getPassword();
         }
 
         // CHALLENGE
-        if(type.equals(ProgramType.CHALLENGE_HALF) || type.equals(ProgramType.CHALLENGE_FULL)) {
+        if (type.equals(ProgramType.CHALLENGE_HALF) || type.equals(ProgramType.CHALLENGE_FULL)) {
             this.topic = topic;
             this.openKakaoLink = openKakaoLink;
             this.openKakaoPassword = openKakaoPassword;
         }
 
         // LETS_CHAT
-        if(type.equals(ProgramType.LETS_CHAT)) {
+        if (type.equals(ProgramType.LETS_CHAT)) {
             this.mentorPassword = mentorPassword;
             this.mailStatus = MailStatus.YET;
         }
@@ -213,6 +220,7 @@ public class Program {
                 .feeType(programCreateRequestDTO.getFeeType())
                 .feeRefund(programCreateRequestDTO.getFeeRefund())
                 .feeCharge(programCreateRequestDTO.getFeeCharge())
+                .discountValue(programCreateRequestDTO.getDiscountValue())
                 .feeDueDate(programCreateRequestDTO.getFeeDueDate())
                 .accountType(programCreateRequestDTO.getAccountType())
                 .accountNumber(programCreateRequestDTO.getAccountNumber())
@@ -223,4 +231,45 @@ public class Program {
                 .zoomMeetingCreateResponse(zoomMeetingCreateResponse)
                 .build();
     }
+
+    public void increaseProgramApplicationCount() {
+        this.applicationCount++;
+    }
+
+    public void decreaseProgramApplicationCount() {
+        this.applicationCount--;
+    }
+
+    public void updateProgramInfo(ProgramUpdateRequestDTO programUpdateRequestDTO,
+                                  ProgramStatus programStatus,
+                                  String stringFaqList) {
+        this.type = updateValue(this.type, programUpdateRequestDTO.getType());
+        this.th = updateValue(this.th, programUpdateRequestDTO.getTh());
+        this.title = updateValue(this.title, programUpdateRequestDTO.getTitle());
+        this.headcount = updateValue(this.headcount, programUpdateRequestDTO.getHeadcount());
+        this.dueDate = updateValue(this.dueDate, programUpdateRequestDTO.getDueDate());
+        this.announcementDate = updateValue(this.announcementDate, programUpdateRequestDTO.getAnnouncementDate());
+        this.startDate = updateValue(this.startDate, programUpdateRequestDTO.getStartDate());
+        this.endDate = updateValue(this.endDate, programUpdateRequestDTO.getEndDate());
+        this.contents = updateValue(this.contents, programUpdateRequestDTO.getContents());
+        this.way = updateValue(this.way, programUpdateRequestDTO.getWay());
+        this.location = updateValue(this.location, programUpdateRequestDTO.getLocation());
+        this.notice = updateValue(this.notice, programUpdateRequestDTO.getNotice());
+        this.status = updateValue(this.status, programStatus);
+        this.isVisible = updateValue(this.isVisible, programUpdateRequestDTO.getIsVisible());
+        this.faqListStr = updateValue(this.faqListStr, stringFaqList);
+        this.link = updateValue(this.link, programUpdateRequestDTO.getLink());
+        this.linkPassword = updateValue(this.linkPassword, programUpdateRequestDTO.getLinkPassword());
+        this.feeType = updateValue(this.feeType, programUpdateRequestDTO.getFeeType());
+        this.feeRefund = updateValue(this.feeRefund, programUpdateRequestDTO.getFeeRefund());
+        this.feeCharge = updateValue(this.feeCharge, programUpdateRequestDTO.getFeeCharge());
+        this.discountValue = updateValue(this.discountValue, programUpdateRequestDTO.getDiscountValue());
+        this.feeDueDate = updateValue(this.feeDueDate, programUpdateRequestDTO.getFeeDueDate());
+        this.accountType = updateValue(this.accountType, programUpdateRequestDTO.getAccountType());
+        this.accountNumber = updateValue(this.accountNumber, programUpdateRequestDTO.getAccountNumber());
+        this.topic = updateValue(this.topic, programUpdateRequestDTO.getTopic());
+        this.openKakaoLink = updateValue(this.openKakaoLink, programUpdateRequestDTO.getOpenKakaoLink());
+        this.openKakaoPassword = updateValue(this.openKakaoPassword, programUpdateRequestDTO.getOpenKakaoPassword());
+    }
+
 }

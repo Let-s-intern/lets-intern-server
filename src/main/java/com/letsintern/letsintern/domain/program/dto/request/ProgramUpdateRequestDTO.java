@@ -52,6 +52,8 @@ public class ProgramUpdateRequestDTO {
 
     private Integer feeCharge;
 
+    private Integer discountValue;
+
     private LocalDateTime feeDueDate;
 
     private AccountType accountType;

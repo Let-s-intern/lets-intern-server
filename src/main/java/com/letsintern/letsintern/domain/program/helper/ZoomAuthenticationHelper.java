@@ -1,8 +1,9 @@
 package com.letsintern.letsintern.domain.program.helper;
 
 import com.letsintern.letsintern.domain.program.dto.response.ZoomAuthResponse;
+import com.letsintern.letsintern.domain.program.exception.ZoomTokenUnauthorizedException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
@@ -17,6 +18,7 @@ import java.util.Calendar;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class ZoomAuthenticationHelper {
@@ -37,8 +39,8 @@ public class ZoomAuthenticationHelper {
 
     private long tokenExpiryTime;
 
-    public synchronized String getAccessToken() throws Exception {
-        if(this.zoomAuthResponse == null || checkIfTokenWillExpire()) {
+    public synchronized String getAccessToken() {
+        if (this.zoomAuthResponse == null || checkIfTokenWillExpire()) {
             fetchToken();
         }
         return this.zoomAuthResponse.getAccessToken();
@@ -50,14 +52,14 @@ public class ZoomAuthenticationHelper {
         long differenceInMillis = this.tokenExpiryTime - now.getTimeInMillis();
 
         // 토큰 이미 만료 or 20분내 만료 예정
-        if(differenceInMillis < 0 || TimeUnit.MILLISECONDS.toMinutes(differenceInMillis) < 20) {
+        if (differenceInMillis < 0 || TimeUnit.MILLISECONDS.toMinutes(differenceInMillis) < 20) {
             return true;
         }
 
         return false;
     }
 
-    private void fetchToken() throws Exception {
+    private void fetchToken() {
         RestTemplate restTemplate = new RestTemplate();
 
         String credentials = zoomClientId + ":" + zoomClientSecret;
@@ -77,15 +79,17 @@ public class ZoomAuthenticationHelper {
             this.zoomAuthResponse = restTemplate.exchange(zoomIssueUrl, HttpMethod.POST, httpEntity, ZoomAuthResponse.class).getBody();
         } catch (HttpClientErrorException e) {
             ResponseEntity<String> errorResponse = new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
-            throw new Exception(
-                    (String
-                            .format(
-                                "Unable to get authentication token due to %s. Response code: %d",
-                                errorResponse.getBody(),
-                                errorResponse.getStatusCode().value()
-                            )
-                    )
-            );
+            log.info("[[Code]]: " + errorResponse.getStatusCode().value() + " [[body]]: " + errorResponse.getBody());
+            throw ZoomTokenUnauthorizedException.EXCEPTION;
+            //            throw new Exception(
+//                    (String
+//                            .format(
+//                                "Unable to get authentication token due to %s. Response code: %d",
+//                                errorResponse.getBody(),
+//                                errorResponse.getStatusCode().value()
+//                            )
+//                    )
+//            );
         }
 
         Calendar now = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"));

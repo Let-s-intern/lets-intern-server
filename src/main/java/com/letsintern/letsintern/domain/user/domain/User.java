@@ -3,6 +3,8 @@ package com.letsintern.letsintern.domain.user.domain;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.letsintern.letsintern.domain.application.domain.Application;
+import com.letsintern.letsintern.domain.attendance.domain.Attendance;
+import com.letsintern.letsintern.domain.coupon.domain.CouponUser;
 import com.letsintern.letsintern.domain.user.dto.request.UserSignUpRequestDTO;
 import com.letsintern.letsintern.domain.user.oauth2.AuthProvider;
 import com.letsintern.letsintern.domain.user.oauth2.user.OAuth2UserInfo;
@@ -16,6 +18,7 @@ import org.hibernate.annotations.Where;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -25,7 +28,6 @@ import java.util.List;
 @Where(clause = "deleted_at IS NULL")
 @SQLDelete(sql = "UPDATE user SET deleted_at = CURRENT_TIMESTAMP where user_id = ?")
 public class User {
-
     @Id
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -88,6 +90,13 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Application> applicationList;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<CouponUser> couponUserList = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Attendance> attendanceList = new ArrayList<>();
 
     @Builder
     private User(String email, String name, String password, String phoneNum,
@@ -130,5 +139,24 @@ public class User {
         this.phoneNum = oAuth2UserInfo.getPhoneNum();
         return this;
     }
-}
 
+    public void addCouponUserList(CouponUser couponUser) {
+        this.couponUserList.add(couponUser);
+    }
+
+    public void updateUniversity(String university) {
+        this.university = university;
+    }
+
+    public void updateMajor(String major) {
+        this.major = major;
+    }
+
+    public void updateAccountType(AccountType accountType) {
+        this.accountType = accountType;
+    }
+
+    public void updateAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
+    }
+}

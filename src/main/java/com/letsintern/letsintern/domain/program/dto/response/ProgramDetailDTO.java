@@ -11,7 +11,6 @@ import java.util.List;
 
 @Getter
 public class ProgramDetailDTO {
-
     private ProgramDetailVo programDetailVo;
     private boolean participated;
     private List<FaqVo> faqList;

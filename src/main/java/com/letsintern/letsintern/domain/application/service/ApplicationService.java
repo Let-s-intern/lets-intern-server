@@ -1,48 +1,61 @@
 package com.letsintern.letsintern.domain.application.service;
 
 import com.letsintern.letsintern.domain.application.domain.Application;
-import com.letsintern.letsintern.domain.application.dto.request.ApplicationCreateDTO;
 import com.letsintern.letsintern.domain.application.dto.request.ApplicationChallengeUpdateDTO;
+import com.letsintern.letsintern.domain.application.dto.request.ApplicationCreateDTO;
 import com.letsintern.letsintern.domain.application.dto.request.ApplicationUpdateDTO;
 import com.letsintern.letsintern.domain.application.dto.response.*;
+import com.letsintern.letsintern.domain.application.exception.ApplicationCannotDeleted;
 import com.letsintern.letsintern.domain.application.exception.ApplicationNotFound;
-import com.letsintern.letsintern.domain.application.exception.ApplicationUserBadRequest;
 import com.letsintern.letsintern.domain.application.helper.ApplicationHelper;
 import com.letsintern.letsintern.domain.application.mapper.ApplicationMapper;
 import com.letsintern.letsintern.domain.application.repository.ApplicationRepository;
+import com.letsintern.letsintern.domain.coupon.domain.Coupon;
+import com.letsintern.letsintern.domain.coupon.domain.CouponProgramType;
+import com.letsintern.letsintern.domain.coupon.domain.CouponUser;
+import com.letsintern.letsintern.domain.coupon.helper.CouponHelper;
+import com.letsintern.letsintern.domain.coupon.mapper.CouponMapper;
+import com.letsintern.letsintern.domain.coupon.vo.CouponUserHistoryVo;
 import com.letsintern.letsintern.domain.mission.repository.MissionRepository;
 import com.letsintern.letsintern.domain.program.domain.Program;
+import com.letsintern.letsintern.domain.program.domain.ProgramFeeType;
+import com.letsintern.letsintern.domain.program.domain.ProgramStatus;
+import com.letsintern.letsintern.domain.program.helper.ProgramHelper;
 import com.letsintern.letsintern.domain.user.domain.User;
-import com.letsintern.letsintern.domain.user.service.UserService;
+import com.letsintern.letsintern.domain.user.helper.UserHelper;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
-@RequiredArgsConstructor
-public class ApplicationService {
+import java.util.Objects;
 
+@RequiredArgsConstructor
+@Transactional
+@Service
+public class ApplicationService {
     private final ApplicationRepository applicationRepository;
     private final ApplicationHelper applicationHelper;
     private final ApplicationMapper applicationMapper;
-    private final UserService userService;
+    private final ProgramHelper programHelper;
+    private final CouponHelper couponHelper;
+    private final CouponMapper couponMapper;
+    private final UserHelper userHelper;
     private final MissionRepository missionRepository;
 
     @Transactional
     public ApplicationCreateResponse createUserApplication(Long programId, ApplicationCreateDTO applicationCreateDTO, PrincipalDetails principalDetails) {
         User user = principalDetails.getUser();
-
-        /* 대학 & 전공 추가 정보 없는 사용자 */
-        if(!userService.checkDetailInfoExist(principalDetails)) {
-            if(applicationCreateDTO.getUniversity() == null || applicationCreateDTO.getMajor() == null) {
-                throw ApplicationUserBadRequest.EXCEPTION;  // 추가 정보 미입력
-            }
-            else userService.addUserDetailInfo(user, applicationCreateDTO.getUniversity(), applicationCreateDTO.getMajor());
-        }
-
-        return applicationHelper.createUserApplication(programId, applicationCreateDTO, user);
+        applicationHelper.validateDuplicateApplication(programId, user);
+        checkUserDetailInfoAndUpdateInfo(user, applicationCreateDTO);
+        Program program = programHelper.findProgramOrThrow(programId);
+        checkAccountInfoForProgramRefundTypeAndUpdate(user, applicationCreateDTO, program.getFeeType());
+        Integer discountValue = checkCouponAppliedAndGetDiscountValue(user, applicationCreateDTO);
+        Integer totalFee = applicationHelper.calculateTotalFee(program, discountValue);
+        Application newUserApplication = createApplicationAndSave(user, programId, applicationCreateDTO, totalFee);
+        updateProgramApplicationCountAndSave(program);
+        return applicationMapper.toApplicationCreateResponse(newUserApplication);
     }
 
     @Transactional
@@ -73,12 +86,14 @@ public class ApplicationService {
         return applicationMapper.toApplicationIdResponse(applicationHelper.updateApplication(applicationId, applicationUpdateDTO));
     }
 
-
     @Transactional
-    public void deleteApplication(Long applicationId) {
-        applicationHelper.deleteApplication(applicationId);
+    public void deleteApplication(Long applicationId, PrincipalDetails principalDetails) {
+        Application application = applicationHelper.findApplicationOrThrow(applicationId);
+        applicationHelper.validateApplicationOpenStatus(application);
+        application.getProgram().decreaseProgramApplicationCount();
+        checkUsedCouponForApplication(application, principalDetails.getUser());
+        applicationRepository.delete(application);
     }
-
 
     public ApplicationValidityResponse checkApplicationValidity(Long programId, PrincipalDetails principalDetails) {
         final User user = principalDetails.getUser();
@@ -105,5 +120,81 @@ public class ApplicationService {
     public ApplicationChallengeAdminVoDetail getApplicationChallengeAdminDetail(Long applicationId) {
         final Application application = applicationRepository.findById(applicationId).orElseThrow(() -> ApplicationNotFound.EXCEPTION);
         return ApplicationChallengeAdminVoDetail.of(application.getApplyMotive(), missionRepository.getMissionAdminApplicationVos(application.getProgram().getId(), application.getUser().getId()));
+    }
+
+    /* 대학 & 전공 추가 정보 없는 사용자 */
+    private void checkUserDetailInfoAndUpdateInfo(User user, ApplicationCreateDTO applicationCreateDTO) {
+        if (userHelper.checkDetailInfoExist(user)) return;
+        applicationHelper.validateHasUserDetailInfo(applicationCreateDTO);
+        userHelper.addUserDetailInfo(user, applicationCreateDTO.getUniversity(), applicationCreateDTO.getMajor());
+    }
+
+    /* 보증금 프로그램인데 계좌 추가 정보 없는 사용자 */
+    private void checkAccountInfoForProgramRefundTypeAndUpdate(User user, ApplicationCreateDTO applicationCreateDTO, ProgramFeeType programFeeType) {
+        if (!(programFeeType.equals(ProgramFeeType.REFUND) && !userHelper.checkDetailAccountInfoExist(user))) return;
+        applicationHelper.validateHasUserAccountInfo(applicationCreateDTO);
+        userHelper.addUserDetailAccountInfo(user, applicationCreateDTO.getAccountType(), applicationCreateDTO.getAccountNumber());
+    }
+
+
+    /* 프로그램 등록시 쿠폰 사용여부 판단 */
+    private Integer checkCouponAppliedAndGetDiscountValue(User user, ApplicationCreateDTO applicationCreateDTO) {
+        if (Objects.isNull(applicationCreateDTO.getCode()))
+            return 0;
+        CouponUserHistoryVo couponUserHistoryVo = couponHelper.findCouponUserHistoryVoOrCreate(user, applicationCreateDTO.getCode());
+        CouponProgramType couponProgramType = couponMapper.toCouponProgramType(applicationCreateDTO.getCouponProgramType());
+        couponHelper.validateApplyTimeForCoupon(couponUserHistoryVo.coupon().getStartDate(), couponUserHistoryVo.coupon().getEndDate());
+        couponHelper.validateAvailableCouponProgram(couponUserHistoryVo.coupon().getId(), couponProgramType);
+        couponHelper.validateRemainTimeForUser(couponUserHistoryVo.remainTime());
+        CouponUser couponUser = getCouponHistoryOrCreateCouponUser(user, couponUserHistoryVo);
+        couponUser.decreaseRemainTime();
+        return couponUserHistoryVo.coupon().getDiscount();
+    }
+
+    private void checkUsedCouponForApplication(Application application, User user) {
+        if (Objects.isNull(application.getCouponCode())) return;
+        CouponUser couponUser = couponHelper.findCouponUserByCodeAndUserIdOrThrow(application.getCouponCode(), user.getId());
+        couponUser.increaseRemainTime();
+    }
+
+    private CouponUser getCouponHistoryOrCreateCouponUser(User user, CouponUserHistoryVo couponUserHistoryVo) {
+        if (isCouponUsed(couponUserHistoryVo.user()))
+            return couponHelper.findCouponUserByCouponIdAndUserIdThrow(couponUserHistoryVo.coupon().getId(), couponUserHistoryVo.user().getId());
+        else
+            return createCouponUserAndSave(user, couponUserHistoryVo);
+    }
+
+    private CouponUser createCouponUserAndSave(User user, CouponUserHistoryVo couponUserHistoryVo) {
+        CouponUser couponUser = CouponUser.createCouponUser(couponUserHistoryVo.coupon(), user);
+        return couponHelper.saveCouponUser(couponUser);
+    }
+
+    private Application createApplicationAndSave(User user, Long programId, ApplicationCreateDTO applicationCreateDTO, Integer totalFee) {
+        String name = getCouponNameForInput(applicationCreateDTO.getCode());
+        Application newUserApplication = applicationMapper.toEntity(programId, applicationCreateDTO, user, totalFee, name);
+        return applicationRepository.save(newUserApplication);
+    }
+
+    private String getCouponNameForInput(String code) {
+        if(Objects.isNull(code))
+            return null;
+        else {
+            Coupon coupon = couponHelper.findCouponByCodeOrThrow(code);
+            return coupon.getName();
+        }
+    }
+
+    /* program application count 증가 및 저장 */
+    private void updateProgramApplicationCountAndSave(Program program) {
+        program.increaseProgramApplicationCount();
+        programHelper.saveProgram(program);
+    }
+
+    private boolean isCouponApplied(String code) {
+        return !Objects.isNull(code);
+    }
+
+    private boolean isCouponUsed(User user) {
+        return !Objects.isNull(user);
     }
 }
