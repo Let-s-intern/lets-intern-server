@@ -107,7 +107,6 @@ public class AttendanceHelper {
 
     private boolean isEditableAttendance(Mission mission) {
         LocalDateTime now = LocalDateTime.now();
-        System.out.println(now + " ----------------------------------------- " + String.valueOf(now.isAfter(mission.getStartDate()) && now.isBefore(mission.getEndDate())));
         return now.isAfter(mission.getStartDate()) && now.isBefore(mission.getEndDate());
     }
 }
