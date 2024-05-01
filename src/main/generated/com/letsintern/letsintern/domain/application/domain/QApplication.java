@@ -32,6 +32,8 @@ public class QApplication extends EntityPathBase<Application> {
 
     public final StringPath couponCode = createString("couponCode");
 
+    public final StringPath couponName = createString("couponName");
+
     public final StringPath createdAt = createString("createdAt");
 
     public final StringPath email = createString("email");

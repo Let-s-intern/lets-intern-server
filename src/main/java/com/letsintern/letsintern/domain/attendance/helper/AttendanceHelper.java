@@ -8,15 +8,15 @@ import com.letsintern.letsintern.domain.attendance.domain.Attendance;
 import com.letsintern.letsintern.domain.attendance.domain.AttendanceResult;
 import com.letsintern.letsintern.domain.attendance.domain.AttendanceStatus;
 import com.letsintern.letsintern.domain.attendance.dto.request.AttendanceAdminUpdateDTO;
-import com.letsintern.letsintern.domain.attendance.dto.request.AttendanceCreateDTO;
+import com.letsintern.letsintern.domain.attendance.dto.request.AttendanceBaseDTO;
 import com.letsintern.letsintern.domain.attendance.exception.AttendanceAlreadyExists;
+import com.letsintern.letsintern.domain.attendance.exception.AttendanceCannotUpdated;
 import com.letsintern.letsintern.domain.attendance.exception.AttendanceNotFound;
 import com.letsintern.letsintern.domain.attendance.mapper.AttendanceMapper;
 import com.letsintern.letsintern.domain.attendance.repository.AttendanceRepository;
 import com.letsintern.letsintern.domain.attendance.vo.AttendanceAdminVo;
 import com.letsintern.letsintern.domain.attendance.vo.AttendanceDashboardVo;
 import com.letsintern.letsintern.domain.mission.domain.Mission;
-import com.letsintern.letsintern.domain.mission.domain.MissionType;
 import com.letsintern.letsintern.domain.mission.exception.MissionNotFound;
 import com.letsintern.letsintern.domain.mission.repository.MissionRepository;
 import com.letsintern.letsintern.domain.user.domain.User;
@@ -39,34 +39,34 @@ public class AttendanceHelper {
     private final MissionRepository missionRepository;
     private final ApplicationRepository applicationRepository;
 
-    public Long createAttendance(Long missionId, AttendanceCreateDTO attendanceCreateDTO, User user) {
+    public Long createAttendance(Long missionId, AttendanceBaseDTO attendanceBaseDTO, User user) {
         Mission mission = missionRepository.findById(missionId).orElseThrow(() -> MissionNotFound.EXCEPTION);
         Application application = applicationRepository.findByProgramIdAndUserId(mission.getProgram().getId(), user.getId());
         if(application == null) throw ApplicationNotFound.EXCEPTION;
-
-        boolean isLateAttendance = mission.getEndDate().isBefore(LocalDateTime.now());
 
         // 이미 출석한 경우 처리
         final Attendance attendance = attendanceRepository.findByMissionIdAndUserId(missionId, user.getId());
         if(attendance != null) throw AttendanceAlreadyExists.EXCEPTION;
 
         // Mission.attendanceCount++ or lateAttendanceCount++
-        if(isLateAttendance) mission.setLateAttendanceCount(mission.getLateAttendanceCount() + 1);
+        if(isLateAttendance(mission.getEndDate())) mission.setLateAttendanceCount(mission.getLateAttendanceCount() + 1);
         else mission.setAttendanceCount(mission.getAttendanceCount() + 1);
 
-        return attendanceRepository.save(attendanceMapper.toEntity(mission, attendanceCreateDTO, user)).getId();
+        return attendanceRepository.save(attendanceMapper.toEntity(mission, attendanceBaseDTO, user)).getId();
     }
 
-    public Long updateAttendance(Long attendanceId, AttendanceCreateDTO attendanceUpdateDTO, Long userId) {
+    public Attendance updateAttendance(Long attendanceId, AttendanceBaseDTO attendanceUpdateDTO, Long userId) {
         Attendance attendance = attendanceRepository.findById(attendanceId).orElseThrow(() -> AttendanceNotFound.EXCEPTION);
         if(!Objects.equals(attendance.getUser().getId(), userId)) throw ApplicationUnauthorized.EXCEPTION;
+        if(!isEditableAttendance(attendance.getMission())) throw AttendanceCannotUpdated.EXCEPTION;
         else if(attendanceUpdateDTO.getLink() != null) {
             attendance.setLink(attendanceUpdateDTO.getLink());
             attendance.setStatus(AttendanceStatus.UPDATED);
             attendance.setResult(AttendanceResult.WAITING);
             attendance.setComments(null);
         }
-        return attendance.getId();
+
+        return attendance;
     }
 
     public Integer getYesterdayHeadCount(Long programId, Integer missionTh, AttendanceStatus attendanceStatus, AttendanceResult attendanceResult) {
@@ -99,5 +99,14 @@ public class AttendanceHelper {
     public List<AccountVo> getAccountListResponse(Long missionId) {
         final Mission mission = missionRepository.findById(missionId).orElseThrow(() -> MissionNotFound.EXCEPTION);
         return attendanceRepository.getAccountVoList(mission.getId());
+    }
+
+    private boolean isLateAttendance(LocalDateTime missionEndDate) {
+        return missionEndDate.isBefore(LocalDateTime.now());
+    }
+
+    private boolean isEditableAttendance(Mission mission) {
+        LocalDateTime now = LocalDateTime.now();
+        return now.isAfter(mission.getStartDate()) && now.isBefore(mission.getEndDate());
     }
 }
