@@ -4,16 +4,15 @@ import com.letsintern.letsintern.domain.application.domain.Application;
 import com.letsintern.letsintern.domain.application.domain.ApplicationWishJob;
 import com.letsintern.letsintern.domain.application.exception.ApplicationNotFound;
 import com.letsintern.letsintern.domain.application.repository.ApplicationRepository;
+import com.letsintern.letsintern.domain.attendance.domain.Attendance;
 import com.letsintern.letsintern.domain.attendance.dto.request.AttendanceAdminUpdateDTO;
-import com.letsintern.letsintern.domain.attendance.dto.request.AttendanceCreateDTO;
+import com.letsintern.letsintern.domain.attendance.dto.request.AttendanceBaseDTO;
 import com.letsintern.letsintern.domain.attendance.dto.response.AccountListResponse;
 import com.letsintern.letsintern.domain.attendance.dto.response.AttendanceAdminListResponse;
 import com.letsintern.letsintern.domain.attendance.dto.response.AttendanceDashboardResponse;
 import com.letsintern.letsintern.domain.attendance.dto.response.AttendanceIdResponse;
 import com.letsintern.letsintern.domain.attendance.helper.AttendanceHelper;
 import com.letsintern.letsintern.domain.attendance.mapper.AttendanceMapper;
-import com.letsintern.letsintern.domain.attendance.repository.AttendanceRepository;
-import com.letsintern.letsintern.domain.mission.repository.MissionRepository;
 import com.letsintern.letsintern.domain.user.domain.User;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
@@ -33,15 +32,16 @@ public class AttendanceService {
     private final ApplicationRepository applicationRepository;
 
     @Transactional
-    public AttendanceIdResponse createAttendance(Long missionId, AttendanceCreateDTO attendanceCreateDTO, PrincipalDetails principalDetails) {
+    public AttendanceIdResponse createAttendance(Long missionId, AttendanceBaseDTO attendanceBaseDTO, PrincipalDetails principalDetails) {
         final User user = principalDetails.getUser();
-        return attendanceMapper.toAttendanceIdResponse(attendanceHelper.createAttendance(missionId, attendanceCreateDTO, user));
+        return attendanceMapper.toAttendanceIdResponse(attendanceHelper.createAttendance(missionId, attendanceBaseDTO, user));
     }
 
     @Transactional
-    public AttendanceIdResponse updateAttendance(Long attendanceId, AttendanceCreateDTO attendanceUpdateDTO, PrincipalDetails principalDetails) {
+    public AttendanceIdResponse updateAttendance(Long attendanceId, AttendanceBaseDTO attendanceUpdateDTO, PrincipalDetails principalDetails) {
         final User user = principalDetails.getUser();
-        return attendanceMapper.toAttendanceIdResponse(attendanceHelper.updateAttendance(attendanceId, attendanceUpdateDTO, user.getId()));
+        Attendance updatedAttendance = attendanceHelper.updateAttendance(attendanceId, attendanceUpdateDTO, user.getId());
+        return attendanceMapper.toAttendanceIdResponse(updatedAttendance.getId());
     }
 
     @Transactional(readOnly = true)

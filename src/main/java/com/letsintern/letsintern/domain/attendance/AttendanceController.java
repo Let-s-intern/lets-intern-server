@@ -1,7 +1,7 @@
 package com.letsintern.letsintern.domain.attendance;
 
 import com.letsintern.letsintern.domain.attendance.dto.request.AttendanceAdminUpdateDTO;
-import com.letsintern.letsintern.domain.attendance.dto.request.AttendanceCreateDTO;
+import com.letsintern.letsintern.domain.attendance.dto.request.AttendanceBaseDTO;
 import com.letsintern.letsintern.domain.attendance.dto.response.AccountListResponse;
 import com.letsintern.letsintern.domain.attendance.dto.response.AttendanceAdminListResponse;
 import com.letsintern.letsintern.domain.attendance.dto.response.AttendanceDashboardResponse;
@@ -27,26 +27,30 @@ public class AttendanceController {
     @PostMapping("/{missionId}")
     @Operation(summary = "출석 생성")
     public AttendanceIdResponse createAttendance(@PathVariable Long missionId,
-                                                 @RequestBody AttendanceCreateDTO attendanceCreateDTO,
+                                                 @RequestBody AttendanceBaseDTO attendanceBaseDTO,
                                                  @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        return attendanceService.createAttendance(missionId, attendanceCreateDTO, principalDetails);
+        return attendanceService.createAttendance(missionId, attendanceBaseDTO, principalDetails);
     }
 
     @PatchMapping("/{attendanceId}")
-    @Operation(summary = "출석 다시 제출")
-    public AttendanceIdResponse updateAttendance(@PathVariable Long attendanceId, @RequestBody AttendanceCreateDTO attendanceUpdateDTO, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+    @Operation(summary = "출석 업데이트")
+    public AttendanceIdResponse updateAttendance(@PathVariable Long attendanceId,
+                                                 @RequestBody AttendanceBaseDTO attendanceUpdateDTO,
+                                                 @AuthenticationPrincipal PrincipalDetails principalDetails) {
         return attendanceService.updateAttendance(attendanceId, attendanceUpdateDTO, principalDetails);
     }
 
     @GetMapping("/admin")
     @Operation(summary = "어드민 출석 목록 보기")
-    public AttendanceAdminListResponse getAttendanceAdminList(@RequestParam(required = false) Long missionId, @PageableDefault(size = 20) Pageable pageable) {
+    public AttendanceAdminListResponse getAttendanceAdminList(@RequestParam(required = false) Long missionId,
+                                                              @PageableDefault(size = 20) Pageable pageable) {
         return attendanceService.getAttendanceAdminList(missionId, pageable);
     }
 
     @PatchMapping("/admin/{attendanceId}")
     @Operation(summary = "어드민 출석 업데이트")
-    public AttendanceIdResponse updateAttendanceAdmin(@PathVariable Long attendanceId, @RequestBody AttendanceAdminUpdateDTO attendanceAdminUpdateDTO) {
+    public AttendanceIdResponse updateAttendanceAdmin(@PathVariable Long attendanceId,
+                                                      @RequestBody AttendanceAdminUpdateDTO attendanceAdminUpdateDTO) {
         return attendanceService.updateAttendanceAdmin(attendanceId, attendanceAdminUpdateDTO);
     }
 
@@ -58,7 +62,8 @@ public class AttendanceController {
 
     @GetMapping("/{applicationId}")
     @Operation(summary = "유저 대시보드 - 우리의 기록장 1명 상세보기")
-    public AttendanceDashboardResponse getAttendanceDashboardList(@PathVariable Long applicationId, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+    public AttendanceDashboardResponse getAttendanceDashboardList(@PathVariable Long applicationId,
+                                                                  @AuthenticationPrincipal PrincipalDetails principalDetails) {
         return attendanceService.getAttendanceDashboardList(applicationId, principalDetails);
     }
 }

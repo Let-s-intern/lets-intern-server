@@ -2,7 +2,7 @@ package com.letsintern.letsintern.domain.attendance.mapper;
 
 import com.letsintern.letsintern.domain.application.domain.ApplicationWishJob;
 import com.letsintern.letsintern.domain.attendance.domain.Attendance;
-import com.letsintern.letsintern.domain.attendance.dto.request.AttendanceCreateDTO;
+import com.letsintern.letsintern.domain.attendance.dto.request.AttendanceBaseDTO;
 import com.letsintern.letsintern.domain.attendance.dto.response.AccountListResponse;
 import com.letsintern.letsintern.domain.attendance.dto.response.AttendanceAdminListResponse;
 import com.letsintern.letsintern.domain.attendance.dto.response.AttendanceDashboardResponse;
@@ -20,8 +20,8 @@ import java.util.List;
 @Component
 public class AttendanceMapper {
 
-    public Attendance toEntity(Mission mission, AttendanceCreateDTO attendanceCreateDTO, User user) {
-        return Attendance.of(mission, attendanceCreateDTO, user);
+    public Attendance toEntity(Mission mission, AttendanceBaseDTO attendanceBaseDTO, User user) {
+        return Attendance.of(mission, attendanceBaseDTO, user);
     }
 
     public AttendanceIdResponse toAttendanceIdResponse(Long attendanceId) {

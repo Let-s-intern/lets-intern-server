@@ -1,7 +1,7 @@
 package com.letsintern.letsintern.domain.attendance.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.letsintern.letsintern.domain.attendance.dto.request.AttendanceCreateDTO;
+import com.letsintern.letsintern.domain.attendance.dto.request.AttendanceBaseDTO;
 import com.letsintern.letsintern.domain.mission.domain.Mission;
 import com.letsintern.letsintern.domain.user.domain.User;
 import jakarta.annotation.Nullable;
@@ -60,11 +60,11 @@ public class Attendance {
         this.isRefunded = false;
     }
 
-    public static Attendance of(Mission mission, AttendanceCreateDTO attendanceCreateDTO, User user) {
+    public static Attendance of(Mission mission, AttendanceBaseDTO attendanceBaseDTO, User user) {
         return Attendance.builder()
                 .mission(mission)
                 .user(user)
-                .link(attendanceCreateDTO.getLink())
+                .link(attendanceBaseDTO.getLink())
                 .build();
     }
 }
