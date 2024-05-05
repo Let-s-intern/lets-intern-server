@@ -15,15 +15,13 @@ import java.util.List;
 public class UserApplicationListResponse {
 
     private List<ApplicationVo> userApplicationList = new ArrayList<>();
-    private PageInfo pageInfo;
 
     @Builder
-    private UserApplicationListResponse(Page<ApplicationVo> userApplicationList) {
-        if(userApplicationList.hasContent()) this.userApplicationList = userApplicationList.getContent();
-        this.pageInfo = PageInfo.of(userApplicationList);
+    private UserApplicationListResponse(List<ApplicationVo> userApplicationList) {
+        this.userApplicationList = userApplicationList;
     }
 
-    public static UserApplicationListResponse from(Page<ApplicationVo> userApplicationList) {
+    public static UserApplicationListResponse from(List<ApplicationVo> userApplicationList) {
         return UserApplicationListResponse.builder()
                 .userApplicationList(userApplicationList)
                 .build();

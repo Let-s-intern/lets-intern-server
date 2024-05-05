@@ -115,8 +115,8 @@ public class ApplicationHelper {
     }
 
     /* 마이페이지 - 사용자 1명의 지원서 목록 */
-    public Page<ApplicationVo> getApplicationListOfUserId(Long userId, Pageable pageable) {
-        return applicationRepository.findAllByUserId(userId, pageable);
+    public List<ApplicationVo> getApplicationListOfUserId(Long userId) {
+        return applicationRepository.findAllByUserId(userId);
     }
 
     /* 어드민 - 사용자 1명의 지원서 목록 */

@@ -38,10 +38,9 @@ public class ApplicationController {
 
     @Operation(summary = "마이페이지 나의 지원서 목록")
     @GetMapping
-    public UserApplicationListResponse getMyPageApplicationList(@PageableDefault(size = 1000) Pageable pageable,
-                                                                @AuthenticationPrincipal PrincipalDetails principalDetails) {
+    public UserApplicationListResponse getMyPageApplicationList(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         final User user = principalDetails.getUser();
-        return applicationService.getApplicationListOfUser(user.getId(), pageable);
+        return applicationService.getApplicationListOfUser(user.getId());
     }
 
     @Operation(summary = "마이페이지 지원 내역 취소")

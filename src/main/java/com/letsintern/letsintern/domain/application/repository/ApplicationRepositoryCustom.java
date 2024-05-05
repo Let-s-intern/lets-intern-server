@@ -21,7 +21,7 @@ public interface ApplicationRepositoryCustom {
 
     Page<ApplicationAdminVo> findAllByProgramIdAndIsApproved(Long programId, Boolean isApproved, Pageable pageable);
 
-    Page<ApplicationVo> findAllByUserId(Long userId, Pageable pageable);
+    List<ApplicationVo> findAllByUserId(Long userId);
 
     Page<Application> findAllByUserIdAdmin(Long userId, Pageable pageable);
 

@@ -86,12 +86,9 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
     }
 
     @Override
-    public Page<ApplicationVo> findAllByUserId(Long userId, Pageable pageable) {
+    public List<ApplicationVo> findAllByUserId(Long userId) {
         QApplication qApplication = QApplication.application;
-        List<ApplicationVo> applicationVos;
-        JPAQuery<Long> count;
-
-        applicationVos = jpaQueryFactory
+        return jpaQueryFactory
                 .select(Projections.constructor(ApplicationVo.class,
                         qApplication.id,
                         qApplication.status,
@@ -111,15 +108,7 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
                 .from(qApplication)
                 .where(qApplication.user.id.eq(userId))
                 .orderBy(qApplication.id.desc())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
                 .fetch();
-
-        count = jpaQueryFactory.select(qApplication.count())
-                .from(qApplication)
-                .where(qApplication.user.id.eq(userId));
-
-        return PageableExecutionUtils.getPage(applicationVos, pageable, count::fetchOne);
     }
 
     @Override

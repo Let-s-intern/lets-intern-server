@@ -43,7 +43,7 @@ public class ApplicationMapper {
         return ApplicationListResponse.from(applicationList);
     }
 
-    public UserApplicationListResponse toUserApplicationListResponse(Page<ApplicationVo> userApplicationList) {
+    public UserApplicationListResponse toUserApplicationListResponse(List<ApplicationVo> userApplicationList) {
         return UserApplicationListResponse.from(userApplicationList);
     }
 

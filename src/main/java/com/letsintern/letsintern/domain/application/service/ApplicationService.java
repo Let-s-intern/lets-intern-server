@@ -73,8 +73,8 @@ public class ApplicationService {
         );
     }
 
-    public UserApplicationListResponse getApplicationListOfUser(Long userId, Pageable pageable) {
-        return applicationMapper.toUserApplicationListResponse(applicationHelper.getApplicationListOfUserId(userId, pageable));
+    public UserApplicationListResponse getApplicationListOfUser(Long userId) {
+        return applicationMapper.toUserApplicationListResponse(applicationHelper.getApplicationListOfUserId(userId));
     }
 
     public ApplicationListResponse getAdminApplicationListOfUserId(Long userId, Pageable pageable) {
