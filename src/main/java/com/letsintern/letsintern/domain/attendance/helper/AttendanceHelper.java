@@ -73,8 +73,8 @@ public class AttendanceHelper {
         return attendanceRepository.countAllByMissionProgramIdAndMissionThAndStatusAndResult(programId, missionTh, attendanceStatus, attendanceResult);
     }
 
-    public Page<AttendanceAdminVo> getAttendanceAdminList(Long missionId, Pageable pageable) {
-        return attendanceRepository.getAttendanceAdminVos(missionId, pageable);
+    public List<AttendanceAdminVo> getAttendanceAdminList(Long missionId) {
+        return attendanceRepository.getAttendanceAdminVos(missionId);
     }
 
     public List<AttendanceDashboardVo> getAttendanceDashboardList(Application application) {

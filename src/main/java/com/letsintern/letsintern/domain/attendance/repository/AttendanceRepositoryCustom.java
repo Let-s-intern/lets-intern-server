@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface AttendanceRepositoryCustom {
 
-    Page<AttendanceAdminVo> getAttendanceAdminVos(Long missionId, Pageable pageable);
+    List<AttendanceAdminVo> getAttendanceAdminVos(Long missionId);
 
     List<AttendanceDashboardVo> getAttendanceDashboardVos(Long programId, Long userId);
 
