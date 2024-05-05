@@ -63,13 +63,13 @@ public class ApplicationService {
         return applicationHelper.createGuestApplication(programId, applicationCreateDTO);
     }
 
-    public AdminApplicationListResponse getApplicationListOfProgram(Long programId, Pageable pageable) {
-        return applicationMapper.toAdminApplicationListResponse(applicationHelper.getApplicationListOfProgramId(programId, pageable));
+    public AdminApplicationListResponse getApplicationListOfProgram(Long programId) {
+        return applicationMapper.toAdminApplicationListResponse(applicationHelper.getApplicationListOfProgramId(programId));
     }
 
-    public AdminApplicationListResponse getApplicationListOfProgramAndApproved(Long programId, Boolean approved, Pageable pageable) {
+    public AdminApplicationListResponse getApplicationListOfProgramAndApproved(Long programId, Boolean approved) {
         return applicationMapper.toAdminApplicationListResponse(
-                applicationHelper.getApplicationListOfProgramIdAndApproved(programId, approved, pageable)
+                applicationHelper.getApplicationListOfProgramIdAndApproved(programId, approved)
         );
     }
 

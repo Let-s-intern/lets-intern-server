@@ -82,14 +82,13 @@ public class ApplicationHelper {
     }
 
     /* 프로그램 1개의 전체 지원서 목록 */
-    public Page<ApplicationAdminVo> getApplicationListOfProgramId(Long programId, Pageable pageable) {
-        PageRequest pageRequest = makePageRequest(pageable);
-        return applicationRepository.findAllByProgramId(programId, pageRequest);
+    public List<ApplicationAdminVo> getApplicationListOfProgramId(Long programId) {
+        return applicationRepository.findAllByProgramId(programId);
     }
 
     /* 프로그램 1개의 승인된 지원서 목록 */
-    public Page<ApplicationAdminVo> getApplicationListOfProgramIdAndApproved(Long programId, Boolean isApproved, Pageable pageable) {
-        return applicationRepository.findAllByProgramIdAndIsApproved(programId, isApproved, pageable);
+    public List<ApplicationAdminVo> getApplicationListOfProgramIdAndApproved(Long programId, Boolean isApproved) {
+        return applicationRepository.findAllApplicationAdminVoByProgramIdAndIsApproved(programId, isApproved);
     }
 
     /* 프로그램 1개의 안내 메일 전송 대상자 메일 주소 목록 */

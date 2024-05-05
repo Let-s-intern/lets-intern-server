@@ -69,12 +69,11 @@ public class ApplicationController {
     @Operation(summary = "어드민 프로그램별 지원서 전체 목록")
     @GetMapping("/admin/{programId}")
     public AdminApplicationListResponse getApplicationListOfProgram(@PathVariable Long programId,
-                                                                    @RequestParam(required = false) Boolean isApproved,
-                                                                    @PageableDefault(size = 1000) Pageable pageable) {
+                                                                    @RequestParam(required = false) Boolean isApproved) {
         if (isApproved != null) {
-            return applicationService.getApplicationListOfProgramAndApproved(programId, isApproved, pageable);
+            return applicationService.getApplicationListOfProgramAndApproved(programId, isApproved);
         } else {
-            return applicationService.getApplicationListOfProgram(programId, pageable);
+            return applicationService.getApplicationListOfProgram(programId);
         }
     }
 

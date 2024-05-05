@@ -36,53 +36,31 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom {
     private final EntityManager em;
 
     @Override
-    public Page<ApplicationAdminVo> findAllByProgramId(Long programId, Pageable pageable) {
+    public List<ApplicationAdminVo> findAllByProgramId(Long programId) {
         QApplication qApplication = QApplication.application;
-        List<ApplicationAdminVo> applicationAdminVos;
-        JPAQuery<Long> count;
 
-        applicationAdminVos = jpaQueryFactory
+        return jpaQueryFactory
                 .select(Projections.constructor(ApplicationAdminVo.class,
                         qApplication
                 ))
                 .from(qApplication)
                 .where(qApplication.program.id.eq(programId))
                 .orderBy(qApplication.id.desc())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
                 .fetch();
-
-        count = jpaQueryFactory.select(qApplication.count())
-                .from(qApplication)
-                .where(qApplication.program.id.eq(programId))
-                .from(qApplication);
-
-        return PageableExecutionUtils.getPage(applicationAdminVos, pageable, count::fetchOne);
     }
 
     @Override
-    public Page<ApplicationAdminVo> findAllByProgramIdAndIsApproved(Long programId, Boolean isApproved, Pageable pageable) {
+    public List<ApplicationAdminVo> findAllApplicationAdminVoByProgramIdAndIsApproved(Long programId, Boolean isApproved) {
         QApplication qApplication = QApplication.application;
-        List<ApplicationAdminVo> applicationAdminVos;
-        JPAQuery<Long> count;
 
-        applicationAdminVos = jpaQueryFactory
+        return jpaQueryFactory
                 .select(Projections.constructor(ApplicationAdminVo.class,
                         qApplication
                 ))
                 .from(qApplication)
                 .where(qApplication.program.id.eq(programId), qApplication.isApproved.eq(isApproved))
                 .orderBy(qApplication.id.desc())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
                 .fetch();
-
-        count = jpaQueryFactory.select(qApplication.count())
-                .from(qApplication)
-                .where(qApplication.program.id.eq(programId), qApplication.isApproved.eq(isApproved))
-                .from(qApplication);
-
-        return PageableExecutionUtils.getPage(applicationAdminVos, pageable, count::fetchOne);
     }
 
     @Override
