@@ -25,6 +25,8 @@ public class MissionMyDashboardVo {
 
     private boolean isAttended;
 
+    private Long attendanceId;
+
     private String essentialContentsLink;
 
     private String additionalContentsLink;
@@ -46,6 +48,7 @@ public class MissionMyDashboardVo {
 
         if(attendance != null) {
             this.isAttended = true;
+            this.attendanceId = attendance.getId();
             this.attendanceLink = attendance.getLink();
         } else {
             this.isAttended = false;
