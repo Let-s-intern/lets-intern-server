@@ -58,11 +58,14 @@ public class AttendanceHelper {
     public Attendance updateAttendance(Long attendanceId, AttendanceBaseDTO attendanceUpdateDTO, Long userId) {
         Attendance attendance = attendanceRepository.findById(attendanceId).orElseThrow(() -> AttendanceNotFound.EXCEPTION);
         if(!Objects.equals(attendance.getUser().getId(), userId)) throw ApplicationUnauthorized.EXCEPTION;
-        if(!isEditableAttendance(attendance.getMission())) throw AttendanceCannotUpdated.EXCEPTION;
-        else if(attendanceUpdateDTO.getLink() != null) {
+
+        if(attendanceUpdateDTO.getLink() != null) {
+            if(isEditableAttendance(attendance.getMission())) {
+                attendance.setStatus(AttendanceStatus.UPDATED);
+            } else {
+                attendance.setStatus(AttendanceStatus.LATE);
+            }
             attendance.setLink(attendanceUpdateDTO.getLink());
-            attendance.setStatus(AttendanceStatus.UPDATED);
-            attendance.setResult(AttendanceResult.WAITING);
             attendance.setComments(null);
         }
 
