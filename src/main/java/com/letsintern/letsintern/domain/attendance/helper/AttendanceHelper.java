@@ -69,7 +69,7 @@ public class AttendanceHelper {
         return attendance;
     }
 
-    public Integer getYesterdayHeadCount(Long programId, Integer missionTh, AttendanceStatus attendanceStatus, AttendanceResult attendanceResult) {
+    public Integer getPreviousHeadCount(Long programId, Integer missionTh, AttendanceStatus attendanceStatus, AttendanceResult attendanceResult) {
         return attendanceRepository.countAllByMissionProgramIdAndMissionThAndStatusAndResult(programId, missionTh, attendanceStatus, attendanceResult);
     }
 

@@ -26,13 +26,13 @@ public class ProgramDashboardResponse {
 
     private Integer finalHeadCount;
 
-    private Integer yesterdayHeadCount;
+    private Integer previousHeadCount;
 
     private Boolean isDone;
 
     @Builder
     private ProgramDashboardResponse(String userName, MissionDashboardVo dailyMission, Page<Notice> noticeList, List<MissionDashboardListVo> missionList,
-                                     Integer totalRefund, Integer currentRefund, Integer finalHeadCount, Integer yesterdayHeadCount, Boolean isDone) {
+                                     Integer totalRefund, Integer currentRefund, Integer finalHeadCount, Integer previousHeadCount, Boolean isDone) {
         this.userName = userName;
         this.dailyMission = dailyMission;
         this.noticeList = (noticeList.hasContent()) ? noticeList.getContent() : new ArrayList<>();
@@ -40,12 +40,12 @@ public class ProgramDashboardResponse {
         this.currentRefund = currentRefund;
         this.totalRefund = totalRefund;
         this.finalHeadCount = finalHeadCount;
-        this.yesterdayHeadCount = yesterdayHeadCount;
+        this.previousHeadCount = previousHeadCount;
         this.isDone = isDone;
     }
 
     public static ProgramDashboardResponse of(String userName, MissionDashboardVo dailyMission, Page<Notice> noticeList, List<MissionDashboardListVo> missionList,
-                                              Integer totalRefund, Integer currentRefund, Integer finalHeadCount, Integer yesterdayHeadCount, Boolean isDone) {
+                                              Integer totalRefund, Integer currentRefund, Integer finalHeadCount, Integer previousHeadCount, Boolean isDone) {
         return ProgramDashboardResponse.builder()
                 .userName(userName)
                 .dailyMission(dailyMission)
@@ -54,7 +54,7 @@ public class ProgramDashboardResponse {
                 .totalRefund(totalRefund)
                 .currentRefund(currentRefund)
                 .finalHeadCount(finalHeadCount)
-                .yesterdayHeadCount(yesterdayHeadCount)
+                .previousHeadCount(previousHeadCount)
                 .isDone(isDone)
                 .build();
     }

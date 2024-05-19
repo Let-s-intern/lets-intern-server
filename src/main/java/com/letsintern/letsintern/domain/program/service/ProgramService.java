@@ -1,14 +1,10 @@
 package com.letsintern.letsintern.domain.program.service;
 
-import com.letsintern.letsintern.domain.application.domain.Application;
 import com.letsintern.letsintern.domain.application.domain.ApplicationWishJob;
-import com.letsintern.letsintern.domain.application.exception.ApplicationNotFound;
 import com.letsintern.letsintern.domain.application.helper.ApplicationHelper;
-import com.letsintern.letsintern.domain.application.repository.ApplicationRepository;
 import com.letsintern.letsintern.domain.attendance.domain.AttendanceResult;
 import com.letsintern.letsintern.domain.attendance.domain.AttendanceStatus;
 import com.letsintern.letsintern.domain.attendance.helper.AttendanceHelper;
-import com.letsintern.letsintern.domain.mission.domain.MissionType;
 import com.letsintern.letsintern.domain.mission.helper.MissionHelper;
 import com.letsintern.letsintern.domain.mission.vo.MissionDashboardListVo;
 import com.letsintern.letsintern.domain.mission.vo.MissionDashboardVo;
@@ -26,7 +22,6 @@ import com.letsintern.letsintern.domain.program.helper.ZoomMeetingApiHelper;
 import com.letsintern.letsintern.domain.program.mapper.ProgramMapper;
 import com.letsintern.letsintern.domain.program.repository.ProgramRepository;
 import com.letsintern.letsintern.domain.user.domain.User;
-import com.letsintern.letsintern.domain.user.domain.UserRole;
 import com.letsintern.letsintern.global.config.user.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -48,7 +43,6 @@ public class ProgramService {
     private final ProgramRepository programRepository;
 
     private final ApplicationHelper applicationHelper;
-    private final ApplicationRepository applicationRepository;
     private final MissionHelper missionHelper;
     private final AttendanceHelper attendanceHelper;
     private final NoticeHelper noticeHelper;
@@ -151,15 +145,15 @@ public class ProgramService {
         /* 챌린지 종료 여부 */
         boolean isDoneProgram = program.getEndDate().isBefore(LocalDateTime.now());
         /* 데일리 미션 */
-        MissionDashboardVo dailyMission = (isDoneProgram) ? null : missionHelper.getDailyMission(program.getId(), program.getStartDate());
+        MissionDashboardVo dailyMission = (isDoneProgram) ? null : missionHelper.getDailyMission(program.getId());
         /* 공지사항 목록 */
         Page<Notice> noticeList = noticeHelper.getNoticeList(program.getId(), pageable);
         /* 전체 미션, 출석 현황 */
         List<MissionDashboardListVo> missionList = missionHelper.getMissionDashboardList(program.getId(), user.getId());
         /* 현재까지 환급금 */
         Integer currentRefund = (isDoneProgram) ? 0 : missionHelper.getCurrentRefund(missionList);
-        /* 어제 미션을 정상 제출한 인원수 */
-        Integer yesterdayHeadCount = (isDoneProgram) ? null : attendanceHelper.getYesterdayHeadCount(program.getId(), dailyMission.getTh() - 1, AttendanceStatus.PRESENT, AttendanceResult.PASS);
+        /* 직전 회차 미션을 정상 제출한 인원수 */
+        Integer previousHeadCount = (isDoneProgram || dailyMission == null) ? null : attendanceHelper.getPreviousHeadCount(program.getId(), dailyMission.getTh() - 1, AttendanceStatus.PRESENT, AttendanceResult.PASS);
 
         return programMapper.toProgramDashboardResponse(
                 user.getName(),
@@ -169,7 +163,7 @@ public class ProgramService {
                 program.getFeeRefund(),
                 currentRefund,
                 program.getFinalHeadCount(),
-                yesterdayHeadCount,
+                previousHeadCount,
                 isDoneProgram
         );
     }
@@ -181,7 +175,7 @@ public class ProgramService {
         applicationHelper.validateIsChallengeParticipant(user.getRole(), program.getId(), user.getId());
 
         return programMapper.toProgramMyDashboardResponse(
-                missionHelper.getDailyMissionDetail(program.getId(), program.getStartDate(), user.getId()),
+                missionHelper.getDailyMissionDetail(program.getId(), user.getId()),
                 missionHelper.getMissionDashboardList(program.getId(), user.getId()),
                 program.getEndDate().isBefore(LocalDateTime.now())
         );
