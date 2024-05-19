@@ -106,6 +106,7 @@ public class MissionRepositoryImpl implements MissionRepositoryCustom {
                         qMission.id,
                         qMission.th,
                         qMission.startDate,
+                        qMission.endDate,
                         qMission.attendanceCount,
                         qMission.lateAttendanceCount,
                         qMission.status))
