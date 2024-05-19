@@ -98,12 +98,12 @@ public class MissionHelper {
             mission.setContents(missionUpdateDTO.getContents());
         if(missionUpdateDTO.getGuide() != null)
             mission.setGuide(missionUpdateDTO.getGuide());
-        if(missionUpdateDTO.getTh() != null) {
+        if(missionUpdateDTO.getTh() != null)
             mission.setTh(missionUpdateDTO.getTh());
-            if(missionUpdateDTO.getTh() == 1) mission.setStartDate(mission.getProgram().getStartDate());
-            else mission.setStartDate(mission.getProgram().getStartDate().plusDays(missionUpdateDTO.getTh() - 1).withHour(6));
-            mission.setEndDate(mission.getStartDate().withHour(23).withMinute(59).withSecond(59));
-        }
+        if(missionUpdateDTO.getStartDate() != null)
+            mission.setStartDate(missionUpdateDTO.getStartDate());
+        if(missionUpdateDTO.getEndDate() != null)
+            mission.setEndDate(missionUpdateDTO.getEndDate());
         if(missionUpdateDTO.getTemplate() != null)
             mission.setTemplate(missionUpdateDTO.getTemplate());
         if(missionUpdateDTO.getComments() != null)
