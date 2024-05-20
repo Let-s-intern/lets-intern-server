@@ -98,12 +98,12 @@ public class MissionHelper {
             mission.setContents(missionUpdateDTO.getContents());
         if(missionUpdateDTO.getGuide() != null)
             mission.setGuide(missionUpdateDTO.getGuide());
-        if(missionUpdateDTO.getTh() != null) {
+        if(missionUpdateDTO.getTh() != null)
             mission.setTh(missionUpdateDTO.getTh());
-            if(missionUpdateDTO.getTh() == 1) mission.setStartDate(mission.getProgram().getStartDate());
-            else mission.setStartDate(mission.getProgram().getStartDate().plusDays(missionUpdateDTO.getTh() - 1).withHour(6));
-            mission.setEndDate(mission.getStartDate().withHour(23).withMinute(59).withSecond(59));
-        }
+        if(missionUpdateDTO.getStartDate() != null)
+            mission.setStartDate(missionUpdateDTO.getStartDate());
+        if(missionUpdateDTO.getEndDate() != null)
+            mission.setEndDate(missionUpdateDTO.getEndDate());
         if(missionUpdateDTO.getTemplate() != null)
             mission.setTemplate(missionUpdateDTO.getTemplate());
         if(missionUpdateDTO.getComments() != null)
@@ -141,22 +141,12 @@ public class MissionHelper {
         missionRepository.delete(mission);
     }
 
-    public MissionDashboardVo getDailyMission(Long programId, LocalDateTime startDate) {
-        LocalDate today = LocalDate.now();
-        Period period = Period.between(LocalDate.from(startDate), today);
-
-        int currentHour = LocalDateTime.now().getHour();
-        if(currentHour < 6) return missionRepository.getMissionDashboardVo(programId, period.getDays()).orElse(null);
-        return missionRepository.getMissionDashboardVo(programId, period.getDays() + 1).orElse(null);
+    public MissionDashboardVo getDailyMission(Long programId) {
+        return missionRepository.getDailyMission(programId).orElse(null);
     }
 
-    public MissionMyDashboardVo getDailyMissionDetail(Long programId, LocalDateTime startDate, Long userId) {
-        LocalDate today = LocalDate.now();
-        Period period = Period.between(LocalDate.from(startDate), today);
-
-        int currentHour = LocalDateTime.now().getHour();
-        if(currentHour < 6) return missionRepository.getMissionMyDashboardVo(programId, period.getDays(), userId).orElse(null);
-        return missionRepository.getMissionMyDashboardVo(programId, period.getDays() + 1, userId).orElse(null);
+    public MissionMyDashboardVo getDailyMissionDetail(Long programId, Long userId) {
+        return missionRepository.getDailyMissionDetail(programId, userId).orElse(null);
     }
 
     public List<MissionDashboardListVo> getMissionDashboardList(Long programId, Long userId) {

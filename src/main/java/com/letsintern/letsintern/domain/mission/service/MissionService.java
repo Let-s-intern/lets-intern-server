@@ -36,7 +36,7 @@ public class MissionService {
     @Transactional(readOnly = true)
     public MissionAdminSimpleListResponse getMissionAdminSimpleList(Long programId) {
         final Program program = programRepository.findById(programId).orElseThrow(() -> ProgramNotFound.EXCEPTION);
-        return missionMapper.toMissionAdminSimpleListResponse(program.getFinalHeadCount(), program.getStartDate(), missionHelper.getMissionAdminSimpleList(programId));
+        return missionMapper.toMissionAdminSimpleListResponse(program.getFinalHeadCount(), missionHelper.getMissionAdminSimpleList(programId));
     }
 
     @Transactional(readOnly = true)

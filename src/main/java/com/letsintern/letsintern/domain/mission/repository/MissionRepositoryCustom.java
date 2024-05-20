@@ -15,10 +15,6 @@ public interface MissionRepositoryCustom {
 
     List<MissionAdminSimpleVo> getMissionAdminSimpleList(Long programId);
 
-    Optional<MissionDashboardVo> getMissionDashboardVo(Long programId, Integer th);
-
-    Optional<MissionMyDashboardVo> getMissionMyDashboardVo(Long programId, Integer th, Long userId);
-
     List<MissionDashboardListVo> getMissionDashboardList(Long programId, Long userId);
 
     List<MissionMyDashboardListVo> getMissionMyDashboardList(Long programId, Long userId);
@@ -30,4 +26,8 @@ public interface MissionRepositoryCustom {
     Optional<MissionMyDashboardAbsentVo> getMissionMyDashboardAbsentVo(Long missionId, Long userId);
 
     List<MissionAdminApplicationVo> getMissionAdminApplicationVos(Long programId, Long userId);
+
+    Optional<MissionDashboardVo> getDailyMission(Long programId);
+
+    Optional<MissionMyDashboardVo> getDailyMissionDetail(Long programId, Long userId);
 }

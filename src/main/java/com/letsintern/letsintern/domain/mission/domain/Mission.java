@@ -87,8 +87,9 @@ public class Mission {
     private List<Attendance> attendanceList;
 
     @Builder
-    private Mission(Program program, MissionTopic topic, MissionType type, Integer refund, String title, String contents, String guide, Integer th, String template,
-                    String comments, Contents essentialContents, Contents additionalContents, Contents limitedContents) {
+    private Mission(Program program, MissionTopic topic, MissionType type, Integer refund, String title, String contents, String guide,
+                    Integer th, LocalDateTime startDate, LocalDateTime endDate,
+                    String template, String comments, Contents essentialContents, Contents additionalContents, Contents limitedContents) {
         this.program = program;
         this.type = type;
         this.topic = topic;
@@ -101,9 +102,8 @@ public class Mission {
         this.guide = guide;
 
         this.th = th;
-        if(th == 1) this.startDate = program.getStartDate();
-        else this.startDate = program.getStartDate().plusDays(th - 1).withHour(6);
-        this.endDate = this.startDate.withHour(23).withMinute(59).withSecond(59);
+        this.startDate = startDate;
+        this.endDate = endDate;
 
         this.template = template;
         this.comments = comments;
@@ -123,6 +123,8 @@ public class Mission {
                 .contents(missionCreateDTO.getContents())
                 .guide(missionCreateDTO.getGuide())
                 .th(missionCreateDTO.getTh())
+                .startDate(missionCreateDTO.getStartDate())
+                .endDate(missionCreateDTO.getEndDate())
                 .template(missionCreateDTO.getTemplate())
                 .comments(missionCreateDTO.getComments())
                 .essentialContents(essentialContents)

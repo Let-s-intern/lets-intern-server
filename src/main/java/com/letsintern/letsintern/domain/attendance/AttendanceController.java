@@ -42,9 +42,8 @@ public class AttendanceController {
 
     @GetMapping("/admin")
     @Operation(summary = "어드민 출석 목록 보기")
-    public AttendanceAdminListResponse getAttendanceAdminList(@RequestParam(required = false) Long missionId,
-                                                              @PageableDefault(size = 20) Pageable pageable) {
-        return attendanceService.getAttendanceAdminList(missionId, pageable);
+    public AttendanceAdminListResponse getAttendanceAdminList(@RequestParam(required = false) Long missionId) {
+        return attendanceService.getAttendanceAdminList(missionId);
     }
 
     @PatchMapping("/admin/{attendanceId}")

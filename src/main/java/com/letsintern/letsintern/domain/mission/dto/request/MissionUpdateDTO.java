@@ -6,6 +6,8 @@ import com.letsintern.letsintern.domain.mission.domain.MissionTopic;
 import com.letsintern.letsintern.domain.mission.domain.MissionType;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 @Getter
 public class MissionUpdateDTO {
 
@@ -24,6 +26,10 @@ public class MissionUpdateDTO {
     private String guide;
 
     private Integer th;
+
+    private LocalDateTime startDate;
+
+    private LocalDateTime endDate;
 
     private String template;
 

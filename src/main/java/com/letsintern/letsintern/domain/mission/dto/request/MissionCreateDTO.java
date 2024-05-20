@@ -7,6 +7,7 @@ import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -32,6 +33,12 @@ public class MissionCreateDTO {
 
     @NotNull
     private Integer th;
+
+    @NotNull
+    private LocalDateTime startDate;
+
+    @NotNull
+    private LocalDateTime endDate;
 
     @NotNull
     private String template;

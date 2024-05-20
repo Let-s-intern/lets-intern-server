@@ -24,6 +24,8 @@ public class MissionDashboardListVo {
 
     private LocalDateTime missionStartDate;
 
+    private LocalDateTime missionEndDate;
+
     private String missionComments;
 
     @JsonIgnore
@@ -36,12 +38,14 @@ public class MissionDashboardListVo {
     private Boolean attendanceIsRefunded;
 
     @Builder
-    public MissionDashboardListVo(Long missionId, Integer missionTh, MissionTopic missionTopic, MissionType missionType, LocalDateTime missionStartDate, String missionComments, Integer missionRefund, Attendance attendance) {
+    public MissionDashboardListVo(Long missionId, Integer missionTh, MissionTopic missionTopic, MissionType missionType,
+                                  LocalDateTime missionStartDate, LocalDateTime missionEndDate, String missionComments, Integer missionRefund, Attendance attendance) {
         this.missionId = missionId;
         this.missionTh = missionTh;
         this.missionTopic = missionTopic.getValue();
         this.missionType = missionType;
         this.missionStartDate = missionStartDate;
+        this.missionEndDate = missionEndDate;
         this.missionRefund = missionRefund;
 
         if(attendance != null) {

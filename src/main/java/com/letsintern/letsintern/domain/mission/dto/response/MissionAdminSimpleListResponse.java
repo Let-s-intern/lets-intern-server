@@ -4,9 +4,7 @@ import com.letsintern.letsintern.domain.mission.vo.MissionAdminSimpleVo;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Period;
 import java.util.List;
 
 @Getter
@@ -17,20 +15,20 @@ public class MissionAdminSimpleListResponse {
     private List<MissionAdminSimpleVo> missionList;
 
     @Builder
-    private MissionAdminSimpleListResponse(Integer finalHeadCount, LocalDateTime startDate, List<MissionAdminSimpleVo> missionList) {
+    private MissionAdminSimpleListResponse(Integer finalHeadCount, List<MissionAdminSimpleVo> missionList) {
         this.finalHeadCount = finalHeadCount;
 
-        LocalDate today = LocalDate.now();
-        int diffDays = Period.between(LocalDate.from(startDate), today).getDays() + 1;
-        if(diffDays >= 1 && diffDays <= 14) this.currentTh = diffDays;
+        LocalDateTime now = LocalDateTime.now();
+        missionList.stream()
+                .filter(mission -> mission.getMissionStartDate().isBefore(now) && mission.getMissionEndDate().isAfter(now))
+                .findFirst().ifPresent(missionAdminSimpleVo -> this.currentTh = missionAdminSimpleVo.getMissionTh());
 
         this.missionList = missionList;
     }
 
-    public static MissionAdminSimpleListResponse of(Integer finalHeadCount, LocalDateTime startDate, List<MissionAdminSimpleVo> missionList) {
+    public static MissionAdminSimpleListResponse of(Integer finalHeadCount, List<MissionAdminSimpleVo> missionList) {
         return MissionAdminSimpleListResponse.builder()
                 .finalHeadCount(finalHeadCount)
-                .startDate(startDate)
                 .missionList(missionList)
                 .build();
     }

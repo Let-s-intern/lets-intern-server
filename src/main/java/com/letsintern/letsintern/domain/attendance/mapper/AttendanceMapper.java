@@ -28,7 +28,7 @@ public class AttendanceMapper {
         return AttendanceIdResponse.from(attendanceId);
     }
 
-    public AttendanceAdminListResponse toAttendanceAdminListResponse(Page<AttendanceAdminVo> attendanceAdminList) {
+    public AttendanceAdminListResponse toAttendanceAdminListResponse(List<AttendanceAdminVo> attendanceAdminList) {
         return AttendanceAdminListResponse.from(attendanceAdminList);
     }
 

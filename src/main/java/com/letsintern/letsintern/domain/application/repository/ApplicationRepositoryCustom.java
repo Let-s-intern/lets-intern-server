@@ -17,11 +17,11 @@ import java.util.Optional;
 
 public interface ApplicationRepositoryCustom {
 
-    Page<ApplicationAdminVo> findAllByProgramId(Long programId, Pageable pageable);
+    List<ApplicationAdminVo> findAllByProgramId(Long programId);
 
-    Page<ApplicationAdminVo> findAllByProgramIdAndIsApproved(Long programId, Boolean isApproved, Pageable pageable);
+    List<ApplicationAdminVo> findAllApplicationAdminVoByProgramIdAndIsApproved(Long programId, Boolean isApproved);
 
-    Page<ApplicationVo> findAllByUserId(Long userId, Pageable pageable);
+    List<ApplicationVo> findAllByUserId(Long userId);
 
     Page<Application> findAllByUserIdAdmin(Long userId, Pageable pageable);
 
