@@ -45,8 +45,8 @@ public class AttendanceService {
     }
 
     @Transactional(readOnly = true)
-    public AttendanceAdminListResponse getAttendanceAdminList(Long missionId, Pageable pageable) {
-        return attendanceMapper.toAttendanceAdminListResponse(attendanceHelper.getAttendanceAdminList(missionId, pageable));
+    public AttendanceAdminListResponse getAttendanceAdminList(Long missionId) {
+        return attendanceMapper.toAttendanceAdminListResponse(attendanceHelper.getAttendanceAdminList(missionId));
     }
 
     @Transactional

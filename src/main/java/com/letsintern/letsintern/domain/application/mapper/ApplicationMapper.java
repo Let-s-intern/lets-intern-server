@@ -35,7 +35,7 @@ public class ApplicationMapper {
         return ApplicationCreateResponse.from(application);
     }
 
-    public AdminApplicationListResponse toAdminApplicationListResponse(Page<ApplicationAdminVo> applicationList) {
+    public AdminApplicationListResponse toAdminApplicationListResponse(List<ApplicationAdminVo> applicationList) {
         return AdminApplicationListResponse.from(applicationList);
     }
 
@@ -43,7 +43,7 @@ public class ApplicationMapper {
         return ApplicationListResponse.from(applicationList);
     }
 
-    public UserApplicationListResponse toUserApplicationListResponse(Page<ApplicationVo> userApplicationList) {
+    public UserApplicationListResponse toUserApplicationListResponse(List<ApplicationVo> userApplicationList) {
         return UserApplicationListResponse.from(userApplicationList);
     }
 

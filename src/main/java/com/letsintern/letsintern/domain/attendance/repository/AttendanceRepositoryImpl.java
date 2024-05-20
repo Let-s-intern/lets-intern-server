@@ -28,10 +28,9 @@ public class AttendanceRepositoryImpl implements AttendanceRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Page<AttendanceAdminVo> getAttendanceAdminVos(Long missionId, Pageable pageable) {
+    public List<AttendanceAdminVo> getAttendanceAdminVos(Long missionId) {
         QAttendance qAttendance = QAttendance.attendance;
         List<AttendanceAdminVo> attendanceAdminVos;
-        JPAQuery<Long> count;
 
         NumberExpression<Integer> resultOrder = new CaseBuilder()
                 .when(qAttendance.result.eq(AttendanceResult.WAITING)).then(0)
@@ -51,13 +50,7 @@ public class AttendanceRepositoryImpl implements AttendanceRepositoryCustom {
                     .from(qAttendance)
                     .where(qAttendance.mission.id.eq(missionId))
                     .orderBy(resultOrder.asc(), qAttendance.id.desc())
-                    .offset(pageable.getOffset())
-                    .limit(pageable.getPageSize())
                     .fetch();
-
-            count = jpaQueryFactory.select(qAttendance.count())
-                    .from(qAttendance)
-                    .where(qAttendance.mission.id.eq(missionId));
         }
 
         else {
@@ -72,15 +65,10 @@ public class AttendanceRepositoryImpl implements AttendanceRepositoryCustom {
                             qAttendance.comments))
                     .from(qAttendance)
                     .orderBy(resultOrder.asc(), qAttendance.id.desc())
-                    .offset(pageable.getOffset())
-                    .limit(pageable.getPageSize())
                     .fetch();
-
-            count = jpaQueryFactory.select(qAttendance.count())
-                    .from(qAttendance);
         }
 
-        return PageableExecutionUtils.getPage(attendanceAdminVos, pageable, count::fetchOne);
+        return attendanceAdminVos;
     }
 
     @Override
