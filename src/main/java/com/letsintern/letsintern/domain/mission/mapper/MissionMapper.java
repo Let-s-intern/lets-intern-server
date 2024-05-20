@@ -28,8 +28,8 @@ public class MissionMapper {
         return MissionIdResponse.from(missionId);
     }
 
-    public MissionAdminSimpleListResponse toMissionAdminSimpleListResponse(Integer finalHeadCount, LocalDateTime startDate, List<MissionAdminSimpleVo> missionAdminSimpleList) {
-        return MissionAdminSimpleListResponse.of(finalHeadCount, startDate, missionAdminSimpleList);
+    public MissionAdminSimpleListResponse toMissionAdminSimpleListResponse(Integer finalHeadCount, List<MissionAdminSimpleVo> missionAdminSimpleList) {
+        return MissionAdminSimpleListResponse.of(finalHeadCount, missionAdminSimpleList);
     }
 
     public MissionAdminListResponse toMissionAdminListResponse(Page<MissionAdminVo> missionAdminList) {

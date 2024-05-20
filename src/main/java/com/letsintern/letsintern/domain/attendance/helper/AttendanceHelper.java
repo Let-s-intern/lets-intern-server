@@ -58,18 +58,21 @@ public class AttendanceHelper {
     public Attendance updateAttendance(Long attendanceId, AttendanceBaseDTO attendanceUpdateDTO, Long userId) {
         Attendance attendance = attendanceRepository.findById(attendanceId).orElseThrow(() -> AttendanceNotFound.EXCEPTION);
         if(!Objects.equals(attendance.getUser().getId(), userId)) throw ApplicationUnauthorized.EXCEPTION;
-        if(!isEditableAttendance(attendance.getMission())) throw AttendanceCannotUpdated.EXCEPTION;
-        else if(attendanceUpdateDTO.getLink() != null) {
+
+        if(attendanceUpdateDTO.getLink() != null) {
+            if(isEditableAttendance(attendance.getMission())) {
+                attendance.setStatus(AttendanceStatus.UPDATED);
+            } else {
+                attendance.setStatus(AttendanceStatus.LATE);
+            }
             attendance.setLink(attendanceUpdateDTO.getLink());
-            attendance.setStatus(AttendanceStatus.UPDATED);
-            attendance.setResult(AttendanceResult.WAITING);
             attendance.setComments(null);
         }
 
         return attendance;
     }
 
-    public Integer getYesterdayHeadCount(Long programId, Integer missionTh, AttendanceStatus attendanceStatus, AttendanceResult attendanceResult) {
+    public Integer getPreviousHeadCount(Long programId, Integer missionTh, AttendanceStatus attendanceStatus, AttendanceResult attendanceResult) {
         return attendanceRepository.countAllByMissionProgramIdAndMissionThAndStatusAndResult(programId, missionTh, attendanceStatus, attendanceResult);
     }
 
