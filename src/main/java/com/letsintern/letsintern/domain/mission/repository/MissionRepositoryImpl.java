@@ -271,7 +271,7 @@ public class MissionRepositoryImpl implements MissionRepositoryCustom {
                         inProgress(now)
                 )
                 .orderBy(mission.id.asc())
-                .fetchOne());
+                .fetchFirst());
     }
 
     @Override
