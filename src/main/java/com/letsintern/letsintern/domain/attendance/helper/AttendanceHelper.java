@@ -60,10 +60,9 @@ public class AttendanceHelper {
         if(!Objects.equals(attendance.getUser().getId(), userId)) throw ApplicationUnauthorized.EXCEPTION;
 
         if(attendanceUpdateDTO.getLink() != null) {
-            if(isEditableAttendance(attendance.getMission())) {
+            if(attendance.getResult().equals(AttendanceResult.WRONG)) {
                 attendance.setStatus(AttendanceStatus.UPDATED);
-            } else {
-                attendance.setStatus(AttendanceStatus.LATE);
+                attendance.setResult(AttendanceResult.WAITING);
             }
             attendance.setLink(attendanceUpdateDTO.getLink());
             attendance.setComments(null);
