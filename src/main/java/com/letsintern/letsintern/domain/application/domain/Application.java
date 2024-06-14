@@ -39,11 +39,11 @@ public class Application {
     private ApplicationWishJob wishJob;
 
     @NotNull
-    @Size(max = 700)
+    @Size(max = 550)
     private String applyMotive;
 
     @Nullable
-    @Size(max = 300)
+    @Size(max = 550)
     private String preQuestions;
 
     @NotNull
